@@ -22,4 +22,7 @@ export interface CommonWallet {
   disconnect: () => void;
   signTransaction: (transaction: Transaction) => Promise<Transaction | Buffer>;
   signMessage: (message: Uint8Array) => Promise<Uint8Array>;
+
+  connectionSuccess: boolean | undefined;
+  resetConnectionSuccess: () => void;
 }

@@ -3,7 +3,7 @@ import {Appearance, StyleSheet} from 'react-native';
 export const baseScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: 20,
     gap: 18,
     paddingHorizontal: 20,
   },

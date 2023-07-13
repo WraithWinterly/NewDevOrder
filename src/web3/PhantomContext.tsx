@@ -2,7 +2,14 @@ import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 global.Buffer = require('buffer').Buffer;
 
-import React, {createContext, ReactNode, useCallback, useState} from 'react';
+import React, {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useCallback,
+  useState,
+} from 'react';
 import * as nacl from 'tweetnacl';
 import {BoxKeyPair} from 'tweetnacl';
 import bs58 from 'bs58';
@@ -55,6 +62,9 @@ export const PhantomContext = createContext<CommonWallet>({
   signMessage: (message: Uint8Array) => {
     throw new Error('Not initialized!');
   },
+
+  connectionSuccess: undefined,
+  resetConnectionSuccess: () => {},
 });
 
 enum RedirectRoutes {
@@ -114,6 +124,10 @@ export default function PhantomContextProvider({
   const [sharedSecret, setSharedSecret] = useState<Uint8Array | null>(null);
   const [session, setSession] = useState<string | null>(null);
 
+  const [connectionSuccess, setConnectionSuccess] = useState<
+    boolean | undefined
+  >();
+
   type PhantomResponseHandler<T> = (params: URLSearchParams) => T;
   const waitForResponse = useCallback(
     <T extends unknown>(
@@ -130,7 +144,8 @@ export default function PhantomContextProvider({
 
           const params = parsedUrl.searchParams;
           if (params.get('errorCode')) {
-            console.error('Error In Response', {params});
+            console.log('Error In Response', {params});
+            setConnectionSuccess(false);
             reject(new Error('Error in Phantom Response'));
             return;
           }
@@ -168,18 +183,21 @@ export default function PhantomContextProvider({
         ),
         dAppKeypair.secretKey,
       );
-      console.log('we are here');
+
       const connectData = decryptPayload(
         responseParams.get(ResponseParams.DATA)!,
         responseParams.get(ResponseParams.NONCE)!,
         sharedSecretDapp,
+        setConnectionSuccess,
       );
 
       setKeypair(dAppKeypair);
       setSharedSecret(sharedSecretDapp);
       setSession(connectData.session);
+      if (!!new PublicKey(connectData.public_key)) {
+        setConnectionSuccess(true);
+      }
       setPublicKey(new PublicKey(connectData.public_key));
-      console.log('Pub: ', new PublicKey(connectData.public_key));
     };
     const resPromise = waitForResponse(RedirectRoutes.OnConnect, onResponse);
 
@@ -219,6 +237,7 @@ export default function PhantomContextProvider({
           responseParams.get(ResponseParams.DATA)!,
           responseParams.get(ResponseParams.NONCE)!,
           sharedSecret,
+          setConnectionSuccess,
         );
 
         return Transaction.from(bs58.decode(signTransactionData.transaction));
@@ -258,6 +277,7 @@ export default function PhantomContextProvider({
           responseParams.get(ResponseParams.DATA)!,
           responseParams.get(ResponseParams.NONCE)!,
           sharedSecret,
+          setConnectionSuccess,
         ) as {signature: string};
 
         const {signature} = signMessageData;
@@ -283,6 +303,10 @@ export default function PhantomContextProvider({
     setSharedSecret(null);
   }
 
+  function resetConnectionSuccess() {
+    setConnectionSuccess(undefined);
+  }
+
   return (
     <PhantomContext.Provider
       value={{
@@ -301,6 +325,8 @@ export default function PhantomContextProvider({
         disconnect,
         signTransaction,
         signMessage,
+        connectionSuccess,
+        resetConnectionSuccess,
       }}>
       {children}
     </PhantomContext.Provider>
@@ -314,6 +340,7 @@ function decryptPayload(
   data: string,
   nonce: string,
   sharedSecret: Uint8Array,
+  setConnectionSuccess: Dispatch<SetStateAction<boolean | undefined>>,
 ): any {
   const decryptedData = nacl.box.open.after(
     bs58.decode(data),
@@ -321,6 +348,7 @@ function decryptPayload(
     sharedSecret,
   );
   if (!decryptedData) {
+    setConnectionSuccess(false);
     throw new Error('Unable to decrypt data');
   }
 

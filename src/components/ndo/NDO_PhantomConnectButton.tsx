@@ -1,15 +1,37 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {TouchableOpacity, View, Text} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import PhantomIcon from '../images/PhantomIcon';
+import {PhantomContext} from 'src/web3/PhantomContext';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {StackParamList} from 'src/Main';
+import {useNavigation} from '@react-navigation/native';
 
 export default function NDO_PhantomConnectButton() {
+  const phantom = useContext(PhantomContext);
+  const navigator = useNavigation<StackNavigationProp<StackParamList>>();
+
+  useEffect(() => {
+    if (typeof phantom.connectionSuccess === 'boolean') {
+      const success = phantom.connectionSuccess;
+      phantom.resetConnectionSuccess();
+      if (success) {
+        navigator.navigate('WelcomeSetupProfile');
+      } else {
+        navigator.navigate('WelcomeWalletFailed');
+      }
+    }
+  }, [phantom.connectionSuccess]);
+
   return (
     <TouchableOpacity
       style={{
         padding: 16,
         borderRadius: 50,
         backgroundColor: Colors.Phantom,
+      }}
+      onPress={() => {
+        !!phantom.connect && !phantom.connect();
       }}>
       <View
         style={{

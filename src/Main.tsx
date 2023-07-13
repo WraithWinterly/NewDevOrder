@@ -12,12 +12,14 @@ import Welcome from './screens/Welcome/Welcome';
 import WelcomeSetupProfile from './screens/Welcome/WelcomeSetupProfile';
 import WelcomeMintMembershipToken from './screens/Welcome/WelcomeMintMembershipToken';
 import WelcomeComplete from './screens/Welcome/WelcomeComplete';
+import WelcomeWalletFailed from './screens/Welcome/WelcomeWalletFailed';
 
 export type StackParamList = {
   Welcome: undefined;
   WelcomeSetupProfile: undefined;
   WelcomeMintMembershipToken: undefined;
   WelcomeComplete: undefined;
+  WelcomeWalletFailed: undefined;
   Home: undefined;
   BountyDetails: undefined;
 };
@@ -59,6 +61,11 @@ export default function Main() {
         <Stack.Screen
           name="WelcomeComplete"
           component={WelcomeComplete}
+          options={{title: ''}}
+        />
+        <Stack.Screen
+          name="WelcomeWalletFailed"
+          component={WelcomeWalletFailed}
           options={{title: ''}}
         />
 
