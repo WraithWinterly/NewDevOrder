@@ -6,7 +6,7 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import {PhantomContext} from '../PhantomContext';
+import {PhantomContext} from '../web3/PhantomContext';
 
 export default function WalletConnect() {
   const phantom = useContext(PhantomContext);

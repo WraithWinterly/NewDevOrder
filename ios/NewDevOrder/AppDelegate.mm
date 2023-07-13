@@ -24,9 +24,7 @@
 #endif
 }
 
-// iOS 9.x or newer
-#import <React/RCTLinkingManager.h>
-
+// iOS 9.x or newer Deep Link
 - (BOOL)application:(UIApplication *)application
    openURL:(NSURL *)url
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options

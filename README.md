@@ -23,7 +23,9 @@ Run &nbsp;`yarn`&nbsp; to install node dependencies. Do this regardless of platf
 - Inside VSCode, run &nbsp;`pod install`&nbsp; in the iOS folder.
 - In XCode, set up your developer signing certificate. Free Apple developer accounts are limited to 10 app ID's which expire every week.
 - Inside XCode, Use &nbsp;`Command + R`&nbsp; to build and install the project to your iPhone.
-- XCode will automatically load the development server. If you do not need to change any dependencies or native links in the app, run &nbsp;`npm run ios` &nbsp;to launch the development server.
+- Run &nbsp;`npm run ios` &nbsp;to launch the development server.
+
+Note: Any time you make dependency or link changes, make sure to run &nbsp;`pod install`&nbsp; if you run into issues.
 
 ### Web
 
