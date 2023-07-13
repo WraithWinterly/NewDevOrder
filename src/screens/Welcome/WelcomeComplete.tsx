@@ -11,7 +11,7 @@ export default function WelcomeComplete() {
   function onPress() {
     navigation.reset({
       index: 0,
-      routes: [{name: 'Home'}],
+      routes: [{name: 'HomeNavigation'}],
     });
   }
 

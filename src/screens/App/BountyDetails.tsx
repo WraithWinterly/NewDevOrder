@@ -1,8 +1,8 @@
 import {View} from 'react-native';
 import {Button, Text} from 'react-native';
-import {baseScreenStyle} from '../styles/styles';
+import {baseScreenStyle} from '../../styles/styles';
 import {useNavigation} from '@react-navigation/native';
-import {StackParamList} from '../Main';
+import {StackParamList} from '../../Main';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 export default function BountyDetails() {
