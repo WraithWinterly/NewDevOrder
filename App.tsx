@@ -5,6 +5,7 @@ import PhantomContextProvider, {Cluster} from './src/web3/PhantomContext';
 import {AppRegistry, Linking} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {AppProvider} from 'src/components/AppContext';
 export default function App() {
   return (
     <PhantomContextProvider
@@ -13,7 +14,9 @@ export default function App() {
       protocol="ndo:"
       cluster={Cluster.MAINNET}>
       <SafeAreaProvider>
-        <Main />
+        <AppProvider>
+          <Main />
+        </AppProvider>
       </SafeAreaProvider>
     </PhantomContextProvider>
   );

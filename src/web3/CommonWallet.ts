@@ -1,5 +1,10 @@
 import {PublicKey, Transaction} from '@solana/web3.js';
 
+export interface SavedWalletData {
+  publicKey: PublicKey;
+  session: string;
+}
+
 export interface CommonWallet {
   name: string;
   url: string;

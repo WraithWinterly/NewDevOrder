@@ -6,12 +6,16 @@ import NDO_Button from 'src/components/ndo/NDO_Button';
 import NDO_Text from 'src/components/ndo/NDO_Text';
 import Layout from 'src/layout/Layout';
 
+import asyncStorage from '@react-native-async-storage/async-storage';
+
 export default function WelcomeComplete() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   function onPress() {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'HomeNavigation'}],
+    asyncStorage.setItem('hasCompletedWelcome', 'true').then(() => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'HomeNavigation'}],
+      });
     });
   }
 

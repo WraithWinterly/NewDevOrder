@@ -2,19 +2,22 @@ import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 global.Buffer = require('buffer').Buffer;
 
+import asyncStorage from '@react-native-async-storage/async-storage';
+
 import React, {
   createContext,
   Dispatch,
   ReactNode,
   SetStateAction,
   useCallback,
+  useEffect,
   useState,
 } from 'react';
 import * as nacl from 'tweetnacl';
 import {BoxKeyPair} from 'tweetnacl';
 import bs58 from 'bs58';
 import {PublicKey, Transaction} from '@solana/web3.js';
-import {CommonWallet} from './CommonWallet';
+import {CommonWallet, SavedWalletData} from './CommonWallet';
 import {LinkingStatic} from 'react-native';
 
 export const PhantomWalletName = 'Phantom';
@@ -194,7 +197,7 @@ export default function PhantomContextProvider({
       setKeypair(dAppKeypair);
       setSharedSecret(sharedSecretDapp);
       setSession(connectData.session);
-      if (!!new PublicKey(connectData.public_key)) {
+      if (connectData.public_key != null) {
         setConnectionSuccess(true);
       }
       setPublicKey(new PublicKey(connectData.public_key));
@@ -296,6 +299,28 @@ export default function PhantomContextProvider({
     [Linking, keypair, session, sharedSecret, waitForResponse],
   );
 
+  useEffect(() => {
+    if (connectionSuccess) {
+      const dataToSave = JSON.stringify({
+        publicKey: publicKey,
+        session,
+      } as SavedWalletData);
+      // console.log(dataToSave);
+      asyncStorage.setItem('walletConnectData', dataToSave);
+    }
+  }, [connectionSuccess]);
+
+  useEffect(() => {
+    asyncStorage.getItem('walletConnectData').then(data => {
+      if (data) {
+        const walletConnectData = JSON.parse(data) as SavedWalletData;
+        setPublicKey(walletConnectData.publicKey);
+        setSession(walletConnectData.session);
+        console.log(walletConnectData);
+      }
+    });
+  }, []);
+
   function disconnect() {
     setPublicKey(null);
     setSession(null);
@@ -349,10 +374,10 @@ function decryptPayload(
   );
   if (!decryptedData) {
     setConnectionSuccess(false);
-    throw new Error('Unable to decrypt data');
+    console.log('Unable to decrypt data');
   }
 
-  return JSON.parse(Buffer.from(decryptedData).toString('utf8'));
+  return JSON.parse(Buffer.from(decryptedData || []).toString('utf8'));
 }
 
 function encryptPayload(
