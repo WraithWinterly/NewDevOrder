@@ -8,18 +8,8 @@ import NDO_Text from 'src/components/ndo/NDO_Text';
 import Layout from 'src/layout/Layout';
 import {Colors} from 'src/styles/styles';
 
-export default function WelcomeMintMembershipToken() {
+export default function WelcomeNoMembershipToken() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  function onMintPressed() {
-    // Mint functionality
-    const mintSuccess = true;
-    if (mintSuccess) {
-      navigation.navigate('WelcomeComplete');
-    } else {
-      navigation.navigate('WelcomeMintFailed');
-    }
-  }
 
   return (
     <Layout>
@@ -31,24 +21,17 @@ export default function WelcomeMintMembershipToken() {
           height: '85%',
         }}>
         <View style={{gap: 18, paddingTop: 0}}>
-          <NDO_Text type="header" style={{paddingBottom: 8}}>
-            Almost there! Let's mint your Membership Token.
-          </NDO_Text>
-          <NDO_Text>
-            The New Dev Order is a token-gated platform. In order to access
-            content and participate in bounties, you'll have to mint a
-            Membership Token first.
-          </NDO_Text>
           <View style={{alignItems: 'center'}}>
             <TokenIcon />
-            <Text
-              style={{
-                fontSize: 32,
-                color: Colors.Text,
-              }}>
-              Mint Price: 1 SOL
-            </Text>
           </View>
+          <NDO_Text type="header" style={{paddingBottom: 8}}>
+            You don't have an NDO Membership Token.
+          </NDO_Text>
+          <NDO_Text>Come back when you have an NDO Membership Token.</NDO_Text>
+          <NDO_Text>
+            You can get this by getting a friend already on the NDO app to
+            invite you.
+          </NDO_Text>
         </View>
 
         <View
@@ -58,8 +41,9 @@ export default function WelcomeMintMembershipToken() {
             width: '100%',
             paddingTop: 80,
           }}>
-          <NDO_Button onPress={onMintPressed}>Mint my pass</NDO_Button>
-          <NDO_Button type="noBg">Why do I need a Membership Token?</NDO_Button>
+          <NDO_Button onPress={() => navigation.navigate('Welcome')}>
+            Refresh Wallet
+          </NDO_Button>
         </View>
       </View>
     </Layout>

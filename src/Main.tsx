@@ -16,11 +16,16 @@ import WelcomeWalletFailed from './screens/Welcome/WelcomeWalletFailed';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import HomeNavigation from './screens/App/HomeNavigation';
+import WelcomeNoMembershipToken from './screens/Welcome/WelcomeNoMembershipToken';
+import WelcomeMintFailed from './screens/Welcome/WelcomeMintFailed';
 
 export type StackParamList = {
   Welcome: undefined;
+  WelcomeNoMembershipToken: undefined;
   WelcomeSetupProfile: undefined;
   WelcomeMintMembershipToken: undefined;
+  WelcomeMintFailed: undefined;
+
   WelcomeComplete: undefined;
   WelcomeWalletFailed: undefined;
   HomeNavigation: undefined;
@@ -56,6 +61,11 @@ export default function Main() {
           options={{title: ''}}
         />
         <Stack.Screen
+          name="WelcomeNoMembershipToken"
+          component={WelcomeNoMembershipToken}
+          options={{title: ''}}
+        />
+        <Stack.Screen
           name="WelcomeSetupProfile"
           component={WelcomeSetupProfile}
           options={{title: ''}}
@@ -63,6 +73,11 @@ export default function Main() {
         <Stack.Screen
           name="WelcomeMintMembershipToken"
           component={WelcomeMintMembershipToken}
+          options={{title: ''}}
+        />
+        <Stack.Screen
+          name="WelcomeMintFailed"
+          component={WelcomeMintFailed}
           options={{title: ''}}
         />
         <Stack.Screen

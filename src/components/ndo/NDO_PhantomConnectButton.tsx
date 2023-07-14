@@ -16,12 +16,22 @@ export default function NDO_PhantomConnectButton() {
       const success = phantom.connectionSuccess;
       phantom.resetConnectionSuccess();
       if (success) {
-        navigator.navigate('WelcomeSetupProfile');
+        onWalletConnectComplete();
       } else {
         navigator.navigate('WelcomeWalletFailed');
       }
     }
   }, [phantom.connectionSuccess]);
+
+  function onWalletConnectComplete() {
+    // Check Solana Token
+    const hasMemberShipToken = true;
+    if (hasMemberShipToken) {
+      navigator.navigate('WelcomeSetupProfile');
+    } else {
+      navigator.navigate('WelcomeNoMembershipToken');
+    }
+  }
 
   return (
     <TouchableOpacity

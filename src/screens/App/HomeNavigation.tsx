@@ -9,7 +9,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Home from './Home';
 import BountyDetails from './BountyDetails';
 import {Colors} from 'src/styles/styles';
-import {Linking, View} from 'react-native';
+import {BackHandler, Linking, View} from 'react-native';
 import {useEffect, useId, useState} from 'react';
 import asyncStorage from '@react-native-async-storage/async-storage';
 import {Text} from 'react-native';
@@ -188,11 +188,11 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
 }
 
 function Developer() {
-  function onResetWelcomeScreen() {
-    useEffect(() => {
-      asyncStorage.removeItem('hasCompletedWelcome');
-      asyncStorage.removeItem('walletConnectData');
-    }, []);
+  const [resetFeedback, setResetFeedback] = useState('');
+  async function onResetWelcomeScreen() {
+    await asyncStorage.removeItem('hasCompletedWelcome');
+    await asyncStorage.removeItem('walletConnectData');
+    setResetFeedback('Success: Reset App');
   }
 
   return (
@@ -200,6 +200,7 @@ function Developer() {
       <NDO_Button onPress={onResetWelcomeScreen}>
         Reset Welcome Screen
       </NDO_Button>
+      <NDO_Text>{resetFeedback}</NDO_Text>
     </Layout>
   );
 }
