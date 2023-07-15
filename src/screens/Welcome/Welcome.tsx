@@ -70,6 +70,13 @@ export default function Welcome() {
               onPress={() => navigation.navigate('WelcomeSetupProfile')}>
               Create new wallet
             </NDO_Button>
+            {__DEV__ && (
+              <NDO_Button
+                type="noBg"
+                onPress={() => navigation.navigate('HomeNavigation')}>
+                __DEV__ Skip
+              </NDO_Button>
+            )}
           </View>
         </View>
       )}

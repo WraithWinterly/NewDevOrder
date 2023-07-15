@@ -3,16 +3,16 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import {Colors} from './styles/styles';
 
-import WelcomeSetupProfile from './screens/Welcome/WelcomeSetupProfile';
-import WelcomeMintMembershipToken from './screens/Welcome/WelcomeMintMembershipToken';
-import WelcomeComplete from './screens/Welcome/WelcomeComplete';
-import WelcomeWalletFailed from './screens/Welcome/WelcomeWalletFailed';
-import WelcomeNoMembershipToken from './screens/Welcome/WelcomeNoMembershipToken';
-import WelcomeMintFailed from './screens/Welcome/WelcomeMintFailed';
-import TabNavigation from './screens/App/TabNavigator';
-import ProjectByID from './screens/Projects/ProjectByID';
-import TeamByID from './screens/Teams/TeamByID';
-import Welcome from './screens/Welcome/Welcome';
+import WelcomeSetupProfile from './screens/welcome/WelcomeSetupProfile';
+import WelcomeMintMembershipToken from './screens/welcome/WelcomeMintMembershipToken';
+import WelcomeComplete from './screens/welcome/WelcomeComplete';
+import WelcomeWalletFailed from './screens/welcome/WelcomeWalletFailed';
+import WelcomeNoMembershipToken from './screens/welcome/WelcomeNoMembershipToken';
+import WelcomeMintFailed from './screens/welcome/WelcomeMintFailed';
+import TabNavigation from './screens/app/TabNavigator';
+import ProjectByID from './screens/projects/ProjectByID';
+import TeamByID from './screens/teams/TeamByID';
+import Welcome from './screens/welcome/Welcome';
 
 export type StackParamList = WelcomeStackParamList & {
   Welcome: undefined;

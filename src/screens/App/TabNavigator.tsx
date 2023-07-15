@@ -1,11 +1,11 @@
 import {NavigationContainer} from '@react-navigation/native';
 import Home from './Home';
-import Projects from '../Projects/Projects';
-import Teams from '../Teams/Teams';
-import Bounties from '../Bounties/Bounties';
+import Projects from '../projects/Projects';
+import Teams from '../teams/Teams';
+import Bounties from '../bounties/Bounties';
 
 import {Colors} from 'src/styles/styles';
-import Inbox from '../Inbox/Inbox';
+import Inbox from '../inbox/Inbox';
 import {ReactNode, createRef, useEffect, useState} from 'react';
 import {Platform, Text, View} from 'react-native';
 import HomeIcon from 'src/components/images/HomeIcon';
@@ -43,7 +43,7 @@ const tabToHeaderText = {
 const Tab = createBottomTabNavigator<MainTabsParams>();
 
 export default function TabNavigation() {
-  const isFounder = true;
+  const isFounder = false;
 
   return (
     <Tab.Navigator
@@ -145,7 +145,7 @@ export default function TabNavigation() {
           }}
         />
       )}
-      {__DEV__ && (
+      {/* {__DEV__ && (
         <Tab.Screen
           name="Dev"
           component={__DEVMenu__}
@@ -155,7 +155,7 @@ export default function TabNavigation() {
             ),
           }}
         />
-      )}
+      )} */}
     </Tab.Navigator>
   );
 }

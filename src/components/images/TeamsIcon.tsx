@@ -7,4 +7,6 @@ const xml = `
 </svg>
 `;
 
-export default () => <SvgXml xml={xml} width="24" height="24" />;
+export default ({small = false}: {small?: boolean}) => (
+  <SvgXml xml={xml} width={small ? '18' : '24'} height={small ? '18' : '24'} />
+);
