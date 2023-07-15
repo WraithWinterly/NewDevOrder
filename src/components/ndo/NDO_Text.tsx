@@ -27,7 +27,7 @@ export function NDO_Text({children, type = 'normal', style}: NDOTextProps) {
       break;
   }
 
-  return <Text style={[style, newStyle]}>{children}</Text>;
+  return <Text style={[newStyle, style]}>{children}</Text>;
 }
 
 export default NDO_Text;

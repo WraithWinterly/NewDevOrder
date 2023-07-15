@@ -1,6 +1,4 @@
 import {View} from 'react-native';
-import {baseScreenStyle} from 'src/styles/styles';
-
 import NDO_Button from 'src/components/ndo/NDO_Button';
 import NDO_Link from 'src/components/ndo/NDO_Link';
 import NDO_Text from 'src/components/ndo/NDO_Text';

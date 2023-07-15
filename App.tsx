@@ -5,7 +5,7 @@ import PhantomContextProvider, {Cluster} from './src/web3/PhantomContext';
 import {AppRegistry, Linking} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {AppProvider} from 'src/components/AppContext';
+import {AppProvider} from 'src/components/AppProvider';
 export default function App() {
   return (
     <PhantomContextProvider

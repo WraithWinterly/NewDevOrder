@@ -3,7 +3,9 @@ import React, {ReactNode, createContext, useContext, useState} from 'react';
 // Define the context type
 type AppContextType = {
   team: string;
+  allTeams: string[];
   setTeam: (team: string) => void;
+  allProjects: string[];
   project: string;
   setProject: (project: string) => void;
 };
@@ -27,7 +29,9 @@ export function AppProvider({children}: {children: ReactNode}) {
 
   const appContextValue: AppContextType = {
     team,
+    allTeams: ['Team 1', 'Team 2', 'Team 3'],
     setTeam,
+    allProjects: ['Project 1', 'Project 2', 'Project 3'],
     project,
     setProject,
   };

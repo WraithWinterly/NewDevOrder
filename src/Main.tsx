@@ -1,26 +1,24 @@
-import {
-  NavigationContainer,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Home from './screens/App/Home';
-import BountyDetails from './screens/App/BountyDetails';
-import Header from './layout/Header';
+
 import {Colors} from './styles/styles';
-import Welcome from './screens/Welcome/Welcome';
+
 import WelcomeSetupProfile from './screens/Welcome/WelcomeSetupProfile';
 import WelcomeMintMembershipToken from './screens/Welcome/WelcomeMintMembershipToken';
 import WelcomeComplete from './screens/Welcome/WelcomeComplete';
 import WelcomeWalletFailed from './screens/Welcome/WelcomeWalletFailed';
-
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import HomeNavigation from './screens/App/HomeNavigation';
 import WelcomeNoMembershipToken from './screens/Welcome/WelcomeNoMembershipToken';
 import WelcomeMintFailed from './screens/Welcome/WelcomeMintFailed';
+import TabNavigation from './screens/App/TabNavigator';
+import ProjectByID from './screens/Projects/ProjectByID';
+import TeamByID from './screens/Teams/TeamByID';
+import Welcome from './screens/Welcome/Welcome';
 
-export type StackParamList = {
+export type StackParamList = WelcomeStackParamList & {
   Welcome: undefined;
+  ProjectByID: undefined;
+  TeamByID: undefined;
+
   WelcomeNoMembershipToken: undefined;
   WelcomeSetupProfile: undefined;
   WelcomeMintMembershipToken: undefined;
@@ -29,12 +27,22 @@ export type StackParamList = {
   WelcomeComplete: undefined;
   WelcomeWalletFailed: undefined;
   HomeNavigation: undefined;
-  BountyDetails: undefined;
+};
+
+export type WelcomeStackParamList = {
+  WelcomeHome: undefined;
+  WelcomeNoMembershipToken: undefined;
+  WelcomeSetupProfile: undefined;
+  WelcomeMintMembershipToken: undefined;
+  WelcomeMintFailed: undefined;
+
+  WelcomeComplete: undefined;
+  WelcomeWalletFailed: undefined;
+  HomeNavigation: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
 
-const Drawer = createDrawerNavigator();
 export default function Main() {
   return (
     <NavigationContainer>
@@ -46,11 +54,9 @@ export default function Main() {
           },
           headerShadowVisible: false,
           headerShown: route.name.includes('Welcome'),
-
           headerTitleStyle: {
             color: Colors.Text,
           },
-
           cardStyle: {
             backgroundColor: Colors.Background,
           },
@@ -90,9 +96,9 @@ export default function Main() {
           component={WelcomeWalletFailed}
           options={{title: ''}}
         />
-
-        <Stack.Screen name="HomeNavigation" component={HomeNavigation} />
-        <Stack.Screen name="BountyDetails" component={BountyDetails} />
+        <Stack.Screen name="HomeNavigation" component={TabNavigation} />
+        <Stack.Screen name="ProjectByID" component={ProjectByID} />
+        <Stack.Screen name="TeamByID" component={TeamByID} />
       </Stack.Navigator>
     </NavigationContainer>
   );

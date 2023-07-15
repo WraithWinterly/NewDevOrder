@@ -1,19 +1,11 @@
 import {Appearance, StyleSheet} from 'react-native';
 
-export const baseScreenStyle = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 40,
-    gap: 18,
-    paddingHorizontal: 20,
-  },
-});
-
 export const Colors = {
   Background: '#2B2323',
   BackgroundLighter: '#36343B',
   AppBar: '#211F26',
   Primary: '#D0BCFF',
+  Secondary: '#4A4458',
   Text: '#F4F4F4',
   Text2: '#C6C6C6',
   Phantom: '#533EC5',
