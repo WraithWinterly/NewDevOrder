@@ -375,8 +375,6 @@ PODS:
   - React-jsinspector (0.72.2)
   - React-logger (0.72.2):
     - glog
-  - react-native-appearance (0.3.4):
-    - React
   - react-native-get-random-values (1.9.0):
     - React-Core
   - react-native-pager-view (6.2.0):
@@ -493,8 +491,6 @@ PODS:
     - React-jsi (= 0.72.2)
     - React-logger (= 0.72.2)
     - React-perflogger (= 0.72.2)
-  - ReactNativeUiLib (4.0.0):
-    - React
   - RNCAsyncStorage (1.19.0):
     - React-Core
   - RNCMaskedView (0.1.11):
@@ -590,7 +586,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - react-native-appearance (from `../node_modules/react-native-appearance`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -611,7 +606,6 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeUiLib (from `../node_modules/react-native-ui-lib`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
@@ -683,8 +677,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
-  react-native-appearance:
-    :path: "../node_modules/react-native-appearance"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-pager-view:
@@ -725,8 +717,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeUiLib:
-    :path: "../node_modules/react-native-ui-lib"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
@@ -780,7 +770,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 2c53849838b096599bd04cbbf11a6b67a1781e7b
   React-jsinspector: 36bb3067723df92b7ea564a28ee61a2282a696bc
   React-logger: 48a3629a61899735cbfa9f0b8c5cd44cb1561952
-  react-native-appearance: 0f0e5fc2fcef70e03d48c8fe6b00b9158c2ba8aa
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df
   react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
@@ -801,7 +790,6 @@ SPEC CHECKSUMS:
   React-runtimescheduler: dbea23f2991dfa010654165de8159862935aed27
   React-utils: ec05233cf7ee1d7014d41aaa17ec65ceeba8948d
   ReactCommon: 77382645a088a81de55c24bde19c5a2805d891c3
-  ReactNativeUiLib: 511a5eb03809a0b27f6aefa2b4d6f7c2d6ae4053
   RNCAsyncStorage: 4b98ac3c64efa4e35c1197cb0c5ca5e9f5d4c666
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700

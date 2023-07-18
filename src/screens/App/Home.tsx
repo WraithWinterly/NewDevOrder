@@ -1,31 +1,47 @@
-import {Text, View} from 'react-native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import DiscoverBounties from './DiscoverBounties';
+import YourBounties from './YourBounties';
+import {Colors} from 'src/styles/styles';
 
-import {useNavigation} from '@react-navigation/native';
-import {StackParamList} from '../../Main';
-import {StackNavigationProp} from '@react-navigation/stack';
-
-import Layout from 'src/layout/Layout';
-
-import {useState} from 'react';
-import useAppContext from 'src/components/AppProvider';
-import {NDO_TextInput} from 'src/components/ndo/NDO_TextInput';
-import SearchIcon from 'src/components/images/SearchIcon';
-import BountyList from 'src/components/home/BountyList';
+const Tab = createMaterialTopTabNavigator();
 
 export default function Home() {
-  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  const {team} = useAppContext();
-  const [searchBounties, setSearchBounties] = useState('');
   return (
-    <Layout>
-      <NDO_TextInput
-        value={searchBounties}
-        onChangeText={e => setSearchBounties(e)}
-        placeholder="Search Bounties"
-        icon={<SearchIcon />}
-      />
-      <BountyList />
-    </Layout>
+    <Tab.Navigator
+      sceneContainerStyle={{
+        backgroundColor: Colors.Background,
+      }}
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: Colors.Background,
+          shadowColor: Colors.Purple[300],
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: Colors.Purple[300],
+        },
+        tabBarActiveTintColor: Colors.Purple[300],
+        tabBarInactiveTintColor: Colors.Gray[300],
+      }}>
+      <Tab.Screen name="Discover Bounties" component={DiscoverBounties} />
+      <Tab.Screen name="Your Bounties" component={YourBounties} />
+    </Tab.Navigator>
   );
 }
+
+// export default function Home() {
+//   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
+//   const {team} = useAppContext();
+//   const [searchBounties, setSearchBounties] = useState('');
+//   return (
+//     <Layout>
+//       <NDO_TextInput
+//         value={searchBounties}
+//         onChangeText={e => setSearchBounties(e)}
+//         placeholder="Search Bounties"
+//         icon={<SearchIcon />}
+//       />
+//       <BountyList />
+//     </Layout>
+//   );
+// }

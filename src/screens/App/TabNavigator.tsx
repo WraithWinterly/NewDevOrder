@@ -1,15 +1,12 @@
-import {NavigationContainer} from '@react-navigation/native';
 import Home from './Home';
 import Projects from '../projects/Projects';
 import Teams from '../teams/Teams';
-import Bounties from '../bounties/Bounties';
 
 import {Colors} from 'src/styles/styles';
 import Inbox from '../inbox/Inbox';
-import {ReactNode, createRef, useEffect, useState} from 'react';
-import {Platform, Text, View} from 'react-native';
+import {ReactNode, useState} from 'react';
+import {Platform, View} from 'react-native';
 import HomeIcon from 'src/components/images/HomeIcon';
-import BountiesIcon from 'src/components/images/BountiesIcon';
 import InboxIcon from 'src/components/images/InboxIcon';
 import ProjectsIcon from 'src/components/images/ProjectsIcon';
 import TeamsIcon from 'src/components/images/TeamsIcon';
@@ -19,8 +16,8 @@ import ProfileIcon from 'src/components/images/ProfileIcon';
 import LeaderboardIcon from 'src/components/images/LeaderboardIcon';
 import TeamSelector from 'src/components/TeamSelector';
 import __DEVMenu__ from './__DEVMenu__';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import NDO_Text from 'src/components/ndo/NDO_Text';
+import CodeIcon from 'src/components/images/CodeIcon';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -116,15 +113,7 @@ export default function TabNavigation() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Bounties"
-        component={Bounties}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <TabBarIcon focused={focused} icon={<BountiesIcon />} />
-          ),
-        }}
-      />
+
       <Tab.Screen
         name="Inbox"
         component={Inbox}
@@ -145,17 +134,17 @@ export default function TabNavigation() {
           }}
         />
       )}
-      {/* {__DEV__ && (
+      {__DEV__ && (
         <Tab.Screen
           name="Dev"
           component={__DEVMenu__}
           options={{
             tabBarIcon: ({focused}) => (
-              <TabBarIcon focused={focused} icon={<BountiesIcon />} />
+              <TabBarIcon focused={focused} icon={<CodeIcon />} />
             ),
           }}
         />
-      )} */}
+      )}
     </Tab.Navigator>
   );
 }

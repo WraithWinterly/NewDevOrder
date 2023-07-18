@@ -26,7 +26,10 @@ export default function Welcome() {
       }
       const completed = JSON.parse(hasCompletedWelcome);
       if (completed) {
-        navigation.navigate('HomeNavigation');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'HomeNavigation'}],
+        });
         return;
       }
       setHasCompletedWelcome(false);

@@ -1,10 +1,10 @@
+import {View} from 'react-native';
 import NDO_Text from 'src/components/ndo/NDO_Text';
-import Layout from 'src/layout/Layout';
 
-export default function Bounties() {
+export default function BountiesScreen() {
   return (
-    <Layout>
+    <View>
       <NDO_Text>Bounties</NDO_Text>
-    </Layout>
+    </View>
   );
 }

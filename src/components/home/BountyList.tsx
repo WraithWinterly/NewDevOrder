@@ -9,7 +9,23 @@ import TeamsIcon from '../images/TeamsIcon';
 import CalendarIcon from '../images/CalendarIcon';
 import RightArrowIcon from '../images/RightArrowIcon';
 
-const Bounties = {
+interface Bounties {
+  data: Array<Bounty>;
+}
+
+interface Bounty {
+  id: string;
+  title: string;
+  description: string;
+  postDate: Date;
+  projectName: string;
+  active: boolean;
+  type: 'Frontend' | 'Backend' | 'Fullstack' | 'Web3';
+  reward: number;
+  deadline: Date;
+  teamCount: number;
+}
+const Bounties: Bounties = {
   data: [
     {
       id: '1',
@@ -78,18 +94,6 @@ const Bounties = {
   ],
 };
 
-interface Bounty {
-  id: string;
-  title: string;
-  description: string;
-  postDate: Date;
-  projectName: string;
-  active: boolean;
-  type: 'Frontend' | 'Backend' | 'Fullstack' | 'Web3';
-  reward: number;
-  deadline: Date;
-  teamCount: number;
-}
 export default function BountyList() {
   const id = useId();
   return (
@@ -120,7 +124,7 @@ export default function BountyList() {
               style={{
                 backgroundColor: '#4F378B',
                 borderRadius: 12,
-                paddingHorizontal: 14,
+                paddingHorizontal: 8,
                 paddingVertical: 2,
                 justifyContent: 'center',
               }}>
