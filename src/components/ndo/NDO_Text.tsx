@@ -6,9 +6,15 @@ interface NDOTextProps {
   children: ReactNode;
   type?: 'normal' | 'header';
   style?: StyleProp<TextStyle>;
+  onPress?: () => void;
 }
 
-export function NDO_Text({children, type = 'normal', style}: NDOTextProps) {
+export function NDO_Text({
+  children,
+  type = 'normal',
+  style,
+  onPress,
+}: NDOTextProps) {
   let newStyle: StyleProp<TextStyle> = {};
 
   switch (type) {
@@ -27,7 +33,11 @@ export function NDO_Text({children, type = 'normal', style}: NDOTextProps) {
       break;
   }
 
-  return <Text style={[newStyle, style]}>{children}</Text>;
+  return (
+    <Text style={[newStyle, style]} onPress={onPress}>
+      {children}
+    </Text>
+  );
 }
 
 export default NDO_Text;

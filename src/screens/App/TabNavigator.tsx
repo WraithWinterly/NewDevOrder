@@ -30,6 +30,7 @@ export type MainTabsParams = {
 
 const tabToHeaderText = {
   Home: 'Home',
+  ViewBounty: 'View Bounty',
   Teams: 'Your Teams',
   Bounties: 'Bounties',
   Inbox: 'Inbox',
@@ -104,6 +105,7 @@ export default function TabNavigation() {
           ),
         }}
       />
+
       <Tab.Screen
         name="Teams"
         component={Teams}

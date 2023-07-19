@@ -13,6 +13,7 @@ import TabNavigation from './screens/app/TabNavigator';
 import ProjectByID from './screens/projects/ProjectByID';
 import TeamByID from './screens/teams/TeamByID';
 import Welcome from './screens/welcome/Welcome';
+import ViewBounty from './screens/bounties/ViewBounty';
 
 export type StackParamList = WelcomeStackParamList & {
   Welcome: undefined;
@@ -27,6 +28,7 @@ export type StackParamList = WelcomeStackParamList & {
   WelcomeComplete: undefined;
   WelcomeWalletFailed: undefined;
   HomeNavigation: undefined;
+  ViewBounty: undefined;
 };
 
 export type WelcomeStackParamList = {
@@ -43,6 +45,8 @@ export type WelcomeStackParamList = {
 
 const Stack = createStackNavigator<StackParamList>();
 
+const ShowHeaderOnRoutes = ['Welcome', 'ViewBounty'];
+
 export default function Main() {
   return (
     <NavigationContainer>
@@ -53,7 +57,7 @@ export default function Main() {
             backgroundColor: Colors.Background,
           },
           headerShadowVisible: false,
-          headerShown: route.name.includes('Welcome'),
+          headerShown: ShowHeaderOnRoutes.includes(route.name),
           headerTitleStyle: {
             color: Colors.Text,
           },
@@ -97,6 +101,7 @@ export default function Main() {
           options={{title: ''}}
         />
         <Stack.Screen name="HomeNavigation" component={TabNavigation} />
+        <Stack.Screen name="ViewBounty" component={ViewBounty} />
         <Stack.Screen name="ProjectByID" component={ProjectByID} />
         <Stack.Screen name="TeamByID" component={TeamByID} />
       </Stack.Navigator>

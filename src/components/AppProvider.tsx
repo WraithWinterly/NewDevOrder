@@ -8,6 +8,8 @@ type AppContextType = {
   allProjects: string[];
   project: string;
   setProject: (project: string) => void;
+  viewBountyId: string;
+  setViewBountyId: (viewBountyId: string) => void;
 };
 
 // Create the context
@@ -27,6 +29,8 @@ export function AppProvider({children}: {children: ReactNode}) {
   const [team, setTeam] = useState<string>('');
   const [project, setProject] = useState<string>('');
 
+  const [viewBountyId, setViewBountyId] = useState<string>('');
+
   const appContextValue: AppContextType = {
     team,
     allTeams: ['Team 1', 'Team 2', 'Team 3'],
@@ -34,6 +38,8 @@ export function AppProvider({children}: {children: ReactNode}) {
     allProjects: ['Project 1', 'Project 2', 'Project 3'],
     project,
     setProject,
+    viewBountyId,
+    setViewBountyId,
   };
 
   return (

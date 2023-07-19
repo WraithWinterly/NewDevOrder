@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
 import NDO_Text from '../ndo/NDO_Text';
@@ -8,12 +8,16 @@ import CashIcon from '../images/CashIcon';
 import TeamsIcon from '../images/TeamsIcon';
 import CalendarIcon from '../images/CalendarIcon';
 import RightArrowIcon from '../images/RightArrowIcon';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {StackParamList} from 'src/Main';
+import useAppContext from '../AppProvider';
 
 interface Bounties {
   data: Array<Bounty>;
 }
 
-interface Bounty {
+export interface Bounty {
   id: string;
   title: string;
   description: string;
@@ -30,7 +34,8 @@ const Bounties: Bounties = {
     {
       id: '1',
       title: 'Front-End Cross-Platform Flutter Application',
-      description: 'Bounty 1 description',
+      description:
+        'Build working and deployable code and final software package for Front-End Cross-Platform application, built using Flutter.',
       postDate: new Date('2021-01-01'),
       projectName: 'Project 1',
       active: true,
@@ -95,7 +100,9 @@ const Bounties: Bounties = {
 };
 
 export default function BountyList() {
+  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
+  const {setViewBountyId} = useAppContext();
   return (
     <ScrollView style={{gap: 10, height: '100%', paddingBottom: 400}}>
       {Bounties.data.map((bounty, i) => (
@@ -118,15 +125,15 @@ export default function BountyList() {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 8,
             }}>
             <View
               style={{
                 backgroundColor: '#4F378B',
                 borderRadius: 12,
-                paddingHorizontal: 8,
+                paddingHorizontal: 12,
                 paddingVertical: 2,
-                justifyContent: 'center',
               }}>
               <NDO_Text
                 style={{
@@ -141,18 +148,22 @@ export default function BountyList() {
               style={{
                 backgroundColor: '#485844',
                 borderRadius: 12,
-                paddingHorizontal: 14,
+                paddingHorizontal: 12,
                 paddingVertical: 2,
+                height: 44,
                 justifyContent: 'center',
               }}>
-              <NDO_Text>{bounty.active ? 'Active' : 'Not Active'}</NDO_Text>
+              <NDO_Text>
+                {bounty.active ? 'Accepting Submissions' : 'Not Active'}
+              </NDO_Text>
             </View>
             <View
               style={{
                 backgroundColor: '#4A4458',
                 borderRadius: 12,
-                paddingHorizontal: 14,
+                paddingHorizontal: 18,
                 paddingVertical: 2,
+                height: 44,
                 justifyContent: 'center',
               }}>
               <NDO_Text>{bounty.type}</NDO_Text>
@@ -183,16 +194,20 @@ export default function BountyList() {
             <TeamsIcon small />
             <NDO_Text>Teams Currently Hacking: {bounty.teamCount}</NDO_Text>
           </View>
-          <View
+          <TouchableOpacity
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               gap: 8,
               paddingTop: 8,
+            }}
+            onPress={() => {
+              setViewBountyId(bounty.id);
+              navigation.navigate('ViewBounty');
             }}>
             <NDO_Text style={{color: '#D0BCFF'}}>View Details</NDO_Text>
             <RightArrowIcon />
-          </View>
+          </TouchableOpacity>
         </View>
       ))}
       <View style={{height: 100}} />
