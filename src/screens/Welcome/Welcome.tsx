@@ -68,9 +68,7 @@ export default function Welcome() {
               paddingTop: 80,
             }}>
             <NDO_PhantomConnectButton />
-            <NDO_Button
-              type="noBg"
-              onPress={() => navigation.navigate('WelcomeSetupProfile')}>
+            <NDO_Button type="noBg" onPress={() => {}}>
               Create new wallet
             </NDO_Button>
             {__DEV__ && (

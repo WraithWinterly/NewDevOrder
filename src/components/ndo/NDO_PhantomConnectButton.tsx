@@ -1,27 +1,15 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import {TouchableOpacity, View, Text} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import PhantomIcon from '../images/PhantomIcon';
-import {PhantomContext} from 'src/web3/PhantomContext';
+import useSolanaContext from 'src/web3/SolanaContext';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/Main';
 import {useNavigation} from '@react-navigation/native';
 
 export default function NDO_PhantomConnectButton() {
-  const phantom = useContext(PhantomContext);
+  const solana = useSolanaContext();
   const navigator = useNavigation<StackNavigationProp<StackParamList>>();
-
-  useEffect(() => {
-    if (typeof phantom.connectionSuccess === 'boolean') {
-      const success = phantom.connectionSuccess;
-      phantom.resetConnectionSuccess();
-      if (success) {
-        onWalletConnectComplete();
-      } else {
-        navigator.navigate('WelcomeWalletFailed');
-      }
-    }
-  }, [phantom.connectionSuccess]);
 
   function onWalletConnectComplete() {
     // Check Solana Token
@@ -41,7 +29,15 @@ export default function NDO_PhantomConnectButton() {
         backgroundColor: Colors.Phantom,
       }}
       onPress={() => {
-        !!phantom.connect && !phantom.connect();
+        solana
+          .initializeWallet()
+          .then(() => {
+            onWalletConnectComplete();
+          })
+          .catch(e => {
+            console.log(e);
+            navigator.navigate('WelcomeWalletFailed');
+          });
       }}>
       <View
         style={{
