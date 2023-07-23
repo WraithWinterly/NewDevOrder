@@ -3,6 +3,7 @@ import {Appearance, StyleSheet} from 'react-native';
 export const Colors = {
   Background: '#2B2323',
   BackgroundLighter: '#36343B',
+  BackgroundDarker: '#1D1B20',
   AppBar: '#211F26',
   Primary: '#D0BCFF',
   Secondary: '#4A4458',

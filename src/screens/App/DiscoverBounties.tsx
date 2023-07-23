@@ -22,7 +22,7 @@ export default function DiscoverBounties() {
         placeholder="Search Bounties"
         icon={<SearchIcon />}
       />
-      <BountyList />
+      <BountyList searchText={searchBounties} yourBounties={false} />
     </Layout>
   );
 }

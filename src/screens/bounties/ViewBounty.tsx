@@ -1,11 +1,11 @@
 import {Linking, TouchableOpacity, View} from 'react-native';
 import useAppContext from 'src/components/AppProvider';
-import {Bounty} from 'src/components/home/BountyList';
+
 import NDO_Text from 'src/components/ndo/NDO_Text';
 import Layout from 'src/layout/Layout';
 
 import Collapsible from 'react-native-collapsible';
-import {Dispatch, SetStateAction, useState} from 'react';
+import {Dispatch, SetStateAction, useId, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import CollapsibleArrow from 'src/components/images/CollapsibleArrow';
 import TeamsIcon from 'src/components/images/TeamsIcon';
@@ -14,116 +14,86 @@ import CashIcon from 'src/components/images/CashIcon';
 import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
 import NDO_Button from 'src/components/ndo/NDO_Button';
+import {useNavigation} from '@react-navigation/native';
+import {StackParamList} from 'src/Main';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FullBounty} from 'src/types/types';
 
-function getBountyByID(id: string) {
-  type FullBounty = Bounty & {
-    submissions: string[];
-    aboutProject: string;
-    recentActivity: string;
-    questions: string[];
-    techStack: {name: string; link: string}[];
-    requirementsSpecifications: {section: string; description: string}[];
-    solutionConstraints: string[];
-    toolsToUse: string[];
-    deliverables: string[];
-    founder: {
-      name: string;
-      tag: string;
-      bio: string;
-    };
-  };
-  const data: FullBounty = {
-    id: '1',
-    title: 'Front-End Cross-Platform Flutter Application',
-    description:
-      'Build working and deployable code and final software package for Front-End Cross-Platform application, built using Flutter.',
-    postDate: new Date('2021-01-01'),
-    projectName: 'Project 1',
-    active: true,
-    type: 'Frontend',
-    reward: 100,
-    deadline: new Date(),
-    teamCount: 1,
+const sampleData: FullBounty = {
+  id: '1',
+  title: 'Front-End Cross-Platform Flutter Application',
+  description:
+    'Build working and deployable code and final software package for Front-End Cross-Platform application, built using Flutter.',
+  postDate: new Date('2021-01-01'),
+  projectName: 'Project 1',
+  active: true,
+  type: 'Frontend',
+  reward: 100,
+  deadline: new Date(),
+  teamCount: 1,
+  youJoined: true,
 
-    submissions: ['Team Solvers', 'Team Solvers', 'Team Givers'],
+  submissions: ['Team Solvers', 'Team Solvers', 'Team Givers'],
 
-    aboutProject:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, rerum.',
-    recentActivity: '3 teams started this bounty',
-    questions: ['How do I get started?'],
-    techStack: [
-      {
-        name: 'Flutter: A UI toolkit for building natively compiled applications for mobile, web, and desktop from a single codebase. ',
-        link: 'https://docs.flutter.dev',
-      },
-      {
-        name: 'Dart: The programming language used by Flutter to build applications.',
-        link: 'https://dart.dev/',
-      },
-      {
-        name: 'Vercel: Vercel to deploy the application on Web. You may use a platform of your choice to deploy on web as well.',
-        link: 'https://vercel.com/',
-      },
-      {
-        name: 'Github: A web-based platform for version control and collaboration that allows developers to host and review code, manage projects, and build software alongside millions of other developers.',
-        link: 'https://github.com/',
-      },
-    ],
-    requirementsSpecifications: [
-      {
-        section: 'Home Page: User Info',
-        description: 'First name... (Input, Required)',
-      },
-      {
-        section: 'Home Page: User Info',
-        description: 'Last name... (Input, Required)',
-      },
-      {
-        section: 'Button',
-        description: 'CTA (Button Text): Wallet Connect',
-      },
-      {
-        section: 'Result Page;',
-        description:
-          'Upon clicking "Wallet Connect" button, show the following, success message, opt-in CTA message.',
-      },
+  aboutProject:
+    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, rerum.',
+  recentActivity: '3 teams started this bounty',
+  questions: ['How do I get started?'],
+  headerSections: {
+    'Tech Stack': [
+      'Flutter: A UI toolkit for building natively compiled applications for mobile, web, and desktop from a single codebase.',
+      'https://docs.flutter.dev',
+      'Dart: The programming language used by Flutter to build applications.',
+      'https://dart.dev/',
+      'Vercel: Vercel to deploy the application on Web. You may use a platform of your choice to deploy on web as well.',
+      'https://vercel.com/',
+      'Github: A web-based platform for version control and collaboration that allows developers to host and review code, manage projects, and build software alongside millions of other developers.',
+      'https://github.com/',
     ],
 
-    solutionConstraints: [
+    'Requirements Specifications': [
+      'Home Page: User Info - First name... (Input, Required)',
+      'Home Page: User Info - Last name... (Input, Required)',
+      'Button - CTA (Button Text): Wallet Connect',
+      'Result Page - Upon clicking "Wallet Connect" button, show the following, success message, opt-in CTA message.',
+    ],
+
+    'Solution Constraints': [
       'Deployable on three platforms',
       'Performance',
       'Passes all test cases on three platforms',
     ],
-    toolsToUse: [
+
+    'Tools to Use': [
       'use: flutter',
       'use: any IDE',
       'use: Dart, DartPad',
       'use: Best practices and recommendations from Flutter',
     ],
-    deliverables: [
+
+    Deliverables: [
       'Completed Code checked in to the repository with a unique folder name that indicates your contribution. It is the parent folder for all deliverables.',
     ],
-    founder: {
-      name: 'Dr Whetsel',
-      tag: '@drwhetsel',
-      bio: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam, ipsa.',
-    },
-  };
-  return data;
-}
+  },
+
+  founder: {
+    name: 'Dr Whetsel',
+    tag: '@drwhetsel',
+    bio: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam, ipsa.',
+  },
+};
 
 export default function ViewBounty() {
-  const {viewBountyId} = useAppContext();
+  const {viewBountyId, setSelectedFullBounty} = useAppContext();
+
+  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+  const id = useId();
+  function getBountyByID(id: string) {
+    const data = sampleData;
+    setSelectedFullBounty(data);
+    return sampleData;
+  }
   const bounty = getBountyByID(viewBountyId);
-
-  const [bountyOverviewCollapsed, setBountyOverviewCollapsed] = useState(false);
-
-  const [techStackCollapsed, setTechStackCollapsed] = useState(false);
-  const [requirementsCollapsed, setRequirementsCollapsed] = useState(false);
-  const [flowCollapsed, setFlowCollapsed] = useState(false);
-  const [constraintsCollapsed, setConstraintsCollapsed] = useState(false);
-  const [toolsCollapsed, setToolsCollapsed] = useState(false);
-  const [deliverablesCollapsed, setDeliverablesCollapsed] = useState(false);
 
   return (
     <Layout>
@@ -183,57 +153,8 @@ export default function ViewBounty() {
             </View>
           </View>
 
-          <View
-            style={{
-              padding: 20,
-              backgroundColor: Colors.BackgroundLighter,
-              borderRadius: 14,
-            }}>
-            <NDO_Text
-              style={{fontSize: 20, fontWeight: 'bold', paddingBottom: 8}}>
-              About {bounty.projectName}
-            </NDO_Text>
-            <NDO_Text>{bounty.aboutProject} </NDO_Text>
-          </View>
-
-          <View
-            style={{
-              padding: 20,
-              backgroundColor: Colors.BackgroundLighter,
-              borderRadius: 14,
-            }}>
-            <NDO_Text
-              style={{fontSize: 20, fontWeight: 'bold', paddingBottom: 8}}>
-              Recent Activity
-            </NDO_Text>
-            <NDO_Text>{bounty.recentActivity}</NDO_Text>
-          </View>
-
-          <View
-            style={{
-              padding: 20,
-              backgroundColor: Colors.BackgroundLighter,
-              borderRadius: 14,
-            }}>
-            <NDO_Text
-              style={{fontSize: 20, fontWeight: 'bold', paddingBottom: 8}}>
-              Questions
-            </NDO_Text>
-            <View>
-              {bounty.questions.map(question => (
-                <View
-                  style={{flexDirection: 'row', gap: 6, alignItems: 'center'}}>
-                  <TeamsIcon small />
-                  <NDO_Text>{question}</NDO_Text>
-                </View>
-              ))}
-            </View>
-          </View>
-          <View style={{paddingTop: 24}}></View>
-          <DropdownSection
-            title="Bounty Overview"
-            collapsed={bountyOverviewCollapsed}
-            setCollapsed={setBountyOverviewCollapsed}>
+          <View style={{height: 12}}></View>
+          <DropdownSection title="Bounty Overview">
             <View style={{flexDirection: 'column', gap: 10}}>
               <NDO_Text>{bounty.description}</NDO_Text>
               <View
@@ -261,79 +182,13 @@ export default function ViewBounty() {
             </View>
           </DropdownSection>
 
-          {/* Tech Stack */}
-          <DropdownSection
-            title="Tech Stack"
-            collapsed={techStackCollapsed}
-            setCollapsed={setTechStackCollapsed}>
-            <NDO_Text>
-              <NDO_Text style={{fontStyle: 'italic'}}>{bounty.title}</NDO_Text>{' '}
-              utilizes the following technologies and frameworks:
-            </NDO_Text>
-
-            {bounty.techStack.map((tech, index) => (
-              <View key={index} style={{paddingVertical: 8}}>
-                <NDO_Text>- {tech.name}</NDO_Text>
-                <NDO_Text
-                  onPress={() => Linking.openURL(tech.link)}
-                  style={{textDecorationLine: 'underline'}}>
-                  {tech.link}
-                </NDO_Text>
-              </View>
-            ))}
-          </DropdownSection>
-
-          {/* Requirements Specifications */}
-          <DropdownSection
-            title="Requirements Specifications"
-            collapsed={requirementsCollapsed}
-            setCollapsed={setRequirementsCollapsed}>
-            <NDO_Text>Requirements Specifications:</NDO_Text>
-            {bounty.requirementsSpecifications.map((spec, index) => (
-              <View key={index}>
-                <NDO_Text>{spec.section}</NDO_Text>
-                <NDO_Text>{spec.description}</NDO_Text>
-              </View>
-            ))}
-          </DropdownSection>
-
-          {/* The Flow */}
-          <DropdownSection
-            title="The Flow"
-            collapsed={flowCollapsed}
-            setCollapsed={setFlowCollapsed}>
-            {/* Add the content for The Flow section */}
-          </DropdownSection>
-
-          {/* Solution Constraints */}
-          <DropdownSection
-            title="Solution Constraints"
-            collapsed={constraintsCollapsed}
-            setCollapsed={setConstraintsCollapsed}>
-            {bounty.solutionConstraints.map((constraint, index) => (
-              <NDO_Text key={index}>- {constraint}</NDO_Text>
-            ))}
-          </DropdownSection>
-
-          {/* Tools to Use */}
-          <DropdownSection
-            title="Tools to Use"
-            collapsed={toolsCollapsed}
-            setCollapsed={setToolsCollapsed}>
-            {bounty.toolsToUse.map((tool, index) => (
-              <NDO_Text key={index}>- {tool}</NDO_Text>
-            ))}
-          </DropdownSection>
-
-          {/* Deliverables */}
-          <DropdownSection
-            title="Deliverables"
-            collapsed={deliverablesCollapsed}
-            setCollapsed={setDeliverablesCollapsed}>
-            {bounty.deliverables.map((deliverable, index) => (
-              <NDO_Text key={index}>- {deliverable}</NDO_Text>
-            ))}
-          </DropdownSection>
+          {Object.keys(bounty.headerSections).map((section, i) => (
+            <DropdownSection title={section} key={`${id}-${i}`}>
+              {bounty.headerSections[section].map((text, index) => (
+                <NDO_Text key={index}>- {text}</NDO_Text>
+              ))}
+            </DropdownSection>
+          ))}
 
           {/* Founder */}
           <View
@@ -352,7 +207,9 @@ export default function ViewBounty() {
             <NDO_Text style={{paddingTop: 4}}>{bounty.founder.bio}</NDO_Text>
           </View>
         </View>
-        <NDO_Button>Start Bounty</NDO_Button>
+        <NDO_Button onPress={() => navigation.navigate('StartBounty')}>
+          Start Bounty
+        </NDO_Button>
         <View style={{paddingVertical: 30}}></View>
       </ScrollView>
     </Layout>
@@ -361,15 +218,13 @@ export default function ViewBounty() {
 
 function DropdownSection({
   title,
-  collapsed,
-  setCollapsed,
+
   children,
 }: {
   title: string;
-  collapsed: boolean;
-  setCollapsed: Dispatch<SetStateAction<boolean>>;
   children: React.ReactNode;
 }) {
+  const [collapsed, setCollapsed] = useState(false);
   return (
     <>
       <TouchableOpacity onPress={() => setCollapsed(prev => !prev)}>

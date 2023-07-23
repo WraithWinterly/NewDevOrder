@@ -18,6 +18,8 @@ import TeamSelector from 'src/components/TeamSelector';
 import __DEVMenu__ from './__DEVMenu__';
 import NDO_Text from 'src/components/ndo/NDO_Text';
 import CodeIcon from 'src/components/images/CodeIcon';
+import useAppContext from 'src/components/AppProvider';
+import HeaderRight from './HeaderRight';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -30,7 +32,6 @@ export type MainTabsParams = {
 
 const tabToHeaderText = {
   Home: 'Home',
-  ViewBounty: 'View Bounty',
   Teams: 'Your Teams',
   Bounties: 'Bounties',
   Inbox: 'Inbox',
@@ -41,7 +42,7 @@ const tabToHeaderText = {
 const Tab = createBottomTabNavigator<MainTabsParams>();
 
 export default function TabNavigation() {
-  const isFounder = false;
+  const {isFounder} = useAppContext();
 
   return (
     <Tab.Navigator
@@ -52,26 +53,18 @@ export default function TabNavigation() {
       screenOptions={({route}) => ({
         headerLeft: () =>
           route.name === 'Home' ? (
-            <TeamSelector />
+            // <TeamSelector />
+            <NDO_Text
+              style={{paddingLeft: 30, fontWeight: 'bold', fontSize: 20}}>
+              New Dev Order
+            </NDO_Text>
           ) : (
             <NDO_Text style={{marginLeft: 20, fontSize: 20}}>
               {tabToHeaderText[route.name]}
             </NDO_Text>
           ),
 
-        headerRight: () => (
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 12,
-
-              alignItems: 'center',
-              paddingRight: 14,
-            }}>
-            <LeaderboardIcon />
-            <ProfileIcon />
-          </View>
-        ),
+        headerRight: () => <HeaderRight />,
         headerTitle: '',
 
         headerStyle: {

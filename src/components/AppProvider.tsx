@@ -1,4 +1,11 @@
-import React, {ReactNode, createContext, useContext, useState} from 'react';
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import {FullBounty} from 'src/types/types';
 
 // Define the context type
 type AppContextType = {
@@ -10,6 +17,9 @@ type AppContextType = {
   setProject: (project: string) => void;
   viewBountyId: string;
   setViewBountyId: (viewBountyId: string) => void;
+  selectedFullBounty?: FullBounty;
+  setSelectedFullBounty: (selectedFullBounty: FullBounty) => void;
+  isFounder: boolean;
 };
 
 // Create the context
@@ -28,18 +38,33 @@ const useAppContext = () => {
 export function AppProvider({children}: {children: ReactNode}) {
   const [team, setTeam] = useState<string>('');
   const [project, setProject] = useState<string>('');
+  const [allTeams, setAllTeams] = useState<string[]>([]);
+  const [allProjects, setAllProjects] = useState<string[]>([]);
+  const [selectedFullBounty, setSelectedFullBounty] = useState<FullBounty>();
+  const [isFounder, setIsFounder] = useState<boolean>(false);
+  useEffect(() => {
+    setAllTeams(['Team 1', 'Team 2', 'Team 3']);
+    setAllProjects(['Project 1', 'Project 2', 'Project 3']);
+    setTeam('Team 1');
+    setProject('Project 1');
+    // Do something...
+    setIsFounder(true);
+  }, []);
 
   const [viewBountyId, setViewBountyId] = useState<string>('');
 
   const appContextValue: AppContextType = {
     team,
-    allTeams: ['Team 1', 'Team 2', 'Team 3'],
+    allTeams,
     setTeam,
-    allProjects: ['Project 1', 'Project 2', 'Project 3'],
+    allProjects,
     project,
     setProject,
     viewBountyId,
     setViewBountyId,
+    selectedFullBounty,
+    setSelectedFullBounty,
+    isFounder,
   };
 
   return (

@@ -21,7 +21,7 @@ export default function YourBounties() {
         placeholder="Search Bounties"
         icon={<SearchIcon />}
       />
-      <BountyList />
+      <BountyList searchText={searchBounties} yourBounties={true} />
     </Layout>
   );
 }

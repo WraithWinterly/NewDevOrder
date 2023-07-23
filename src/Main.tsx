@@ -14,25 +14,14 @@ import ProjectByID from './screens/projects/ProjectByID';
 import TeamByID from './screens/teams/TeamByID';
 import Welcome from './screens/welcome/Welcome';
 import ViewBounty from './screens/bounties/ViewBounty';
-
-export type StackParamList = WelcomeStackParamList & {
-  Welcome: undefined;
-  ProjectByID: undefined;
-  TeamByID: undefined;
-
-  WelcomeNoMembershipToken: undefined;
-  WelcomeSetupProfile: undefined;
-  WelcomeMintMembershipToken: undefined;
-  WelcomeMintFailed: undefined;
-
-  WelcomeComplete: undefined;
-  WelcomeWalletFailed: undefined;
-  HomeNavigation: undefined;
-  ViewBounty: undefined;
-};
+import StartBounty from './screens/bounties/StartBounty';
+import MyWallet from './screens/wallet/MyWallet';
+import MintNFTs from './screens/wallet/MintNFTs';
+import MintNFTConfirm from './screens/wallet/MintNFTConfirm';
+import MintRoleNFT from './screens/wallet/MintRoleNFT';
 
 export type WelcomeStackParamList = {
-  WelcomeHome: undefined;
+  Welcome: undefined;
   WelcomeNoMembershipToken: undefined;
   WelcomeSetupProfile: undefined;
   WelcomeMintMembershipToken: undefined;
@@ -40,12 +29,27 @@ export type WelcomeStackParamList = {
 
   WelcomeComplete: undefined;
   WelcomeWalletFailed: undefined;
-  HomeNavigation: undefined;
 };
+
+export type WalletParamList = {
+  MyWallet: undefined;
+  MintNFTs: undefined;
+  MintNFTConfirm: undefined;
+  MintRoleNFT: undefined;
+};
+
+export type StackParamList = WelcomeStackParamList &
+  WalletParamList & {
+    ProjectByID: undefined;
+    TeamByID: undefined;
+    HomeNavigation: undefined;
+    ViewBounty: undefined;
+    StartBounty: undefined;
+  };
 
 const Stack = createStackNavigator<StackParamList>();
 
-const ShowHeaderOnRoutes = ['Welcome', 'ViewBounty'];
+const ShowHeaderOnRoutes = ['Welcome', 'ViewBounty', 'StartBounty'];
 
 export default function Main() {
   return (
@@ -112,9 +116,24 @@ export default function Main() {
           options={{title: ''}}
         />
         <Stack.Screen name="HomeNavigation" component={TabNavigation} />
-        <Stack.Screen name="ViewBounty" component={ViewBounty} />
+        <Stack.Screen
+          name="ViewBounty"
+          component={ViewBounty}
+          options={{title: 'View Bounty'}}
+        />
+        <Stack.Screen
+          name="StartBounty"
+          component={StartBounty}
+          options={{title: ''}}
+        />
         <Stack.Screen name="ProjectByID" component={ProjectByID} />
         <Stack.Screen name="TeamByID" component={TeamByID} />
+        {/* MyWallet: undefined; MintNFTs: undefined; MintNFTConfirm: undefined;
+        MintRoleNFT: undefined; */}
+        <Stack.Screen name="MyWallet" component={MyWallet} />
+        <Stack.Screen name="MintNFTs" component={MintNFTs} />
+        <Stack.Screen name="MintNFTConfirm" component={MintNFTConfirm} />
+        <Stack.Screen name="MintRoleNFT" component={MintRoleNFT} />
       </Stack.Navigator>
     </NavigationContainer>
   );

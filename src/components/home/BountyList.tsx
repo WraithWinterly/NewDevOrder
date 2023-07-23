@@ -12,23 +12,12 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/Main';
 import useAppContext from '../AppProvider';
+import {Bounty} from 'src/types/types';
 
 interface Bounties {
   data: Array<Bounty>;
 }
 
-export interface Bounty {
-  id: string;
-  title: string;
-  description: string;
-  postDate: Date;
-  projectName: string;
-  active: boolean;
-  type: 'Frontend' | 'Backend' | 'Fullstack' | 'Web3';
-  reward: number;
-  deadline: Date;
-  teamCount: number;
-}
 const Bounties: Bounties = {
   data: [
     {
@@ -43,6 +32,7 @@ const Bounties: Bounties = {
       reward: 100,
       deadline: new Date(),
       teamCount: 1,
+      youJoined: true,
     },
     {
       id: '2',
@@ -56,6 +46,7 @@ const Bounties: Bounties = {
       reward: 50,
       deadline: new Date('2023-08-31'),
       teamCount: 1,
+      youJoined: false,
     },
     {
       id: '3',
@@ -69,6 +60,7 @@ const Bounties: Bounties = {
       reward: 200,
       deadline: new Date('2023-12-31'),
       teamCount: 2,
+      youJoined: false,
     },
     {
       id: '4',
@@ -82,6 +74,7 @@ const Bounties: Bounties = {
       reward: 150,
       deadline: new Date('2024-02-28'),
       teamCount: 1,
+      youJoined: false,
     },
     {
       id: '5',
@@ -95,17 +88,34 @@ const Bounties: Bounties = {
       reward: 75,
       deadline: new Date('2023-10-31'),
       teamCount: 3,
+      youJoined: false,
     },
   ],
 };
 
-export default function BountyList() {
+export default function BountyList({
+  searchText,
+  yourBounties,
+}: {
+  searchText?: string;
+  yourBounties: boolean;
+}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
   const {setViewBountyId} = useAppContext();
+
+  const search = Bounties.data.filter(bounty => {
+    if (bounty.title.includes(searchText || '')) {
+      if (yourBounties) {
+        return bounty.youJoined;
+      }
+      return bounty;
+    }
+  });
+
   return (
     <ScrollView style={{gap: 10, height: '100%', paddingBottom: 400}}>
-      {Bounties.data.map((bounty, i) => (
+      {search.map((bounty, i) => (
         <View
           key={`${bounty.id}-${i}-${id}`}
           style={{

@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View, Text} from 'react-native';
+import {TouchableOpacity, View, Text, Linking} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import PhantomIcon from '../images/PhantomIcon';
 import useSolanaContext from 'src/web3/SolanaContext';
@@ -36,6 +36,15 @@ export default function NDO_PhantomConnectButton() {
           })
           .catch(e => {
             console.log(e);
+            const error = e as Error;
+            if (
+              error.message.includes(
+                'Found no installed wallet that supports the mobile wallet protocol.',
+              )
+            ) {
+              Linking.openURL('market://details?id=app.phantom');
+              return;
+            }
             navigator.navigate('WelcomeWalletFailed');
           });
       }}>
