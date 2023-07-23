@@ -1,97 +1,18 @@
 import {TouchableOpacity, View} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
-import NDO_Text from '../ndo/NDO_Text';
+import StyledText from '../ui/styled/StyledText';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useId} from 'react';
-import CashIcon from '../images/CashIcon';
-import TeamsIcon from '../images/TeamsIcon';
-import CalendarIcon from '../images/CalendarIcon';
-import RightArrowIcon from '../images/RightArrowIcon';
+import {useEffect, useId} from 'react';
+import CashIcon from '../icons/CashIcon';
+import TeamsIcon from '../icons/TeamsIcon';
+import CalendarIcon from '../icons/CalendarIcon';
+import RightArrowIcon from '../icons/RightArrowIcon';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {StackParamList} from 'src/Main';
-import useAppContext from '../AppProvider';
+import {StackParamList} from 'src/StackNavigator';
 import {Bounty} from 'src/types/types';
-
-interface Bounties {
-  data: Array<Bounty>;
-}
-
-const Bounties: Bounties = {
-  data: [
-    {
-      id: '1',
-      title: 'Front-End Cross-Platform Flutter Application',
-      description:
-        'Build working and deployable code and final software package for Front-End Cross-Platform application, built using Flutter.',
-      postDate: new Date('2021-01-01'),
-      projectName: 'Project 1',
-      active: true,
-      type: 'Frontend',
-      reward: 100,
-      deadline: new Date(),
-      teamCount: 1,
-      youJoined: true,
-    },
-    {
-      id: '2',
-      title: 'Emoji Translator',
-      description:
-        "Do you love emojis? We need someone to develop an emoji translator that can convert text into emojis and vice versa. Let's make communication more fun!",
-      postDate: new Date('2023-07-15'),
-      projectName: 'Project Emoji',
-      active: true,
-      type: 'Web3',
-      reward: 50,
-      deadline: new Date('2023-08-31'),
-      teamCount: 1,
-      youJoined: false,
-    },
-    {
-      id: '3',
-      title: 'Time-Traveling Website',
-      description:
-        'Ever wished you could go back in time? We want you to build a website that simulates time travel. Let users experience historical events as if they were there!',
-      postDate: new Date('2023-07-14'),
-      projectName: 'Project Time Warp',
-      active: true,
-      type: 'Fullstack',
-      reward: 200,
-      deadline: new Date('2023-12-31'),
-      teamCount: 2,
-      youJoined: false,
-    },
-    {
-      id: '4',
-      title: 'AI Stand-up Comedian',
-      description:
-        "Are you a programming genius with a great sense of humor? We're looking for someone to create an AI stand-up comedian that can crack jokes about coding and technology. Make the nerds laugh!",
-      postDate: new Date('2023-07-13'),
-      projectName: 'Project LOLCode',
-      active: true,
-      type: 'Backend',
-      reward: 150,
-      deadline: new Date('2024-02-28'),
-      teamCount: 1,
-      youJoined: false,
-    },
-    {
-      id: '5',
-      title: 'Reverse-Engineering Puzzle',
-      description:
-        'Calling all puzzle enthusiasts and code breakers! We have a mysterious device that needs to be reverse-engineered. Solve the puzzle and unveil its secrets!',
-      postDate: new Date('2023-07-12'),
-      projectName: 'Project Enigma',
-      active: true,
-      type: 'Web3',
-      reward: 75,
-      deadline: new Date('2023-10-31'),
-      teamCount: 3,
-      youJoined: false,
-    },
-  ],
-};
+import useAppStore from '../../store';
 
 export default function BountyList({
   searchText,
@@ -102,9 +23,19 @@ export default function BountyList({
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
-  const {setViewBountyId} = useAppContext();
 
-  const search = Bounties.data.filter(bounty => {
+  const setSelectedFullBounty = useAppStore(
+    state => state.setSelectedFullBounty,
+  );
+
+  const bounties = useAppStore(state => state.bounties);
+  const fetchBounties = useAppStore(state => state.fetchBounties);
+
+  useEffect(() => {
+    if (!bounties) fetchBounties();
+  }, []);
+
+  const search = bounties?.filter(bounty => {
     if (bounty.title.includes(searchText || '')) {
       if (yourBounties) {
         return bounty.youJoined;
@@ -115,7 +46,7 @@ export default function BountyList({
 
   return (
     <ScrollView style={{gap: 10, height: '100%', paddingBottom: 400}}>
-      {search.map((bounty, i) => (
+      {search?.map((bounty, i) => (
         <View
           key={`${bounty.id}-${i}-${id}`}
           style={{
@@ -125,13 +56,13 @@ export default function BountyList({
             marginVertical: 10,
             gap: 8,
           }}>
-          <NDO_Text style={{fontWeight: 'bold', fontSize: 20}}>
+          <StyledText style={{fontWeight: 'bold', fontSize: 20}}>
             {bounty.title}
-          </NDO_Text>
-          <NDO_Text
+          </StyledText>
+          <StyledText
             style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>
             {formatTimeAgo(bounty.postDate)}
-          </NDO_Text>
+          </StyledText>
           <View
             style={{
               flexDirection: 'row',
@@ -145,13 +76,13 @@ export default function BountyList({
                 paddingHorizontal: 12,
                 paddingVertical: 2,
               }}>
-              <NDO_Text
+              <StyledText
                 style={{
                   padding: 8,
                   borderRadius: 100,
                 }}>
                 {bounty.projectName}
-              </NDO_Text>
+              </StyledText>
             </View>
 
             <View
@@ -163,9 +94,9 @@ export default function BountyList({
                 height: 44,
                 justifyContent: 'center',
               }}>
-              <NDO_Text>
+              <StyledText>
                 {bounty.active ? 'Accepting Submissions' : 'Not Active'}
-              </NDO_Text>
+              </StyledText>
             </View>
             <View
               style={{
@@ -176,19 +107,19 @@ export default function BountyList({
                 height: 44,
                 justifyContent: 'center',
               }}>
-              <NDO_Text>{bounty.type}</NDO_Text>
+              <StyledText>{bounty.type}</StyledText>
             </View>
           </View>
-          <NDO_Text
+          <StyledText
             style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>
             {bounty.description}
-          </NDO_Text>
+          </StyledText>
 
           <View style={{flexDirection: 'row', gap: 6, alignItems: 'center'}}>
             <CashIcon />
-            <NDO_Text style={{fontWeight: '500'}}>
+            <StyledText style={{fontWeight: '500'}}>
               Bonty Reward: {bounty.reward} SOL
-            </NDO_Text>
+            </StyledText>
           </View>
           <View
             style={{
@@ -198,11 +129,11 @@ export default function BountyList({
               paddingTop: 2,
             }}>
             <CalendarIcon />
-            <NDO_Text>Deadline: {bounty.deadline.toDateString()}</NDO_Text>
+            <StyledText>Deadline: {bounty.deadline.toDateString()}</StyledText>
           </View>
           <View style={{flexDirection: 'row', gap: 6, alignItems: 'center'}}>
             <TeamsIcon small />
-            <NDO_Text>Teams Currently Hacking: {bounty.teamCount}</NDO_Text>
+            <StyledText>Teams Currently Hacking: {bounty.teamCount}</StyledText>
           </View>
           <TouchableOpacity
             style={{
@@ -212,10 +143,10 @@ export default function BountyList({
               paddingTop: 8,
             }}
             onPress={() => {
-              setViewBountyId(bounty.id);
+              setSelectedFullBounty(bounty.id);
               navigation.navigate('ViewBounty');
             }}>
-            <NDO_Text style={{color: '#D0BCFF'}}>View Details</NDO_Text>
+            <StyledText style={{color: '#D0BCFF'}}>View Details</StyledText>
             <RightArrowIcon />
           </TouchableOpacity>
         </View>

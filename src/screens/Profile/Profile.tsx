@@ -1,10 +1,10 @@
-import NDO_Text from 'src/components/ndo/NDO_Text';
+import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 
 export default function Profile() {
   return (
     <Layout>
-      <NDO_Text>Test</NDO_Text>
+      <StyledText>Test</StyledText>
     </Layout>
   );
 }

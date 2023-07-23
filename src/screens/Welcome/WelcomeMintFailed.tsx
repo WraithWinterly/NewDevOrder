@@ -1,17 +1,13 @@
 import {View} from 'react-native';
-import {baseScreenStyle} from 'src/styles/styles';
 
-import NDO_Button from 'src/components/ndo/NDO_Button';
-import NDO_Link from 'src/components/ndo/NDO_Link';
-import NDO_Text from 'src/components/ndo/NDO_Text';
-import NDO_PhantomConnectButton from 'src/components/ndo/NDO_PhantomConnectButton';
+import StyledButton from 'src/components/ui/styled/StyledButton';
+
+import StyledText from 'src/components/ui/styled/StyledText';
+
 import Layout from 'src/layout/Layout';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {StackParamList} from 'src/Main';
-
-import asyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect, useState} from 'react';
+import {StackParamList} from 'src/StackNavigator';
 
 export default function WelcomeMintFailed() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -26,14 +22,14 @@ export default function WelcomeMintFailed() {
           height: '85%',
         }}>
         <View style={{gap: 18, paddingTop: 60}}>
-          <NDO_Text type="header" style={{paddingBottom: 24}}>
+          <StyledText type="header" style={{paddingBottom: 24}}>
             Not enough funds in your wallet.
-          </NDO_Text>
-          <NDO_Text>
+          </StyledText>
+          <StyledText>
             We checked your wallet and you don't have enough SOL to mint your
             Membership Token. Come back later after you have charged your wallet
             and try again.
-          </NDO_Text>
+          </StyledText>
         </View>
 
         <View
@@ -43,10 +39,10 @@ export default function WelcomeMintFailed() {
             width: '100%',
             paddingTop: 80,
           }}>
-          <NDO_Button
+          <StyledButton
             onPress={() => navigation.navigate('WelcomeMintMembershipToken')}>
             Reresh Wallet
-          </NDO_Button>
+          </StyledButton>
         </View>
       </View>
     </Layout>

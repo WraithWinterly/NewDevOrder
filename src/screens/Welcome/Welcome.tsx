@@ -1,12 +1,12 @@
 import {View} from 'react-native';
-import NDO_Button from 'src/components/ndo/NDO_Button';
-import NDO_Link from 'src/components/ndo/NDO_Link';
-import NDO_Text from 'src/components/ndo/NDO_Text';
-import NDO_PhantomConnectButton from 'src/components/ndo/NDO_PhantomConnectButton';
+import StyledButton from 'src/components/ui/styled/StyledButton';
+import StyledLink from 'src/components/ui/styled/StyledLink';
+import StyledText from 'src/components/ui/styled/StyledText';
+import PhantomConnectButton from 'src/components/ui/PhantomConnectButton';
 import Layout from 'src/layout/Layout';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {StackParamList} from 'src/Main';
+import {StackParamList} from 'src/StackNavigator';
 
 import asyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect, useState} from 'react';
@@ -47,17 +47,17 @@ export default function Welcome() {
             height: '85%',
           }}>
           <View style={{gap: 18, paddingTop: 60}}>
-            <NDO_Text type="header" style={{paddingBottom: 24}}>
+            <StyledText type="header" style={{paddingBottom: 24}}>
               Congratulations! You've been invited to join the New Dev Order.
-            </NDO_Text>
-            <NDO_Text>
+            </StyledText>
+            <StyledText>
               Let's take a couple minutes to get you set up. You'll need to
               connect your Phantom Wallet.
-            </NDO_Text>
-            <NDO_Text>
+            </StyledText>
+            <StyledText>
               Just a heads up - it'll take 1 SOL to mint your Membership Token.{' '}
-              <NDO_Link href="https://google.com">Learn more.</NDO_Link>
-            </NDO_Text>
+              <StyledLink href="https://google.com">Learn more.</StyledLink>
+            </StyledText>
           </View>
 
           <View
@@ -67,17 +67,10 @@ export default function Welcome() {
               width: '100%',
               paddingTop: 80,
             }}>
-            <NDO_PhantomConnectButton />
-            <NDO_Button type="noBg" onPress={() => {}}>
+            <PhantomConnectButton />
+            {/* <NDO_Button type="noBg" onPress={() => {}}>
               Create new wallet
-            </NDO_Button>
-            {__DEV__ && (
-              <NDO_Button
-                type="noBg"
-                onPress={() => navigation.navigate('HomeNavigation')}>
-                __DEV__ Skip
-              </NDO_Button>
-            )}
+            </NDO_Button> */}
           </View>
         </View>
       )}

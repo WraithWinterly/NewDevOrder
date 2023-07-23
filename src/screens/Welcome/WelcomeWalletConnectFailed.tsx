@@ -1,26 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import TokenIcon from 'src/components/icons/TokenIcon';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
+import useAppStore from 'src/store';
 import Layout from 'src/layout/Layout';
-import {Colors} from 'src/styles/styles';
 
-export default function WelcomeMintMembershipToken() {
+export default function WelcomeWalletConnectFailed() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  function onMintPressed() {
-    // Mint functionality
-    const mintSuccess = true;
-    if (mintSuccess) {
-      navigation.navigate('WelcomeComplete');
-    } else {
-      navigation.navigate('WelcomeMintFailed');
-    }
-  }
-
+  const walletConnectError = useAppStore(state => state.walletConnectError);
   return (
     <Layout>
       <View
@@ -31,24 +21,17 @@ export default function WelcomeMintMembershipToken() {
           height: '85%',
         }}>
         <View style={{gap: 18, paddingTop: 0}}>
-          <StyledText type="header" style={{paddingBottom: 8}}>
-            Almost there! Let's mint your Membership Token.
-          </StyledText>
-          <StyledText>
-            The New Dev Order is a token-gated platform. In order to access
-            content and participate in bounties, you'll have to mint a
-            Membership Token first.
-          </StyledText>
           <View style={{alignItems: 'center'}}>
             <TokenIcon />
-            <Text
-              style={{
-                fontSize: 32,
-                color: Colors.Text,
-              }}>
-              Mint Price: 1 SOL
-            </Text>
           </View>
+          <StyledText type="header" style={{paddingBottom: 8}}>
+            Wallet Connect Failed
+          </StyledText>
+          <StyledText>
+            Please review your wallet settings and do not reject the connection
+            prompt.
+          </StyledText>
+          <StyledText>Error: {walletConnectError}</StyledText>
         </View>
 
         <View
@@ -58,9 +41,8 @@ export default function WelcomeMintMembershipToken() {
             width: '100%',
             paddingTop: 80,
           }}>
-          <StyledButton onPress={onMintPressed}>Mint my pass</StyledButton>
-          <StyledButton type="noBg">
-            Why do I need a Membership Token?
+          <StyledButton onPress={() => navigation.navigate('Welcome')}>
+            Try Again
           </StyledButton>
         </View>
       </View>

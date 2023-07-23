@@ -1,23 +1,19 @@
-import React, {createRef, useState} from 'react';
-import {
-  TouchableOpacity,
-  ActionSheetIOS,
-  Platform,
-  View,
-  Text,
-} from 'react-native';
-import NDO_Text from './ndo/NDO_Text';
-import DropdownIcon from './images/DropdownIcon';
+import React, {createRef} from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import StyledText from './ui/styled/StyledText';
+import DropdownIcon from './icons/DropdownIcon';
 import {Colors} from 'src/styles/styles';
-import useAppContext from './AppProvider';
 import {Picker} from '@react-native-picker/picker';
+import useAppStore from '../store';
 
 export default function TeamSelector() {
   return <TeamSelectorAndroid />;
 }
 
 export function TeamSelectorAndroid() {
-  const {team, allTeams, setTeam} = useAppContext();
+  const team = useAppStore(state => state.team);
+  const allTeams = useAppStore(state => state.allTeams);
+  const setTeam = useAppStore(state => state.setTeam);
 
   const pickerRef = createRef<Picker<any>>();
 
@@ -34,10 +30,10 @@ export function TeamSelectorAndroid() {
           padding: 16,
           borderRadius: 8,
         }}>
-        <NDO_Text style={{fontSize: 20}}>
+        <StyledText style={{fontSize: 20}}>
           {/* {team === 'All Teams' ? 'All Teams' : `Team ${team}`} */}
           {team}
-        </NDO_Text>
+        </StyledText>
         <DropdownIcon />
       </TouchableOpacity>
 

@@ -2,10 +2,10 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useState} from 'react';
 import {Text, View} from 'react-native';
-import {StackParamList} from 'src/Main';
-import NDO_Button from 'src/components/ndo/NDO_Button';
-import NDO_Text from 'src/components/ndo/NDO_Text';
-import {NDO_TextInput} from 'src/components/ndo/NDO_TextInput';
+import {StackParamList} from 'src/StackNavigator';
+import StyledButton from 'src/components/ui/styled/StyledButton';
+import StyledText from 'src/components/ui/styled/StyledText';
+import {StyledTextInput} from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 
 export default function WelcomeSetupProfile() {
@@ -27,28 +27,28 @@ export default function WelcomeSetupProfile() {
           height: '85%',
         }}>
         <View style={{gap: 20}}>
-          <NDO_Text type="header">Let's set up your profile.</NDO_Text>
-          <NDO_TextInput
+          <StyledText type="header">Let's set up your profile.</StyledText>
+          <StyledTextInput
             onChangeText={t => setUsername(t)}
             value={username}
             placeholder="Username"
           />
-          <NDO_TextInput
+          <StyledTextInput
             onChangeText={t => setFirstName(t)}
             value={firstName}
             placeholder="First Name"
           />
-          <NDO_TextInput
+          <StyledTextInput
             onChangeText={t => setLastName(t)}
             value={lastName}
             placeholder="Last Name"
           />
-          <NDO_TextInput
+          <StyledTextInput
             onChangeText={t => setEmail(t)}
             value={email}
             placeholder="Email"
           />
-          <NDO_TextInput
+          <StyledTextInput
             onChangeText={t => setPassword(t)}
             value={password}
             placeholder="Password"
@@ -56,10 +56,10 @@ export default function WelcomeSetupProfile() {
           />
         </View>
 
-        <NDO_Button
+        <StyledButton
           onPress={() => navigation.navigate('WelcomeMintMembershipToken')}>
           Next Step
-        </NDO_Button>
+        </StyledButton>
       </View>
     </Layout>
   );

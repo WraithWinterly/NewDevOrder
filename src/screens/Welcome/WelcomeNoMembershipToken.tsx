@@ -1,12 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Text, View} from 'react-native';
-import {StackParamList} from 'src/Main';
-import TokenIcon from 'src/components/images/TokenIcon';
-import NDO_Button from 'src/components/ndo/NDO_Button';
-import NDO_Text from 'src/components/ndo/NDO_Text';
+import {View} from 'react-native';
+import {StackParamList} from 'src/StackNavigator';
+import TokenIcon from 'src/components/icons/TokenIcon';
+import StyledButton from 'src/components/ui/styled/StyledButton';
+import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import {Colors} from 'src/styles/styles';
 
 export default function WelcomeNoMembershipToken() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -24,14 +23,16 @@ export default function WelcomeNoMembershipToken() {
           <View style={{alignItems: 'center'}}>
             <TokenIcon />
           </View>
-          <NDO_Text type="header" style={{paddingBottom: 8}}>
+          <StyledText type="header" style={{paddingBottom: 8}}>
             You don't have an NDO Membership Token.
-          </NDO_Text>
-          <NDO_Text>Come back when you have an NDO Membership Token.</NDO_Text>
-          <NDO_Text>
+          </StyledText>
+          <StyledText>
+            Come back when you have an NDO Membership Token.
+          </StyledText>
+          <StyledText>
             You can get this by getting a friend already on the NDO app to
             invite you.
-          </NDO_Text>
+          </StyledText>
         </View>
 
         <View
@@ -41,9 +42,9 @@ export default function WelcomeNoMembershipToken() {
             width: '100%',
             paddingTop: 80,
           }}>
-          <NDO_Button onPress={() => navigation.navigate('Welcome')}>
+          <StyledButton onPress={() => navigation.navigate('Welcome')}>
             Refresh Wallet
-          </NDO_Button>
+          </StyledButton>
         </View>
       </View>
     </Layout>

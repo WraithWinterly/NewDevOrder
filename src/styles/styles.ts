@@ -1,7 +1,6 @@
-import {Appearance, StyleSheet} from 'react-native';
-
 export const Colors = {
-  Background: '#2B2323',
+  BackgroundBrown: '#2B2323',
+  Background: '#161616',
   BackgroundLighter: '#36343B',
   BackgroundDarker: '#1D1B20',
   AppBar: '#211F26',

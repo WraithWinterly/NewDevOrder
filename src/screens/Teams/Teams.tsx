@@ -1,10 +1,10 @@
-import NDO_Text from 'src/components/ndo/NDO_Text';
+import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 
 export default function Teams() {
   return (
     <Layout>
-      <NDO_Text>Teams</NDO_Text>
+      <StyledText>Teams</StyledText>
     </Layout>
   );
 }
