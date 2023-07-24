@@ -8,6 +8,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
+
 import {Colors} from 'src/styles/styles';
 import WalletIcon from 'src/components/icons/WalletIcon';
 

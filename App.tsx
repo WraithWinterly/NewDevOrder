@@ -9,14 +9,23 @@ import 'buffer';
 
 import {SolanaProvider} from 'src/web3/SolanaProvider';
 import {MenuProvider} from 'react-native-popup-menu';
+import {AuthorizationProvider} from 'src/web3/SolAuthorizationProvider';
+import {ConnectionProvider, RPC_ENDPOINT} from 'src/web3/ConnectionProvider';
+import {clusterApiUrl} from '@solana/web3.js';
 export default function App() {
   return (
-    <SolanaProvider>
-      <SafeAreaProvider>
-        <MenuProvider>
-          <StackNavigator />
-        </MenuProvider>
-      </SafeAreaProvider>
-    </SolanaProvider>
+    <AuthorizationProvider>
+      <ConnectionProvider
+        config={{commitment: 'processed'}}
+        endpoint={clusterApiUrl(RPC_ENDPOINT)}>
+        <SolanaProvider>
+          <SafeAreaProvider>
+            <MenuProvider>
+              <StackNavigator />
+            </MenuProvider>
+          </SafeAreaProvider>
+        </SolanaProvider>
+      </ConnectionProvider>
+    </AuthorizationProvider>
   );
 }

@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 import {Bounty} from 'src/types/types';
-import useAppStore from '../../store';
+import useAppStore from '../../stores/store';
 
 export default function BountyList({
   searchText,

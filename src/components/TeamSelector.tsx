@@ -4,7 +4,7 @@ import StyledText from './ui/styled/StyledText';
 import DropdownIcon from './icons/DropdownIcon';
 import {Colors} from 'src/styles/styles';
 import {Picker} from '@react-native-picker/picker';
-import useAppStore from '../store';
+import useAppStore from '../stores/store';
 
 export default function TeamSelector() {
   return <TeamSelectorAndroid />;

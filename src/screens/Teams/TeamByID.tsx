@@ -1,6 +1,6 @@
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import useAppStore from 'src/store';
+import useAppStore from 'src/stores/store';
 
 export default function TeamByID() {
   const team = useAppStore(state => state.team);

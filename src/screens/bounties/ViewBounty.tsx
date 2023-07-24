@@ -17,7 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackParamList} from 'src/StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FullBounty} from 'src/types/types';
-import useAppStore from 'src/store';
+import useAppStore from 'src/stores/store';
 
 export default function ViewBounty() {
   const bounty = useAppStore(state => state.selectedFullBounty);

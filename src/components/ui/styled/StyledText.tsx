@@ -7,6 +7,7 @@ interface StyledTextProps {
   type?: 'normal' | 'header';
   style?: StyleProp<TextStyle>;
   onPress?: () => void;
+  truncate?: boolean;
 }
 
 export function StyledText({
@@ -14,6 +15,7 @@ export function StyledText({
   type = 'normal',
   style,
   onPress,
+  truncate = false,
 }: StyledTextProps) {
   let newStyle: StyleProp<TextStyle> = {};
 
@@ -33,7 +35,23 @@ export function StyledText({
       break;
   }
 
-  return (
+  // if (truncate) {
+  //   newStyle = {
+  //     ...newStyle,
+  //     lineHeight: 1,
+  //     el: 'tail',
+  //   };
+  // }
+
+  return truncate ? (
+    <Text
+      style={[newStyle, style]}
+      numberOfLines={1}
+      ellipsizeMode="tail"
+      onPress={onPress}>
+      {children}
+    </Text>
+  ) : (
     <Text style={[newStyle, style]} onPress={onPress}>
       {children}
     </Text>

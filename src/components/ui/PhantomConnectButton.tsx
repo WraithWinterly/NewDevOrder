@@ -6,9 +6,13 @@ import useSolanaContext from 'src/web3/SolanaProvider';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 import {useNavigation} from '@react-navigation/native';
-import useAppStore from '../../store';
+import useAppStore from '../../stores/store';
 
-export default function PhantomConnectButton() {
+export default function PhantomConnectButton({
+  skipWelcome = false,
+}: {
+  skipWelcome?: boolean;
+}) {
   const solana = useSolanaContext();
   const navigator = useNavigation<StackNavigationProp<StackParamList>>();
   const setWalletConnectError = useAppStore(
@@ -36,6 +40,9 @@ export default function PhantomConnectButton() {
         solana
           .initializeWallet()
           .then(() => {
+            if (skipWelcome) {
+              return;
+            }
             onWalletConnectComplete();
           })
           .catch(e => {

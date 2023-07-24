@@ -15,6 +15,7 @@ type AppStore = {
   selectedFullBounty?: FullBounty;
   setSelectedFullBounty: (fetchId: string) => void;
   isFounder: boolean;
+  setIsFounder: (isFounder: boolean) => void;
 };
 
 function fetchBounties() {
@@ -181,7 +182,8 @@ const useAppStore = create<AppStore>(set => ({
     const data = SAMPLE_BOUNTY;
     set(() => ({selectedFullBounty: data}));
   },
-  isFounder: true,
+  isFounder: false,
+  setIsFounder: isFounder => set(() => ({isFounder})),
 }));
 
 export default useAppStore;

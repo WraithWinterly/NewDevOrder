@@ -19,6 +19,10 @@ import MyWallet from './screens/wallet/MyWallet';
 import MintNFTs from './screens/wallet/MintNFTs';
 import MintNFTConfirm from './screens/wallet/MintNFTConfirm';
 import MintRoleNFT from './screens/wallet/MintRoleNFT';
+import StackHeaderRight from './StackHeaderRight';
+import NFTDetails from './screens/wallet/NFTDetails';
+import MintVarNFT from './screens/wallet/MintVarNFT';
+import useMintStore from './stores/mintStore';
 
 export type WelcomeStackParamList = {
   Welcome: undefined;
@@ -36,6 +40,8 @@ export type WalletParamList = {
   MintNFTs: undefined;
   MintNFTConfirm: undefined;
   MintRoleNFT: undefined;
+  MintVarNFT: undefined;
+  NFTDetails: undefined;
 };
 
 export type StackParamList = WelcomeStackParamList &
@@ -52,6 +58,7 @@ const Stack = createStackNavigator<StackParamList>();
 const HideStackHeader = ['HomeNavigation'];
 
 export default function StackNavigator() {
+  const nftToMint = useMintStore(state => state.nftToMint);
   return (
     <NavigationContainer
       theme={{
@@ -80,6 +87,7 @@ export default function StackNavigator() {
           headerRightContainerStyle: {
             paddingTop: 8,
           },
+          headerRight: () => <StackHeaderRight route={route.name} />,
           headerShadowVisible: false,
           headerShown: !HideStackHeader.includes(route.name),
           headerTitleStyle: {
@@ -139,10 +147,34 @@ export default function StackNavigator() {
         <Stack.Screen name="TeamByID" component={TeamByID} />
         {/* MyWallet: undefined; MintNFTs: undefined; MintNFTConfirm: undefined;
         MintRoleNFT: undefined; */}
-        <Stack.Screen name="MyWallet" component={MyWallet} />
-        <Stack.Screen name="MintNFTs" component={MintNFTs} />
+        <Stack.Screen
+          name="MyWallet"
+          component={MyWallet}
+          options={{title: 'My Wallet'}}
+        />
+        <Stack.Screen
+          name="MintNFTs"
+          component={MintNFTs}
+          options={{title: 'Mint NFTs'}}
+        />
         <Stack.Screen name="MintNFTConfirm" component={MintNFTConfirm} />
-        <Stack.Screen name="MintRoleNFT" component={MintRoleNFT} />
+        <Stack.Screen
+          name="MintRoleNFT"
+          component={MintRoleNFT}
+          options={{title: 'Mint Role NFT'}}
+        />
+        <Stack.Screen
+          name="MintVarNFT"
+          component={MintVarNFT}
+          options={{
+            title: `Mint ${nftToMint} NFT`,
+          }}
+        />
+        <Stack.Screen
+          name="NFTDetails"
+          component={NFTDetails}
+          options={{title: ''}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

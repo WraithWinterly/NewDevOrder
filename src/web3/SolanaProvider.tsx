@@ -4,12 +4,17 @@ import React, {
   useEffect,
   useContext,
   ReactNode,
+  useCallback,
 } from 'react';
 import {transact} from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
 import {
   AuthorizationResult,
   AuthorizeAPI,
+  ReauthorizeAPI,
 } from '@solana-mobile/mobile-wallet-adapter-protocol';
+import {Cluster, Connection, PublicKey} from '@solana/web3.js';
+import {useConnection} from './ConnectionProvider';
+import {Account, useAuthorization} from './SolAuthorizationProvider';
 
 interface AppIdentity {
   name: string;
@@ -18,38 +23,56 @@ interface AppIdentity {
 }
 
 interface SolanaContextType {
-  wallet: AuthorizationResult | null;
+  wallet: Account | null;
+  balance: number | null;
   isConnected: boolean;
   initializeWallet: () => Promise<void>;
 }
 
 const SolanaContext = createContext<SolanaContextType | undefined>(undefined);
 
-const APP_IDENTITY: AppIdentity = {
-  name: 'New Dev Order',
-  uri: 'https://cryptoversus.llc',
-  icon: 'favicon.ico', // Full path resolves to https://yourdapp.com/favicon.ico
-};
-
 export function SolanaProvider({children}: {children: ReactNode}) {
-  const [wallet, setWallet] = useState<AuthorizationResult | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const {authorizeSession, selectedAccount: wallet} = useAuthorization();
+  const [authorizationInProgress, setAuthorizationInProgress] = useState(false);
+
+  const {connection} = useConnection();
+  const {selectedAccount} = useAuthorization();
+  const [balance, setBalance] = useState<number | null>(null);
+
+  const fetchAndUpdateBalance = useCallback(
+    async (account: Account) => {
+      console.log('Fetching balance for: ' + account.publicKey);
+      const fetchedBalance = await connection.getBalance(account.publicKey);
+      console.log('Balance fetched: ' + fetchedBalance);
+      setBalance(fetchedBalance);
+    },
+    [connection],
+  );
+
+  useEffect(() => {
+    if (!selectedAccount) {
+      return;
+    }
+    fetchAndUpdateBalance(selectedAccount);
+  }, [fetchAndUpdateBalance, selectedAccount]);
 
   async function initializeWallet() {
-    const wallet = await transact(async wallet => {
-      const authorizationResult = await wallet.authorize({
-        cluster: 'devnet',
-        identity: APP_IDENTITY,
-      });
-      return authorizationResult;
+    if (authorizationInProgress) {
+      return;
+    }
+    setAuthorizationInProgress(true);
+    await transact(async wallet => {
+      await authorizeSession(wallet);
     });
 
-    setWallet(wallet);
     setIsConnected(true);
+    setAuthorizationInProgress(false);
   }
 
   const contextValue: SolanaContextType = {
     wallet,
+    balance,
     isConnected,
     initializeWallet,
   };

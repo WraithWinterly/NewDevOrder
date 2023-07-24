@@ -18,7 +18,7 @@ import CodeIcon from 'src/components/icons/CodeIcon';
 
 import HeaderRight from './HeaderRight';
 
-import useAppStore from 'src/store';
+import useAppStore from 'src/stores/store';
 
 export type MainTabsParams = {
   Home: undefined;
