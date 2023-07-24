@@ -2,9 +2,9 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
-import StyledButton from 'src/components/ui/styled/StyledButton';
+
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useAppStore from 'src/stores/store';

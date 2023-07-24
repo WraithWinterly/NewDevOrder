@@ -6,7 +6,7 @@ type AppStore = {
   setWalletConnectError: (error: string) => void;
   team: string;
   bounties: Bounty[] | undefined;
-  fetchBounties: () => void;
+  fetchBounties: () => Promise<void>;
   allTeams: string[];
   setTeam: (team: string) => void;
   allProjects: string[];
@@ -165,7 +165,7 @@ const useAppStore = create<AppStore>(set => ({
   setWalletConnectError: error => set(() => ({walletConnectError: error})),
   team: '',
   bounties: SAMPLE_BOUNTIES,
-  fetchBounties: () => {
+  fetchBounties: async () => {
     // sample fetch
     const data = fetchBounties();
     set(() => ({bounties: data}));

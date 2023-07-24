@@ -5,7 +5,7 @@ import Layout from 'src/layout/Layout';
 
 import Collapsible from 'react-native-collapsible';
 import {useId, useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 import CollapsibleArrow from 'src/components/icons/CollapsibleArrow';
 import TeamsIcon from 'src/components/icons/TeamsIcon';
 import CalendarIcon from 'src/components/icons/CalendarIcon';

@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import {Text, StyleProp, TextStyle} from 'react-native';
 import {Colors} from 'src/styles/styles';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 
 interface StyledButtonProps {
   children: ReactNode;

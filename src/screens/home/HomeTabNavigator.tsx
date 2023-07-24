@@ -54,7 +54,7 @@ export default function HomeTabNavigator() {
           route.name === 'Home' ? (
             <StyledText
               style={{paddingLeft: 30, fontWeight: 'bold', fontSize: 20}}>
-              New Dev Order
+              Welcome
             </StyledText>
           ) : (
             <StyledText style={{marginLeft: 20, fontSize: 20}}>

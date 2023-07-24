@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import RightArrowAccent from '../icons/RightArrowAccent';
 import StyledText from './styled/StyledText';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {Colors} from 'src/styles/styles';
 
 export default function LongLinkNavigation({
