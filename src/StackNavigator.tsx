@@ -10,7 +10,6 @@ import WelcomeWalletConnectFailed from './screens/welcome/WelcomeWalletConnectFa
 import WelcomeNoMembershipToken from './screens/welcome/WelcomeNoMembershipToken';
 import WelcomeMintFailed from './screens/welcome/WelcomeMintFailed';
 import HomeTabNavigator from './screens/home/HomeTabNavigator';
-import ProjectByID from './screens/projects/ProjectByID';
 import TeamVar from './screens/teams/TeamVar';
 import Welcome from './screens/welcome/Welcome';
 import ViewBounty from './screens/bounties/ViewBounty';
@@ -27,6 +26,7 @@ import useTeamsStore from './stores/teamsStore';
 import InviteMembers from './screens/teams/InviteMembers';
 import CreateTeam from './screens/teams/CreateTeam';
 import Profile from './screens/profile/Profile';
+import CreateProject from './screens/projects/CreateProject';
 
 export type WelcomeStackParamList = {
   Welcome: undefined;
@@ -57,11 +57,12 @@ export type WalletParamList = {
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
   TeamParamList & {
-    Profile: undefined;
-    ProjectByID: undefined;
     HomeNavigation: undefined;
     ViewBounty: undefined;
     StartBounty: undefined;
+
+    Profile: undefined;
+    CreateProject: undefined;
   };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -155,8 +156,17 @@ export default function StackNavigator() {
           component={StartBounty}
           options={{title: ''}}
         />
+
         <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="ProjectByID" component={ProjectByID} />
+
+        <Stack.Screen
+          name="CreateProject"
+          component={CreateProject}
+          options={{
+            title: 'Create New Project',
+          }}
+        />
+
         <Stack.Screen
           name="TeamVar"
           component={TeamVar}
@@ -178,8 +188,7 @@ export default function StackNavigator() {
             title: 'Create New Team',
           }}
         />
-        {/* MyWallet: undefined; MintNFTs: undefined; MintNFTConfirm: undefined;
-        MintRoleNFT: undefined; */}
+
         <Stack.Screen
           name="MyWallet"
           component={MyWallet}

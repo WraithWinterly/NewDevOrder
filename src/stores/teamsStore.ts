@@ -55,6 +55,7 @@ type TeamsStore = {
   setCreateTeamData: (data: CreateTeamData | undefined) => void;
   isCreateTeamValid: (data: CreateTeamData) => boolean;
   teams: Team[] | undefined;
+  finalizeCreateTeam: () => void;
   fetchTeams: () => Promise<void>;
   selectedTeam?: FullTeam;
   setSelectedTeam: (fetchId: string) => void;
@@ -75,6 +76,20 @@ const useTeamsStore = create<TeamsStore>(set => ({
     return true;
   },
   teams: SAMPLE_FULL_TEAMS,
+  finalizeCreateTeam: () => {
+    set(state => ({
+      teams: [
+        {
+          ...state.createTeamData!,
+          id: String(state.teams!.length + 1),
+          // accepted: false,
+          memberCount: 1,
+          createdByYou: true,
+        },
+        ...state.teams!,
+      ],
+    }));
+  },
   selectedTeam: undefined,
   fetchTeams: async () => {
     // sample fetch
