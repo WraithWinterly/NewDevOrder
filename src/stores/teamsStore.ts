@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {Member} from './membersStore';
+import {Member, SAMPLE_MEMBERS} from './membersStore';
 
 type Team = {
   id: string;
@@ -34,39 +34,12 @@ const SAMPLE_TEAMS: Team[] = [
 const SAMPLE_FULL_TEAMS: FullTeam[] = [
   {
     ...SAMPLE_TEAMS[0],
-    members: [
-      {
-        id: '1',
-        name: 'Aydens',
-        tag: '@aydens1234',
-      },
-      {
-        id: '2',
-        name: 'Rocky',
-        tag: '@rocky',
-      },
-    ],
+    members: [SAMPLE_MEMBERS[0], SAMPLE_MEMBERS[1]],
     link: 'https://aydens.net',
   },
   {
     ...SAMPLE_TEAMS[1],
-    members: [
-      {
-        id: '1',
-        name: 'Comp1',
-        tag: '@comp1',
-      },
-      {
-        id: '2',
-        name: 'commp2',
-        tag: '@comp2',
-      },
-      {
-        id: '3',
-        name: 'commp3',
-        tag: '@comp3',
-      },
-    ],
+    members: [SAMPLE_MEMBERS[2], SAMPLE_MEMBERS[3]],
     link: 'https://aydens.net',
   },
 ];

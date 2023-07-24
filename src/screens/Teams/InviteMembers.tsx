@@ -26,6 +26,12 @@ export default function InviteMembers() {
             id: '999',
             name: 'John Doe',
             tag: '@johndoe',
+            bio: '',
+            level: '0',
+            roles: ['Bounty Designer'],
+            bountiesWon: 0,
+            membersInvited: 0,
+            teamsJoined: 0,
           }}
           rightChildren={
             <StyledText style={{color: Colors.Red[300]}}>

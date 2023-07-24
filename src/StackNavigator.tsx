@@ -26,6 +26,7 @@ import useMintStore from './stores/mintStore';
 import useTeamsStore from './stores/teamsStore';
 import InviteMembers from './screens/teams/InviteMembers';
 import CreateTeam from './screens/teams/CreateTeam';
+import Profile from './screens/profile/Profile';
 
 export type WelcomeStackParamList = {
   Welcome: undefined;
@@ -56,6 +57,7 @@ export type WalletParamList = {
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
   TeamParamList & {
+    Profile: undefined;
     ProjectByID: undefined;
     HomeNavigation: undefined;
     ViewBounty: undefined;
@@ -153,6 +155,7 @@ export default function StackNavigator() {
           component={StartBounty}
           options={{title: ''}}
         />
+        <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="ProjectByID" component={ProjectByID} />
         <Stack.Screen
           name="TeamVar"

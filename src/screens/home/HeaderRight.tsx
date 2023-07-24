@@ -15,9 +15,13 @@ import WalletIcon from 'src/components/icons/WalletIcon';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {StackParamList} from 'src/StackNavigator';
 import Separator from 'src/components/ui/Separator';
+import useMemberStore from 'src/stores/membersStore';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
+  const setMemberIdViewing = useMemberStore(state => state.setMemberIdViewing);
+  const myProfile = useMemberStore(state => state.myProfile);
+
   return (
     <View
       style={{
@@ -43,52 +47,58 @@ export default function HeaderRight() {
             },
             optionsWrapper: {
               backgroundColor: Colors.BackgroundDarker,
-              // gap: 10,
               padding: 10,
               borderRadius: 12,
               width: 280,
             },
           }}>
-          <View
-            style={{
-              flexDirection: 'column',
-              gap: 10,
-              marginBottom: 8,
-            }}>
+          {myProfile && (
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 12,
-                gap: 12,
+                flexDirection: 'column',
+                gap: 10,
+                marginBottom: 8,
               }}>
-              {/* Profile Picture */}
               <View
                 style={{
-                  height: 38,
-                  width: 38,
-                  backgroundColor: Colors.Purple[400],
-                  borderRadius: 100,
-                }}></View>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{color: Colors.White, fontSize: 18}}>
-                  Christina Vu
-                </Text>
-                <Text>@christinavu</Text>
-              </View>
-              <View
-                style={{
-                  backgroundColor: Colors.BackgroundLighter,
-                  borderRadius: 12,
-                  justifyContent: 'center',
-                  paddingHorizontal: 18,
-                  paddingVertical: 12,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginBottom: 12,
+                  gap: 12,
                 }}>
-                <Text>Level 12</Text>
+                {/* Profile Picture */}
+                <View
+                  style={{
+                    height: 38,
+                    width: 38,
+                    backgroundColor: Colors.Purple[400],
+                    borderRadius: 100,
+                  }}></View>
+                <View style={{flexDirection: 'column'}}>
+                  <Text style={{color: Colors.White, fontSize: 18}}>
+                    {myProfile.name}
+                  </Text>
+                  <Text>{myProfile.tag}</Text>
+                </View>
+                <View
+                  style={{
+                    backgroundColor: Colors.BackgroundLighter,
+                    borderRadius: 12,
+                    justifyContent: 'center',
+                    paddingHorizontal: 18,
+                    paddingVertical: 12,
+                  }}>
+                  <Text>Level {myProfile.level}</Text>
+                </View>
               </View>
             </View>
-          </View>
-          <MenuOption onSelect={() => {}}>
+          )}
+
+          <MenuOption
+            onSelect={() => {
+              setMemberIdViewing(undefined);
+              navigation.navigate('Profile');
+            }}>
             <View style={{flexDirection: 'row', gap: 10, alignItems: 'center'}}>
               <ProfileIcon />
               <Text style={{color: 'white'}}>My Profile</Text>

@@ -1,15 +1,9 @@
+import {Roles} from 'src/styles/types';
 import {create} from 'zustand';
 
-export type MintTypes =
-  | 'Bounty Hunter'
-  | 'Founder'
-  | 'Bounty Manager'
-  | 'Bounty Designer'
-  | 'Bounty Validator';
-
 type MintStore = {
-  nftToMint: MintTypes;
-  setNftToMint: (string: MintTypes) => void;
+  nftToMint: Roles;
+  setNftToMint: (string: Roles) => void;
 };
 
 const useMintStore = create<MintStore>(set => ({

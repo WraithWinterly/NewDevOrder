@@ -1,9 +1,13 @@
 import {View} from 'react-native';
-import {Member} from 'src/stores/membersStore';
+import useMemberStore, {Member} from 'src/stores/membersStore';
 import {Colors} from 'src/styles/styles';
 import StyledText from './ui/styled/StyledText';
 import Bubble from './ui/Bubble';
 import {ReactNode} from 'react';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {StackParamList} from 'src/StackNavigator';
 
 export default function MemberBox({
   member,
@@ -12,8 +16,10 @@ export default function MemberBox({
   member: Member;
   rightChildren?: ReactNode;
 }) {
+  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+  const setMemberIdViewing = useMemberStore(state => state.setMemberIdViewing);
   return (
-    <View
+    <TouchableOpacity
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -23,6 +29,10 @@ export default function MemberBox({
         paddingVertical: 8,
         backgroundColor: Colors.BackgroundLighter,
         borderRadius: 12,
+      }}
+      onPress={() => {
+        setMemberIdViewing(member.id);
+        navigation.navigate('Profile');
       }}>
       <View style={{padding: 8, borderRadius: 8}}>
         <StyledText>{member.name}</StyledText>
@@ -32,6 +42,6 @@ export default function MemberBox({
       </View>
       {rightChildren}
       {/* <Bubble lowHeight text={member.role} /> */}
-    </View>
+    </TouchableOpacity>
   );
 }

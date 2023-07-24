@@ -3,15 +3,16 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import LongLinkNavigation from 'src/components/ui/LongLinkNavigation';
-import StyledText from 'src/components/ui/styled/StyledText';
+
 import Layout from 'src/layout/Layout';
-import useMintStore, {MintTypes} from 'src/stores/mintStore';
+import useMintStore from 'src/stores/mintStore';
+import {type Roles} from 'src/styles/types';
 
 export default function MintRoleNFT() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const setNftToMint = useMintStore(state => state.setNftToMint);
-  function handlePress(nftType: MintTypes) {
+  function handlePress(nftType: Roles) {
     setNftToMint(nftType);
     navigation.navigate('MintVarNFT');
   }
