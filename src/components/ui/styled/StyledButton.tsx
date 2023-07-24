@@ -35,8 +35,10 @@ export function StyledButton({
   }
 
   let textStyle: StyleProp<TextStyle> = {
-    color: type === 'noBg' ? Colors.White : Colors.Black,
+    color: type === 'noBg' ? Colors.White : '#381E72',
+    fontWeight: '500',
     alignSelf: 'center',
+    fontSize: 16,
   };
 
   return (

@@ -8,6 +8,7 @@ interface TextInputProps {
   placeholder: string;
   icon?: ReactNode;
   secureTextEntry?: boolean;
+  isLinkInput?: boolean;
 }
 
 export function StyledTextInput({
@@ -16,13 +17,17 @@ export function StyledTextInput({
   placeholder,
   icon = null,
   secureTextEntry = false,
+  isLinkInput = false,
 }: TextInputProps) {
   return (
     <View>
       <TextInput
-        placeholderTextColor={Colors.Text}
+        placeholderTextColor={Colors.Gray[400]}
+        autoCorrect={!isLinkInput}
+        autoCapitalize={isLinkInput ? 'none' : undefined}
+        autoComplete={isLinkInput ? 'url' : undefined}
         style={{
-          borderColor: Colors.Primary,
+          borderColor: Colors.BorderColor,
           borderWidth: 1,
           padding: 16,
           color: Colors.Text,

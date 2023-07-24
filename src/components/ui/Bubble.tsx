@@ -1,12 +1,15 @@
 import {View} from 'react-native';
 import StyledText from './styled/StyledText';
+import {Colors} from 'src/styles/styles';
 
 export default function Bubble({
   text,
-  type,
+  type = 'normal',
+  lowHeight = false,
 }: {
   text: string;
-  type: 'purple' | 'green' | 'normal';
+  type?: 'purple' | 'green' | 'normal' | 'transparent';
+  lowHeight?: boolean;
 }) {
   function getBg() {
     switch (type) {
@@ -16,6 +19,8 @@ export default function Bubble({
         return '#485844';
       case 'normal':
         return '#4A4458';
+      case 'transparent':
+        return 'transparent';
     }
   }
   return (
@@ -24,11 +29,14 @@ export default function Bubble({
         backgroundColor: getBg(),
         borderRadius: 12,
         paddingHorizontal: 16,
-        paddingVertical: 4,
-        height: 44,
+        height: lowHeight ? 30 : 44,
         justifyContent: 'center',
+        borderWidth: type === 'transparent' ? 1 : 0,
+        borderColor: Colors.BorderColor,
       }}>
-      <StyledText>{text}</StyledText>
+      <StyledText style={{fontSize: lowHeight ? 14 : 16, marginVertical: 0}}>
+        {text}
+      </StyledText>
     </View>
   );
 }

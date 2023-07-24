@@ -11,7 +11,7 @@ import WelcomeNoMembershipToken from './screens/welcome/WelcomeNoMembershipToken
 import WelcomeMintFailed from './screens/welcome/WelcomeMintFailed';
 import HomeTabNavigator from './screens/home/HomeTabNavigator';
 import ProjectByID from './screens/projects/ProjectByID';
-import TeamByID from './screens/teams/TeamByID';
+import TeamVar from './screens/teams/TeamVar';
 import Welcome from './screens/welcome/Welcome';
 import ViewBounty from './screens/bounties/ViewBounty';
 import StartBounty from './screens/bounties/StartBounty';
@@ -23,6 +23,9 @@ import StackHeaderRight from './StackHeaderRight';
 import NFTDetails from './screens/wallet/NFTDetails';
 import MintVarNFT from './screens/wallet/MintVarNFT';
 import useMintStore from './stores/mintStore';
+import useTeamsStore from './stores/teamsStore';
+import InviteMembers from './screens/teams/InviteMembers';
+import CreateTeam from './screens/teams/CreateTeam';
 
 export type WelcomeStackParamList = {
   Welcome: undefined;
@@ -35,6 +38,12 @@ export type WelcomeStackParamList = {
   WelcomeWalletFailed: undefined;
 };
 
+export type TeamParamList = {
+  TeamVar: undefined;
+  InviteMembers: undefined;
+  CreateTeam: undefined;
+};
+
 export type WalletParamList = {
   MyWallet: undefined;
   MintNFTs: undefined;
@@ -45,9 +54,9 @@ export type WalletParamList = {
 };
 
 export type StackParamList = WelcomeStackParamList &
-  WalletParamList & {
+  WalletParamList &
+  TeamParamList & {
     ProjectByID: undefined;
-    TeamByID: undefined;
     HomeNavigation: undefined;
     ViewBounty: undefined;
     StartBounty: undefined;
@@ -59,6 +68,7 @@ const HideStackHeader = ['HomeNavigation'];
 
 export default function StackNavigator() {
   const nftToMint = useMintStore(state => state.nftToMint);
+  const teamTitle = useTeamsStore(state => state.selectedTeam);
   return (
     <NavigationContainer
       theme={{
@@ -144,7 +154,27 @@ export default function StackNavigator() {
           options={{title: ''}}
         />
         <Stack.Screen name="ProjectByID" component={ProjectByID} />
-        <Stack.Screen name="TeamByID" component={TeamByID} />
+        <Stack.Screen
+          name="TeamVar"
+          component={TeamVar}
+          options={{
+            title: teamTitle?.title || '',
+          }}
+        />
+        <Stack.Screen
+          name="InviteMembers"
+          component={InviteMembers}
+          options={{
+            title: 'Invite Members',
+          }}
+        />
+        <Stack.Screen
+          name="CreateTeam"
+          component={CreateTeam}
+          options={{
+            title: 'Create New Team',
+          }}
+        />
         {/* MyWallet: undefined; MintNFTs: undefined; MintNFTConfirm: undefined;
         MintRoleNFT: undefined; */}
         <Stack.Screen

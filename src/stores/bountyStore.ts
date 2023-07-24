@@ -1,4 +1,3 @@
-import {Bounty, FullBounty} from 'src/types/types';
 import {create} from 'zustand';
 
 type BountyStore = {
@@ -6,6 +5,34 @@ type BountyStore = {
   fetchBounties: () => Promise<void>;
   selectedFullBounty?: FullBounty;
   setSelectedFullBounty: (fetchId: string) => void;
+};
+
+export type FullBounty = Bounty & {
+  submissions: string[];
+  aboutProject: string;
+  recentActivity: string;
+  questions: string[];
+  headerSections: {[key: string]: string[]};
+
+  founder: {
+    name: string;
+    tag: string;
+    bio: string;
+  };
+};
+
+export type Bounty = {
+  id: string;
+  title: string;
+  description: string;
+  postDate: Date;
+  projectName: string;
+  active: boolean;
+  type: 'Frontend' | 'Backend' | 'Fullstack' | 'Web3';
+  reward: number;
+  deadline: Date;
+  teamCount: number;
+  youJoined: boolean;
 };
 
 const SAMPLE_BOUNTIES: Bounty[] = [

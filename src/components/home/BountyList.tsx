@@ -32,10 +32,6 @@ export default function BountyList({
   const bounties = useBountyStore(state => state.bounties);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
 
-  useEffect(() => {
-    if (!bounties) fetchBounties();
-  }, []);
-
   const search = bounties?.filter(bounty => {
     if (bounty.title.includes(searchText || '')) {
       if (yourBounties) {
