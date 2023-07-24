@@ -35,7 +35,7 @@ export type Bounty = {
   youJoined: boolean;
 };
 
-const SAMPLE_BOUNTIES: Bounty[] = [
+export const SAMPLE_BOUNTIES: Bounty[] = [
   {
     id: '1',
     title: 'Front-End Cross-Platform Flutter Application',

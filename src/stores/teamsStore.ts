@@ -14,7 +14,7 @@ type FullTeam = Team & {
   link: string;
 };
 
-const SAMPLE_TEAMS: Team[] = [
+export const SAMPLE_TEAMS: Team[] = [
   {
     id: '1',
     title: 'Team Solsitce',
