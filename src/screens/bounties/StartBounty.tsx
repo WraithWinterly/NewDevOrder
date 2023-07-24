@@ -16,6 +16,13 @@ export default function StartBounty() {
 
   const selectedFullBounty = useBountyStore(state => state.selectedFullBounty);
 
+  function startBounty() {
+    // start bounty
+
+    // redirect
+    navigation.navigate('HomeNavigation');
+  }
+
   return (
     <Layout>
       <View style={{justifyContent: 'space-between', height: '98%'}}>
@@ -32,9 +39,7 @@ export default function StartBounty() {
           <StyledText>Choose a team to start this bounty:</StyledText>
           <TeamSelector />
         </View>
-        <StyledButton onPress={() => navigation.navigate('HomeNavigation')}>
-          Confirm Bounty
-        </StyledButton>
+        <StyledButton onPress={startBounty}>Confirm Bounty</StyledButton>
       </View>
     </Layout>
   );

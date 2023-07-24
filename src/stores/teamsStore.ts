@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import {Member, SAMPLE_MEMBERS} from './membersStore';
 
-type Team = {
+export type Team = {
   id: string;
   title: string;
   description: string;
