@@ -16,14 +16,12 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import {useNavigation} from '@react-navigation/native';
 import {StackParamList} from 'src/StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {FullBounty} from 'src/types/types';
-import useAppStore from 'src/stores/store';
+import useBountyStore from 'src/stores/bountyStore';
+import Separator from 'src/components/ui/Separator';
+import Bubble from 'src/components/ui/Bubble';
 
 export default function ViewBounty() {
-  const bounty = useAppStore(state => state.selectedFullBounty);
-  const setSelectedFullBounty = useAppStore(
-    state => state.setSelectedFullBounty,
-  );
+  const bounty = useBountyStore(state => state.selectedFullBounty);
 
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
@@ -46,45 +44,12 @@ export default function ViewBounty() {
                 flexWrap: 'wrap',
                 gap: 8,
               }}>
-              <View
-                style={{
-                  backgroundColor: '#4F378B',
-                  borderRadius: 12,
-                  paddingHorizontal: 16,
-                  paddingVertical: 2,
-                }}>
-                <StyledText
-                  style={{
-                    padding: 8,
-                    borderRadius: 100,
-                  }}>
-                  {bounty.projectName}
-                </StyledText>
-              </View>
-
-              <View
-                style={{
-                  backgroundColor: '#485844',
-                  borderRadius: 12,
-                  paddingHorizontal: 18,
-                  paddingVertical: 2,
-                  justifyContent: 'center',
-                }}>
-                <StyledText>
-                  {bounty.active ? 'Accepting Submissions' : 'Not Active'}
-                </StyledText>
-              </View>
-              <View
-                style={{
-                  backgroundColor: '#4A4458',
-                  borderRadius: 12,
-                  paddingHorizontal: 24,
-                  paddingVertical: 2,
-                  height: 44,
-                  justifyContent: 'center',
-                }}>
-                <StyledText>{bounty.type}</StyledText>
-              </View>
+              <Bubble type="purple" text={bounty.projectName} />
+              <Bubble
+                type="green"
+                text={bounty.active ? 'Accepting Submissions' : 'Not Active'}
+              />
+              <Bubble type="normal" text={bounty.type} />
             </View>
 
             <View style={{height: 12}}></View>
@@ -184,14 +149,7 @@ function DropdownSection({
       </TouchableOpacity>
 
       <Collapsible collapsed={collapsed}>{children}</Collapsible>
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderColor: '#79747E',
-          padding: 8,
-
-          marginBottom: 14,
-        }}></View>
+      <Separator />
     </>
   );
 }

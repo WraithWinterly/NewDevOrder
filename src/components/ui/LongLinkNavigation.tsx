@@ -1,8 +1,9 @@
 import {View} from 'react-native';
-import RightArrowAccent from '../icons/RightArrowAccent';
 import StyledText from './styled/StyledText';
 import {TouchableOpacity} from 'react-native';
 import {Colors} from 'src/styles/styles';
+import Separator from './Separator';
+import RightArrowIcon from '../icons/RightArrowIcon';
 
 export default function LongLinkNavigation({
   name,
@@ -18,39 +19,39 @@ export default function LongLinkNavigation({
   onPress: () => void;
 }) {
   return (
-    <TouchableOpacity
-      style={{
-        borderBottomColor: Colors.Gray[400],
-        paddingBottom: 14,
-        borderBottomWidth: 0.5,
-        paddingTop: 14,
-        flexDirection: 'row',
-      }}
-      disabled={!enabled}
-      onPress={onPress}>
-      <View style={{width: '90%'}}>
-        <StyledText
-          style={{
-            fontSize: 18,
-            paddingBottom: 2,
-            color: enabled ? Colors.Text : Colors.Gray[600],
-          }}>
-          {name}
-        </StyledText>
-        <StyledText
-          style={{color: enabled ? Colors.Gray[400] : Colors.Gray[600]}}>
-          {description}
-        </StyledText>
-        {bottomText && (
+    <>
+      <TouchableOpacity
+        style={{
+          paddingTop: 14,
+          flexDirection: 'row',
+        }}
+        disabled={!enabled}
+        onPress={onPress}>
+        <View style={{width: '90%'}}>
+          <StyledText
+            style={{
+              fontSize: 18,
+              paddingBottom: 2,
+              color: enabled ? Colors.Text : Colors.Gray[600],
+            }}>
+            {name}
+          </StyledText>
           <StyledText
             style={{color: enabled ? Colors.Gray[400] : Colors.Gray[600]}}>
-            {bottomText}
+            {description}
           </StyledText>
-        )}
-      </View>
-      <View style={{paddingTop: 14}}>
-        <RightArrowAccent />
-      </View>
-    </TouchableOpacity>
+          {bottomText && (
+            <StyledText
+              style={{color: enabled ? Colors.Gray[400] : Colors.Gray[600]}}>
+              {bottomText}
+            </StyledText>
+          )}
+        </View>
+        <View style={{paddingTop: 14}}>
+          <RightArrowIcon />
+        </View>
+      </TouchableOpacity>
+      <Separator customH={8} />
+    </>
   );
 }

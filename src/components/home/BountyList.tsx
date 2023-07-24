@@ -11,8 +11,9 @@ import RightArrowIcon from '../icons/RightArrowIcon';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
-import {Bounty} from 'src/types/types';
-import useAppStore from '../../stores/store';
+
+import useBountyStore from 'src/stores/bountyStore';
+import Bubble from '../ui/Bubble';
 
 export default function BountyList({
   searchText,
@@ -24,12 +25,12 @@ export default function BountyList({
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
 
-  const setSelectedFullBounty = useAppStore(
+  const setSelectedFullBounty = useBountyStore(
     state => state.setSelectedFullBounty,
   );
 
-  const bounties = useAppStore(state => state.bounties);
-  const fetchBounties = useAppStore(state => state.fetchBounties);
+  const bounties = useBountyStore(state => state.bounties);
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
 
   useEffect(() => {
     if (!bounties) fetchBounties();
@@ -187,46 +188,12 @@ export default function BountyList({
               flexWrap: 'wrap',
               gap: 8,
             }}>
-            <View
-              style={{
-                backgroundColor: '#4F378B',
-                borderRadius: 12,
-                paddingHorizontal: 12,
-                paddingVertical: 2,
-              }}>
-              <StyledText
-                style={{
-                  padding: 8,
-                  borderRadius: 100,
-                }}>
-                {bounty.projectName}
-              </StyledText>
-            </View>
-
-            <View
-              style={{
-                backgroundColor: '#485844',
-                borderRadius: 12,
-                paddingHorizontal: 12,
-                paddingVertical: 2,
-                height: 44,
-                justifyContent: 'center',
-              }}>
-              <StyledText>
-                {bounty.active ? 'Accepting Submissions' : 'Not Active'}
-              </StyledText>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#4A4458',
-                borderRadius: 12,
-                paddingHorizontal: 18,
-                paddingVertical: 2,
-                height: 44,
-                justifyContent: 'center',
-              }}>
-              <StyledText>{bounty.type}</StyledText>
-            </View>
+            <Bubble type="purple" text={bounty.projectName} />
+            <Bubble
+              type="green"
+              text={bounty.active ? 'Accepting Submissions' : 'Not Active'}
+            />
+            <Bubble type="normal" text={bounty.type} />
           </View>
           <StyledText
             style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>

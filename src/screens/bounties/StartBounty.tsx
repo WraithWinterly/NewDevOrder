@@ -8,12 +8,13 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import {Colors} from 'src/styles/styles';
-import useAppStore from 'src/stores/store';
+import useBountyStore from 'src/stores/bountyStore';
+import Separator from 'src/components/ui/Separator';
 
 export default function StartBounty() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
-  const selectedFullBounty = useAppStore(state => state.selectedFullBounty);
+  const selectedFullBounty = useBountyStore(state => state.selectedFullBounty);
 
   return (
     <Layout>
@@ -26,12 +27,7 @@ export default function StartBounty() {
             </Text>{' '}
             {selectedFullBounty?.title}
           </StyledText>
-          <View
-            style={{
-              borderBottomColor: Colors.Primary,
-              borderBottomWidth: 1,
-            }}
-          />
+          <Separator />
           <View style={{height: 24}}></View>
           <StyledText>Choose a team to start this bounty:</StyledText>
           <TeamSelector />

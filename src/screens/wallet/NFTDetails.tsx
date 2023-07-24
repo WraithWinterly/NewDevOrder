@@ -1,4 +1,5 @@
 import {View} from 'react-native';
+import Bubble from 'src/components/ui/Bubble';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useWalletStore from 'src/stores/walletStore';
@@ -8,25 +9,11 @@ export default function NFTDetails() {
   const nft = useWalletStore(state => state.nftById);
   return (
     <Layout>
-      <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+      <View
+        style={{flexDirection: 'column', alignItems: 'flex-start', gap: 18}}>
         <StyledText type="header">{nft?.name}</StyledText>
 
-        <View
-          style={{
-            backgroundColor: '#4F378B',
-            borderRadius: 12,
-            paddingHorizontal: 12,
-            paddingVertical: 2,
-            marginTop: 12,
-          }}>
-          <StyledText
-            style={{
-              padding: 8,
-              borderRadius: 100,
-            }}>
-            Project {nft?.project}
-          </StyledText>
-        </View>
+        <Bubble type="purple" text={nft?.project || 'Loading...'} />
         <View
           style={{
             width: 300,

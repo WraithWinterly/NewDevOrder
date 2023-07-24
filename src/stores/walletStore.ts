@@ -28,11 +28,16 @@ type WalletStore = {
   nftById: NFT | undefined;
   fetchNFTs: () => void;
   setNFTId: (id: string) => void;
+  walletConnectError: string;
+  setWalletConnectError: (error: string) => void;
 };
 
 const useWalletStore = create<WalletStore>(set => ({
   nfts: [],
   nftById: undefined,
+  walletConnectError: '',
+  setWalletConnectError: error => set(() => ({walletConnectError: error})),
+  team: '',
 
   fetchNFTs: () => {
     set({nfts: NFTs});

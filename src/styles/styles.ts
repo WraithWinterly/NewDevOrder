@@ -3,6 +3,7 @@ export const Colors = {
   Background: '#161616',
   BackgroundLighter: '#36343B',
   BackgroundDarker: '#1D1B20',
+  BorderColor: '#79747E',
   AppBar: '#211F26',
   Primary: '#D0BCFF',
   Secondary: '#4A4458',

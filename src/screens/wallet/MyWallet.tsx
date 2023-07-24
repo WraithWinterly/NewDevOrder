@@ -4,10 +4,11 @@ import {useEffect, useId} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
+import Separator from 'src/components/ui/Separator';
 
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import useAppStore from 'src/stores/store';
+
 import useWalletStore from 'src/stores/walletStore';
 import {Colors} from 'src/styles/styles';
 
@@ -31,12 +32,10 @@ export default function MyWallet() {
           fontSize: 32,
           fontWeight: '400',
           paddingTop: 2,
-          paddingBottom: 24,
-          borderBottomColor: Colors.Gray[600],
-          borderBottomWidth: 1,
         }}>
         {balance} SOL
       </StyledText>
+      <Separator />
       {!!nfts && (
         <FlatList
           style={{paddingTop: 14}}
