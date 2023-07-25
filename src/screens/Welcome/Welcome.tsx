@@ -1,5 +1,4 @@
 import {View} from 'react-native';
-import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledLink from 'src/components/ui/styled/StyledLink';
 import StyledText from 'src/components/ui/styled/StyledText';
 import PhantomConnectButton from 'src/components/ui/PhantomConnectButton';
@@ -28,7 +27,7 @@ export default function Welcome() {
       if (completed) {
         navigation.reset({
           index: 0,
-          routes: [{name: 'HomeNavigation'}],
+          routes: [{name: 'ReconnectWallet'}],
         });
         return;
       }
@@ -67,7 +66,7 @@ export default function Welcome() {
               width: '100%',
               paddingTop: 80,
             }}>
-            <PhantomConnectButton />
+            <PhantomConnectButton successRoute="WelcomeSetupProfile" />
             {/* <NDO_Button type="noBg" onPress={() => {}}>
               Create new wallet
             </NDO_Button> */}

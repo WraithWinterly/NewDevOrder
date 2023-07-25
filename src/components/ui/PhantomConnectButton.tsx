@@ -7,15 +7,17 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 import {useNavigation} from '@react-navigation/native';
 import useAppStore from '../../stores/store';
+import useWalletStore from 'src/stores/walletStore';
 
 export default function PhantomConnectButton({
-  skipWelcome = false,
+  successRoute,
 }: {
-  skipWelcome?: boolean;
+  successRoute: keyof StackParamList;
 }) {
   const solana = useSolanaContext();
   const navigator = useNavigation<StackNavigationProp<StackParamList>>();
-  const setWalletConnectError = useAppStore(
+
+  const setWalletConnectError = useWalletStore(
     state => state.setWalletConnectError,
   );
 
@@ -23,7 +25,7 @@ export default function PhantomConnectButton({
     // Check Solana Token
     const hasMemberShipToken = true;
     if (hasMemberShipToken) {
-      navigator.navigate('WelcomeSetupProfile');
+      navigator.navigate(successRoute);
     } else {
       navigator.navigate('WelcomeNoMembershipToken');
     }
@@ -40,9 +42,6 @@ export default function PhantomConnectButton({
         solana
           .initializeWallet()
           .then(() => {
-            if (skipWelcome) {
-              return;
-            }
             onWalletConnectComplete();
           })
           .catch(e => {

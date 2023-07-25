@@ -5,12 +5,13 @@ import {StackParamList} from 'src/StackNavigator';
 import TokenIcon from 'src/components/icons/TokenIcon';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
-import useAppStore from 'src/stores/store';
+
 import Layout from 'src/layout/Layout';
+import useWalletStore from 'src/stores/walletStore';
 
 export default function WelcomeWalletConnectFailed() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const walletConnectError = useAppStore(state => state.walletConnectError);
+  const walletConnectError = useWalletStore(state => state.walletConnectError);
   return (
     <Layout>
       <View

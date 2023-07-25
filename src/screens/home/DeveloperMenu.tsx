@@ -25,7 +25,7 @@ export default function DeveloperMenu() {
 
   return (
     <Layout>
-      <PhantomConnectButton skipWelcome />
+      <PhantomConnectButton successRoute="HomeNavigation" />
       <View style={{gap: 8, marginTop: 24}}>
         <StyledButton onPress={onToggleFounder}>
           Toggle Founder Status

@@ -28,6 +28,7 @@ import CreateTeam from './screens/teams/CreateTeam';
 import Profile from './screens/profile/Profile';
 import CreateProject from './screens/projects/CreateProject';
 import LeaderboardNavigation from './screens/leaderboard/LeaderboardNavigation';
+import ReconnectWallet from './screens/home/ReconnectWallet';
 
 export type WelcomeStackParamList = {
   Welcome: undefined;
@@ -58,6 +59,7 @@ export type WalletParamList = {
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
   TeamParamList & {
+    ReconnectWallet: undefined;
     HomeNavigation: undefined;
     ViewBounty: undefined;
     StartBounty: undefined;
@@ -112,6 +114,11 @@ export default function StackNavigator() {
             backgroundColor: Colors.Background,
           },
         })}>
+        <Stack.Screen
+          name="ReconnectWallet"
+          component={ReconnectWallet}
+          options={{title: ''}}
+        />
         <Stack.Screen
           name="Welcome"
           component={Welcome}
