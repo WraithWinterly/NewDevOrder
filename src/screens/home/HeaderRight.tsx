@@ -16,6 +16,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {StackParamList} from 'src/StackNavigator';
 import Separator from 'src/components/ui/Separator';
 import useMemberStore from 'src/stores/membersStore';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
@@ -31,7 +32,9 @@ export default function HeaderRight() {
         alignItems: 'center',
         paddingRight: 18,
       }}>
-      <LeaderboardIcon />
+      <TouchableOpacity onPress={() => navigation.navigate('Leaderboard')}>
+        <LeaderboardIcon />
+      </TouchableOpacity>
 
       <Menu>
         <MenuTrigger>

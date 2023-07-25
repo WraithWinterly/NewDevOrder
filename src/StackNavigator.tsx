@@ -27,6 +27,7 @@ import InviteMembers from './screens/teams/InviteMembers';
 import CreateTeam from './screens/teams/CreateTeam';
 import Profile from './screens/profile/Profile';
 import CreateProject from './screens/projects/CreateProject';
+import LeaderboardNavigation from './screens/leaderboard/LeaderboardNavigation';
 
 export type WelcomeStackParamList = {
   Welcome: undefined;
@@ -62,6 +63,7 @@ export type StackParamList = WelcomeStackParamList &
     StartBounty: undefined;
 
     Profile: undefined;
+    Leaderboard: undefined;
     CreateProject: undefined;
   };
 
@@ -158,6 +160,7 @@ export default function StackNavigator() {
         />
 
         <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Leaderboard" component={LeaderboardNavigation} />
 
         <Stack.Screen
           name="CreateProject"

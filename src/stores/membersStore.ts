@@ -58,6 +58,17 @@ export const SAMPLE_MEMBERS: Array<Member> = [
     teamsJoined: 0,
     membersInvited: 21,
   },
+  {
+    id: '5',
+    name: 'Comp3',
+    tag: '@comp4',
+    bio: 'lorem20',
+    level: '40',
+    roles: ['Bounty Hunter', 'Founder', 'Bounty Hunter'],
+    bountiesWon: 20,
+    teamsJoined: 0,
+    membersInvited: 21,
+  },
 ];
 
 type MemberStore = {
