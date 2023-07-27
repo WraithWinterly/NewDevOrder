@@ -4,6 +4,7 @@ export const Colors = {
   BackgroundLighter: '#36343B',
   BackgroundDarker: '#1D1B20',
   BorderColor: '#79747E',
+  BtnTextColor: '#381E72',
   AppBar: '#211F26',
   Primary: '#D0BCFF',
   Secondary: '#4A4458',

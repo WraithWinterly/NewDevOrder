@@ -30,8 +30,12 @@ export default function Projects() {
   }
   const playingRole = useMemberStore(state => state.myProfile?.playingRole);
 
-  const projectsPending = projects?.filter(p => p.stage !== 'Ready');
-  const projectsAccepted = projects?.filter(p => p.stage === 'Ready');
+  const projectsPending = projects?.filter(
+    p => p.stage == 'WaitingBountyMgrQuote',
+  );
+  const projectsAccepted = projects?.filter(
+    p => p.stage !== 'WaitingBountyMgrQuote',
+  );
 
   return (
     <Layout>
@@ -78,17 +82,19 @@ function ProjectCard({project}: {project: Project}) {
   );
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const role = useMemberStore(state => state.myProfile?.playingRole);
+
+  async function onClick() {
+    setSelectedProject(project.id);
+    if (role?.title === 'Bounty Designer') {
+      navigation.navigate('ProjectWorkspaceNavigator');
+    } else if (role?.title === 'Founder' || role?.title === 'Bounty Manager') {
+      navigation.navigate('PendingProposal');
+    }
+  }
+
   return (
     <TouchableOpacity
-      onPress={() => {
-        async function transfer() {
-          await setSelectedProject(project.id);
-          if (role?.title === 'Bounty Designer') {
-            navigation.navigate('ProjectWorkspaceNavigator');
-          }
-        }
-        transfer();
-      }}
+      onPress={onClick}
       style={{
         padding: 12,
         backgroundColor: Colors.BackgroundLighter,
@@ -101,6 +107,10 @@ function ProjectCard({project}: {project: Project}) {
       </View>
       <StyledText style={{fontSize: 16, fontWeight: '500'}}>
         {project.stage === 'WaitingBountyMgrQuote' ? 'Pending Review' : ''}
+        {project.stage === 'Declined' ? 'Declined' : ''}
+        {project.stage === 'WaitingBountyDesign'
+          ? 'Pending design from bounty designer'
+          : ''}
       </StyledText>
 
       <StyledText style={{paddingTop: 8}}>

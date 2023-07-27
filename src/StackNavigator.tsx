@@ -36,7 +36,7 @@ import AcceptAndSendQuote from './screens/projects/manager/AcceptAndSendQuote';
 import ConfirmDecline from './screens/projects/manager/ConfirmDecline';
 import AddTestCases from './screens/projects/validator/AddTestCases';
 import Submissions from './screens/projects/validator/Submissions';
-import PendingProject from './screens/projects/shared/founderManager/PendingProject';
+import PendingProposal from './screens/projects/shared/founderManager/PendingProposal';
 import useProjectsStore from './stores/projectsStore';
 
 export type WelcomeStackParamList = {
@@ -79,7 +79,7 @@ export type ProjectParamList = {
   AddTestCases: undefined;
   Submissions: undefined;
   // Shared
-  PendingProject: undefined;
+  PendingProposal: undefined;
 };
 
 export type StackParamList = WelcomeStackParamList &
@@ -103,7 +103,6 @@ export default function StackNavigator() {
   const nftToMint = useMintStore(state => state.nftToMint);
   const teamTitle = useTeamsStore(state => state.selectedTeam);
   const project = useProjectsStore(state => state.selectedProject);
-  console.log('adsf ', project);
 
   return (
     <NavigationContainer
@@ -263,8 +262,8 @@ export default function StackNavigator() {
           }}
         />
         <Stack.Screen
-          name="PendingProject"
-          component={PendingProject}
+          name="PendingProposal"
+          component={PendingProposal}
           options={{
             title: '',
           }}

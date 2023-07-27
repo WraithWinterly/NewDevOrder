@@ -10,6 +10,7 @@ interface TextInputProps {
   secureTextEntry?: boolean;
   isLinkInput?: boolean;
   multiLine?: boolean;
+  numberInput?: boolean;
 }
 
 export default function StyledTextInput({
@@ -20,6 +21,7 @@ export default function StyledTextInput({
   secureTextEntry = false,
   isLinkInput = false,
   multiLine = false,
+  numberInput = false,
 }: TextInputProps) {
   return (
     <View>
@@ -41,6 +43,7 @@ export default function StyledTextInput({
         value={value}
         placeholder={placeholder}
         multiline={multiLine}
+        keyboardType={numberInput ? 'numeric' : 'default'}
       />
       {!!icon && (
         <View

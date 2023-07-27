@@ -21,7 +21,6 @@ export default function Drafts() {
   }
 
   const shown = bounties?.filter(bounty => bounty.stage === 'Draft');
-  console.log(shown);
 
   return (
     <Layout>

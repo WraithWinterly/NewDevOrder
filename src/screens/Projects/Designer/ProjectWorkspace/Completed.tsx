@@ -21,7 +21,6 @@ export default function Completed() {
   }
 
   const shown = bounties?.filter(bounty => bounty.stage === 'Completed');
-  console.log(shown);
 
   return (
     <Layout>

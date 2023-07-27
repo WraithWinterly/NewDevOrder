@@ -6,7 +6,7 @@ import {TouchableOpacity} from 'react-native';
 interface StyledButtonProps {
   children: ReactNode;
   onPress?: () => void;
-  type?: 'normal' | 'noBg' | 'noBgDanger' | 'borderNoFill';
+  type?: 'normal' | 'noBg' | 'noBgDanger' | 'noBgPurple' | 'borderNoFill';
 }
 
 export function StyledButton({
@@ -21,12 +21,20 @@ export function StyledButton({
       style = {
         fontSize: 16,
         padding: 16,
+        paddingHorizontal: 22,
         borderRadius: 50,
         color: Colors.Text,
         backgroundColor: Colors.Primary,
       };
       break;
     case 'noBg':
+      style = {
+        fontSize: 16,
+        padding: 16,
+        backgroundColor: Colors.Transparent,
+      };
+      break;
+    case 'noBgPurple':
       style = {
         fontSize: 16,
         padding: 16,
@@ -63,6 +71,8 @@ export function StyledButton({
         ? Colors.White
         : type === 'noBgDanger'
         ? Colors.Red[400]
+        : type === 'noBgPurple'
+        ? Colors.Primary
         : type === 'borderNoFill'
         ? Colors.Primary
         : '#381E72',

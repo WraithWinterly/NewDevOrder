@@ -21,7 +21,6 @@ export default function ActiveBounties() {
   }
 
   const shown = bounties?.filter(bounty => bounty.stage === 'Active');
-  console.log(shown);
 
   return (
     <Layout>
