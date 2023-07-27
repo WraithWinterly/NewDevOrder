@@ -1,11 +1,7 @@
 import React, {createRef, useEffect} from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import StyledText from './ui/styled/StyledText';
-import DropdownIcon from './icons/DropdownIcon';
-import {Colors} from 'src/styles/styles';
 import {Picker} from '@react-native-picker/picker';
 
-import useTeamsStore, {Team} from 'src/stores/teamsStore';
+import useTeamsStore from 'src/stores/teamsStore';
 import DropdownMenu from './ui/DropdownMenu';
 
 export default function TeamSelector() {

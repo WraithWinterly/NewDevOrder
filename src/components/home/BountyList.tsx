@@ -3,7 +3,7 @@ import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
 import StyledText from '../ui/styled/StyledText';
 import {FlatList} from 'react-native';
-import {Dispatch, SetStateAction, useEffect, useId, useState} from 'react';
+import {useId} from 'react';
 import CashIcon from '../icons/CashIcon';
 import TeamsIcon from '../icons/TeamsIcon';
 import CalendarIcon from '../icons/CalendarIcon';

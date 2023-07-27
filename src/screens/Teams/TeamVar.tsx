@@ -9,7 +9,6 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 
 import useTeamsStore from 'src/stores/teamsStore';
-import {Colors} from 'src/styles/styles';
 
 export default function TeamVar() {
   const selectedTeam = useTeamsStore(state => state.selectedTeam);

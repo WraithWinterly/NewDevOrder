@@ -12,7 +12,7 @@ import useWalletStore from 'src/stores/walletStore';
 export default function PhantomConnectButton({
   successRoute,
 }: {
-  successRoute: keyof StackParamList;
+  successRoute: StackParamList;
 }) {
   const solana = useSolanaContext();
   const navigator = useNavigation<StackNavigationProp<StackParamList>>();
@@ -25,6 +25,7 @@ export default function PhantomConnectButton({
     // Check Solana Token
     const hasMemberShipToken = true;
     if (hasMemberShipToken) {
+      //@ts-expect-error Passing screen as string by name is valid and works
       navigator.navigate(successRoute);
     } else {
       navigator.navigate('WelcomeNoMembershipToken');

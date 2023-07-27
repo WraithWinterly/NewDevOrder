@@ -6,13 +6,13 @@ import LongLinkNavigation from 'src/components/ui/LongLinkNavigation';
 
 import Layout from 'src/layout/Layout';
 import useMintStore from 'src/stores/mintStore';
-import {type Roles} from 'src/types/types';
+import {RoleType} from 'src/stores/membersStore';
 
 export default function MintRoleNFT() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const setNftToMint = useMintStore(state => state.setNftToMint);
-  function handlePress(nftType: Roles) {
+  function handlePress(nftType: RoleType) {
     setNftToMint(nftType);
     navigation.navigate('MintVarNFT');
   }

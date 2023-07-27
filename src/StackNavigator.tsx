@@ -26,17 +26,17 @@ import useTeamsStore from './stores/teamsStore';
 import InviteMembers from './screens/teams/InviteMembers';
 import CreateTeam from './screens/teams/CreateTeam';
 import Profile from './screens/profile/Profile';
-import CreateProject from './screens/projects/Designer/CreateProject';
+import CreateProject from './screens/projects/designer/CreateProject';
 import LeaderboardNavigation from './screens/leaderboard/LeaderboardNavigation';
 import ReconnectWallet from './screens/home/ReconnectWallet';
-import ProjectWorkspaceNavigator from './screens/projects/Designer/ProjectWorkspace/ProjectWorkspaceNavigator';
-import CreateProposal from './screens/projects/Founder/CreateProposal';
-import ConfirmAndPay from './screens/projects/Founder/ConfirmAndPay';
-import AcceptAndSendQuote from './screens/projects/Manager/AcceptAndSendQuote';
-import ConfirmDecline from './screens/projects/Manager/ConfirmDecline';
-import AddTestCases from './screens/projects/Validator/AddTestCases';
-import Submissions from './screens/projects/Validator/Submissions';
-import PendingProject from './screens/projects/Shared/FounderManager/PendingProject';
+import ProjectWorkspaceNavigator from './screens/projects/designer/ProjectWorkspace/ProjectWorkspaceNavigator';
+import CreateProposal from './screens/projects/founder/CreateProposal';
+import ConfirmAndPay from './screens/projects/founder/ConfirmAndPay';
+import AcceptAndSendQuote from './screens/projects/manager/AcceptAndSendQuote';
+import ConfirmDecline from './screens/projects/manager/ConfirmDecline';
+import AddTestCases from './screens/projects/validator/AddTestCases';
+import Submissions from './screens/projects/validator/Submissions';
+import PendingProject from './screens/projects/shared/founderManager/PendingProject';
 import useProjectsStore from './stores/projectsStore';
 
 export type WelcomeStackParamList = {

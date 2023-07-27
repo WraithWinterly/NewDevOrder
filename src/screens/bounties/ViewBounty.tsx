@@ -45,10 +45,11 @@ export default function ViewBounty() {
                 gap: 8,
               }}>
               <Bubble type="purple" text={bounty.projectName} />
-              <Bubble
-                type="green"
-                text={bounty.active ? 'Accepting Submissions' : 'Not Active'}
-              />
+
+              {bounty.stage === 'Active' && (
+                <Bubble type="green" text="Accepting Submissions" />
+              )}
+
               <Bubble type="normal" text={bounty.type} />
             </View>
 
