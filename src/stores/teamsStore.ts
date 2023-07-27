@@ -98,7 +98,7 @@ const useTeamsStore = create<TeamsStore>(set => ({
   },
   setSelectedTeam: (fetchId: string) => {
     // sample fetch
-    console.log(fetchId);
+    // console.log(fetchId);
     const data = SAMPLE_FULL_TEAMS[Number(fetchId) - 1];
     set(() => ({selectedTeam: data}));
   },

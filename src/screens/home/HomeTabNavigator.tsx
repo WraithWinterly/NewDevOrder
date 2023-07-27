@@ -19,6 +19,7 @@ import CodeIcon from 'src/components/icons/CodeIcon';
 import HeaderRight from './HeaderRight';
 
 import useAppStore from 'src/stores/store';
+import useMemberStore from 'src/stores/membersStore';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -41,7 +42,7 @@ const tabToHeaderText = {
 const Tab = createBottomTabNavigator<MainTabsParams>();
 
 export default function HomeTabNavigator() {
-  const isFounder = useAppStore(state => state.isFounder);
+  const playingRole = useMemberStore(state => state.myProfile?.playingRole);
 
   return (
     <Tab.Navigator
@@ -125,7 +126,7 @@ export default function HomeTabNavigator() {
           ),
         }}
       />
-      {isFounder && (
+      {playingRole?.title !== 'Bounty Hunter' && (
         <Tab.Screen
           name="Projects"
           component={Projects}

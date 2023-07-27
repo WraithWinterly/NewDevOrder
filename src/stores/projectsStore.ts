@@ -1,42 +1,48 @@
 import {create} from 'zustand';
+import {RoleType} from './membersStore';
 
 export type Project = {
   id: string;
   title: string;
   description: string;
-  accepted: boolean;
-};
-
-type FullProject = Project & {
   email: string;
   phone: string;
+  bountyIDs: string[];
+  stage:
+    | 'WaitingBountyMgrQuote'
+    | 'WaitingFounderPay'
+    | 'WaitingBountyDesign'
+    | 'Declined'
+    | 'Ready';
 };
 
 export const SAMPLE_PROJECTS: Project[] = [
   {
-    id: '1',
-    title: 'Project Avalanche',
+    id: '0',
+    title: 'Avalanche',
     description: 'lorem10',
-    accepted: true,
+    stage: 'WaitingBountyMgrQuote',
+    email: '',
+    phone: '',
+    bountyIDs: [],
+  },
+  {
+    id: '1',
+    title: 'Booster',
+    description: 'lorem10',
+    stage: 'WaitingBountyMgrQuote',
+    email: '',
+    phone: '',
+    bountyIDs: [],
   },
   {
     id: '2',
-    title: 'Project DOOM',
-    description: 'lorem20',
-    accepted: false,
-  },
-];
-
-const SAMPLE_FULL_PROJECTS: FullProject[] = [
-  {
-    ...SAMPLE_PROJECTS[0],
-    email: 'test@test.com',
-    phone: '+11234567890',
-  },
-  {
-    ...SAMPLE_PROJECTS[1],
-    email: 'no@gmail.com',
-    phone: '+12345678990',
+    title: 'Treasure',
+    description: 'lorem10',
+    stage: 'WaitingBountyMgrQuote',
+    email: '',
+    phone: '',
+    bountyIDs: [],
   },
 ];
 
@@ -54,7 +60,7 @@ type ProjectsStore = {
   projects: Project[] | undefined;
   finalizeCreateProject: () => void;
   fetchProjects: () => Promise<void>;
-  selectedProject?: FullProject;
+  selectedProject?: Project;
   setSelectedProject: (fetchId: string) => void;
 };
 
@@ -74,7 +80,7 @@ const useProjectsStore = create<ProjectsStore>(set => ({
 
     return true;
   },
-  projects: SAMPLE_FULL_PROJECTS,
+  projects: SAMPLE_PROJECTS,
   finalizeCreateProject: () => {
     set(state => ({
       projects: [
@@ -82,6 +88,8 @@ const useProjectsStore = create<ProjectsStore>(set => ({
           ...state.createProjectData!,
           id: String(state.projects!.length + 1),
           accepted: false,
+          stage: 'WaitingBountyMgrQuote',
+          bountyIDs: [],
         },
         ...state.projects!,
       ],
@@ -90,13 +98,14 @@ const useProjectsStore = create<ProjectsStore>(set => ({
   selectedProject: undefined,
   fetchProjects: async () => {
     // sample fetch
-    const data = SAMPLE_FULL_PROJECTS;
+    const data = SAMPLE_PROJECTS;
     set(() => ({projects: data}));
   },
   setSelectedProject: (fetchId: string) => {
     // sample fetch
-    console.log(fetchId);
-    const data = SAMPLE_FULL_PROJECTS[Number(fetchId) - 1];
+    // console.log(fetchId);
+    console.log(SAMPLE_PROJECTS[Number(fetchId)]);
+    const data = SAMPLE_PROJECTS[Number(fetchId)];
     set(() => ({selectedProject: data}));
   },
 }));

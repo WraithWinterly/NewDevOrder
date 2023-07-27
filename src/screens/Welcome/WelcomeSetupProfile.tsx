@@ -5,7 +5,7 @@ import {Text, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
-import {StyledTextInput} from 'src/components/ui/styled/StyledTextInput';
+import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 
 export default function WelcomeSetupProfile() {

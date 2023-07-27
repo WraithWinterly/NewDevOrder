@@ -6,7 +6,7 @@ import LongLinkNavigation from 'src/components/ui/LongLinkNavigation';
 
 import Layout from 'src/layout/Layout';
 import useMintStore from 'src/stores/mintStore';
-import {type Roles} from 'src/styles/types';
+import {type Roles} from 'src/types/types';
 
 export default function MintRoleNFT() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();

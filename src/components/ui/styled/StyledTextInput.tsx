@@ -9,15 +9,17 @@ interface TextInputProps {
   icon?: ReactNode;
   secureTextEntry?: boolean;
   isLinkInput?: boolean;
+  multiLine?: boolean;
 }
 
-export function StyledTextInput({
+export default function StyledTextInput({
   onChangeText,
   value,
   placeholder,
   icon = null,
   secureTextEntry = false,
   isLinkInput = false,
+  multiLine = false,
 }: TextInputProps) {
   return (
     <View>
@@ -38,6 +40,7 @@ export function StyledTextInput({
         onChangeText={onChangeText}
         value={value}
         placeholder={placeholder}
+        multiline={multiLine}
       />
       {!!icon && (
         <View

@@ -1,4 +1,4 @@
-import {Roles} from 'src/styles/types';
+import {Roles} from 'src/types/types';
 import {create} from 'zustand';
 
 type MintStore = {

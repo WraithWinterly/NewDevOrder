@@ -1,5 +1,11 @@
-import {Roles} from 'src/styles/types';
 import {create} from 'zustand';
+
+export type RoleType =
+  | 'Founder'
+  | 'Bounty Hunter'
+  | 'Bounty Manager'
+  | 'Bounty Designer'
+  | 'Bounty Validator';
 
 export type Member = {
   id: string;
@@ -7,11 +13,29 @@ export type Member = {
   tag: string;
   bio: string;
   level: string;
-  roles: Array<Roles>;
+  roles: Array<Role>;
+  playingRole: (typeof RoleDict)[0];
   bountiesWon: number;
   teamsJoined: number;
   membersInvited: number;
 };
+
+type Role = {
+  id: string;
+  title: RoleType;
+};
+
+export const RoleDict: Role[] = [
+  {id: '0', title: 'Founder'},
+  {id: '1', title: 'Bounty Hunter'},
+  {id: '2', title: 'Bounty Manager'},
+  {id: '3', title: 'Bounty Designer'},
+  {id: '4', title: 'Bounty Validator'},
+];
+
+function GetRole(string: RoleType) {
+  return RoleDict.find(role => role.title == string)!;
+}
 
 export const SAMPLE_MEMBERS: Array<Member> = [
   {
@@ -20,7 +44,8 @@ export const SAMPLE_MEMBERS: Array<Member> = [
     tag: '@aydens1234',
     bio: 'lorem20',
     level: '1',
-    roles: ['Bounty Hunter'],
+    roles: [GetRole('Bounty Hunter')],
+    playingRole: RoleDict[0],
     bountiesWon: 0,
     teamsJoined: 0,
     membersInvited: 0,
@@ -31,7 +56,8 @@ export const SAMPLE_MEMBERS: Array<Member> = [
     tag: '@rocky',
     bio: 'lorem20',
     level: '2',
-    roles: ['Bounty Hunter', 'Founder', 'Bounty Validator'],
+    roles: [GetRole('Bounty Hunter'), GetRole('Bounty Validator')],
+    playingRole: RoleDict[1],
     bountiesWon: 24,
     teamsJoined: 81,
     membersInvited: 12,
@@ -42,7 +68,8 @@ export const SAMPLE_MEMBERS: Array<Member> = [
     tag: '@comp1',
     bio: 'lorem20',
     level: '3',
-    roles: ['Bounty Hunter', 'Founder', 'Bounty Hunter'],
+    roles: [GetRole('Bounty Hunter'), GetRole('Bounty Hunter')],
+    playingRole: RoleDict[2],
     bountiesWon: 21,
     teamsJoined: 25,
     membersInvited: 92,
@@ -53,7 +80,8 @@ export const SAMPLE_MEMBERS: Array<Member> = [
     tag: '@comp2',
     bio: 'lorem20',
     level: '4',
-    roles: ['Bounty Hunter', 'Founder', 'Bounty Hunter'],
+    roles: [GetRole('Bounty Hunter'), GetRole('Bounty Designer')],
+    playingRole: RoleDict[3],
     bountiesWon: 20,
     teamsJoined: 0,
     membersInvited: 21,
@@ -64,7 +92,8 @@ export const SAMPLE_MEMBERS: Array<Member> = [
     tag: '@comp4',
     bio: 'lorem20',
     level: '40',
-    roles: ['Bounty Hunter', 'Founder', 'Bounty Hunter'],
+    roles: [GetRole('Bounty Hunter'), GetRole('Bounty Hunter')],
+    playingRole: RoleDict[2],
     bountiesWon: 20,
     teamsJoined: 0,
     membersInvited: 21,
@@ -75,9 +104,10 @@ type MemberStore = {
   memberViewing: Member | undefined;
   setMemberIdViewing: (id: string | undefined) => void;
   myProfile: Member | undefined;
+  setPlayingRole: (role: Role) => void;
 };
 
-const useMemberStore = create<MemberStore>(set => ({
+const useMemberStore = create<MemberStore>((set, get) => ({
   memberViewing: undefined,
   setMemberIdViewing: id => {
     if (typeof id === 'undefined')
@@ -88,6 +118,9 @@ const useMemberStore = create<MemberStore>(set => ({
     set(() => ({memberViewing: data}));
   },
   myProfile: SAMPLE_MEMBERS[0],
+  setPlayingRole: (role: Role) => {
+    set(() => ({myProfile: {...SAMPLE_MEMBERS[0], playingRole: role}}));
+  },
 }));
 
 export default useMemberStore;

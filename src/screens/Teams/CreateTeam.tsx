@@ -1,14 +1,14 @@
 import {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import StyledText from 'src/components/ui/styled/StyledText';
-import {StyledTextInput} from 'src/components/ui/styled/StyledTextInput';
+import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 import useTeamsStore from 'src/stores/teamsStore';
 
 export default function CreateTeam() {
   const [teamName, setTeamName] = useState('');
   const [description, setDescription] = useState('');
-  const [webLink, setWebLink] = useState('');
+  const [webLink, setWebLink] = useState('https://');
 
   const setCreateTeamData = useTeamsStore(state => state.setCreateTeamData);
 

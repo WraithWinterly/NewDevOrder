@@ -26,9 +26,18 @@ import useTeamsStore from './stores/teamsStore';
 import InviteMembers from './screens/teams/InviteMembers';
 import CreateTeam from './screens/teams/CreateTeam';
 import Profile from './screens/profile/Profile';
-import CreateProject from './screens/projects/CreateProject';
+import CreateProject from './screens/projects/Designer/CreateProject';
 import LeaderboardNavigation from './screens/leaderboard/LeaderboardNavigation';
 import ReconnectWallet from './screens/home/ReconnectWallet';
+import ProjectWorkspaceNavigator from './screens/projects/Designer/ProjectWorkspace/ProjectWorkspaceNavigator';
+import CreateProposal from './screens/projects/Founder/CreateProposal';
+import ConfirmAndPay from './screens/projects/Founder/ConfirmAndPay';
+import AcceptAndSendQuote from './screens/projects/Manager/AcceptAndSendQuote';
+import ConfirmDecline from './screens/projects/Manager/ConfirmDecline';
+import AddTestCases from './screens/projects/Validator/AddTestCases';
+import Submissions from './screens/projects/Validator/Submissions';
+import PendingProject from './screens/projects/Shared/FounderManager/PendingProject';
+import useProjectsStore from './stores/projectsStore';
 
 export type WelcomeStackParamList = {
   Welcome: undefined;
@@ -56,9 +65,27 @@ export type WalletParamList = {
   NFTDetails: undefined;
 };
 
+export type ProjectParamList = {
+  // Designer
+  ProjectWorkspaceNavigator: undefined;
+  CreateProject: undefined;
+  // Founder
+  CreateProposal: undefined;
+  ConfirmAndPay: undefined;
+  // Manager
+  AcceptAndSendQuote: undefined;
+  ConfirmDecline: undefined;
+  // Validator
+  AddTestCases: undefined;
+  Submissions: undefined;
+  // Shared
+  PendingProject: undefined;
+};
+
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
-  TeamParamList & {
+  TeamParamList &
+  ProjectParamList & {
     ReconnectWallet: undefined;
     HomeNavigation: undefined;
     ViewBounty: undefined;
@@ -66,7 +93,6 @@ export type StackParamList = WelcomeStackParamList &
 
     Profile: undefined;
     Leaderboard: undefined;
-    CreateProject: undefined;
   };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -76,6 +102,9 @@ const HideStackHeader = ['HomeNavigation'];
 export default function StackNavigator() {
   const nftToMint = useMintStore(state => state.nftToMint);
   const teamTitle = useTeamsStore(state => state.selectedTeam);
+  const project = useProjectsStore(state => state.selectedProject);
+  console.log('adsf ', project);
+
   return (
     <NavigationContainer
       theme={{
@@ -114,11 +143,13 @@ export default function StackNavigator() {
             backgroundColor: Colors.Background,
           },
         })}>
+        {/* Screen that is prompted when you load the app */}
         <Stack.Screen
           name="ReconnectWallet"
           component={ReconnectWallet}
           options={{title: ''}}
         />
+        {/* Welcome */}
         <Stack.Screen
           name="Welcome"
           component={Welcome}
@@ -154,6 +185,9 @@ export default function StackNavigator() {
           component={WelcomeWalletConnectFailed}
           options={{title: ''}}
         />
+        {/* End Welcome */}
+
+        {/* Start Home */}
         <Stack.Screen name="HomeNavigation" component={HomeTabNavigator} />
         <Stack.Screen
           name="ViewBounty"
@@ -166,17 +200,78 @@ export default function StackNavigator() {
           options={{title: ''}}
         />
 
+        {/* End Home */}
+
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Leaderboard" component={LeaderboardNavigation} />
 
+        {/* Projects */}
+        <Stack.Screen
+          name="ProjectWorkspaceNavigator"
+          component={ProjectWorkspaceNavigator}
+          options={{
+            title: `Project ${project?.title}`,
+          }}
+        />
         <Stack.Screen
           name="CreateProject"
           component={CreateProject}
           options={{
-            title: 'Create New Project',
+            title: '',
           }}
         />
+        <Stack.Screen
+          name="CreateProposal"
+          component={CreateProposal}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="ConfirmAndPay"
+          component={ConfirmAndPay}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="AcceptAndSendQuote"
+          component={AcceptAndSendQuote}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="ConfirmDecline"
+          component={ConfirmDecline}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="AddTestCases"
+          component={AddTestCases}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="Submissions"
+          component={Submissions}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="PendingProject"
+          component={PendingProject}
+          options={{
+            title: '',
+          }}
+        />
+        {/* End Projects */}
 
+        {/* Teams */}
         <Stack.Screen
           name="TeamVar"
           component={TeamVar}
@@ -198,7 +293,9 @@ export default function StackNavigator() {
             title: 'Create New Team',
           }}
         />
+        {/* End Teams */}
 
+        {/* Wallet */}
         <Stack.Screen
           name="MyWallet"
           component={MyWallet}
@@ -227,6 +324,7 @@ export default function StackNavigator() {
           component={NFTDetails}
           options={{title: ''}}
         />
+        {/* End Wallet */}
       </Stack.Navigator>
     </NavigationContainer>
   );

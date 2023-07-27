@@ -5,6 +5,8 @@ import {Colors} from 'src/styles/styles';
 import {useEffect} from 'react';
 import useBountyStore from 'src/stores/bountyStore';
 import useTeamsStore from 'src/stores/teamsStore';
+import useProjectsStore from 'src/stores/projectsStore';
+import useMemberStore from 'src/stores/membersStore';
 
 const Tab = createMaterialTopTabNavigator();
 

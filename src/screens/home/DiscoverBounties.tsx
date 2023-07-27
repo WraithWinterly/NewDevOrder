@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import BountyList from 'src/components/home/BountyList';
 import SearchIcon from 'src/components/icons/SearchIcon';
-import {StyledTextInput} from 'src/components/ui/styled/StyledTextInput';
+import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 
 export default function DiscoverBounties() {

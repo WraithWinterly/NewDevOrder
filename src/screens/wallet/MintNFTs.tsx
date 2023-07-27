@@ -4,17 +4,18 @@ import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import LongLinkNavigation from 'src/components/ui/LongLinkNavigation';
 import Layout from 'src/layout/Layout';
+import useMemberStore from 'src/stores/membersStore';
 import useMintStore from 'src/stores/mintStore';
-import useAppStore from 'src/stores/store';
 
 export default function MintNFTs() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const setNftToMint = useMintStore(state => state.setNftToMint);
-  const isFounder = useAppStore(state => state.isFounder);
+  const playingRole = useMemberStore(state => state.myProfile?.playingRole);
+
   return (
     <Layout>
       <ScrollView>
-        {isFounder && (
+        {playingRole?.title != 'Bounty Hunter' && (
           <LongLinkNavigation
             name="Mint Role NFT"
             description="Mint the following roles: Bounty Hunter, Founder, Bounty Manager, Bounty Designer, Bounty Validator, and Catalyst. Each role provides access to different functionalities."

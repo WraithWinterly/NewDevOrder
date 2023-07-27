@@ -34,7 +34,7 @@ function ProfileCard({profile}: {profile: Member}) {
       <StyledText>{profile.tag}</StyledText>
       <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 14}}>
         {profile.roles.map((role, i) => (
-          <Bubble key={`${role}-${i}-${id}`} text={role} />
+          <Bubble key={`${i}-${id}-${role.id}`} text={role.title} />
         ))}
       </View>
 

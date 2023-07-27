@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import MemberBox from 'src/components/MemberBox';
 import SearchIcon from 'src/components/icons/SearchIcon';
 import StyledText from 'src/components/ui/styled/StyledText';
-import {StyledTextInput} from 'src/components/ui/styled/StyledTextInput';
+import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
