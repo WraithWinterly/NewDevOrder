@@ -3,7 +3,7 @@ import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
 import StyledText from '../ui/styled/StyledText';
 import {FlatList} from 'react-native';
-import {useEffect, useId, useState} from 'react';
+import {Dispatch, SetStateAction, useEffect, useId, useState} from 'react';
 import CashIcon from '../icons/CashIcon';
 import TeamsIcon from '../icons/TeamsIcon';
 import CalendarIcon from '../icons/CalendarIcon';
@@ -12,15 +12,20 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 
-import useBountyStore from 'src/stores/bountyStore';
+import useBountyStore, {Bounty} from 'src/stores/bountyStore';
 import Bubble from '../ui/Bubble';
+import CheckIcon from '../icons/CheckIcon';
 
 export default function BountyList({
-  searchText,
-  yourBounties,
+  bounties,
+  onRefresh,
+  refreshing,
+  designerView,
 }: {
-  searchText?: string;
-  yourBounties: boolean;
+  bounties: Bounty[] | undefined;
+  onRefresh: () => void;
+  refreshing: boolean;
+  designerView?: boolean;
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
@@ -29,29 +34,9 @@ export default function BountyList({
     state => state.setSelectedFullBounty,
   );
 
-  const bounties = useBountyStore(state => state.bounties);
-  const fetchBounties = useBountyStore(state => state.fetchBounties);
-
-  const search = bounties?.filter(bounty => {
-    if (bounty.title.includes(searchText || '')) {
-      if (yourBounties) {
-        return bounty.youJoined;
-      }
-      return bounty;
-    }
-  });
-  const [refreshing, setRefreshing] = useState(false);
-
-  function onRefresh() {
-    setRefreshing(true);
-    fetchBounties().then(() => {
-      setRefreshing(false);
-    });
-  }
-
   return (
     <FlatList
-      data={search}
+      data={bounties}
       renderItem={({item: bounty, index: i}) => (
         <View
           key={`${bounty.id}-${i}-${id}`}
@@ -65,10 +50,27 @@ export default function BountyList({
           <StyledText style={{fontWeight: 'bold', fontSize: 20}}>
             {bounty.title}
           </StyledText>
-          <StyledText
-            style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>
-            {formatTimeAgo(bounty.postDate)}
-          </StyledText>
+          {designerView && bounty.stage === 'Active' && (
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 6,
+                alignItems: 'center',
+                paddingVertical: 8,
+              }}>
+              <CheckIcon />
+              <StyledText>
+                You posted this bounty {formatTimeAgo(bounty.postDate)}.
+              </StyledText>
+            </View>
+          )}
+          {!designerView && bounty.stage === 'Active' && (
+            <StyledText
+              style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>
+              Posted {formatTimeAgo(bounty.postDate)}
+            </StyledText>
+          )}
+
           <View
             style={{
               flexDirection: 'row',
@@ -76,10 +78,12 @@ export default function BountyList({
               gap: 8,
             }}>
             <Bubble type="purple" text={bounty.projectName} />
-            <Bubble
-              type="green"
-              text={bounty.active ? 'Accepting Submissions' : 'Not Active'}
-            />
+            {bounty.stage === 'Active' && (
+              <Bubble type="green" text="Accepting Submissions" />
+            )}
+            {bounty.stage === 'Completed' && (
+              <Bubble type="green" text="Completed" />
+            )}
             <Bubble type="normal" text={bounty.type} />
           </View>
           <StyledText
@@ -107,20 +111,92 @@ export default function BountyList({
             <TeamsIcon small />
             <StyledText>Teams Currently Hacking: {bounty.teamCount}</StyledText>
           </View>
-          <TouchableOpacity
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-              paddingTop: 8,
-            }}
-            onPress={() => {
-              setSelectedFullBounty(bounty.id);
-              navigation.navigate('ViewBounty');
-            }}>
-            <StyledText style={{color: '#D0BCFF'}}>View Details</StyledText>
-            <RightArrowIcon />
-          </TouchableOpacity>
+          {bounty.stage === 'Active' && !designerView && (
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+                paddingTop: 8,
+              }}
+              onPress={() => {
+                setSelectedFullBounty(bounty.id);
+                navigation.navigate('ViewBounty');
+              }}>
+              <StyledText style={{color: '#D0BCFF'}}>View Details</StyledText>
+              <RightArrowIcon />
+            </TouchableOpacity>
+          )}
+          {designerView && bounty.stage === 'Active' && (
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 24,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <StyledText style={{color: Colors.Primary}}>
+                Edit Bounty
+              </StyledText>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                  paddingVertical: 12,
+                  paddingHorizontal: 22,
+                  borderColor: Colors.BorderColor,
+                  borderWidth: 1,
+                  borderRadius: 50,
+                }}
+                onPress={() => {
+                  setSelectedFullBounty(bounty.id);
+                  navigation.navigate('ViewBounty');
+                }}>
+                <StyledText style={{color: '#D0BCFF'}}>
+                  View Submisions
+                </StyledText>
+                <RightArrowIcon />
+              </TouchableOpacity>
+            </View>
+          )}
+          {designerView &&
+            (bounty.stage === 'Draft' || bounty.stage === 'Completed') && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 24,
+                  justifyContent: 'center',
+                  alignItems: 'stretch',
+                  marginHorizontal: 22,
+                }}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    paddingVertical: 12,
+                    paddingHorizontal: 22,
+
+                    borderColor: Colors.BorderColor,
+                    borderWidth: 1,
+                    borderRadius: 50,
+                    width: '100%',
+                  }}
+                  onPress={() => {
+                    setSelectedFullBounty(bounty.id);
+                    navigation.navigate('ViewBounty');
+                  }}>
+                  <StyledText style={{color: '#D0BCFF', alignItems: 'center'}}>
+                    {bounty.stage === 'Draft'
+                      ? 'Continue editing'
+                      : 'View Details'}
+                  </StyledText>
+                  <RightArrowIcon />
+                </TouchableOpacity>
+              </View>
+            )}
         </View>
       )}
       refreshControl={

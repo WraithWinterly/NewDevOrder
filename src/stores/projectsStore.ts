@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {RoleType} from './membersStore';
+import {Bounty, SAMPLE_BOUNTIES} from './bountyStore';
 
 export type Project = {
   id: string;
@@ -24,7 +24,7 @@ export const SAMPLE_PROJECTS: Project[] = [
     stage: 'WaitingBountyMgrQuote',
     email: '',
     phone: '',
-    bountyIDs: [],
+    bountyIDs: ['0', '1', '2', '3'],
   },
   {
     id: '1',
@@ -61,7 +61,8 @@ type ProjectsStore = {
   finalizeCreateProject: () => void;
   fetchProjects: () => Promise<void>;
   selectedProject?: Project;
-  setSelectedProject: (fetchId: string) => void;
+  setSelectedProject: (fetchId: string) => Promise<void>;
+  bountiesById: Bounty[] | undefined;
 };
 
 const useProjectsStore = create<ProjectsStore>(set => ({
@@ -101,13 +102,20 @@ const useProjectsStore = create<ProjectsStore>(set => ({
     const data = SAMPLE_PROJECTS;
     set(() => ({projects: data}));
   },
-  setSelectedProject: (fetchId: string) => {
+  setSelectedProject: async (fetchId: string) => {
     // sample fetch
     // console.log(fetchId);
     console.log(SAMPLE_PROJECTS[Number(fetchId)]);
     const data = SAMPLE_PROJECTS[Number(fetchId)];
     set(() => ({selectedProject: data}));
+    set(() => ({
+      bountiesById: SAMPLE_BOUNTIES.filter(bounty =>
+        data.bountyIDs.includes(bounty.id),
+      ),
+    }));
   },
+
+  bountiesById: undefined,
 }));
 
 export default useProjectsStore;

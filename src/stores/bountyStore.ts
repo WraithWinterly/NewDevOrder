@@ -27,12 +27,13 @@ export type Bounty = {
   description: string;
   postDate: Date;
   projectName: string;
-  active: boolean;
+  projectId: string;
   type: 'Frontend' | 'Backend' | 'Fullstack' | 'Web3';
   reward: number;
   deadline: Date;
   teamCount: number;
   youJoined: boolean;
+  stage: 'Active' | 'Draft' | 'Completed';
 };
 
 export const SAMPLE_BOUNTIES: Bounty[] = [
@@ -43,12 +44,13 @@ export const SAMPLE_BOUNTIES: Bounty[] = [
       'Build working and deployable code and final software package for Front-End Cross-Platform application, built using Flutter.',
     postDate: new Date('2021-01-01'),
     projectName: 'Project 1',
-    active: true,
+    projectId: '0',
     type: 'Frontend',
     reward: 100,
     deadline: new Date(),
     teamCount: 1,
     youJoined: true,
+    stage: 'Active',
   },
   {
     id: '2',
@@ -57,12 +59,13 @@ export const SAMPLE_BOUNTIES: Bounty[] = [
       "Do you love emojis? We need someone to develop an emoji translator that can convert text into emojis and vice versa. Let's make communication more fun!",
     postDate: new Date('2023-07-15'),
     projectName: 'Project Emoji',
-    active: true,
+    projectId: '1',
     type: 'Web3',
     reward: 50,
     deadline: new Date('2023-08-31'),
     teamCount: 1,
     youJoined: false,
+    stage: 'Draft',
   },
   {
     id: '3',
@@ -71,12 +74,13 @@ export const SAMPLE_BOUNTIES: Bounty[] = [
       'Ever wished you could go back in time? We want you to build a website that simulates time travel. Let users experience historical events as if they were there!',
     postDate: new Date('2023-07-14'),
     projectName: 'Project Time Warp',
-    active: true,
+    projectId: '2',
     type: 'Fullstack',
     reward: 200,
     deadline: new Date('2023-12-31'),
     teamCount: 2,
     youJoined: false,
+    stage: 'Completed',
   },
   {
     id: '4',
@@ -85,12 +89,13 @@ export const SAMPLE_BOUNTIES: Bounty[] = [
       "Are you a programming genius with a great sense of humor? We're looking for someone to create an AI stand-up comedian that can crack jokes about coding and technology. Make the nerds laugh!",
     postDate: new Date('2023-07-13'),
     projectName: 'Project LOLCode',
-    active: true,
+    projectId: '2',
     type: 'Backend',
     reward: 150,
     deadline: new Date('2024-02-28'),
     teamCount: 1,
     youJoined: false,
+    stage: 'Active',
   },
   {
     id: '5',
@@ -99,28 +104,18 @@ export const SAMPLE_BOUNTIES: Bounty[] = [
       'Calling all puzzle enthusiasts and code breakers! We have a mysterious device that needs to be reverse-engineered. Solve the puzzle and unveil its secrets!',
     postDate: new Date('2023-07-12'),
     projectName: 'Project Enigma',
-    active: true,
+    projectId: '3',
     type: 'Web3',
     reward: 75,
     deadline: new Date('2023-10-31'),
     teamCount: 3,
     youJoined: false,
+    stage: 'Active',
   },
 ];
 
 const SAMPLE_BOUNTY: FullBounty = {
-  id: '1',
-  title: 'Front-End Cross-Platform Flutter Application',
-  description:
-    'Build working and deployable code and final software package for Front-End Cross-Platform application, built using Flutter.',
-  postDate: new Date('2021-01-01'),
-  projectName: 'Project 1',
-  active: true,
-  type: 'Frontend',
-  reward: 100,
-  deadline: new Date(),
-  teamCount: 1,
-  youJoined: true,
+  ...SAMPLE_BOUNTIES[0],
 
   submissions: ['Team Solvers', 'Team Solvers', 'Team Givers'],
 

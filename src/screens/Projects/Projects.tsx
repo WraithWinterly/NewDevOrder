@@ -81,12 +81,13 @@ function ProjectCard({project}: {project: Project}) {
   return (
     <TouchableOpacity
       onPress={() => {
-        setSelectedProject(project.id);
-        console.log(project.id);
-        if (role?.title === 'Bounty Designer') {
-          navigation.navigate('ProjectWorkspaceNavigator');
+        async function transfer() {
+          await setSelectedProject(project.id);
+          if (role?.title === 'Bounty Designer') {
+            navigation.navigate('ProjectWorkspaceNavigator');
+          }
         }
-        // navigation.navigate('TeamVar');
+        transfer();
       }}
       style={{
         padding: 12,
