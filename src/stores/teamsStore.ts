@@ -1,48 +1,17 @@
+import axios from 'axios';
+
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
-import {Member, SAMPLE_MEMBERS} from './membersStore';
 
 export type Team = {
   id: string;
   title: string;
   description: string;
   memberCount: number;
-  createdByYou: boolean;
-};
-
-type FullTeam = Team & {
-  members: Member[];
+  creatorID: string;
+  members: string[];
   link: string;
 };
-
-export const SAMPLE_TEAMS: Team[] = [
-  {
-    id: '1',
-    title: 'Team Solsitce',
-    description: 'lorem20',
-    memberCount: 2,
-    createdByYou: true,
-  },
-  {
-    id: '2',
-    title: 'Team Compete!!!',
-    description: 'lorem20',
-    memberCount: 4,
-    createdByYou: false,
-  },
-];
-
-const SAMPLE_FULL_TEAMS: FullTeam[] = [
-  {
-    ...SAMPLE_TEAMS[0],
-    members: [SAMPLE_MEMBERS[0], SAMPLE_MEMBERS[1]],
-    link: 'https://aydens.net',
-  },
-  {
-    ...SAMPLE_TEAMS[1],
-    members: [SAMPLE_MEMBERS[2], SAMPLE_MEMBERS[3]],
-    link: 'https://aydens.net',
-  },
-];
 
 type CreateTeamData = {
   title: string;
@@ -57,11 +26,11 @@ type TeamsStore = {
   teams: Team[] | undefined;
   finalizeCreateTeam: () => void;
   fetchTeams: () => Promise<void>;
-  selectedTeam?: FullTeam;
+  selectedTeam?: Team;
   setSelectedTeam: (fetchId: string) => void;
 };
 
-const useTeamsStore = create<TeamsStore>(set => ({
+const useTeamsStore = create<TeamsStore>((set, get) => ({
   createTeamData: undefined,
   setCreateTeamData: data => {
     set(() => ({createTeamData: data}));
@@ -75,7 +44,7 @@ const useTeamsStore = create<TeamsStore>(set => ({
     if (!linkRegex.test(data.link)) return false;
     return true;
   },
-  teams: SAMPLE_FULL_TEAMS,
+  teams: [],
   finalizeCreateTeam: () => {
     set(state => ({
       teams: [
@@ -84,7 +53,8 @@ const useTeamsStore = create<TeamsStore>(set => ({
           id: String(state.teams!.length + 1),
           // accepted: false,
           memberCount: 1,
-          createdByYou: true,
+          creatorID: '',
+          members: [],
         },
         ...state.teams!,
       ],
@@ -92,14 +62,14 @@ const useTeamsStore = create<TeamsStore>(set => ({
   },
   selectedTeam: undefined,
   fetchTeams: async () => {
-    // sample fetch
-    const data = SAMPLE_FULL_TEAMS;
-    set(() => ({teams: data}));
+    const {data} = await axios.get(getServerEndpoint(Endpoints.GET_TEAMS));
+    console.log('fetch data: ', data);
+    set(() => ({teams: data ?? undefined}));
   },
   setSelectedTeam: (fetchId: string) => {
     // sample fetch
     // console.log(fetchId);
-    const data = SAMPLE_FULL_TEAMS[Number(fetchId) - 1];
+    const data = get().teams?.find(team => team.id == fetchId);
     set(() => ({selectedTeam: data}));
   },
 }));

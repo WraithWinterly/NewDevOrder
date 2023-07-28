@@ -28,8 +28,12 @@ export default function Teams() {
     });
   }
 
-  const teamsJoined = teams?.filter(team => !team.createdByYou);
-  const teamsCreated = teams?.filter(team => team.createdByYou);
+  const teamsJoined = !!teams
+    ? teams?.filter(team => team.creatorID === '')
+    : undefined;
+  const teamsCreated = !!teams
+    ? teams?.filter(team => team.creatorID !== '')
+    : undefined;
 
   return (
     <Layout>
@@ -57,6 +61,12 @@ export default function Teams() {
         )}></FlatList>
       <Separator />
       <StyledText style={{marginBottom: 16}}>Teams Joined</StyledText>
+      {!teams && (
+        <View style={{alignItems: 'center'}}>
+          <StyledText>No Teams Found Yet</StyledText>
+          <StyledButton onPress={() => fetchTeams()}>Refresh</StyledButton>
+        </View>
+      )}
       <FlatList
         data={teamsJoined}
         keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}

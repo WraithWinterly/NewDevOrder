@@ -1,6 +1,6 @@
 .env
 server/dist
-JSONdb.json
+jsonDB.json
 # OSX
 #
 .DS_Store

@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import {Member, SAMPLE_MEMBERS} from './membersStore';
-import {SAMPLE_TEAMS, Team} from './teamsStore';
+import {Team} from './teamsStore';
 import {Bounty} from './bountyStore';
 
 type NotificationTypes = 'RequestJoinTeam' | 'InvitedJoinTeam' | 'BountyWon';
@@ -17,19 +17,19 @@ const SAMPLE_NOTIFICATIONS: Array<Notification> = [
   {
     id: '0',
     user: SAMPLE_MEMBERS[0],
-    team: SAMPLE_TEAMS[0],
+    team: undefined,
     type: 'BountyWon',
   },
   {
     id: '1',
     user: SAMPLE_MEMBERS[0],
-    team: SAMPLE_TEAMS[0],
+    team: undefined,
     type: 'InvitedJoinTeam',
   },
   {
     id: '2',
     user: SAMPLE_MEMBERS[1],
-    team: SAMPLE_TEAMS[1],
+    team: undefined,
     type: 'RequestJoinTeam',
   },
 ];

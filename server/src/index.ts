@@ -6,8 +6,9 @@ import bodyParser from 'body-parser';
 import {JsonDB, Config} from 'node-json-db';
 import {bountiesSeed, bountiesSetup} from './bounties';
 import {memberSeed, membersSetup} from './members';
+import {teamsSeed, teamsSetup} from './teams';
 
-export const db = new JsonDB(new Config('jsonDb', true, false, '/'));
+export const db = new JsonDB(new Config('jsonDB', true, false, '/'));
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/seed', async (req: Request, res: Response) => {
   await bountiesSeed();
   await memberSeed();
+  await teamsSeed();
   res.status(200).send();
 });
 
@@ -39,6 +41,7 @@ app.get('/alive', (req: Request, res: Response) => {
 
 bountiesSetup();
 membersSetup();
+teamsSetup();
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

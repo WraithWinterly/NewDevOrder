@@ -4,7 +4,8 @@ export enum Endpoints {
   ALIVE = '/alive',
   SEED = '/seed',
   CREATE_PROFILE = '/create-profile',
-  GET_BOUNTIES = '/bounties',
+  GET_BOUNTIES = '/get-bounties',
+  GET_TEAMS = '/get-teams',
 }
 
 export function getServerEndpoint(endpoint: Endpoints) {

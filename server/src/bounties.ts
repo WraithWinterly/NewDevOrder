@@ -132,7 +132,7 @@ export async function bountiesSeed() {
 }
 
 export function bountiesSetup() {
-  app.get('/bounties', async (req: Request, res: Response) => {
+  app.get('/get-bounties', async (req: Request, res: Response) => {
     const currBounties = (await db.getObjectDefault('/bounties', undefined)) as
       | Bounty[]
       | undefined;
