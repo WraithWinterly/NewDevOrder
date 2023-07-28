@@ -1,9 +1,9 @@
-import {Roles} from 'src/types/types';
+import {RoleType} from 'src/sharedTypes';
 import {create} from 'zustand';
 
 type MintStore = {
-  nftToMint: Roles;
-  setNftToMint: (string: Roles) => void;
+  nftToMint: RoleType;
+  setNftToMint: (string: RoleType) => void;
 };
 
 const useMintStore = create<MintStore>(set => ({

@@ -55,7 +55,7 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
   }
   const loading = !topMembers && !topFounders;
 
-  const setMemberIdViewing = useMemberStore(state => state.setMemberIdViewing);
+  const setMemberAddrViewing = useMemberStore(state => state.fetchProfile);
   return (
     <View
       style={{
@@ -67,7 +67,7 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
       {!loading && (
         <FlatList
           data={!isFounder ? topMembers : topFounders}
-          keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
+          keyExtractor={(item, index) => `${item.walletAddress}-${index}-${id}`}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
@@ -75,7 +75,7 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
           renderItem={({item, index}) => (
             <TouchableOpacity
               onPress={() => {
-                setMemberIdViewing(item.id);
+                setMemberAddrViewing(item.walletAddress);
                 navigation.navigate('Profile');
               }}
               style={{
@@ -101,7 +101,7 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
                 <View style={{flexDirection: 'column'}}>
                   <StyledText>{item.firstName}</StyledText>
                   <StyledText style={{color: Colors.Primary}}>
-                    {item.tag}
+                    {item.username}
                   </StyledText>
                 </View>
               </View>

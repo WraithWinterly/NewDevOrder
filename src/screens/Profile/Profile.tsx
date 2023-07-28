@@ -3,7 +3,8 @@ import {Text, View} from 'react-native';
 import Bubble from 'src/components/ui/Bubble';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import useMemberStore, {Member} from 'src/stores/membersStore';
+import useMemberStore from 'src/stores/membersStore';
+import {Member} from 'src/sharedTypes';
 
 export default function Profile() {
   const myProfile = useMemberStore(state => state.myProfile);
@@ -31,7 +32,7 @@ function ProfileCard({profile}: {profile: Member}) {
         <Bubble lowHeight text={`Level ${profile.level}`} />
       </View>
 
-      <StyledText>{profile.tag}</StyledText>
+      <StyledText>@{profile.username}</StyledText>
       <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 14}}>
         {profile.roles.map((role, i) => (
           <Bubble key={`${i}-${id}-${role.id}`} text={role.title} />

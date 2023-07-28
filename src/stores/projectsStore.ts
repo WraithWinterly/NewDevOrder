@@ -2,29 +2,7 @@ import {create} from 'zustand';
 import {Bounty} from './bountyStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import axios from 'axios';
-
-export type Project = {
-  id: string;
-  title: string;
-  description: string;
-  email: string;
-  phone: string;
-  bountyIDs: string[];
-  quotePrice: number;
-  stage:
-    | 'WaitingBountyMgrQuote'
-    | 'WaitingFounderPay'
-    | 'WaitingBountyDesign'
-    | 'Declined'
-    | 'Ready';
-};
-
-type CreateProjectData = {
-  title: string;
-  description: string;
-  email: string;
-  phone: string;
-};
+import {CreateProjectData, Project} from 'src/sharedTypes';
 
 type ProjectsStore = {
   createProjectData: CreateProjectData | undefined;

@@ -31,7 +31,7 @@ interface SolanaContextType {
   wallet: Account | null;
   balance: string | null;
   isConnected: boolean;
-  initializeWallet: () => Promise<void>;
+  initializeWallet: () => Promise<PublicKey | null>;
 }
 
 const SolanaContext = createContext<SolanaContextType | undefined>(undefined);
@@ -69,17 +69,22 @@ export function SolanaProvider({children}: {children: ReactNode}) {
     fetchAndUpdateBalance(selectedAccount);
   }, [fetchAndUpdateBalance, selectedAccount]);
 
-  async function initializeWallet() {
+  async function initializeWallet(): Promise<PublicKey | null> {
     if (authorizationInProgress) {
-      return;
+      return Promise.resolve(null);
     }
     setAuthorizationInProgress(true);
+    let publicKey: PublicKey | null = null;
     await transact(async wallet => {
-      await authorizeSession(wallet);
+      await authorizeSession(wallet).then(e => {
+        publicKey = e.publicKey;
+      });
     });
 
     setIsConnected(true);
     setAuthorizationInProgress(false);
+
+    return Promise.resolve(publicKey);
   }
 
   const contextValue: SolanaContextType = {

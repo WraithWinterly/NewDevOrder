@@ -1,7 +1,7 @@
 import axios from 'axios';
+import {Member} from 'src/sharedTypes';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
-import {Member} from './membersStore';
 
 type BountyStore = {
   bounties: Bounty[] | undefined;

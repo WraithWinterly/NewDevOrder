@@ -22,24 +22,43 @@ import useTeamsStore from 'src/stores/teamsStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import RefreshIcon from 'src/components/icons/RefreshIcon';
 import {useState} from 'react';
+import useInboxStore from 'src/stores/inboxStore';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
-  const setMemberIdViewing = useMemberStore(state => state.setMemberIdViewing);
+  const setMemberIdViewing = useMemberStore(state => state.fetchProfile);
   const myProfile = useMemberStore(state => state.myProfile);
 
   const fetchBounties = useBountyStore(state => state.fetchBounties);
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
+  const fetchInbox = useInboxStore(state => state.fetchInbox);
+  const fetchProfile = useMemberStore(state => state.fetchProfile);
+
+  const {wallet} = useSolanaContext();
 
   const [refreshing, setRefreshing] = useState(false);
 
+  const [refreshError, setRefreshError] = useState<boolean>(false);
+
   async function refresh() {
-    if (refreshing) return;
+    // if (refreshing) return;
+    setRefreshError(false);
     setRefreshing(true);
-    await fetchBounties();
-    await fetchTeams();
-    await fetchProjects();
+    try {
+      await Promise.all([
+        fetchBounties(),
+        fetchTeams(),
+        fetchProjects(),
+        fetchInbox(),
+        fetchProfile(wallet?.publicKey.toBase58().toString(), true),
+      ]);
+    } catch (e) {
+      console.log((e as Error).message);
+      setRefreshError(true);
+    }
+
     setRefreshing(false);
   }
 
@@ -56,7 +75,7 @@ export default function HeaderRight() {
         {refreshing ? (
           <ActivityIndicator color={Colors.White} />
         ) : (
-          <RefreshIcon />
+          <RefreshIcon red={refreshError} />
         )}
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Leaderboard')}>
@@ -108,7 +127,7 @@ export default function HeaderRight() {
                   <Text style={{color: Colors.White, fontSize: 18}}>
                     {myProfile.firstName}
                   </Text>
-                  <Text>{myProfile.tag}</Text>
+                  <Text>{myProfile.username}</Text>
                 </View>
                 <View
                   style={{

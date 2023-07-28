@@ -35,7 +35,7 @@ export default function TeamVar() {
               style={{fontSize: 18, marginBottom: 8, fontWeight: '500'}}>
               Members
             </StyledText>
-            <FlatList
+            {/* <FlatList
               data={selectedTeam.members}
               keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
               ItemSeparatorComponent={() => <View style={{height: 12}}></View>}
@@ -45,7 +45,7 @@ export default function TeamVar() {
                   rightChildren={
                     <Bubble type="transparent" text="Member" />
                   }></MemberBox>
-              )}></FlatList>
+              )}></FlatList> */}
           </View>
         </View>
       )}

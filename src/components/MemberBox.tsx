@@ -17,7 +17,7 @@ export default function MemberBox({
   rightChildren?: ReactNode;
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const setMemberIdViewing = useMemberStore(state => state.setMemberIdViewing);
+  const setMemberIdViewing = useMemberStore(state => state.fetchProfile);
   return (
     <TouchableOpacity
       style={{

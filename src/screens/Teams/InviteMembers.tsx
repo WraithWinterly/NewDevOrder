@@ -23,7 +23,7 @@ export default function InviteMembers() {
       <StyledText style={{marginTop: 12}}>Pending Invites</StyledText>
       <View style={{marginVertical: 8}}>
         {/* Sample member ...  */}
-        <MemberBox
+        {/* <MemberBox
           member={{
             id: '999',
             firstName: 'John Doe',
@@ -41,7 +41,7 @@ export default function InviteMembers() {
               Remove Invite
             </StyledText>
           }
-        />
+        /> */}
       </View>
     </Layout>
   );

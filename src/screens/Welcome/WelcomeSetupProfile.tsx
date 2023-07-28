@@ -9,10 +9,10 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import useCreateProfile from 'src/hooks/useCreateProfile';
-import {CreateProfile} from 'sharedTypes';
+import {CreateProfile} from 'src/sharedTypes';
 import useWalletStore from 'src/stores/walletStore';
 import useSolanaContext from 'src/web3/SolanaProvider';
+import axios from 'axios';
 
 export default function WelcomeSetupProfile() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -24,9 +24,11 @@ export default function WelcomeSetupProfile() {
   // const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
 
-  const {error, isLoading, data, mutateAsync} = useCreateProfile();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   async function onSubmit() {
+    setIsLoading(true);
+    setError('');
     setErrors([]);
     const localErrors: string[] = [];
     if (username.trim().length < 3) {
@@ -51,16 +53,29 @@ export default function WelcomeSetupProfile() {
     if (localErrors.length > 0) {
       return;
     }
-
-    await mutateAsync({
-      username,
-      firstName,
-      lastName,
-      email,
-      walletAddress: wallet!.publicKey!.toBase58().toString(),
-    });
-
-    navigation.navigate('WelcomeComplete');
+    try {
+      const data = await axios.post(
+        getServerEndpoint(Endpoints.CREATE_PROFILE),
+        {
+          username,
+          firstName,
+          lastName,
+          email,
+          walletAddress: wallet!.publicKey!.toBase58().toString(),
+        },
+      );
+      if (data.status === 200) {
+        navigation.replace('WelcomeComplete');
+      } else {
+        throw new Error('Something went wrong');
+      }
+    } catch (e) {
+      if ((e as Error).message.length > 0) {
+        setIsLoading(false);
+        setError((e as Error).message);
+        return;
+      }
+    }
   }
 
   return (

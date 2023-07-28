@@ -1,49 +1,20 @@
 import {create} from 'zustand';
-import {Member, SAMPLE_MEMBERS} from './membersStore';
-import {Team} from './teamsStore';
-import {Bounty} from './bountyStore';
-
-type NotificationTypes = 'RequestJoinTeam' | 'InvitedJoinTeam' | 'BountyWon';
-
-export type Notification = {
-  id: string;
-  user: Member;
-  team?: Team;
-  bounty?: Bounty;
-  type: NotificationTypes;
-};
-
-const SAMPLE_NOTIFICATIONS: Array<Notification> = [
-  {
-    id: '0',
-    user: SAMPLE_MEMBERS[0],
-    team: undefined,
-    type: 'BountyWon',
-  },
-  {
-    id: '1',
-    user: SAMPLE_MEMBERS[0],
-    team: undefined,
-    type: 'InvitedJoinTeam',
-  },
-  {
-    id: '2',
-    user: SAMPLE_MEMBERS[1],
-    team: undefined,
-    type: 'RequestJoinTeam',
-  },
-];
+import axios from 'axios';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import {Notification} from 'src/sharedTypes';
 
 type InboxStore = {
   notifications: Notification[];
-  fetchNotifications: () => Promise<void>;
+  fetchInbox: () => Promise<void>;
   removeNotification: (id: string) => void;
 };
 
-const useInboxStore = create<InboxStore>(set => ({
-  notifications: SAMPLE_NOTIFICATIONS,
-  fetchNotifications: async () => {
-    set({notifications: SAMPLE_NOTIFICATIONS});
+const useInboxStore = create<InboxStore>((set, get) => ({
+  notifications: [],
+  fetchInbox: async () => {
+    set({notifications: undefined});
+    const {data} = await axios.get(getServerEndpoint(Endpoints.GET_INBOX));
+    set({notifications: data});
   },
   removeNotification: id => {
     set(state => ({

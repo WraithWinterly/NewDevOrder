@@ -9,7 +9,7 @@ import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import useMemberStore, {SAMPLE_MEMBERS} from 'src/stores/membersStore';
+import useMemberStore from 'src/stores/membersStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
 
@@ -47,7 +47,7 @@ export default function PendingProposal() {
       <StyledText style={{fontSize: 18, marginBottom: 12}}>
         Contact information
       </StyledText>
-      <MemberBox member={SAMPLE_MEMBERS[0]} />
+      {/* <MemberBox member={SAMPLE_MEMBERS[0]} /> */}
       <View style={{height: 8}}></View>
       <StyledText>
         <Text style={{fontWeight: 'bold'}}>Email: </Text>

@@ -1,13 +1,14 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useId, useState} from 'react';
+import {useEffect, useId, useState} from 'react';
 import {RefreshControl, Text, View} from 'react-native';
 import {FlatList} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import useInboxStore, {Notification} from 'src/stores/inboxStore';
+import useInboxStore from 'src/stores/inboxStore';
+import {Notification} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
@@ -15,14 +16,18 @@ import {Colors} from 'src/styles/styles';
 export default function Inbox() {
   const id = useId();
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const setMemberIdViewing = useMemberStore(state => state.setMemberIdViewing);
+  const setMemberAddrViewing = useMemberStore(state => state.fetchProfile);
   const setTeam = useTeamsStore(state => state.setSelectedTeam);
 
   const [refreshing, setRefreshing] = useState(false);
 
   const removeNotification = useInboxStore(state => state.removeNotification);
   const notifications = useInboxStore(state => state.notifications);
-  const fetchNotifications = useInboxStore(state => state.fetchNotifications);
+  const fetchNotifications = useInboxStore(state => state.fetchInbox);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
 
   function onConfirm(noti: Notification) {
     switch (noti.type) {
@@ -82,7 +87,7 @@ export default function Inbox() {
                 <Text style={{fontSize: 16, lineHeight: 28}}>
                   <Text
                     onPress={() => {
-                      setMemberIdViewing(notification.user.id);
+                      setMemberAddrViewing(notification.user.walletAddress);
                       navigation.navigate('Profile');
                     }}
                     style={{color: Colors.Primary}}>
@@ -95,7 +100,7 @@ export default function Inbox() {
                   </Text>
                   <Text
                     onPress={() => {
-                      setTeam(notification.user.id);
+                      setTeam(notification.user.walletAddress);
                       navigation.navigate('TeamVar');
                     }}
                     style={{color: Colors.Primary}}>
@@ -107,7 +112,7 @@ export default function Inbox() {
                 <Text style={{fontSize: 16, lineHeight: 28}}>
                   <Text
                     onPress={() => {
-                      setMemberIdViewing(notification.user.id);
+                      setMemberAddrViewing(notification.user.walletAddress);
                       navigation.navigate('Profile');
                     }}
                     style={{color: Colors.Text}}>
@@ -124,7 +129,7 @@ export default function Inbox() {
                   <Text> won the bounty </Text>
                   <Text
                     onPress={() => {
-                      setMemberIdViewing(notification.bounty?.id);
+                      setMemberAddrViewing(notification.bounty?.id);
                       navigation.navigate('ViewBounty');
                     }}
                     style={{color: Colors.Primary}}>

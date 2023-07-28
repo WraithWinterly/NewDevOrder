@@ -7,8 +7,9 @@ import PhantomConnectButton from 'src/components/ui/PhantomConnectButton';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import useMemberStore, {RoleDict} from 'src/stores/membersStore';
+import useMemberStore from 'src/stores/membersStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import {RoleDict} from 'src/sharedTypes';
 
 export default function DeveloperMenu() {
   const [resetFeedback, setResetFeedback] = useState('');

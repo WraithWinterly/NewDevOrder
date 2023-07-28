@@ -8,6 +8,8 @@ import {StackParamList} from 'src/StackNavigator';
 import {useNavigation} from '@react-navigation/native';
 import useAppStore from '../../stores/store';
 import useWalletStore from 'src/stores/walletStore';
+import useMemberStore from 'src/stores/membersStore';
+import {PublicKey} from '@solana/web3.js';
 
 export default function PhantomConnectButton({
   successRoute,
@@ -21,7 +23,14 @@ export default function PhantomConnectButton({
     state => state.setWalletConnectError,
   );
 
-  function onWalletConnectComplete() {
+  const fetchProfile = useMemberStore(state => state.fetchProfile);
+
+  function onWalletConnectComplete(publicKey: PublicKey | null) {
+    if (!publicKey) {
+      navigator.navigate('WelcomeWalletFailed');
+      setWalletConnectError('Wallet address not found');
+      return;
+    }
     // Check Solana Token
     const hasMemberShipToken = true;
     if (hasMemberShipToken) {
@@ -30,6 +39,10 @@ export default function PhantomConnectButton({
     } else {
       navigator.navigate('WelcomeNoMembershipToken');
     }
+    // Fetch user profile
+    try {
+      fetchProfile(publicKey.toBase58().toString(), true);
+    } catch {}
   }
 
   return (
@@ -42,8 +55,8 @@ export default function PhantomConnectButton({
       onPress={() => {
         solana
           .initializeWallet()
-          .then(() => {
-            onWalletConnectComplete();
+          .then(publicKey => {
+            onWalletConnectComplete(publicKey);
           })
           .catch(e => {
             const error = e as Error;
