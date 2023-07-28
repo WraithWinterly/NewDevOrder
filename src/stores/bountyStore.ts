@@ -33,7 +33,7 @@ export type Bounty = {
   deadline: Date;
   teamCount: number;
   youJoined: boolean;
-  stage: 'Active' | 'Draft' | 'Completed';
+  stage: 'Active' | 'Draft' | 'Completed' | 'ReadyForTests';
 };
 
 export const SAMPLE_BOUNTIES: Bounty[] = [
@@ -50,7 +50,7 @@ export const SAMPLE_BOUNTIES: Bounty[] = [
     deadline: new Date(),
     teamCount: 1,
     youJoined: true,
-    stage: 'Active',
+    stage: 'ReadyForTests',
   },
   {
     id: '2',
@@ -65,7 +65,7 @@ export const SAMPLE_BOUNTIES: Bounty[] = [
     deadline: new Date('2023-08-31'),
     teamCount: 1,
     youJoined: false,
-    stage: 'Draft',
+    stage: 'ReadyForTests',
   },
   {
     id: '3',

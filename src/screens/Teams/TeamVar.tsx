@@ -1,6 +1,6 @@
 import {useId} from 'react';
 import {View} from 'react-native';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {FlatList, TouchableOpacity} from 'react-native';
 import MemberBox from 'src/components/MemberBox';
 import LinkIcon from 'src/components/icons/LinkIcon';
 import Bubble from 'src/components/ui/Bubble';

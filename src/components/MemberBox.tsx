@@ -4,7 +4,7 @@ import {Colors} from 'src/styles/styles';
 import StyledText from './ui/styled/StyledText';
 import Bubble from './ui/Bubble';
 import {ReactNode} from 'react';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';

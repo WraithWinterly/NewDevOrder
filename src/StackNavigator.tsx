@@ -38,6 +38,7 @@ import AddTestCases from './screens/projects/validator/AddTestCases';
 import Submissions from './screens/projects/validator/Submissions';
 import PendingProposal from './screens/projects/shared/founderManager/PendingProposal';
 import useProjectsStore from './stores/projectsStore';
+import ValidatorNavigator from './screens/projects/validator/ValidatorNavigator';
 
 export type WelcomeStackParamList = {
   Welcome: undefined;
@@ -76,6 +77,7 @@ export type ProjectParamList = {
   AcceptAndSendQuote: undefined;
   ConfirmDecline: undefined;
   // Validator
+  ValidatorNavigator: undefined;
   AddTestCases: undefined;
   Submissions: undefined;
   // Shared
@@ -88,7 +90,11 @@ export type StackParamList = WelcomeStackParamList &
   ProjectParamList & {
     ReconnectWallet: undefined;
     HomeNavigation: undefined;
-    ViewBounty: undefined;
+    ViewBounty:
+      | {
+          isValidator?: boolean;
+        }
+      | undefined;
     StartBounty: undefined;
 
     Profile: undefined;
@@ -245,6 +251,13 @@ export default function StackNavigator() {
           component={ConfirmDecline}
           options={{
             title: '',
+          }}
+        />
+        <Stack.Screen
+          name="ValidatorNavigator"
+          component={ValidatorNavigator}
+          options={{
+            title: 'Your Projects',
           }}
         />
         <Stack.Screen

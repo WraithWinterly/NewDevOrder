@@ -8,6 +8,6 @@ const xml = `
 </svg>
 `;
 
-export default function WaleltIcon() {
+export default function WalletIcon() {
   return <BaseIcon width={32} height={32} xml={xml} />;
 }

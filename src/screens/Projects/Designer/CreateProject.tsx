@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 import StyledPhoneInput from 'src/components/ui/styled/StyledPhoneInput';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';

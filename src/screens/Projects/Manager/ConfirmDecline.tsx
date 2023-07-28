@@ -17,7 +17,7 @@ export default function ConfirmDecline() {
   const founderDecline = useProjectsStore(state => state.founderDecline);
 
   function onDecline() {
-    console.log('dec');
+    // console.log('dec');
     founderDecline();
     navigation.navigate('HomeNavigation');
   }

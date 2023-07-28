@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useId, useState} from 'react';
 import {RefreshControl, Text, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';

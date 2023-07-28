@@ -12,6 +12,12 @@ const xmlDown = `
 </svg>
 `;
 
-export default function CollapsibleArrow({faceDown}: {faceDown: boolean}) {
-  return <BaseIcon width={10} height={10} xml={faceDown ? xmlDown : xmlUp} />;
+export default function CollapsibleArrow({
+  faceDown,
+  wh = 10,
+}: {
+  faceDown: boolean;
+  wh?: number;
+}) {
+  return <BaseIcon width={wh} height={wh} xml={faceDown ? xmlDown : xmlUp} />;
 }

@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useId, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {FlatList, RefreshControl} from 'react-native-gesture-handler';
+import {FlatList, RefreshControl} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import Bubble from 'src/components/ui/Bubble';
 import Separator from 'src/components/ui/Separator';

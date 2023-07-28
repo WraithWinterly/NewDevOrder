@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import MemberBox from 'src/components/MemberBox';
 import RightArrowIcon from 'src/components/icons/RightArrowIcon';

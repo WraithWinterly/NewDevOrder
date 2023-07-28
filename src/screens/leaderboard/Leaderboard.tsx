@@ -7,7 +7,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native';
-import {RefreshControl} from 'react-native-gesture-handler';
+import {RefreshControl} from 'react-native';
 import {Text} from 'react-native-svg';
 import {StackParamList} from 'src/StackNavigator';
 import StyledText from 'src/components/ui/styled/StyledText';

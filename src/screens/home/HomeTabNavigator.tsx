@@ -97,15 +97,17 @@ export default function HomeTabNavigator() {
           fontWeight: 'bold',
         },
       })}>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <TabBarIcon focused={focused} icon={<HomeIcon />} />
-          ),
-        }}
-      />
+      {playingRole?.title === 'Bounty Hunter' && (
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon focused={focused} icon={<HomeIcon />} />
+            ),
+          }}
+        />
+      )}
 
       <Tab.Screen
         name="Teams"

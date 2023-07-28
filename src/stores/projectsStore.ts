@@ -117,7 +117,7 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
     // sample fetch
     // console.log(fetchId);
     setTimeout(() => {
-      console.log(SAMPLE_PROJECTS[Number(fetchId)]);
+      // console.log(SAMPLE_PROJECTS[Number(fetchId)]);
       const data = SAMPLE_PROJECTS[Number(fetchId)];
       set(() => ({selectedProject: data}));
       set(() => ({
@@ -152,7 +152,7 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
   },
   founderDecline: () => {
     if (get().selectedProject) {
-      console.log('dec2');
+      // console.log('dec2');
       set(() => ({
         selectedProject: {
           ...get().selectedProject!,

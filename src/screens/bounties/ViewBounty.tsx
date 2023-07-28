@@ -13,24 +13,80 @@ import CashIcon from 'src/components/icons/CashIcon';
 import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
 import StyledButton from 'src/components/ui/styled/StyledButton';
-import {useNavigation} from '@react-navigation/native';
+import {
+  RouteProp,
+  StackRouterOptions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {StackParamList} from 'src/StackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import useBountyStore from 'src/stores/bountyStore';
 import Separator from 'src/components/ui/Separator';
 import Bubble from 'src/components/ui/Bubble';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-export default function ViewBounty() {
+type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
+
+export default function ViewBounty({route, navigation}: Props) {
   const bounty = useBountyStore(state => state.selectedFullBounty);
 
-  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+  // const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
+  // const route = useRoute <RouteProp<StackParamList>();
+  const isValidator = route.params?.isValidator ?? false;
 
   return (
     <Layout>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: -28,
+          width: '110%',
+          paddingHorizontal: 24,
+          marginLeft: -18,
+          paddingVertical: 14,
+          // height: 42,
+          backgroundColor: Colors.AppBar,
+          zIndex: 1,
+        }}>
+        {isValidator ? (
+          bounty?.stage === 'ReadyForTests' ? (
+            <StyledButton
+              type="normal2"
+              onPress={() => navigation.navigate('AddTestCases')}>
+              Add test cases
+            </StyledButton>
+          ) : (
+            <StyledButton
+              type="normal2"
+              onPress={() => navigation.navigate('AddTestCases')}>
+              View submissions
+            </StyledButton>
+          )
+        ) : (
+          <StyledButton
+            type="normal2"
+            onPress={() => navigation.navigate('StartBounty')}>
+            Start Bounty
+          </StyledButton>
+        )}
+      </View>
       <ScrollView>
         {!!bounty && (
           <View style={{flexDirection: 'column', gap: 10}}>
+            {isValidator && (
+              <View>
+                <StyledText style={{fontWeight: 'bold', fontSize: 28}}>
+                  Review bounty
+                </StyledText>
+                <StyledText style={{fontSize: 16}}>
+                  This will be posted on the bounty feed when submitted and
+                  reviewed.
+                </StyledText>
+                <Separator />
+              </View>
+            )}
             <StyledText style={{fontWeight: 'bold', fontSize: 28}}>
               {bounty.title}
             </StyledText>
@@ -114,10 +170,6 @@ export default function ViewBounty() {
             </View>
           </View>
         )}
-
-        <StyledButton onPress={() => navigation.navigate('StartBounty')}>
-          Start Bounty
-        </StyledButton>
         <View style={{paddingVertical: 30}}></View>
       </ScrollView>
     </Layout>

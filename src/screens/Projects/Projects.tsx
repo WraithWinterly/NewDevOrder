@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {FlatList, RefreshControl} from 'react-native-gesture-handler';
+import {FlatList, RefreshControl} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 
 import Separator from 'src/components/ui/Separator';
@@ -89,6 +89,8 @@ function ProjectCard({project}: {project: Project}) {
       navigation.navigate('ProjectWorkspaceNavigator');
     } else if (role?.title === 'Founder' || role?.title === 'Bounty Manager') {
       navigation.navigate('PendingProposal');
+    } else if (role?.title === 'Bounty Validator') {
+      navigation.navigate('ValidatorNavigator');
     }
   }
 
