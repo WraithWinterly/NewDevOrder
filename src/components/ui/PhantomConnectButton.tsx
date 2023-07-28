@@ -12,7 +12,7 @@ import useWalletStore from 'src/stores/walletStore';
 export default function PhantomConnectButton({
   successRoute,
 }: {
-  successRoute: StackParamList;
+  successRoute: keyof StackParamList;
 }) {
   const solana = useSolanaContext();
   const navigator = useNavigation<StackNavigationProp<StackParamList>>();

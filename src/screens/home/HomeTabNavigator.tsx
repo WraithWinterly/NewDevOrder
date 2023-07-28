@@ -36,7 +36,7 @@ const tabToHeaderText = {
   Bounties: 'Bounties',
   Inbox: 'Inbox',
   Projects: 'Your Projects',
-  Dev: '__UNOFFICIAL__',
+  Dev: '__DEVELOPER__',
 };
 
 const Tab = createBottomTabNavigator<MainTabsParams>();

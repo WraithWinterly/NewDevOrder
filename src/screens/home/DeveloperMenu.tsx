@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import {useState} from 'react';
 import {View} from 'react-native';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
@@ -7,6 +8,7 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useMemberStore, {RoleDict} from 'src/stores/membersStore';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 export default function DeveloperMenu() {
   const [resetFeedback, setResetFeedback] = useState('');
@@ -19,6 +21,28 @@ export default function DeveloperMenu() {
   const myProfile = useMemberStore(state => state.myProfile);
   const setPlayingRole = useMemberStore(state => state.setPlayingRole);
 
+  const [connectionFeedback, setConnectionFeedback] = useState('');
+  async function testConnection() {
+    setConnectionFeedback('Connecting...');
+
+    try {
+      console.log(getServerEndpoint(Endpoints.ALIVE));
+      const data = await axios.get(getServerEndpoint(Endpoints.ALIVE), {
+        timeout: 3000,
+      });
+      if (data.data === 'Alive!') {
+        setConnectionFeedback('Connected');
+      } else {
+        setConnectionFeedback(
+          'Connected, but did not receive the correct data.',
+        );
+      }
+    } catch (error) {
+      const e = error as Error;
+      setConnectionFeedback(`Connection failed: ${e.message}`);
+    }
+  }
+
   return (
     <Layout>
       <PhantomConnectButton successRoute="HomeNavigation" />
@@ -27,6 +51,12 @@ export default function DeveloperMenu() {
           Erase Storage Data
         </StyledButton>
         <StyledText style={{paddingBottom: 24}}>{resetFeedback}</StyledText>
+        <StyledButton onPress={testConnection}>
+          Test Server Connection
+        </StyledButton>
+        <StyledText style={{paddingBottom: 24}}>
+          {connectionFeedback}
+        </StyledText>
         <StyledText style={{paddingBottom: 2}}>Playing as role...</StyledText>
         <DropdownMenu
           data={RoleDict || []}
