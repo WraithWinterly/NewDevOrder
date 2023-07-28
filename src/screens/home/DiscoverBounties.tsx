@@ -11,14 +11,19 @@ export default function DiscoverBounties() {
   const bounties = useBountyStore(state => state.bounties);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
 
-  const search = bounties?.filter(bounty => {
-    if (bounty.title.includes(searchText || '') && bounty.stage === 'Active') {
-      // if (yourBounties) {
-      //   return bounty.youJoined;
-      // }
-      return bounty;
-    }
-  });
+  const search = !!bounties
+    ? bounties?.filter(bounty => {
+        if (
+          bounty.title.includes(searchText || '') &&
+          bounty.stage === 'Active'
+        ) {
+          // if (yourBounties) {
+          //   return bounty.youJoined;
+          // }
+          return bounty;
+        }
+      })
+    : undefined;
 
   function onRefresh() {
     setRefreshing(true);

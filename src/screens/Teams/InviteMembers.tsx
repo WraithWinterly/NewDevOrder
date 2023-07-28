@@ -26,7 +26,7 @@ export default function InviteMembers() {
         <MemberBox
           member={{
             id: '999',
-            name: 'John Doe',
+            firstName: 'John Doe',
             tag: '@johndoe',
             bio: '',
             level: '0',

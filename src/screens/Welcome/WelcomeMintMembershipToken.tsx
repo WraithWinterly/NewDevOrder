@@ -15,7 +15,7 @@ export default function WelcomeMintMembershipToken() {
     // Mint functionality
     const mintSuccess = true;
     if (mintSuccess) {
-      navigation.navigate('WelcomeComplete');
+      navigation.navigate('WelcomeSetupProfile');
     } else {
       navigation.navigate('WelcomeMintFailed');
     }

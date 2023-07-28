@@ -26,7 +26,6 @@ export default function DeveloperMenu() {
     setConnectionFeedback('Connecting...');
 
     try {
-      console.log(getServerEndpoint(Endpoints.ALIVE));
       const data = await axios.get(getServerEndpoint(Endpoints.ALIVE), {
         timeout: 3000,
       });
@@ -40,6 +39,22 @@ export default function DeveloperMenu() {
     } catch (error) {
       const e = error as Error;
       setConnectionFeedback(`Connection failed: ${e.message}`);
+    }
+  }
+  const [seedFeedback, setSeedFeedback] = useState('');
+  async function seed() {
+    setSeedFeedback('Seeding...');
+
+    try {
+      const data = await axios.get(getServerEndpoint(Endpoints.SEED), {
+        timeout: 3000,
+      });
+      if (data.status === 200) {
+        setSeedFeedback('Success');
+      }
+    } catch (error) {
+      const e = error as Error;
+      setSeedFeedback(`Connection failed: ${e.message}`);
     }
   }
 
@@ -57,6 +72,8 @@ export default function DeveloperMenu() {
         <StyledText style={{paddingBottom: 24}}>
           {connectionFeedback}
         </StyledText>
+        <StyledButton onPress={seed}>Seed Database</StyledButton>
+        <StyledText style={{paddingBottom: 24}}>{seedFeedback}</StyledText>
         <StyledText style={{paddingBottom: 2}}>Playing as role...</StyledText>
         <DropdownMenu
           data={RoleDict || []}

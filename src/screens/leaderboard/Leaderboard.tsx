@@ -99,7 +99,7 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
                   {index}
                 </StyledText>
                 <View style={{flexDirection: 'column'}}>
-                  <StyledText>{item.name}</StyledText>
+                  <StyledText>{item.firstName}</StyledText>
                   <StyledText style={{color: Colors.Primary}}>
                     {item.tag}
                   </StyledText>

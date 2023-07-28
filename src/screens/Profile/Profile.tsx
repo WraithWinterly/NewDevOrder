@@ -26,7 +26,7 @@ function ProfileCard({profile}: {profile: Member}) {
     <View style={{gap: 12, alignItems: 'flex-start'}}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 12}}>
         <StyledText style={{fontSize: 24, fontWeight: '500'}}>
-          {profile.name}
+          {profile.firstName}
         </StyledText>
         <Bubble lowHeight text={`Level ${profile.level}`} />
       </View>

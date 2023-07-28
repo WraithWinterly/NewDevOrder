@@ -16,7 +16,7 @@ import useBountyStore from 'src/stores/bountyStore';
 import {Colors} from 'src/styles/styles';
 
 export default function AddTestCases() {
-  const selectedFullBounty = useBountyStore(state => state.selectedFullBounty);
+  const selectedFullBounty = useBountyStore(state => state.selectedBounty);
   const [testCases, setTestCases] = useState<string[]>([]);
   const [addingTestCase, setAddingTestCase] = useState(false);
 

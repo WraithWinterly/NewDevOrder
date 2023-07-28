@@ -12,6 +12,7 @@ import {MenuProvider} from 'react-native-popup-menu';
 import {AuthorizationProvider} from 'src/web3/SolAuthorizationProvider';
 import {ConnectionProvider, RPC_ENDPOINT} from 'src/web3/ConnectionProvider';
 import {clusterApiUrl} from '@solana/web3.js';
+
 export default function App() {
   return (
     <AuthorizationProvider>

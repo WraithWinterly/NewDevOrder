@@ -14,7 +14,7 @@ import Separator from 'src/components/ui/Separator';
 export default function StartBounty() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
-  const selectedFullBounty = useBountyStore(state => state.selectedFullBounty);
+  const selectedFullBounty = useBountyStore(state => state.selectedBounty);
 
   function startBounty() {
     // start bounty

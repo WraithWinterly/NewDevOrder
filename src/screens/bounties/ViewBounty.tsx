@@ -29,7 +29,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
 export default function ViewBounty({route, navigation}: Props) {
-  const bounty = useBountyStore(state => state.selectedFullBounty);
+  const bounty = useBountyStore(state => state.selectedBounty);
 
   // const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();

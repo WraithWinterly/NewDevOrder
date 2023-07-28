@@ -1,6 +1,10 @@
 export function formatTimeAgo(date: Date) {
+  const ensuredDate = new Date(date);
+
   const currentDate = new Date();
-  const timeDifference = Math.abs(currentDate.getTime() - date.getTime());
+  const timeDifference = Math.abs(
+    currentDate.getTime() - ensuredDate.getTime(),
+  );
   const secondsDifference = Math.floor(timeDifference / 1000);
   const minutesDifference = Math.floor(secondsDifference / 60);
   const hoursDifference = Math.floor(minutesDifference / 60);

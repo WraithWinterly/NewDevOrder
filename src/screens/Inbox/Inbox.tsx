@@ -86,7 +86,7 @@ export default function Inbox() {
                       navigation.navigate('Profile');
                     }}
                     style={{color: Colors.Primary}}>
-                    {notification.user.name}
+                    {notification.user.firstName}
                   </Text>
                   <Text>
                     {notification.type === 'InvitedJoinTeam'

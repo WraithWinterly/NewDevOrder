@@ -1,5 +1,5 @@
-import React, {ReactNode} from 'react';
-import {Text, StyleProp, TextStyle} from 'react-native';
+import React, {ReactNode, useState} from 'react';
+import {Text, StyleProp, TextStyle, ActivityIndicator} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import {TouchableOpacity} from 'react-native';
 
@@ -13,12 +13,14 @@ interface StyledButtonProps {
     | 'noBgDanger'
     | 'noBgPurple'
     | 'borderNoFill';
+  loading?: boolean;
 }
 
 export function StyledButton({
   children,
   onPress,
   type = 'normal',
+  loading = false,
 }: StyledButtonProps) {
   let style: StyleProp<TextStyle> = {};
 
@@ -102,9 +104,15 @@ export function StyledButton({
   return (
     <TouchableOpacity style={style} onPress={onPress}>
       {typeof children === 'string' ? (
-        <Text style={textStyle}>{children}</Text>
-      ) : (
+        !loading ? (
+          <Text style={textStyle}>{children}</Text>
+        ) : (
+          <ActivityIndicator color={Colors.AppBar} size={24} />
+        )
+      ) : !loading ? (
         children
+      ) : (
+        <ActivityIndicator color={Colors.AppBar} />
       )}
     </TouchableOpacity>
   );

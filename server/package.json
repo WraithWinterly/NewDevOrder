@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "ts-node index.ts",
-    "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\""
+    "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/server/src/index.js\""
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "node-json-db": "^2.2.0",
     "path": "^0.12.7"
   },
   "devDependencies": {

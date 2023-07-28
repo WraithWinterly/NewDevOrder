@@ -35,7 +35,7 @@ export default function MemberBox({
         navigation.navigate('Profile');
       }}>
       <View style={{padding: 8, borderRadius: 8}}>
-        <StyledText>{member.name}</StyledText>
+        <StyledText>{member.firstName}</StyledText>
         <StyledText style={{color: Colors.Gray[400], fontSize: 15}}>
           {member.tag}
         </StyledText>

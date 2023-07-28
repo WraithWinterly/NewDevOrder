@@ -9,15 +9,20 @@ export type RoleType =
 
 export type Member = {
   id: string;
-  name: string;
+  username?: string;
+  firstName: string;
+  lastName?: string;
+  walletAddress?: string;
+  email?: string;
   tag: string;
   bio: string;
   level: string;
   roles: Array<Role>;
   playingRole: (typeof RoleDict)[0];
   bountiesWon: number;
-  teamsJoined: number;
+  teamsJoined: string[];
   membersInvited: number;
+  completedWelcome: boolean;
 };
 
 type Role = {
@@ -33,70 +38,75 @@ export const RoleDict: Role[] = [
   {id: '4', title: 'Bounty Validator'},
 ];
 
-function GetRole(string: RoleType) {
+export function GetRole(string: RoleType) {
   return RoleDict.find(role => role.title == string)!;
 }
 
 export const SAMPLE_MEMBERS: Array<Member> = [
   {
     id: '1',
-    name: 'Aydens',
+    firstName: 'Aydens',
     tag: '@aydens1234',
     bio: 'lorem20',
     level: '1',
     roles: [GetRole('Bounty Hunter')],
     playingRole: RoleDict[0],
     bountiesWon: 0,
-    teamsJoined: 0,
+    teamsJoined: [],
     membersInvited: 0,
+    completedWelcome: false,
   },
   {
     id: '2',
-    name: 'Rocky',
+    firstName: 'Rocky',
     tag: '@rocky',
     bio: 'lorem20',
     level: '2',
     roles: [GetRole('Bounty Hunter'), GetRole('Bounty Validator')],
     playingRole: RoleDict[1],
     bountiesWon: 24,
-    teamsJoined: 81,
+    teamsJoined: ['1', '2', '3'],
     membersInvited: 12,
+    completedWelcome: true,
   },
   {
     id: '3',
-    name: 'Comp1',
+    firstName: 'Comp1',
     tag: '@comp1',
     bio: 'lorem20',
     level: '3',
     roles: [GetRole('Bounty Hunter'), GetRole('Bounty Hunter')],
     playingRole: RoleDict[2],
     bountiesWon: 21,
-    teamsJoined: 25,
+    teamsJoined: [],
     membersInvited: 92,
+    completedWelcome: true,
   },
   {
     id: '4',
-    name: 'Comp2',
+    firstName: 'Comp2',
     tag: '@comp2',
     bio: 'lorem20',
     level: '4',
     roles: [GetRole('Bounty Hunter'), GetRole('Bounty Designer')],
     playingRole: RoleDict[3],
     bountiesWon: 20,
-    teamsJoined: 0,
+    teamsJoined: [],
     membersInvited: 21,
+    completedWelcome: true,
   },
   {
     id: '5',
-    name: 'Comp3',
+    firstName: 'Comp3',
     tag: '@comp4',
     bio: 'lorem20',
     level: '40',
     roles: [GetRole('Bounty Hunter'), GetRole('Bounty Hunter')],
     playingRole: RoleDict[2],
     bountiesWon: 20,
-    teamsJoined: 0,
+    teamsJoined: [],
     membersInvited: 21,
+    completedWelcome: true,
   },
 ];
 

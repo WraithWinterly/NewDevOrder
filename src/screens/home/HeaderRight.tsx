@@ -79,7 +79,7 @@ export default function HeaderRight() {
                   }}></View>
                 <View style={{flexDirection: 'column'}}>
                   <Text style={{color: Colors.White, fontSize: 18}}>
-                    {myProfile.name}
+                    {myProfile.firstName}
                   </Text>
                   <Text>{myProfile.tag}</Text>
                 </View>
