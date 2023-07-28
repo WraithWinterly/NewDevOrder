@@ -1,4 +1,4 @@
-import {Text, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import LeaderboardIcon from 'src/components/icons/LeaderboardIcon';
 import ProfileIcon from 'src/components/icons/ProfileIcon';
 
@@ -17,11 +17,31 @@ import {StackParamList} from 'src/StackNavigator';
 import Separator from 'src/components/ui/Separator';
 import useMemberStore from 'src/stores/membersStore';
 import {TouchableOpacity} from 'react-native';
+import useBountyStore from 'src/stores/bountyStore';
+import useTeamsStore from 'src/stores/teamsStore';
+import useProjectsStore from 'src/stores/projectsStore';
+import RefreshIcon from 'src/components/icons/RefreshIcon';
+import {useState} from 'react';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
   const setMemberIdViewing = useMemberStore(state => state.setMemberIdViewing);
   const myProfile = useMemberStore(state => state.myProfile);
+
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
+  const fetchTeams = useTeamsStore(state => state.fetchTeams);
+  const fetchProjects = useProjectsStore(state => state.fetchProjects);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function refresh() {
+    if (refreshing) return;
+    setRefreshing(true);
+    await fetchBounties();
+    await fetchTeams();
+    await fetchProjects();
+    setRefreshing(false);
+  }
 
   return (
     <View
@@ -32,6 +52,13 @@ export default function HeaderRight() {
         alignItems: 'center',
         paddingRight: 18,
       }}>
+      <TouchableOpacity onPress={refresh}>
+        {refreshing ? (
+          <ActivityIndicator color={Colors.White} />
+        ) : (
+          <RefreshIcon />
+        )}
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Leaderboard')}>
         <LeaderboardIcon />
       </TouchableOpacity>

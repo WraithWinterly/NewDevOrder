@@ -42,12 +42,12 @@ export default function BountyList({
 
   return (
     <>
-      {!bounties && (
+      {/* {!bounties && (
         <View style={{alignItems: 'center'}}>
           <StyledText>No Bounties Found Yet</StyledText>
           <StyledButton onPress={() => fetchBounties()}>Refresh</StyledButton>
         </View>
-      )}
+      )} */}
       <FlatList
         data={bounties}
         renderItem={({item: bounty, index: i}) => (
@@ -175,6 +175,7 @@ export default function BountyList({
                 style={{
                   flexDirection: 'row',
                   gap: 24,
+                  marginTop: 8,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
@@ -204,13 +205,16 @@ export default function BountyList({
               </View>
             )}
             {designerView &&
-              (bounty.stage === 'Draft' || bounty.stage === 'Completed') && (
+              (bounty.stage === 'Draft' ||
+                bounty.stage === 'Completed' ||
+                bounty.stage === 'ReadyForTests') && (
                 <View
                   style={{
                     flexDirection: 'row',
                     gap: 24,
                     justifyContent: 'center',
                     alignItems: 'stretch',
+                    marginTop: 8,
                     marginHorizontal: 22,
                   }}>
                   <TouchableOpacity

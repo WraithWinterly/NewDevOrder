@@ -22,6 +22,10 @@ export default function Projects() {
   const id = useId();
   const id2 = useId();
 
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
   function onRefresh() {
     setRefreshing(true);
     fetchProjects().then(() => {
@@ -48,30 +52,37 @@ export default function Projects() {
           <Separator />
         </>
       )}
-
-      <StyledText style={{marginBottom: 16}}>Pending Projects</StyledText>
-      <FlatList
-        data={projectsPending}
-        keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        renderItem={({item}) => <ProjectCard project={item}></ProjectCard>}
-        ItemSeparatorComponent={() => (
-          <View style={{height: 12}}></View>
-        )}></FlatList>
-      <Separator />
-      <StyledText style={{marginBottom: 16}}>Projects</StyledText>
-      <FlatList
-        data={projectsAccepted}
-        keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        renderItem={({item}) => <ProjectCard project={item}></ProjectCard>}
-        ItemSeparatorComponent={() => (
-          <View style={{height: 12}}></View>
-        )}></FlatList>
+      {!!projectsPending && projectsPending.length > 0 && (
+        <>
+          <StyledText style={{marginBottom: 16}}>Pending Projects</StyledText>
+          <FlatList
+            data={projectsPending}
+            keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            renderItem={({item}) => <ProjectCard project={item}></ProjectCard>}
+            ItemSeparatorComponent={() => (
+              <View style={{height: 12}}></View>
+            )}></FlatList>
+          <Separator />
+        </>
+      )}
+      {!!projectsAccepted && projectsAccepted.length > 0 && (
+        <>
+          <StyledText style={{marginBottom: 16}}>Projects</StyledText>
+          <FlatList
+            data={projectsAccepted}
+            keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            renderItem={({item}) => <ProjectCard project={item}></ProjectCard>}
+            ItemSeparatorComponent={() => (
+              <View style={{height: 12}}></View>
+            )}></FlatList>
+        </>
+      )}
     </Layout>
   );
 }

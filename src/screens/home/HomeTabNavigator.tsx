@@ -4,7 +4,7 @@ import Teams from '../teams/Teams';
 
 import {Colors} from 'src/styles/styles';
 import Inbox from '../inbox/Inbox';
-import {ReactNode, useState} from 'react';
+import {ReactNode, useEffect, useState} from 'react';
 import {Platform, View} from 'react-native';
 import HomeIcon from 'src/components/icons/HomeIcon';
 import InboxIcon from 'src/components/icons/InboxIcon';
@@ -20,6 +20,7 @@ import HeaderRight from './HeaderRight';
 
 import useAppStore from 'src/stores/store';
 import useMemberStore from 'src/stores/membersStore';
+import useBountyStore from 'src/stores/bountyStore';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -43,6 +44,12 @@ const Tab = createBottomTabNavigator<MainTabsParams>();
 
 export default function HomeTabNavigator() {
   const playingRole = useMemberStore(state => state.myProfile?.playingRole);
+
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
+
+  useEffect(() => {
+    fetchBounties();
+  }, []);
 
   return (
     <Tab.Navigator

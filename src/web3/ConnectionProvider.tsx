@@ -1,3 +1,4 @@
+import {Cluster} from '@solana-mobile/mobile-wallet-adapter-protocol';
 import {Connection, type ConnectionConfig} from '@solana/web3.js';
 import React, {
   type FC,
@@ -7,7 +8,7 @@ import React, {
   useContext,
 } from 'react';
 
-export const RPC_ENDPOINT = 'devnet';
+export const RPC_ENDPOINT: Cluster = 'mainnet-beta';
 
 export interface ConnectionProviderProps {
   children: ReactNode;

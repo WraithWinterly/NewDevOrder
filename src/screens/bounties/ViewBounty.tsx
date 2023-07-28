@@ -129,7 +129,7 @@ export default function ViewBounty({route, navigation}: Props) {
                   }}>
                   <CalendarIcon />
                   <StyledText>
-                    Deadline: {bounty.deadline.toDateString()}
+                    Deadline: {new Date(bounty.deadline).toDateString()}
                   </StyledText>
                 </View>
                 <View
@@ -142,32 +142,36 @@ export default function ViewBounty({route, navigation}: Props) {
               </View>
             </DropdownSection>
 
-            {Object.keys(bounty.headerSections).map((section, i) => (
-              <DropdownSection title={section} key={`${id}-${i}`}>
-                {bounty.headerSections[section].map((text, index) => (
-                  <StyledText key={index}>- {text}</StyledText>
-                ))}
-              </DropdownSection>
-            ))}
+            {!!bounty.headerSections &&
+              Object.keys(bounty.headerSections).map((section, i) => (
+                <DropdownSection title={section} key={`${id}-${i}`}>
+                  {!!bounty.headerSections &&
+                    bounty.headerSections[section].map((text, index) => (
+                      <StyledText key={index}>- {text}</StyledText>
+                    ))}
+                </DropdownSection>
+              ))}
 
             {/* Founder */}
-            <View
-              style={{
-                padding: 16,
-                backgroundColor: Colors.BackgroundLighter,
-                borderRadius: 20,
-                marginBottom: 38,
-              }}>
-              <StyledText style={{fontSize: 20, fontWeight: 'bold'}}>
-                Meet the founder - {bounty.founder.name}
-              </StyledText>
-              <StyledText style={{color: Colors.Gray[400]}}>
-                {bounty.founder.tag}
-              </StyledText>
-              <StyledText style={{paddingTop: 4}}>
-                {bounty.founder.bio}
-              </StyledText>
-            </View>
+            {!!bounty.founder && (
+              <View
+                style={{
+                  padding: 16,
+                  backgroundColor: Colors.BackgroundLighter,
+                  borderRadius: 20,
+                  marginBottom: 38,
+                }}>
+                <StyledText style={{fontSize: 20, fontWeight: 'bold'}}>
+                  Meet the founder - {bounty.founder?.firstName}
+                </StyledText>
+                <StyledText style={{color: Colors.Gray[400]}}>
+                  {bounty.founder?.username}
+                </StyledText>
+                <StyledText style={{paddingTop: 4}}>
+                  {bounty.founder?.bio}
+                </StyledText>
+              </View>
+            )}
           </View>
         )}
         <View style={{paddingVertical: 30}}></View>

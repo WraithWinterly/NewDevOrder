@@ -78,7 +78,7 @@ export const SAMPLE_BOUNTIES: Bounty[] = [
     deadline: new Date('2023-08-31'),
     teamCount: 1,
     youJoined: false,
-    stage: 'ReadyForTests',
+    stage: 'Draft',
   },
   {
     id: 'A419DF06-3E6F-4101-909C-ECFC7588D232',

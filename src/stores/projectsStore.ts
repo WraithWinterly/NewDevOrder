@@ -1,5 +1,7 @@
 import {create} from 'zustand';
-import {Bounty, SAMPLE_BOUNTIES} from './bountyStore';
+import {Bounty} from './bountyStore';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import axios from 'axios';
 
 export type Project = {
   id: string;
@@ -16,39 +18,6 @@ export type Project = {
     | 'Declined'
     | 'Ready';
 };
-
-export const SAMPLE_PROJECTS: Project[] = [
-  {
-    id: '0',
-    title: 'Avalanche',
-    description: 'lorem10',
-    stage: 'WaitingBountyMgrQuote',
-    email: 'test@gmail.com',
-    phone: '(207) 444-4444',
-    quotePrice: 5_5000,
-    bountyIDs: ['0', '1', '2', '3'],
-  },
-  {
-    id: '1',
-    title: 'Booster',
-    description: 'lorem10',
-    stage: 'WaitingBountyMgrQuote',
-    email: '',
-    phone: '',
-    quotePrice: 6_000,
-    bountyIDs: [],
-  },
-  {
-    id: '2',
-    title: 'Treasure',
-    description: 'lorem10',
-    stage: 'WaitingBountyMgrQuote',
-    email: '',
-    phone: '',
-    quotePrice: 5_000,
-    bountyIDs: [],
-  },
-];
 
 type CreateProjectData = {
   title: string;
@@ -87,7 +56,7 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
 
     return true;
   },
-  projects: SAMPLE_PROJECTS,
+  projects: [],
   finalizeCreateProject: () => {
     set(state => ({
       projects: [
@@ -105,8 +74,8 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
   },
   selectedProject: undefined,
   fetchProjects: async () => {
-    // sample fetch
-    const data = SAMPLE_PROJECTS;
+    set(() => ({projects: []}));
+    const {data} = await axios.get(getServerEndpoint(Endpoints.GET_PROJECTS));
     set(() => ({projects: data}));
   },
   setSelectedProject: async (fetchId: string) => {
@@ -114,18 +83,20 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
     set(() => ({
       bountiesById: undefined,
     }));
-    // sample fetch
-    // console.log(fetchId);
-    setTimeout(() => {
-      // console.log(SAMPLE_PROJECTS[Number(fetchId)]);
-      const data = SAMPLE_PROJECTS[Number(fetchId)];
-      set(() => ({selectedProject: data}));
-      set(() => ({
-        bountiesById: SAMPLE_BOUNTIES.filter(bounty =>
-          data.bountyIDs.includes(bounty.id),
-        ),
-      }));
-    }, 500);
+    // Find project from loaded projects list
+    const data = get().projects?.find(p => p.id === fetchId);
+    // console.log(get().projects);
+    // console.log(data);
+
+    // When a project is selected, load the bounty(s) information for the project
+    const idData = (await axios.get(
+      getServerEndpoint(Endpoints.GET_BOUNTIES_FOR_PROJECT) + `/${data?.id}`,
+    )) as {data: Bounty[] | undefined};
+    // console.log('idData: : ', idData);
+    set(() => ({selectedProject: data}));
+    set(() => ({
+      bountiesById: idData.data,
+    }));
   },
 
   bountiesById: undefined,

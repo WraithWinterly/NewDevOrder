@@ -62,12 +62,12 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
   },
   selectedTeam: undefined,
   fetchTeams: async () => {
+    set(() => ({teams: undefined}));
     const {data} = await axios.get(getServerEndpoint(Endpoints.GET_TEAMS));
-    console.log('fetch data: ', data);
+    // console.log('fetch data: ', data);
     set(() => ({teams: data ?? undefined}));
   },
   setSelectedTeam: (fetchId: string) => {
-    // sample fetch
     // console.log(fetchId);
     const data = get().teams?.find(team => team.id == fetchId);
     set(() => ({selectedTeam: data}));

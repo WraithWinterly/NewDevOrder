@@ -12,7 +12,12 @@ import {
   AuthorizeAPI,
   ReauthorizeAPI,
 } from '@solana-mobile/mobile-wallet-adapter-protocol';
-import {Cluster, Connection, PublicKey} from '@solana/web3.js';
+import {
+  Cluster,
+  Connection,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+} from '@solana/web3.js';
 import {useConnection} from './ConnectionProvider';
 import {Account, useAuthorization} from './SolAuthorizationProvider';
 
@@ -24,7 +29,7 @@ interface AppIdentity {
 
 interface SolanaContextType {
   wallet: Account | null;
-  balance: number | null;
+  balance: string | null;
   isConnected: boolean;
   initializeWallet: () => Promise<void>;
 }
@@ -38,14 +43,21 @@ export function SolanaProvider({children}: {children: ReactNode}) {
 
   const {connection} = useConnection();
   const {selectedAccount} = useAuthorization();
-  const [balance, setBalance] = useState<number | null>(null);
+  const [balance, setBalance] = useState<string | null>(null);
+
+  function convertLamportsToSOL(lamports: number) {
+    return new Intl.NumberFormat(undefined, {maximumFractionDigits: 3}).format(
+      (lamports || 0) / LAMPORTS_PER_SOL,
+    );
+  }
 
   const fetchAndUpdateBalance = useCallback(
     async (account: Account) => {
       console.log('Fetching balance for: ' + account.publicKey);
       const fetchedBalance = await connection.getBalance(account.publicKey);
-      console.log('Balance fetched: ' + fetchedBalance);
-      setBalance(fetchedBalance);
+      const sol = convertLamportsToSOL(fetchedBalance);
+      console.log('Balance fetched: ' + sol);
+      setBalance(sol);
     },
     [connection],
   );

@@ -7,6 +7,7 @@ import {JsonDB, Config} from 'node-json-db';
 import {bountiesSeed, bountiesSetup} from './bounties';
 import {memberSeed, membersSetup} from './members';
 import {teamsSeed, teamsSetup} from './teams';
+import {projectsSeed, projectsSetup} from './projects';
 
 export const db = new JsonDB(new Config('jsonDB', true, false, '/'));
 
@@ -32,6 +33,7 @@ app.get('/seed', async (req: Request, res: Response) => {
   await bountiesSeed();
   await memberSeed();
   await teamsSeed();
+  await projectsSeed();
   res.status(200).send();
 });
 
@@ -42,6 +44,7 @@ app.get('/alive', (req: Request, res: Response) => {
 bountiesSetup();
 membersSetup();
 teamsSetup();
+projectsSetup();
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useId, useState} from 'react';
+import {useEffect, useId, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {FlatList, RefreshControl} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
@@ -20,6 +20,10 @@ export default function Teams() {
 
   const id = useId();
   const id2 = useId();
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
 
   function onRefresh() {
     setRefreshing(true);
@@ -42,47 +46,51 @@ export default function Teams() {
         Create new team
       </StyledButton>
       <Separator />
-      <StyledText style={{marginBottom: 16}}>Teams Created</StyledText>
-      <FlatList
-        data={teamsCreated}
-        keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        renderItem={({item}) => (
-          <TeamCard
-            id={item.id}
-            title={item.title}
-            members={item.memberCount}
-            description={item.description}></TeamCard>
-        )}
-        ItemSeparatorComponent={() => (
-          <View style={{height: 12}}></View>
-        )}></FlatList>
-      <Separator />
-      <StyledText style={{marginBottom: 16}}>Teams Joined</StyledText>
-      {!teams && (
-        <View style={{alignItems: 'center'}}>
-          <StyledText>No Teams Found Yet</StyledText>
-          <StyledButton onPress={() => fetchTeams()}>Refresh</StyledButton>
-        </View>
+      {!!teamsCreated && teamsCreated.length > 0 && (
+        <>
+          <StyledText style={{marginBottom: 16}}>Teams Created</StyledText>
+          <FlatList
+            data={teamsCreated}
+            keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            renderItem={({item}) => (
+              <TeamCard
+                id={item.id}
+                title={item.title}
+                members={item.memberCount}
+                description={item.description}></TeamCard>
+            )}
+            ItemSeparatorComponent={() => (
+              <View style={{height: 12}}></View>
+            )}></FlatList>
+          <Separator />
+        </>
       )}
-      <FlatList
-        data={teamsJoined}
-        keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        renderItem={({item}) => (
-          <TeamCard
-            id={item.id}
-            title={item.title}
-            members={item.memberCount}
-            description={item.description}></TeamCard>
-        )}
-        ItemSeparatorComponent={() => (
-          <View style={{height: 12}}></View>
-        )}></FlatList>
+
+      {!!teamsJoined && teamsJoined.length > 0 && (
+        <>
+          <StyledText style={{marginBottom: 16}}>Teams Joined</StyledText>
+
+          <FlatList
+            data={teamsJoined}
+            keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            renderItem={({item}) => (
+              <TeamCard
+                id={item.id}
+                title={item.title}
+                members={item.memberCount}
+                description={item.description}></TeamCard>
+            )}
+            ItemSeparatorComponent={() => (
+              <View style={{height: 12}}></View>
+            )}></FlatList>
+        </>
+      )}
     </Layout>
   );
 }

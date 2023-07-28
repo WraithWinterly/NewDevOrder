@@ -20,7 +20,9 @@ export default function Completed() {
     });
   }
 
-  const shown = bounties?.filter(bounty => bounty.stage === 'Completed');
+  const shown = bounties?.filter(
+    bounty => bounty.stage === 'Completed' || bounty.stage === 'ReadyForTests',
+  );
 
   return (
     <Layout>

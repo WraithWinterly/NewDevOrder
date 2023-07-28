@@ -2,23 +2,10 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import DiscoverBounties from './DiscoverBounties';
 import YourBounties from './YourBounties';
 import {Colors} from 'src/styles/styles';
-import {useEffect} from 'react';
-import useBountyStore from 'src/stores/bountyStore';
-import useTeamsStore from 'src/stores/teamsStore';
-import useProjectsStore from 'src/stores/projectsStore';
-import useMemberStore from 'src/stores/membersStore';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function Home() {
-  const fetchBounties = useBountyStore(state => state.fetchBounties);
-  const fetchTeams = useTeamsStore(state => state.fetchTeams);
-
-  useEffect(() => {
-    fetchBounties();
-    fetchTeams();
-  }, []);
-
   return (
     <Tab.Navigator
       sceneContainerStyle={{

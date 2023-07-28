@@ -6,6 +6,8 @@ export enum Endpoints {
   CREATE_PROFILE = '/create-profile',
   GET_BOUNTIES = '/get-bounties',
   GET_TEAMS = '/get-teams',
+  GET_PROJECTS = '/get-projects',
+  GET_BOUNTIES_FOR_PROJECT = '/get-bounties-for-project',
 }
 
 export function getServerEndpoint(endpoint: Endpoints) {

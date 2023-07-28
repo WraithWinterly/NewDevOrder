@@ -33,6 +33,7 @@ const useBountyStore = create<BountyStore>((set, get) => ({
   bounties: [],
   selectedBounty: undefined,
   fetchBounties: async () => {
+    set(() => ({bounties: undefined}));
     const {data} = await axios.get(getServerEndpoint(Endpoints.GET_BOUNTIES));
     // console.log('fetch data: ', data);
     set(() => ({bounties: data}));
