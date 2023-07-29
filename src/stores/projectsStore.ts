@@ -7,15 +7,12 @@ import {CreateProjectData, Project} from 'src/sharedTypes';
 type ProjectsStore = {
   createProjectData: CreateProjectData | undefined;
   setCreateProjectData: (data: CreateProjectData | undefined) => void;
-  isCreateProjectValid: (data: CreateProjectData) => boolean;
   projects: Project[] | undefined;
   finalizeCreateProject: () => void;
   fetchProjects: () => Promise<void>;
   selectedProject?: Project;
   setSelectedProject: (fetchId: string) => Promise<void>;
   bountiesById: Bounty[] | undefined;
-  founderSetQuotePrice: (price: number) => void;
-  founderDecline: () => void;
 };
 
 const useProjectsStore = create<ProjectsStore>((set, get) => ({
@@ -23,17 +20,7 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
   setCreateProjectData: data => {
     set(() => ({createProjectData: data}));
   },
-  isCreateProjectValid: (data: CreateProjectData) => {
-    // sample validation
-    if (data.title.trim().length < 3) return false;
-    if (data.description.trim().length < 3) return false;
-    if (data.email.trim().length < 3) return false;
-    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    if (!emailReg.test(data.email)) return false;
-    if (data.phone.trim().length < 10) return false;
 
-    return true;
-  },
   projects: [],
   finalizeCreateProject: () => {
     set(state => ({
@@ -78,52 +65,6 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
   },
 
   bountiesById: undefined,
-  founderSetQuotePrice: (price: number) => {
-    const dict = get().selectedProject;
-    if (dict) {
-      dict.quotePrice = price;
-      set(() => ({selectedProject: dict}));
-    }
-    //@ts-expect-error This works ... Won't be used when actual fetching is implemented anyways
-    set(() => ({
-      projects: [
-        ...get().projects!.map(p => {
-          if (p.id === get().selectedProject!.id) {
-            return {
-              ...p,
-              stage: 'WaitingBountyDesign',
-            };
-          }
-          return p;
-        }),
-      ],
-    }));
-  },
-  founderDecline: () => {
-    if (get().selectedProject) {
-      // console.log('dec2');
-      set(() => ({
-        selectedProject: {
-          ...get().selectedProject!,
-          stage: 'Declined',
-        },
-      }));
-      //@ts-expect-error This works ... Won't be used when actual fetching is implemented anyways
-      set(() => ({
-        projects: [
-          ...get().projects!.map(p => {
-            if (p.id === get().selectedProject!.id) {
-              return {
-                ...p,
-                stage: 'Declined',
-              };
-            }
-            return p;
-          }),
-        ],
-      }));
-    }
-  },
 }));
 
 export default useProjectsStore;

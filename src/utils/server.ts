@@ -10,6 +10,9 @@ export enum Endpoints {
   GET_TEAMS = '/get-teams',
   CREATE_TEAM = '/create-team',
   GET_PROJECTS = '/get-projects',
+  CREATE_PROPOSAL = '/create-proposal',
+  BOUNTYMGR_SET_QUOTE_PRICE = '/bountymgr-set-quote-price',
+  BOUNTYMGR_DECLINE = '/bountymgr-decline',
   GET_INBOX = '/get-inbox',
   GET_BOUNTIES_FOR_PROJECT = '/get-bounties-for-project',
 }

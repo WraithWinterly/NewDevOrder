@@ -9,6 +9,14 @@ export type CreateProfile = {
   email: string;
   walletAddress: string;
 };
+export type BountyMgrSetQuotePrice = {
+  quotePrice: number;
+  projectID: string;
+};
+
+export type BountyMgrDeclineProject = {
+  projectID: string;
+};
 
 export type CreateTeam = {
   name: string;

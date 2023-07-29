@@ -1,5 +1,5 @@
 import {useEffect, useId} from 'react';
-import {View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native';
 import MemberBox from 'src/components/MemberBox';
 import LinkIcon from 'src/components/icons/LinkIcon';
@@ -23,7 +23,8 @@ export default function TeamVar() {
           <View style={{flexDirection: 'row', gap: 12, marginTop: 12}}>
             <Bubble lowHeight text={`${selectedTeam.members.length} Members`} />
             <TouchableOpacity
-              style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}>
+              style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}
+              onPress={() => Linking.openURL(selectedTeam.link)}>
               <LinkIcon />
               <StyledText>Website</StyledText>
             </TouchableOpacity>

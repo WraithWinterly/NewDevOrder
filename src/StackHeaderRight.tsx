@@ -101,23 +101,6 @@ export default function StackHeaderRight({route}: {route: string}) {
           }}>
           Next
         </StyledText>
-      ) : route === 'CreateProject' ? (
-        <StyledText
-          onPress={async () => {
-            if (canProceedCreateProject) {
-              // finalizeCreateProject();
-              // Create team
-              setCreateProjectData(undefined);
-
-              // return
-              navigation.navigate('HomeNavigation');
-            }
-          }}
-          style={{
-            color: canProceedCreateProject ? Colors.Primary : Colors.Gray[500],
-          }}>
-          Send
-        </StyledText>
       ) : route === 'MyWallet' ? (
         <StyledButton>
           <RefreshIcon />

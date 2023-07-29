@@ -14,6 +14,8 @@ interface StyledButtonProps {
     | 'noBgPurple'
     | 'borderNoFill';
   loading?: boolean;
+  enabled?: boolean;
+  error?: boolean;
 }
 
 export function StyledButton({
@@ -21,6 +23,8 @@ export function StyledButton({
   onPress,
   type = 'normal',
   loading = false,
+  enabled = true,
+  error = false,
 }: StyledButtonProps) {
   let style: StyleProp<TextStyle> = {};
 
@@ -100,14 +104,31 @@ export function StyledButton({
     alignSelf: 'center',
     fontSize: 16,
   };
-
+  const noBg = type != 'noBg' && type != 'noBgDanger' && type != 'noBgPurple';
   return (
-    <TouchableOpacity style={style} onPress={onPress}>
+    <TouchableOpacity
+      style={
+        enabled && error && noBg
+          ? {...style, backgroundColor: Colors.Red[400]}
+          : !enabled && noBg
+          ? {...style, backgroundColor: Colors.Gray[600]}
+          : style
+      }
+      onPress={onPress}>
       {typeof children === 'string' ? (
         !loading ? (
-          <Text style={textStyle}>{children}</Text>
+          <Text
+            style={
+              error
+                ? {...textStyle, color: Colors.White}
+                : enabled
+                ? textStyle
+                : {...textStyle, color: Colors.Gray[400]}
+            }>
+            {children}
+          </Text>
         ) : (
-          <ActivityIndicator color={Colors.AppBar} size={24} />
+          <ActivityIndicator color={Colors.AppBar} size={22} />
         )
       ) : !loading ? (
         children

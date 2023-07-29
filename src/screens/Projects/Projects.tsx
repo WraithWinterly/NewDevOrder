@@ -3,6 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {FlatList, RefreshControl} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {StackParamList} from 'src/StackNavigator';
 
 import Separator from 'src/components/ui/Separator';
@@ -18,7 +19,6 @@ export default function Projects() {
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
   const projects = useProjectsStore(state => state.projects);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const [refreshing, setRefreshing] = useState(false);
 
   const id = useId();
   const id2 = useId();
@@ -27,12 +27,6 @@ export default function Projects() {
     fetchProjects();
   }, []);
 
-  function onRefresh() {
-    setRefreshing(true);
-    fetchProjects().then(() => {
-      setRefreshing(false);
-    });
-  }
   const playingRole = useMemberStore(state => state.myProfile?.playingRole);
 
   const projectsPending = projects?.filter(
@@ -44,46 +38,54 @@ export default function Projects() {
 
   return (
     <Layout>
-      <View style={{height: 20}}></View>
-      {playingRole?.title === 'Founder' && (
-        <>
-          <StyledButton onPress={() => navigation.navigate('CreateProject')}>
-            Create a new project
-          </StyledButton>
-          <Separator />
-        </>
-      )}
-      {!!projectsPending && projectsPending.length > 0 && (
-        <>
-          <StyledText style={{marginBottom: 16}}>Pending Projects</StyledText>
-          <FlatList
-            data={projectsPending}
-            keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            renderItem={({item}) => <ProjectCard project={item}></ProjectCard>}
-            ItemSeparatorComponent={() => (
-              <View style={{height: 12}}></View>
-            )}></FlatList>
-          <Separator />
-        </>
-      )}
-      {!!projectsAccepted && projectsAccepted.length > 0 && (
-        <>
-          <StyledText style={{marginBottom: 16}}>Projects</StyledText>
-          <FlatList
-            data={projectsAccepted}
-            keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            renderItem={({item}) => <ProjectCard project={item}></ProjectCard>}
-            ItemSeparatorComponent={() => (
-              <View style={{height: 12}}></View>
-            )}></FlatList>
-        </>
-      )}
+      <ScrollView>
+        <View style={{height: 20}}></View>
+        {playingRole?.title === 'Founder' && (
+          <>
+            <StyledButton onPress={() => navigation.navigate('CreateProposal')}>
+              Create a new proposal
+            </StyledButton>
+            <Separator />
+          </>
+        )}
+        {playingRole?.title === 'Bounty Manager' && (
+          <>
+            <StyledButton onPress={() => navigation.navigate('CreateProject')}>
+              Create a new project
+            </StyledButton>
+            <Separator />
+          </>
+        )}
+        {!!projectsPending && projectsPending.length > 0 && (
+          <>
+            <StyledText style={{marginBottom: 16}}>Pending Projects</StyledText>
+            <FlatList
+              data={projectsPending}
+              keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
+              renderItem={({item}) => (
+                <ProjectCard project={item}></ProjectCard>
+              )}
+              ItemSeparatorComponent={() => (
+                <View style={{height: 12}}></View>
+              )}></FlatList>
+            <Separator />
+          </>
+        )}
+        {!!projectsAccepted && projectsAccepted.length > 0 && (
+          <>
+            <StyledText style={{marginBottom: 16}}>Projects</StyledText>
+            <FlatList
+              data={projectsAccepted}
+              keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
+              renderItem={({item}) => (
+                <ProjectCard project={item}></ProjectCard>
+              )}
+              ItemSeparatorComponent={() => (
+                <View style={{height: 12}}></View>
+              )}></FlatList>
+          </>
+        )}
+      </ScrollView>
     </Layout>
   );
 }
@@ -120,7 +122,9 @@ function ProjectCard({project}: {project: Project}) {
         </StyledText>
       </View>
       <StyledText style={{fontSize: 16, fontWeight: '500'}}>
+        {project.stage === 'Ready' ? 'Ready' : ''}
         {project.stage === 'WaitingBountyMgrQuote' ? 'Pending Review' : ''}
+        {project.stage === 'WaitingFounderPay' ? 'Pending founder payment' : ''}
         {project.stage === 'Declined' ? 'Declined' : ''}
         {project.stage === 'WaitingBountyDesign'
           ? 'Pending design from bounty designer'
