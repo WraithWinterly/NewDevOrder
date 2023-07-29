@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import StyledText from './components/ui/styled/StyledText';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -8,6 +8,12 @@ import useTeamsStore from './stores/teamsStore';
 import useProjectsStore from './stores/projectsStore';
 import StyledButton from './components/ui/styled/StyledButton';
 import RefreshIcon from './components/icons/RefreshIcon';
+import useSolanaContext from './web3/SolanaProvider';
+
+import {CreateTeam} from './sharedTypes';
+import axios from 'axios';
+import {Endpoints, getServerEndpoint} from './utils/server';
+import {useState} from 'react';
 
 export default function StackHeaderRight({route}: {route: string}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -18,7 +24,7 @@ export default function StackHeaderRight({route}: {route: string}) {
   const finalizeCreateTeam = useTeamsStore(state => state.finalizeCreateTeam);
   const canProceedCreateTeam =
     !!createTeamData && isCreateTeamValid(createTeamData);
-
+  const wallet = useSolanaContext();
   const createProjectData = useProjectsStore(state => state.createProjectData);
   const setCreateProjectData = useProjectsStore(
     state => state.setCreateProjectData,
@@ -26,11 +32,14 @@ export default function StackHeaderRight({route}: {route: string}) {
   const isCreateProjectValid = useProjectsStore(
     state => state.isCreateProjectValid,
   );
-  const finalizeCreateProject = useProjectsStore(
-    state => state.finalizeCreateProject,
-  );
+  // const finalizeCreateProject = useProjectsStore(
+  //   state => state.finalizeCreateProject,
+  // );
+  const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const canProceedCreateProject =
     !!createProjectData && isCreateProjectValid(createProjectData);
+
+  const [loading, setLoading] = useState(false);
 
   return (
     <View style={{paddingRight: 18}}>
@@ -48,23 +57,39 @@ export default function StackHeaderRight({route}: {route: string}) {
         </StyledText>
       ) : route === 'InviteMembers' ? (
         <StyledText
-          onPress={() => {
-            // Is invite in normal team
-            if (!canProceedCreateTeam) {
-              navigation.goBack();
-              return;
+          onPress={async () => {
+            if (!canProceedCreateTeam) return;
+            setLoading(true);
+            try {
+              const walletAddress = wallet.wallet?.publicKey
+                .toBase58()
+                .toString();
+              const createData: CreateTeam = {
+                ...createTeamData!,
+                creatorAddress: walletAddress!,
+              };
+              const data = await axios.post(
+                getServerEndpoint(Endpoints.CREATE_TEAM),
+                createData,
+              );
+              if (data.status === 200) {
+                setCreateProjectData(undefined);
+                navigation.navigate('HomeNavigation');
+              }
+              fetchTeams();
+            } catch (e) {
+            } finally {
+              setLoading(false);
             }
-
-            // post data to server
-            finalizeCreateTeam();
-            // Create team
-            setCreateTeamData(undefined);
-
-            // return
-            navigation.navigate('HomeNavigation');
           }}
           style={{color: Colors.Primary}}>
-          {canProceedCreateTeam ? 'Create Team' : 'Done'}
+          {loading ? (
+            <ActivityIndicator color={Colors.White} />
+          ) : canProceedCreateTeam ? (
+            'Create Team'
+          ) : (
+            'Done'
+          )}
         </StyledText>
       ) : route === 'CreateTeam' ? (
         <StyledText
@@ -78,10 +103,9 @@ export default function StackHeaderRight({route}: {route: string}) {
         </StyledText>
       ) : route === 'CreateProject' ? (
         <StyledText
-          onPress={() => {
+          onPress={async () => {
             if (canProceedCreateProject) {
-              // post data to server
-              finalizeCreateProject();
+              // finalizeCreateProject();
               // Create team
               setCreateProjectData(undefined);
 

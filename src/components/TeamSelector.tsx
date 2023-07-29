@@ -32,7 +32,7 @@ export function TeamSelectorAndroid() {
           setSelectedTeam(team.id);
         }
       }}
-      displayText={selectedTeam?.title || ''}
+      displayText={selectedTeam?.name || ''}
       selectedValue={selectedTeam?.id || ''}
     />
   );

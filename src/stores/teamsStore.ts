@@ -1,19 +1,13 @@
 import axios from 'axios';
-import {Member, Team} from 'src/sharedTypes';
+import {CreateTeam, Member, Team} from 'src/sharedTypes';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
 
-type CreateTeamData = {
-  title: string;
-  description: string;
-  link: string;
-};
-
 type TeamsStore = {
-  createTeamData: CreateTeamData | undefined;
-  setCreateTeamData: (data: CreateTeamData | undefined) => void;
-  isCreateTeamValid: (data: CreateTeamData) => boolean;
+  createTeamData: CreateTeam | undefined;
+  setCreateTeamData: (data: CreateTeam | undefined) => void;
+  isCreateTeamValid: (data: CreateTeam) => boolean;
   teams: Team[] | undefined;
   finalizeCreateTeam: () => void;
   fetchTeams: () => Promise<void>;
@@ -27,9 +21,9 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
   setCreateTeamData: data => {
     set(() => ({createTeamData: data}));
   },
-  isCreateTeamValid: (data: CreateTeamData) => {
+  isCreateTeamValid: (data: CreateTeam) => {
     // sample validation
-    if (data.title.trim().length < 3) return false;
+    if (data.name.trim().length < 3) return false;
     if (data.description.trim().length < 3) return false;
     if (data.link.trim().length < 3) return false;
     const linkRegex = /^(ftp|http|https):\/\/[^ "]+$/;
@@ -38,19 +32,19 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
   },
   teams: [],
   finalizeCreateTeam: () => {
-    set(state => ({
-      teams: [
-        {
-          ...state.createTeamData!,
-          id: String(state.teams!.length + 1),
-          // accepted: false,
-          creatorID: '',
-          members: [],
-          creatorAddress: '',
-        },
-        ...state.teams!,
-      ],
-    }));
+    // set(state => ({
+    //   teams: [
+    //     {
+    //       ...state.createTeamData!,
+    //       id: String(state.teams!.length + 1),
+    //       // accepted: false,
+    //       creatorID: '',
+    //       members: [],
+    //       creatorAddress: '',
+    //     },
+    //     ...state.teams!,
+    //   ],
+    // }));
   },
   selectedTeam: undefined,
   fetchTeams: async () => {

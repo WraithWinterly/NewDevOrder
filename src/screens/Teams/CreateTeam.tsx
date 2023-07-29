@@ -6,7 +6,7 @@ import Layout from 'src/layout/Layout';
 import useTeamsStore from 'src/stores/teamsStore';
 
 export default function CreateTeam() {
-  const [teamName, setTeamName] = useState('');
+  const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [webLink, setWebLink] = useState('https://');
 
@@ -14,19 +14,21 @@ export default function CreateTeam() {
 
   useEffect(() => {
     setCreateTeamData({
-      title: teamName,
+      name: name,
       description,
       link: webLink,
+      memberAddressesToInvite: [],
+      creatorAddress: '',
     });
-  }, [teamName, description, webLink]);
+  }, [name, description, webLink]);
 
   return (
     <Layout>
       <View style={{height: 64}}></View>
       <View style={{gap: 24}}>
         <StyledTextInput
-          value={teamName}
-          onChangeText={e => setTeamName(e)}
+          value={name}
+          onChangeText={e => setName(e)}
           placeholder="Team name"
         />
         <StyledTextInput

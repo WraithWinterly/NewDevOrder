@@ -106,7 +106,7 @@ export default function Inbox() {
                       navigation.navigate('TeamVar');
                     }}
                     style={{color: Colors.Primary}}>
-                    {notification.team?.title}
+                    {notification.team?.name}
                   </Text>
                   .
                 </Text>
@@ -128,7 +128,7 @@ export default function Inbox() {
                       setTeam(notification.team?.id || '0');
                       navigation.navigate('TeamVar');
                     }}>
-                    {notification.team?.title}
+                    {notification.team?.name}
                   </Text>
                   <Text> won the bounty </Text>
                   <Text

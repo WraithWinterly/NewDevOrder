@@ -8,6 +8,7 @@ export enum Endpoints {
   GET_MEMBERS_BY_WALLET_ADDRESSES = '/get-members-by-wallet-addresses',
   GET_BOUNTIES = '/get-bounties',
   GET_TEAMS = '/get-teams',
+  CREATE_TEAM = '/create-team',
   GET_PROJECTS = '/get-projects',
   GET_INBOX = '/get-inbox',
   GET_BOUNTIES_FOR_PROJECT = '/get-bounties-for-project',

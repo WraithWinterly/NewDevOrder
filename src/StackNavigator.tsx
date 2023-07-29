@@ -288,7 +288,7 @@ export default function StackNavigator() {
           name="TeamVar"
           component={TeamVar}
           options={{
-            title: teamTitle?.title || '',
+            title: teamTitle?.name || '',
           }}
         />
         <Stack.Screen

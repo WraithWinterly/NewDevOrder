@@ -1,8 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {LogBox, TouchableOpacity, View} from 'react-native';
 import {FlatList, RefreshControl} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {StackParamList} from 'src/StackNavigator';
 import Bubble from 'src/components/ui/Bubble';
 import Separator from 'src/components/ui/Separator';
@@ -32,6 +33,10 @@ export default function Teams() {
     });
   }
 
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
+
   const teamsJoined = !!teams
     ? teams?.filter(team => team.creatorAddress === '')
     : undefined;
@@ -39,59 +44,54 @@ export default function Teams() {
     ? teams?.filter(team => team.creatorAddress !== '')
     : undefined;
 
-
   return (
     <Layout>
-      <View style={{height: 20}}></View>
-      <StyledButton onPress={() => navigation.navigate('CreateTeam')}>
-        Create new team
-      </StyledButton>
-      <Separator />
-      {!!teamsCreated && teamsCreated.length > 0 && (
-        <>
-          <StyledText style={{marginBottom: 16}}>Teams Created</StyledText>
-          <FlatList
-            data={teamsCreated}
-            keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            renderItem={({item}) => (
-              <TeamCard
-                id={item.id}
-                title={item.title}
-                members={item.members.length}
-                description={item.description}></TeamCard>
-            )}
-            ItemSeparatorComponent={() => (
-              <View style={{height: 12}}></View>
-            )}></FlatList>
-          <Separator />
-        </>
-      )}
+      <ScrollView>
+        <View style={{height: 20}}></View>
+        <StyledButton onPress={() => navigation.navigate('CreateTeam')}>
+          Create new team
+        </StyledButton>
+        <Separator />
+        {!!teamsCreated && teamsCreated.length > 0 && (
+          <>
+            <StyledText style={{marginBottom: 16}}>Teams Created</StyledText>
+            <FlatList
+              data={teamsCreated}
+              keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
+              renderItem={({item}) => (
+                <TeamCard
+                  id={item.id}
+                  title={item.name}
+                  members={item.members.length}
+                  description={item.description}></TeamCard>
+              )}
+              ItemSeparatorComponent={() => (
+                <View style={{height: 12}}></View>
+              )}></FlatList>
+            <Separator />
+          </>
+        )}
 
-      {!!teamsJoined && teamsJoined.length > 0 && (
-        <>
-          <StyledText style={{marginBottom: 16}}>Teams Joined</StyledText>
+        {!!teamsJoined && teamsJoined.length > 0 && (
+          <>
+            <StyledText style={{marginBottom: 16}}>Teams Joined</StyledText>
 
-          <FlatList
-            data={teamsJoined}
-            keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            renderItem={({item}) => (
-              <TeamCard
-                id={item.id}
-                title={item.title}
-                members={item.members.length}
-                description={item.description}></TeamCard>
-            )}
-            ItemSeparatorComponent={() => (
-              <View style={{height: 12}}></View>
-            )}></FlatList>
-        </>
-      )}
+            <FlatList
+              data={teamsJoined}
+              keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
+              renderItem={({item}) => (
+                <TeamCard
+                  id={item.id}
+                  title={item.name}
+                  members={item.members.length}
+                  description={item.description}></TeamCard>
+              )}
+              ItemSeparatorComponent={() => (
+                <View style={{height: 12}}></View>
+              )}></FlatList>
+          </>
+        )}
+      </ScrollView>
     </Layout>
   );
 }
