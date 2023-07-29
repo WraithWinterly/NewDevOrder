@@ -40,6 +40,23 @@ import PendingProposal from './screens/projects/shared/founderManager/PendingPro
 import useProjectsStore from './stores/projectsStore';
 import ValidatorNavigator from './screens/projects/validator/ValidatorNavigator';
 
+export type StackParamList = WelcomeStackParamList &
+  WalletParamList &
+  TeamParamList &
+  ProjectParamList & {
+    ReconnectWallet: undefined;
+    HomeNavigation: undefined;
+    ViewBounty:
+      | {
+          isValidator?: boolean;
+        }
+      | undefined;
+    StartBounty: undefined;
+
+    Profile: {viewProfileAddress?: string} | undefined;
+    Leaderboard: undefined;
+  };
+
 export type WelcomeStackParamList = {
   Welcome: undefined;
   WelcomeNoMembershipToken: undefined;
@@ -83,23 +100,6 @@ export type ProjectParamList = {
   // Shared
   PendingProposal: undefined;
 };
-
-export type StackParamList = WelcomeStackParamList &
-  WalletParamList &
-  TeamParamList &
-  ProjectParamList & {
-    ReconnectWallet: undefined;
-    HomeNavigation: undefined;
-    ViewBounty:
-      | {
-          isValidator?: boolean;
-        }
-      | undefined;
-    StartBounty: undefined;
-
-    Profile: undefined;
-    Leaderboard: undefined;
-  };
 
 const Stack = createStackNavigator<StackParamList>();
 

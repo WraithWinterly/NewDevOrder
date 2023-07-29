@@ -5,6 +5,7 @@ export enum Endpoints {
   SEED = '/seed',
   CREATE_PROFILE = '/create-profile',
   GET_MEMBER_BY_WALLET_ADDRESS = '/get-member-by-wallet-address',
+  GET_MEMBERS_BY_WALLET_ADDRESSES = '/get-members-by-wallet-addresses',
   GET_BOUNTIES = '/get-bounties',
   GET_TEAMS = '/get-teams',
   GET_PROJECTS = '/get-projects',

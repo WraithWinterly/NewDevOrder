@@ -1,4 +1,4 @@
-import {useId} from 'react';
+import {useEffect, useId} from 'react';
 import {View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native';
 import MemberBox from 'src/components/MemberBox';
@@ -14,13 +14,14 @@ export default function TeamVar() {
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
   const id = useId();
 
+  const selectedTeamMembers = useTeamsStore(state => state.selectedTeamMembers);
   return (
     <Layout>
       {!!selectedTeam && (
         <View>
           <StyledText>{selectedTeam.description}</StyledText>
           <View style={{flexDirection: 'row', gap: 12, marginTop: 12}}>
-            <Bubble lowHeight text={`${selectedTeam.memberCount} Members`} />
+            <Bubble lowHeight text={`${selectedTeam.members.length} Members`} />
             <TouchableOpacity
               style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}>
               <LinkIcon />
@@ -35,9 +36,11 @@ export default function TeamVar() {
               style={{fontSize: 18, marginBottom: 8, fontWeight: '500'}}>
               Members
             </StyledText>
-            {/* <FlatList
-              data={selectedTeam.members}
-              keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
+            <FlatList
+              data={selectedTeamMembers}
+              keyExtractor={(item, index) =>
+                `${item.walletAddress}-${index}-${id}`
+              }
               ItemSeparatorComponent={() => <View style={{height: 12}}></View>}
               renderItem={({item: member}) => (
                 <MemberBox
@@ -45,7 +48,7 @@ export default function TeamVar() {
                   rightChildren={
                     <Bubble type="transparent" text="Member" />
                   }></MemberBox>
-              )}></FlatList> */}
+              )}></FlatList>
           </View>
         </View>
       )}

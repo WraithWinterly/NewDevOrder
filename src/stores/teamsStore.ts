@@ -1,17 +1,8 @@
 import axios from 'axios';
+import {Member, Team} from 'src/sharedTypes';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
-
-export type Team = {
-  id: string;
-  title: string;
-  description: string;
-  memberCount: number;
-  creatorID: string;
-  members: string[];
-  link: string;
-};
 
 type CreateTeamData = {
   title: string;
@@ -28,6 +19,7 @@ type TeamsStore = {
   fetchTeams: () => Promise<void>;
   selectedTeam?: Team;
   setSelectedTeam: (fetchId: string) => void;
+  selectedTeamMembers: Member[] | undefined;
 };
 
 const useTeamsStore = create<TeamsStore>((set, get) => ({
@@ -52,9 +44,9 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
           ...state.createTeamData!,
           id: String(state.teams!.length + 1),
           // accepted: false,
-          memberCount: 1,
           creatorID: '',
           members: [],
+          creatorAddress: '',
         },
         ...state.teams!,
       ],
@@ -67,11 +59,22 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
     // console.log('fetch data: ', data);
     set(() => ({teams: data ?? undefined}));
   },
-  setSelectedTeam: (fetchId: string) => {
+  setSelectedTeam: async (fetchId: string) => {
     // console.log(fetchId);
     const data = get().teams?.find(team => team.id == fetchId);
+
+    // console.log('sdf');
+    console.log(getServerEndpoint(Endpoints.GET_MEMBERS_BY_WALLET_ADDRESSES));
+    const {data: teamMembers} = await axios.post(
+      getServerEndpoint(Endpoints.GET_MEMBERS_BY_WALLET_ADDRESSES),
+      {
+        addresses: data?.members || [],
+      },
+    );
     set(() => ({selectedTeam: data}));
+    set(() => ({selectedTeamMembers: teamMembers}));
   },
+  selectedTeamMembers: [],
 }));
 
 export default useTeamsStore;

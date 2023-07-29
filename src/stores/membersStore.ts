@@ -21,10 +21,14 @@ const useMemberStore = create<MemberStore>((set, get) => ({
   memberViewing: undefined,
   fetchProfile: async (id, isMyProfile) => {
     set(() => ({memberViewing: undefined}));
+    set(() => ({myProfile: undefined}));
+
     if (typeof id === 'undefined') return;
+    // console.log('a1111111sdfasdfsadf', id);
     const {data} = await axios.get(
       getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) + `/${id}`,
     );
+    // console.log('asdfsadf ', data);
     if (isMyProfile) {
       set(() => ({myProfile: data}));
       return;

@@ -88,7 +88,9 @@ export default function Inbox() {
                   <Text
                     onPress={() => {
                       setMemberAddrViewing(notification.user.walletAddress);
-                      navigation.navigate('Profile');
+                      navigation.navigate('Profile', {
+                        viewProfileAddress: notification.user.walletAddress,
+                      });
                     }}
                     style={{color: Colors.Primary}}>
                     {notification.user.firstName}
@@ -113,7 +115,9 @@ export default function Inbox() {
                   <Text
                     onPress={() => {
                       setMemberAddrViewing(notification.user.walletAddress);
-                      navigation.navigate('Profile');
+                      navigation.navigate('Profile', {
+                        viewProfileAddress: notification.user.walletAddress,
+                      });
                     }}
                     style={{color: Colors.Text}}>
                     Congratulations! Your team,{' '}

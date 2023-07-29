@@ -1,21 +1,41 @@
-import {useId} from 'react';
+import {useEffect, useId} from 'react';
 import {Text, View} from 'react-native';
 import Bubble from 'src/components/ui/Bubble';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useMemberStore from 'src/stores/membersStore';
 import {Member} from 'src/sharedTypes';
+import useSolanaContext from 'src/web3/SolanaProvider';
+import {StackParamList} from 'src/StackNavigator';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-export default function Profile() {
+type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
+
+export default function Profile({route, navigation}: Props) {
   const myProfile = useMemberStore(state => state.myProfile);
   const memberViewing = useMemberStore(state => state.memberViewing);
+  const fetchProfile = useMemberStore(state => state.fetchProfile);
+  const wallet = useSolanaContext();
+
+  const viewProfileAddress = route.params?.viewProfileAddress ?? undefined;
+
+  const displayProfile = !!viewProfileAddress ? memberViewing : myProfile;
+
+  useEffect(() => {
+    if (!!viewProfileAddress) {
+      fetchProfile(viewProfileAddress.toString());
+      return;
+    } else {
+      fetchProfile(wallet?.wallet?.publicKey.toBase58().toString(), true);
+    }
+  }, []);
 
   return (
     <Layout>
-      {!!memberViewing ? (
-        <ProfileCard profile={memberViewing} />
+      {!!displayProfile ? (
+        <ProfileCard profile={displayProfile} />
       ) : (
-        myProfile && <ProfileCard profile={myProfile} />
+        displayProfile && <ProfileCard profile={displayProfile} />
       )}
     </Layout>
   );

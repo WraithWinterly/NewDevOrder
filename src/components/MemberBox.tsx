@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import useMemberStore, {Member} from 'src/stores/membersStore';
+import useMemberStore from 'src/stores/membersStore';
 import {Colors} from 'src/styles/styles';
 import StyledText from './ui/styled/StyledText';
 import Bubble from './ui/Bubble';
@@ -8,6 +8,7 @@ import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
+import {Member} from 'src/sharedTypes';
 
 export default function MemberBox({
   member,
@@ -17,7 +18,7 @@ export default function MemberBox({
   rightChildren?: ReactNode;
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const setMemberIdViewing = useMemberStore(state => state.fetchProfile);
+
   return (
     <TouchableOpacity
       style={{
@@ -31,13 +32,15 @@ export default function MemberBox({
         borderRadius: 12,
       }}
       onPress={() => {
-        setMemberIdViewing(member.id);
-        navigation.navigate('Profile');
+        // setMemberIdViewing(member.walletAddress);
+        navigation.navigate('Profile', {
+          viewProfileAddress: member.walletAddress,
+        });
       }}>
       <View style={{padding: 8, borderRadius: 8}}>
         <StyledText>{member.firstName}</StyledText>
         <StyledText style={{color: Colors.Gray[400], fontSize: 15}}>
-          {member.tag}
+          {member.username}
         </StyledText>
       </View>
       {rightChildren}

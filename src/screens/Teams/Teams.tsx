@@ -33,11 +33,12 @@ export default function Teams() {
   }
 
   const teamsJoined = !!teams
-    ? teams?.filter(team => team.creatorID === '')
+    ? teams?.filter(team => team.creatorAddress === '')
     : undefined;
   const teamsCreated = !!teams
-    ? teams?.filter(team => team.creatorID !== '')
+    ? teams?.filter(team => team.creatorAddress !== '')
     : undefined;
+
 
   return (
     <Layout>
@@ -59,7 +60,7 @@ export default function Teams() {
               <TeamCard
                 id={item.id}
                 title={item.title}
-                members={item.memberCount}
+                members={item.members.length}
                 description={item.description}></TeamCard>
             )}
             ItemSeparatorComponent={() => (
@@ -83,7 +84,7 @@ export default function Teams() {
               <TeamCard
                 id={item.id}
                 title={item.title}
-                members={item.memberCount}
+                members={item.members.length}
                 description={item.description}></TeamCard>
             )}
             ItemSeparatorComponent={() => (

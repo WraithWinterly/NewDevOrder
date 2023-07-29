@@ -76,7 +76,9 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
             <TouchableOpacity
               onPress={() => {
                 setMemberAddrViewing(item.walletAddress);
-                navigation.navigate('Profile');
+                navigation.navigate('Profile', {
+                  viewProfileAddress: item.walletAddress,
+                });
               }}
               style={{
                 flexDirection: 'row',

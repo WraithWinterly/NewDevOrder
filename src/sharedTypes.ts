@@ -37,8 +37,7 @@ export type Team = {
   id: string;
   title: string;
   description: string;
-  memberCount: number;
-  creatorID: string;
+  creatorAddress: string;
   members: string[];
   link: string;
 };

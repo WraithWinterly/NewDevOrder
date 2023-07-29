@@ -6,6 +6,8 @@ import {StackParamList} from './StackNavigator';
 import {Colors} from './styles/styles';
 import useTeamsStore from './stores/teamsStore';
 import useProjectsStore from './stores/projectsStore';
+import StyledButton from './components/ui/styled/StyledButton';
+import RefreshIcon from './components/icons/RefreshIcon';
 
 export default function StackHeaderRight({route}: {route: string}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -92,6 +94,10 @@ export default function StackHeaderRight({route}: {route: string}) {
           }}>
           Send
         </StyledText>
+      ) : route === 'MyWallet' ? (
+        <StyledButton>
+          <RefreshIcon />
+        </StyledButton>
       ) : null}
     </View>
   );
