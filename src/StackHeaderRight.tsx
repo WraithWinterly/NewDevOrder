@@ -29,15 +29,11 @@ export default function StackHeaderRight({route}: {route: string}) {
   const setCreateProjectData = useProjectsStore(
     state => state.setCreateProjectData,
   );
-  const isCreateProjectValid = useProjectsStore(
-    state => state.isCreateProjectValid,
-  );
+
   // const finalizeCreateProject = useProjectsStore(
   //   state => state.finalizeCreateProject,
   // );
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
-  const canProceedCreateProject =
-    !!createProjectData && isCreateProjectValid(createProjectData);
 
   const [loading, setLoading] = useState(false);
 
@@ -75,9 +71,12 @@ export default function StackHeaderRight({route}: {route: string}) {
               if (data.status === 200) {
                 setCreateProjectData(undefined);
                 navigation.navigate('HomeNavigation');
+              } else {
+                throw data;
               }
               fetchTeams();
             } catch (e) {
+              console.error(e);
             } finally {
               setLoading(false);
             }
