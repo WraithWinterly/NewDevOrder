@@ -12,6 +12,7 @@ export enum Endpoints {
   CREATE_TEAM = '/create-team',
   INVITE_TO_TEAM = '/invite-to-team',
   JOIN_TEAM_FROM_INVITE = '/join-team-from-invite',
+  DENY_TEAM_FROM_INVITE = '/deny-team-from-invite',
   GET_PROJECTS = '/get-projects',
   CREATE_PROPOSAL = '/create-proposal',
   BOUNTYMGR_SET_QUOTE_PRICE = '/bountymgr-set-quote-price',

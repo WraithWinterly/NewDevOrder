@@ -24,20 +24,29 @@ export default function Inbox() {
   const myProfile = useMemberStore(state => state.myProfile);
   const [refreshing, setRefreshing] = useState(false);
   const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+
+  const [loadingJoinTeam, setLoadingJoinTeam] = useState(false);
+  const [errorJoinTeam, setErrorJoinTeam] = useState(false);
+
+  const [loadingDenyTeam, setLoadingDenyTeam] = useState(false);
+  const [errorDenyTeam, setErrorDenyTeam] = useState(false);
+
   const fetchProfile = useMemberStore(state => state.fetchProfile);
 
   const wallet = useSolanaContext();
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
+
+  const performingAction = loadingJoinTeam || loadingDenyTeam;
+
   async function joinInvite(teamID: string) {
     if (!myProfile?.walletAddress) return;
-    if (loading) return;
+    if (performingAction) return;
 
     const body: JoinTeamPOSTData = {
       fromAddress: myProfile?.walletAddress,
       toTeamID: teamID,
     };
+    setLoadingJoinTeam(true);
     try {
       const data = await axios.post(
         getServerEndpoint(Endpoints.JOIN_TEAM_FROM_INVITE),
@@ -59,7 +68,39 @@ export default function Inbox() {
     } catch (e) {
       console.log((e as Error).message);
     } finally {
-      setLoading(false);
+      setLoadingJoinTeam(false);
+    }
+  }
+
+  async function denyInvite(teamID: string) {
+    if (!myProfile?.walletAddress) return;
+    if (performingAction) return;
+
+    const body: JoinTeamPOSTData = {
+      fromAddress: myProfile?.walletAddress,
+      toTeamID: teamID,
+    };
+    setLoadingDenyTeam(true);
+    try {
+      const data = await axios.post(
+        getServerEndpoint(Endpoints.DENY_TEAM_FROM_INVITE),
+        body,
+      );
+      if (data.status === 200) {
+        // Refresh my profile (which will also refresh inbox)
+        if (wallet.wallet?.publicKey.toBase58.toString()) {
+          fetchProfile(wallet.wallet?.publicKey.toBase58().toString(), true);
+          // refresh teams as well
+          fetchTeams();
+        }
+      } else {
+        console.log(data);
+        throw data;
+      }
+    } catch (e) {
+      console.log((e as Error).message);
+    } finally {
+      setLoadingDenyTeam(false);
     }
   }
 
@@ -133,13 +174,25 @@ export default function Inbox() {
                     flexDirection: 'row',
                     marginVertical: 12,
                     alignItems: 'center',
+                    gap: 16,
                   }}>
                   <StyledButton
                     type="borderNoFill"
-                    loading={loading}
-                    error={error}
+                    loading={loadingJoinTeam}
+                    enabled={!performingAction}
+                    error={errorJoinTeam}
                     onPress={() => joinInvite(item.toTeamId)}>
                     <Text>Join Team</Text>
+                  </StyledButton>
+                  <StyledButton
+                    type="noBg"
+                    loading={loadingJoinTeam}
+                    enabled={!performingAction}
+                    error={errorJoinTeam}
+                    onPress={() => denyInvite(item.toTeamId)}>
+                    <Text style={{color: Colors.Red[300], fontWeight: '500'}}>
+                      Deny Invite
+                    </Text>
                   </StyledButton>
                 </View>
               </View>
