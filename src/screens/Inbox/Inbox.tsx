@@ -7,8 +7,7 @@ import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import useInboxStore from 'src/stores/inboxStore';
-import {Notification} from 'src/sharedTypes';
+
 import useMemberStore from 'src/stores/membersStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
@@ -18,39 +17,31 @@ export default function Inbox() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const setMemberAddrViewing = useMemberStore(state => state.fetchProfile);
   const setTeam = useTeamsStore(state => state.setSelectedTeam);
-
+  const myProfile = useMemberStore(state => state.myProfile);
   const [refreshing, setRefreshing] = useState(false);
 
-  const removeNotification = useInboxStore(state => state.removeNotification);
-  const notifications = useInboxStore(state => state.notifications);
-  const fetchNotifications = useInboxStore(state => state.fetchInbox);
-
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
-
-  function onConfirm(noti: Notification) {
-    switch (noti.type) {
-      case 'InvitedJoinTeam':
-        navigation.navigate('TeamVar');
-        break;
-      case 'RequestJoinTeam':
-        navigation.navigate('TeamVar');
-        break;
-      case 'BountyWon':
-        navigation.navigate('ViewBounty');
-        break;
-    }
+  function onConfirm() {
+    // switch (noti.type) {
+    //   case 'InvitedJoinTeam':
+    //     navigation.navigate('TeamVar');
+    //     break;
+    //   case 'RequestJoinTeam':
+    //     navigation.navigate('TeamVar');
+    //     break;
+    //   case 'BountyWon':
+    //     navigation.navigate('ViewBounty');
+    //     break;
+    // }
   }
 
-  function onDelete(noti: Notification) {
+  function onDelete() {
     // remove from array with this ID
-    removeNotification(noti.id);
+    // removeNotification(noti.id);
   }
 
   function onRefresh() {
-    setRefreshing(true);
-    fetchNotifications().then(() => setRefreshing(false));
+    // setRefreshing(true);
+    // fetchNotifications().then(() => setRefreshing(false));
   }
 
   return (
@@ -58,120 +49,71 @@ export default function Inbox() {
       <StyledText style={{fontWeight: '500', fontSize: 20, marginBottom: 8}}>
         Latest Messages
       </StyledText>
-      <FlatList
-        data={notifications}
-        keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        renderItem={({item: notification, index}) => (
-          <View
-            style={{
-              backgroundColor: Colors.BackgroundLighter,
-              padding: 12,
-              marginVertical: 8,
-              borderRadius: 12,
-              flexDirection: 'row',
-              gap: 12,
-            }}>
+      {!!myProfile && myProfile.pendingTeamInvites.length > 0 && (
+        <FlatList
+          data={myProfile.pendingTeamInvites}
+          keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          renderItem={({item, index}) => (
             <View
               style={{
-                width: 32,
-                height: 32,
-                backgroundColor: Colors.Gray[200],
-                borderRadius: 50,
-              }}></View>
-            <View key={`${id}-${index}`} style={{width: '80%'}}>
-              {notification.type === 'InvitedJoinTeam' ||
-              notification.type === 'RequestJoinTeam' ? (
-                <Text style={{fontSize: 16, lineHeight: 28}}>
-                  <Text
-                    onPress={() => {
-                      setMemberAddrViewing(notification.user.walletAddress);
-                      navigation.navigate('Profile', {
-                        viewProfileAddress: notification.user.walletAddress,
-                      });
-                    }}
-                    style={{color: Colors.Primary}}>
-                    {notification.user.firstName}
-                  </Text>
-                  <Text>
-                    {notification.type === 'InvitedJoinTeam'
-                      ? ' invited you to join their team, '
-                      : ' requested to join your team, '}
-                  </Text>
-                  <Text
-                    onPress={() => {
-                      setTeam(notification.user.walletAddress);
-                      navigation.navigate('TeamVar');
-                    }}
-                    style={{color: Colors.Primary}}>
-                    {notification.team?.name}
-                  </Text>
-                  .
-                </Text>
-              ) : (
-                <Text style={{fontSize: 16, lineHeight: 28}}>
-                  <Text
-                    onPress={() => {
-                      setMemberAddrViewing(notification.user.walletAddress);
-                      navigation.navigate('Profile', {
-                        viewProfileAddress: notification.user.walletAddress,
-                      });
-                    }}
-                    style={{color: Colors.Text}}>
-                    Congratulations! Your team,{' '}
-                  </Text>
-                  <Text
-                    style={{color: Colors.Primary}}
-                    onPress={() => {
-                      setTeam(notification.team?.id || '0');
-                      navigation.navigate('TeamVar');
-                    }}>
-                    {notification.team?.name}
-                  </Text>
-                  <Text> won the bounty </Text>
-                  <Text
-                    onPress={() => {
-                      setMemberAddrViewing(notification.bounty?.id);
-                      navigation.navigate('ViewBounty');
-                    }}
-                    style={{color: Colors.Primary}}>
-                    {notification.bounty?.title}
-                  </Text>
-                  .
-                </Text>
-              )}
-
+                backgroundColor: Colors.BackgroundLighter,
+                padding: 12,
+                marginVertical: 8,
+                borderRadius: 12,
+                flexDirection: 'row',
+                gap: 12,
+              }}>
               <View
                 style={{
-                  flexDirection: 'row',
-                  marginVertical: 12,
-                  alignItems: 'center',
-                }}>
-                <StyledButton
-                  type="borderNoFill"
-                  onPress={() => onConfirm(notification)}>
-                  <Text>
-                    {notification.type === 'InvitedJoinTeam'
-                      ? 'Join Team'
-                      : notification.type === 'RequestJoinTeam'
-                      ? 'Accept'
-                      : 'Claim reward'}
+                  width: 32,
+                  height: 32,
+                  backgroundColor: Colors.Gray[200],
+                  borderRadius: 50,
+                }}></View>
+              <View key={`${id}-${index}`} style={{width: '80%'}}>
+                {myProfile.pendingTeamInvites.length > 0 && (
+                  <Text style={{fontSize: 16, lineHeight: 28}}>
+                    <Text
+                      onPress={() => {
+                        setMemberAddrViewing(item.fromAddress);
+                        navigation.navigate('Profile', {
+                          viewProfileAddress: item.fromAddress,
+                        });
+                      }}
+                      style={{color: Colors.Primary}}>
+                      {item.fromName}
+                    </Text>
+                    <Text> invited you to join their team, </Text>
+                    <Text
+                      onPress={() => {
+                        setTeam(item.toTeamId);
+                        navigation.navigate('TeamVar');
+                      }}
+                      style={{color: Colors.Primary}}>
+                      {item.toTeamName}
+                    </Text>
+                    .
                   </Text>
-                </StyledButton>
-                {notification.type != 'BountyWon' && (
-                  <StyledButton
-                    type="noBgDanger"
-                    onPress={() => onDelete(notification)}>
-                    Delete
-                  </StyledButton>
                 )}
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: 12,
+                    alignItems: 'center',
+                  }}>
+                  <StyledButton type="borderNoFill" onPress={() => onConfirm()}>
+                    <Text>Join Team</Text>
+                  </StyledButton>
+                </View>
               </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      )}
     </Layout>
   );
 }

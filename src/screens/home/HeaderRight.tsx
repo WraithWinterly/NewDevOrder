@@ -22,7 +22,6 @@ import useTeamsStore from 'src/stores/teamsStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import RefreshIcon from 'src/components/icons/RefreshIcon';
 import {useState} from 'react';
-import useInboxStore from 'src/stores/inboxStore';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function HeaderRight() {
@@ -33,7 +32,6 @@ export default function HeaderRight() {
   const fetchBounties = useBountyStore(state => state.fetchBounties);
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
-  const fetchInbox = useInboxStore(state => state.fetchInbox);
   const fetchProfile = useMemberStore(state => state.fetchProfile);
 
   const {wallet} = useSolanaContext();
@@ -51,7 +49,6 @@ export default function HeaderRight() {
         fetchBounties(),
         fetchTeams(),
         fetchProjects(),
-        fetchInbox(),
         fetchProfile(wallet?.publicKey.toBase58().toString(), true),
       ]);
     } catch (e) {
