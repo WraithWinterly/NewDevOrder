@@ -47,7 +47,14 @@ export default function TeamVar() {
                 <MemberBox
                   member={member}
                   rightChildren={
-                    <Bubble type="transparent" text="Member" />
+                    <Bubble
+                      type="transparent"
+                      text={
+                        member.walletAddress === selectedTeam.creatorAddress
+                          ? 'Creator'
+                          : 'Member'
+                      }
+                    />
                   }></MemberBox>
               )}></FlatList>
           </View>
