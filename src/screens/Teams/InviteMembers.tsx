@@ -33,7 +33,6 @@ export default function InviteMembers() {
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
 
   const [newInvitesMembers, setNewInvitesMembers] = useState<Member[]>([]);
-  console.log(newInvitesMembers);
 
   async function fetchInvitedMembers() {
     if (!!selectedTeam) {
