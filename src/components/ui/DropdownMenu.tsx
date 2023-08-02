@@ -25,7 +25,7 @@ export default function DropdownMenu({
   data,
   onSelect,
   style,
-  disabled,
+  disabled = false,
 }: DropdownMenuProps) {
   const pickerRef = useRef<Picker<any>>(null);
   const id = useId();
@@ -59,6 +59,7 @@ export default function DropdownMenu({
 
       <Picker
         ref={pickerRef}
+        enabled={!disabled}
         // selectedValue={selectedTeamId}
         selectedValue={selectedValue}
         itemStyle={{color: Colors.Text}}

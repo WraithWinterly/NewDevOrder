@@ -76,7 +76,8 @@ export type Bounty = {
   reward: number;
   deadline: Date;
   teamCount: number;
-  youJoined: boolean;
+  // array of team Ids
+  participantsTeamIDs: string[];
   stage: 'Active' | 'Draft' | 'Completed' | 'ReadyForTests';
   submissions?: string[];
   aboutProject?: string;
@@ -111,10 +112,15 @@ export type InviteToTeamPOSTData = {
   toAddress: string;
   toTeam: string;
 };
-
 export type JoinTeamPOSTData = {
   fromAddress: string;
   toTeamID: string;
+};
+
+export type StartBountyPOSTData = {
+  address: string;
+  forTeam: string;
+  bountyID: string;
 };
 
 export type TeamInvite = {

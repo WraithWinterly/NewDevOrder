@@ -17,7 +17,8 @@ export default function DiscoverBounties() {
           bounty.title.includes(searchText || '') &&
           bounty.stage === 'Active'
         ) {
-          return bounty.youJoined;
+          // return bounty.youJoined;
+          return true;
         }
       })
     : undefined;

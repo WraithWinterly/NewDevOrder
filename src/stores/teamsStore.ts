@@ -12,7 +12,7 @@ type TeamsStore = {
   finalizeCreateTeam: () => void;
   fetchTeams: () => Promise<void>;
   selectedTeam?: Team;
-  setSelectedTeam: (fetchId: string) => void;
+  setSelectedTeam: (fetchId: string | undefined) => void;
   selectedTeamMembers: Member[] | undefined;
 };
 
@@ -53,7 +53,12 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
     // console.log('fetch data: ', data);
     set(() => ({teams: data ?? undefined}));
   },
-  setSelectedTeam: async (fetchId: string) => {
+  setSelectedTeam: async (fetchId: string | undefined) => {
+    if (!fetchId) {
+      set(() => ({selectedTeam: undefined}));
+      set(() => ({selectedTeamMembers: undefined}));
+      return;
+    }
     // console.log(fetchId);
     const data = get().teams?.find(team => team.id == fetchId);
 

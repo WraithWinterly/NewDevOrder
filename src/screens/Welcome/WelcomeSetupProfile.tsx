@@ -78,58 +78,77 @@ export default function WelcomeSetupProfile() {
     }
   }
 
+  const [noUserAccount, setNoUserAccount] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get(
+        getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
+          `/${wallet!.publicKey!.toBase58().toString()}`,
+      )
+      .then(res => {
+        // You already have an account with us
+        navigation.navigate('WelcomeComplete');
+      })
+      .catch(e => {
+        setNoUserAccount(true);
+      });
+  }, []);
+
   return (
     <Layout>
       <ScrollView>
-        <View
-          style={{
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: 20,
-            height: '85%',
-          }}>
-          <View style={{gap: 20}}>
-            <StyledText type="header">Let's set up your profile.</StyledText>
-            {errors.length > 0 && (
-              <StyledText style={{color: 'red'}}>
-                {errors.join('\n')}
-              </StyledText>
-            )}
-            <StyledTextInput
-              onChangeText={t => setUsername(t)}
-              value={username}
-              placeholder="Username"
-            />
-            <StyledTextInput
-              onChangeText={t => setFirstName(t)}
-              value={firstName}
-              placeholder="First Name"
-            />
-            <StyledTextInput
-              onChangeText={t => setLastName(t)}
-              value={lastName}
-              placeholder="Last Name"
-            />
-            <StyledTextInput
-              onChangeText={t => setEmail(t)}
-              value={email}
-              placeholder="Email"
-            />
-            {/* <StyledTextInput
-              onChangeText={t => setPassword(t)}
-              value={password}
-              placeholder="Password"
-              secureTextEntry={true}
-            /> */}
-          </View>
+        {noUserAccount && (
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: 20,
+              height: '85%',
+            }}>
+            <View style={{gap: 20}}>
+              <StyledText type="header">Let's set up your profile.</StyledText>
+              {errors.length > 0 && (
+                <StyledText style={{color: 'red'}}>
+                  {errors.join('\n')}
+                </StyledText>
+              )}
+              <StyledTextInput
+                onChangeText={t => setUsername(t)}
+                value={username}
+                placeholder="Username"
+              />
+              <StyledTextInput
+                onChangeText={t => setFirstName(t)}
+                value={firstName}
+                placeholder="First Name"
+              />
+              <StyledTextInput
+                onChangeText={t => setLastName(t)}
+                value={lastName}
+                placeholder="Last Name"
+              />
+              <StyledTextInput
+                onChangeText={t => setEmail(t)}
+                value={email}
+                placeholder="Email"
+              />
+              {/* <StyledTextInput
+                    onChangeText={t => setPassword(t)}
+                    value={password}
+                    placeholder="Password"
+                    secureTextEntry={true}
+                  /> */}
+            </View>
 
-          <StyledButton onPress={onSubmit} loading={isLoading}>
-            Next Step
-          </StyledButton>
-          <StyledText style={{color: 'red', alignSelf: 'center'}}>
-            {error}
-          </StyledText>
-        </View>
+            <StyledButton onPress={onSubmit} loading={isLoading}>
+              Next Step
+            </StyledButton>
+            <StyledText style={{color: 'red', alignSelf: 'center'}}>
+              {error}
+            </StyledText>
+          </View>
+        )}
       </ScrollView>
     </Layout>
   );

@@ -1,8 +1,8 @@
 import {create} from 'zustand';
-import {Bounty} from './bountyStore';
+
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import axios from 'axios';
-import {CreateProjectData, Project} from 'src/sharedTypes';
+import {Bounty, CreateProjectData, Project} from 'src/sharedTypes';
 
 type ProjectsStore = {
   createProjectData: CreateProjectData | undefined;
@@ -11,7 +11,7 @@ type ProjectsStore = {
   finalizeCreateProject: () => void;
   fetchProjects: () => Promise<void>;
   selectedProject?: Project;
-  setSelectedProject: (fetchId: string) => Promise<void>;
+  setSelectedProject: (fetchId: string | undefined) => Promise<void>;
   bountiesById: Bounty[] | undefined;
 };
 
@@ -43,7 +43,12 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
     const {data} = await axios.get(getServerEndpoint(Endpoints.GET_PROJECTS));
     set(() => ({projects: data}));
   },
-  setSelectedProject: async (fetchId: string) => {
+  setSelectedProject: async (fetchId: string | undefined) => {
+    if (!fetchId) {
+      set(() => ({selectedProject: undefined}));
+      set(() => ({bountiesById: undefined}));
+      return;
+    }
     set(() => ({selectedProject: undefined}));
     set(() => ({
       bountiesById: undefined,

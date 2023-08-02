@@ -40,6 +40,12 @@ export default function HeaderRight() {
 
   const [refreshError, setRefreshError] = useState<boolean>(false);
 
+  const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
+  const setSelectedProject = useProjectsStore(
+    state => state.setSelectedProject,
+  );
+  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
+
   async function refresh() {
     // if (refreshing) return;
     setRefreshError(false);
@@ -51,6 +57,9 @@ export default function HeaderRight() {
         fetchProjects(),
         fetchProfile(wallet?.publicKey.toBase58().toString(), true),
       ]);
+      setSelectedTeam(undefined);
+      setSelectedProject(undefined);
+      setSelectedBounty(undefined);
     } catch (e) {
       console.log((e as Error).message);
       setRefreshError(true);

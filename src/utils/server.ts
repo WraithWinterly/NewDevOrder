@@ -7,6 +7,7 @@ export enum Endpoints {
   GET_MEMBER_BY_WALLET_ADDRESS = '/get-member-by-wallet-address',
   GET_MEMBERS_BY_WALLET_ADDRESSES = '/get-members-by-wallet-addresses',
   GET_BOUNTIES = '/get-bounties',
+  START_BOUNTY = '/start-bounty',
   GET_TEAMS = '/get-teams',
   GET_TEAM_BY_ID = '/get-team-by-id',
   CREATE_TEAM = '/create-team',
