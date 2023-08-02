@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {RoleType} from 'prisma/generated';
 import {Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -27,7 +28,7 @@ export default function PendingProposal() {
           style={{fontSize: 26, fontWeight: 'bold', marginBottom: 22}}>
           Pending Proposal
         </StyledText>
-        {role?.title === 'Founder' &&
+        {role === RoleType.Founder &&
         proj?.quotePrice &&
         proj.quotePrice > 0 ? (
           <View>
@@ -50,7 +51,7 @@ export default function PendingProposal() {
           </View>
         ) : null}
 
-        {role?.title === 'Bounty Manager' &&
+        {role === RoleType.BountyManager &&
           proj?.stage !== 'WaitingBountyMgrQuote' && (
             <View>
               <StyledText style={{fontSize: 18}}>
@@ -85,7 +86,7 @@ export default function PendingProposal() {
           {proj?.description}
         </StyledText>
         <Separator />
-        {role?.title === 'Bounty Manager' &&
+        {role === RoleType.BountyManager &&
           proj?.stage === 'WaitingBountyMgrQuote' && (
             <View style={{marginTop: 16}}>
               <TouchableOpacity

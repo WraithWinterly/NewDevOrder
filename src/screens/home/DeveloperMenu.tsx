@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {RoleType} from 'prisma/generated';
 import {useState} from 'react';
 import {View} from 'react-native';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
@@ -9,7 +10,6 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useMemberStore from 'src/stores/membersStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import {RoleDict} from 'src/sharedTypes';
 
 export default function DeveloperMenu() {
   const [resetFeedback, setResetFeedback] = useState('');
@@ -59,6 +59,28 @@ export default function DeveloperMenu() {
     }
   }
 
+  const RoleDict = [
+    {
+      id: '0',
+      title: RoleType.BountyDesigner,
+    },
+    {
+      id: '1',
+      title: RoleType.BountyHunter,
+    },
+    {
+      id: '2',
+      title: RoleType.BountyManager,
+    },
+    {
+      id: '3',
+      title: RoleType.BountyValidator,
+    },
+    {
+      id: '4',
+      title: RoleType.Founder,
+    },
+  ];
   return (
     <Layout>
       <PhantomConnectButton successRoute="HomeNavigation" />
@@ -83,11 +105,14 @@ export default function DeveloperMenu() {
             const role = RoleDict?.find(role => role.id == itemID);
 
             if (role) {
-              setPlayingRole(role);
+              setPlayingRole(role?.title as RoleType);
             }
           }}
-          displayText={myProfile?.playingRole.title || ''}
-          selectedValue={myProfile?.playingRole.id || ''}
+          displayText={myProfile?.playingRole || ''}
+          selectedValue={
+            RoleDict.find(role => role.title == myProfile?.playingRole)?.id ||
+            ''
+          }
         />
       </View>
     </Layout>

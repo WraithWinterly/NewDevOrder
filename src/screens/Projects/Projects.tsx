@@ -1,8 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useEffect, useId, useState} from 'react';
+import {Project, RoleType} from 'prisma/generated';
+import {useEffect, useId} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {FlatList, RefreshControl} from 'react-native';
+import {FlatList} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StackParamList} from 'src/StackNavigator';
 
@@ -10,7 +11,6 @@ import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import {Project} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
@@ -29,18 +29,20 @@ export default function Projects() {
 
   const playingRole = useMemberStore(state => state.myProfile?.playingRole);
 
-  const projectsPending = projects?.filter(
-    p => p.stage == 'WaitingBountyMgrQuote',
-  );
-  const projectsAccepted = projects?.filter(
-    p => p.stage !== 'WaitingBountyMgrQuote',
-  );
+  const projectsPending =
+    typeof projects !== 'undefined'
+      ? projects?.filter(p => p.stage == 'WaitingBountyMgrQuote')
+      : undefined;
+  const projectsAccepted =
+    typeof projects !== 'undefined'
+      ? projects?.filter(p => p.stage !== 'WaitingBountyMgrQuote')
+      : undefined;
 
   return (
     <Layout>
       <ScrollView>
         <View style={{height: 20}}></View>
-        {playingRole?.title === 'Founder' && (
+        {playingRole === RoleType.Founder && (
           <>
             <StyledButton onPress={() => navigation.navigate('CreateProposal')}>
               Create a new proposal
@@ -48,7 +50,7 @@ export default function Projects() {
             <Separator />
           </>
         )}
-        {playingRole?.title === 'Bounty Manager' && (
+        {playingRole === RoleType.BountyManager && (
           <>
             <StyledButton onPress={() => navigation.navigate('CreateProject')}>
               Create a new project
@@ -59,30 +61,24 @@ export default function Projects() {
         {!!projectsPending && projectsPending.length > 0 && (
           <>
             <StyledText style={{marginBottom: 16}}>Pending Projects</StyledText>
-            <FlatList
-              data={projectsPending}
-              keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
-              renderItem={({item}) => (
+            {projectsPending.map((item, index) => (
+              <View key={`${item.id}-${index}-${id}`}>
                 <ProjectCard project={item}></ProjectCard>
-              )}
-              ItemSeparatorComponent={() => (
                 <View style={{height: 12}}></View>
-              )}></FlatList>
+              </View>
+            ))}
             <Separator />
           </>
         )}
         {!!projectsAccepted && projectsAccepted.length > 0 && (
           <>
             <StyledText style={{marginBottom: 16}}>Projects</StyledText>
-            <FlatList
-              data={projectsAccepted}
-              keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
-              renderItem={({item}) => (
+            {projectsAccepted.map((item, index) => (
+              <View key={`${item.id}-${index}-${id2}`}>
                 <ProjectCard project={item}></ProjectCard>
-              )}
-              ItemSeparatorComponent={() => (
                 <View style={{height: 12}}></View>
-              )}></FlatList>
+              </View>
+            ))}
           </>
         )}
       </ScrollView>
@@ -99,11 +95,11 @@ function ProjectCard({project}: {project: Project}) {
 
   async function onClick() {
     setSelectedProject(project.id);
-    if (role?.title === 'Bounty Designer') {
+    if (role === RoleType.BountyDesigner) {
       navigation.navigate('ProjectWorkspaceNavigator');
-    } else if (role?.title === 'Founder' || role?.title === 'Bounty Manager') {
+    } else if (role === RoleType.Founder || role === RoleType.BountyManager) {
       navigation.navigate('PendingProposal');
-    } else if (role?.title === 'Bounty Validator') {
+    } else if (role === RoleType.BountyValidator) {
       navigation.navigate('ValidatorNavigator');
     }
   }

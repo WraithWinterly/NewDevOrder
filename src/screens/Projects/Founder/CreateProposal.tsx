@@ -10,7 +10,7 @@ import StyledPhoneInput from 'src/components/ui/styled/StyledPhoneInput';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
-import {CreateProjectData} from 'src/sharedTypes';
+import {CreateProjectDataPOSTData} from 'src/sharedTypes';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
@@ -23,7 +23,7 @@ export default function CreateProposal() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const [createProjectData, setCreateProjectData] =
-    useState<CreateProjectData>();
+    useState<CreateProjectDataPOSTData>();
 
   function canProceedCreateProject() {
     if (!createProjectData) return false;

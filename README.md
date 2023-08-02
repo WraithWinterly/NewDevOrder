@@ -10,10 +10,7 @@ It supports connecting to Solana using the Solana Mobile Wallet Adapter SDK.
 Run &nbsp;`yarn`&nbsp; to install node dependencies. Do this regardless of platform.
 Copy the &nbsp;`.env.example`&nbsp; file and rename it to &nbsp;`.env`&nbsp; in both the root directory and server directory.
 
-### Server
-
-- This app will need some sort of server to run on. The server included is for testing purposes, and will only hold the data during the lifetime of the server. Change your env file depending on how you want to use the server.
-- Run &nbsp;`cd server`&nbsp; then &nbsp;`yarn run dev`&nbsp; to start the local server.
+If you need to update the types from the server, copy the new &nbsp;`index.d.ts`&nbsp; file into the &nbsp;`prisma/generated`&nbsp; folder. If you have new Enums, you must also update the &nbsp;`index.js`&nbsp; file.
 
 ### Android
 

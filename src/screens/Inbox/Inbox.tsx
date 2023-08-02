@@ -32,6 +32,7 @@ export default function Inbox() {
   const [errorDenyTeam, setErrorDenyTeam] = useState(false);
 
   const fetchProfile = useMemberStore(state => state.fetchProfile);
+  const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 
   const wallet = useSolanaContext();
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
@@ -56,7 +57,7 @@ export default function Inbox() {
         navigation.navigate('TeamVar');
         // Refresh my profile (which will also refresh inbox)
         if (wallet.wallet?.publicKey.toBase58.toString()) {
-          fetchProfile(wallet.wallet?.publicKey.toBase58().toString(), true);
+          fetchMyProfile(wallet.wallet?.publicKey.toBase58().toString());
           // refresh teams as well
           await fetchTeams();
         }
@@ -89,7 +90,7 @@ export default function Inbox() {
       if (data.status === 200) {
         // Refresh my profile (which will also refresh inbox)
         if (wallet.wallet?.publicKey.toBase58.toString()) {
-          fetchProfile(wallet.wallet?.publicKey.toBase58().toString(), true);
+          fetchMyProfile(wallet.wallet?.publicKey.toBase58().toString());
           // refresh teams as well
           fetchTeams();
         }
@@ -119,9 +120,9 @@ export default function Inbox() {
       <StyledText style={{fontWeight: '500', fontSize: 20, marginBottom: 8}}>
         Latest Messages
       </StyledText>
-      {!!myProfile && myProfile.pendingTeamInvites.length > 0 && (
+      {!!myProfile && (myProfile.teamInvites?.length || 0) > 0 && (
         <FlatList
-          data={myProfile.pendingTeamInvites}
+          data={myProfile.teamInvites}
           keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -144,7 +145,7 @@ export default function Inbox() {
                   borderRadius: 50,
                 }}></View>
               <View key={`${id}-${index}`} style={{width: '80%'}}>
-                {myProfile.pendingTeamInvites.length > 0 && (
+                {(myProfile.teamInvites?.length || 0) > 0 && (
                   <Text style={{fontSize: 16, lineHeight: 28}}>
                     <Text
                       onPress={() => {

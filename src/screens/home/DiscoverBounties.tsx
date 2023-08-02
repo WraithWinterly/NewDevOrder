@@ -4,6 +4,7 @@ import SearchIcon from 'src/components/icons/SearchIcon';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 import useBountyStore from 'src/stores/bountyStore';
+import useTeamsStore from 'src/stores/teamsStore';
 
 export default function DiscoverBounties() {
   const [searchText, setSearchBounties] = useState('');
@@ -11,16 +12,19 @@ export default function DiscoverBounties() {
   const bounties = useBountyStore(state => state.bounties);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
 
-  const search = !!bounties
+  const teams = useTeamsStore(state => state.teams);
+
+  const bountiesWithSearch = !!bounties
     ? bounties?.filter(bounty => {
         if (
           bounty.title.includes(searchText || '') &&
           bounty.stage === 'Active'
         ) {
-          // if (yourBounties) {
-          //   return bounty.youJoined;
-          // }
-          return bounty;
+          const myTeamIds = teams?.map(team => team.id);
+          const doesNotInclude = myTeamIds?.every(teamId => {
+            return !bounty.participantsTeamIDs.includes(teamId);
+          });
+          return doesNotInclude;
         }
       })
     : undefined;
@@ -40,11 +44,13 @@ export default function DiscoverBounties() {
         placeholder="Search Bounties"
         icon={<SearchIcon />}
       />
-      <BountyList
-        refreshing={refreshing}
-        bounties={search}
-        onRefresh={onRefresh}
-      />
+      {!!bountiesWithSearch && (
+        <BountyList
+          refreshing={refreshing}
+          bounties={bountiesWithSearch}
+          onRefresh={onRefresh}
+        />
+      )}
     </Layout>
   );
 }

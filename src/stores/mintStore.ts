@@ -1,4 +1,4 @@
-import {RoleType} from 'src/sharedTypes';
+import {RoleType} from 'prisma/generated';
 import {create} from 'zustand';
 
 type MintStore = {
@@ -7,7 +7,7 @@ type MintStore = {
 };
 
 const useMintStore = create<MintStore>(set => ({
-  nftToMint: 'Bounty Hunter',
+  nftToMint: RoleType.BountyDesigner,
   setNftToMint: string => {
     set({nftToMint: string});
   },

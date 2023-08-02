@@ -32,7 +32,7 @@ export default function HeaderRight() {
   const fetchBounties = useBountyStore(state => state.fetchBounties);
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
-  const fetchProfile = useMemberStore(state => state.fetchProfile);
+  const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 
   const {wallet} = useSolanaContext();
 
@@ -55,7 +55,7 @@ export default function HeaderRight() {
         fetchBounties(),
         fetchTeams(),
         fetchProjects(),
-        fetchProfile(wallet?.publicKey.toBase58().toString(), true),
+        fetchMyProfile(wallet?.publicKey.toBase58().toString()),
       ]);
       setSelectedTeam(undefined);
       setSelectedProject(undefined);

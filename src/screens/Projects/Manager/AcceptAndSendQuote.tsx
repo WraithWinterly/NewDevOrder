@@ -8,7 +8,7 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
-import {BountyMgrSetQuotePrice} from 'src/sharedTypes';
+import {BountyMgrSetQuotePricePOSTData} from 'src/sharedTypes';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
@@ -29,7 +29,7 @@ export default function AcceptAndSendQuote() {
       if (!!quoteAmount && !!selectedProject && quoteAmount > 0) {
         console.log('');
         Keyboard.dismiss();
-        const body: BountyMgrSetQuotePrice = {
+        const body: BountyMgrSetQuotePricePOSTData = {
           quotePrice: quoteAmount,
           projectID: selectedProject.id,
         };

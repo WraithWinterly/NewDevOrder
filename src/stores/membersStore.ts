@@ -1,42 +1,47 @@
 import axios from 'axios';
 import {Endpoints, getServerEndpoint} from '../utils/server';
 import {create} from 'zustand';
-import {Member, Role, RoleDict, RoleType} from 'src/sharedTypes';
-
-export function GetRole(string: RoleType) {
-  return RoleDict.find(role => role.title == string)!;
-}
+import {Member, RoleType, TeamInvite} from 'prisma/generated';
 
 type MemberStore = {
   memberViewing: Member | undefined;
-  fetchProfile: (
-    walletAddress: string | undefined,
-    isMyProfile?: boolean,
-  ) => Promise<void>;
-  myProfile: Member | undefined;
-  setPlayingRole: (role: Role) => void;
+  fetchProfile: (walletAddress: string | undefined) => Promise<void>;
+  fetchMyProfile: (walletAddress: string | undefined) => Promise<void>;
+  myProfile:
+    | (Member & {
+        teamInvites: TeamInvite[] | undefined;
+      })
+    | undefined;
+  setPlayingRole: (role: RoleType) => void;
 };
 
 const useMemberStore = create<MemberStore>((set, get) => ({
   memberViewing: undefined,
-  fetchProfile: async (id, isMyProfile) => {
+  fetchProfile: async id => {
     set(() => ({memberViewing: undefined}));
-    set(() => ({myProfile: undefined}));
 
     if (typeof id === 'undefined') return;
-    // console.log('a1111111sdfasdfsadf', id);
+
     const {data} = await axios.get(
       getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) + `/${id}`,
     );
-    // console.log('asdfsadf ', data);
-    if (isMyProfile) {
-      set(() => ({myProfile: data}));
-      return;
-    }
+
     set(() => ({memberViewing: data}));
   },
+  fetchMyProfile: async id => {
+    set(() => ({myProfile: undefined}));
+
+    if (typeof id === 'undefined') return;
+
+    const {data} = await axios.get(
+      getServerEndpoint(Endpoints.GET_MY_PROFILE) + `/${id}`,
+    );
+
+    set(() => ({myProfile: data}));
+    return;
+  },
   myProfile: undefined,
-  setPlayingRole: (role: Role) => {
+  setPlayingRole: (role: RoleType) => {
     set(() => ({myProfile: {...get().myProfile!, playingRole: role}}));
   },
 }));

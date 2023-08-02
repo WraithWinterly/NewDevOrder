@@ -21,6 +21,7 @@ import HeaderRight from './HeaderRight';
 import useAppStore from 'src/stores/store';
 import useMemberStore from 'src/stores/membersStore';
 import useBountyStore from 'src/stores/bountyStore';
+import {RoleType} from 'prisma/generated';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -104,7 +105,7 @@ export default function HomeTabNavigator() {
           fontWeight: 'bold',
         },
       })}>
-      {playingRole?.title === 'Bounty Hunter' && (
+      {playingRole === RoleType.BountyHunter && (
         <Tab.Screen
           name="Home"
           component={Home}
@@ -135,7 +136,7 @@ export default function HomeTabNavigator() {
           ),
         }}
       />
-      {playingRole?.title !== 'Bounty Hunter' && (
+      {playingRole !== RoleType.BountyHunter && (
         <Tab.Screen
           name="Projects"
           component={Projects}

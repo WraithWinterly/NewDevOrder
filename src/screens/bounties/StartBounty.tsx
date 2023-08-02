@@ -21,6 +21,7 @@ export default function StartBounty() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const selectedFullBounty = useBountyStore(state => state.selectedBounty);
+  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
 
   const walletAddress = useSolanaContext()
@@ -63,6 +64,7 @@ export default function StartBounty() {
       await axios.post(getServerEndpoint(Endpoints.START_BOUNTY), body);
       // redirect
       fetchBounties();
+      setSelectedBounty(body.bountyID);
       navigation.goBack();
     } catch (e) {
       setError(true);
@@ -78,7 +80,7 @@ export default function StartBounty() {
           <StyledText style={{fontSize: 24}}>Start Bounty</StyledText>
           <StyledText>
             <Text style={{color: Colors.Gray[400]}}>
-              {selectedFullBounty?.projectName} /{' '}
+              {selectedFullBounty?.project.title} /{' '}
             </Text>{' '}
             {selectedFullBounty?.title}
           </StyledText>
@@ -93,7 +95,6 @@ export default function StartBounty() {
               viewTeams?.map(team => ({id: team.id, title: team.name})) || []
             }
             onSelect={(itemID, itemIndex) => {
-              console.warn('t: ', itemID);
               const v = viewTeams?.find(team => team.id == itemID);
               console.log('', itemID);
               console.log('', viewTeams);

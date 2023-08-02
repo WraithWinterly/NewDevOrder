@@ -2,7 +2,6 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId, useState} from 'react';
 import {LogBox, TouchableOpacity, View} from 'react-native';
-import {FlatList, RefreshControl} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StackParamList} from 'src/StackNavigator';
 import Bubble from 'src/components/ui/Bubble';
@@ -12,13 +11,16 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function Teams() {
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const teams = useTeamsStore(state => state.teams);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const [refreshing, setRefreshing] = useState(false);
-
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
   const id = useId();
   const id2 = useId();
 
@@ -26,22 +28,11 @@ export default function Teams() {
     fetchTeams();
   }, []);
 
-  function onRefresh() {
-    setRefreshing(true);
-    fetchTeams().then(() => {
-      setRefreshing(false);
-    });
-  }
-
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-
   const teamsJoined = !!teams
-    ? teams?.filter(team => team.creatorAddress === '')
+    ? teams?.filter(team => team.creatorAddress !== walletAddress)
     : undefined;
   const teamsCreated = !!teams
-    ? teams?.filter(team => team.creatorAddress !== '')
+    ? teams?.filter(team => team.creatorAddress === walletAddress)
     : undefined;
 
   return (
@@ -55,19 +46,17 @@ export default function Teams() {
         {!!teamsCreated && teamsCreated.length > 0 && (
           <>
             <StyledText style={{marginBottom: 16}}>Teams Created</StyledText>
-            <FlatList
-              data={teamsCreated}
-              keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
-              renderItem={({item}) => (
+            {teamsCreated.map(item => (
+              <View key={`${item.id}-${id}`}>
                 <TeamCard
                   id={item.id}
                   title={item.name}
-                  members={item.members.length}
-                  description={item.description}></TeamCard>
-              )}
-              ItemSeparatorComponent={() => (
-                <View style={{height: 12}}></View>
-              )}></FlatList>
+                  members={item.members?.length || 0}
+                  description={item.description}
+                />
+                <View style={{height: 12}} />
+              </View>
+            ))}
             <Separator />
           </>
         )}
@@ -75,20 +64,18 @@ export default function Teams() {
         {!!teamsJoined && teamsJoined.length > 0 && (
           <>
             <StyledText style={{marginBottom: 16}}>Teams Joined</StyledText>
-
-            <FlatList
-              data={teamsJoined}
-              keyExtractor={(item, index) => `${item.id}-${index}-${id2}`}
-              renderItem={({item}) => (
+            {teamsJoined.map(item => (
+              <View key={`${item.id + 1}-${id2}`}>
                 <TeamCard
                   id={item.id}
                   title={item.name}
-                  members={item.members.length}
-                  description={item.description}></TeamCard>
-              )}
-              ItemSeparatorComponent={() => (
-                <View style={{height: 12}}></View>
-              )}></FlatList>
+                  members={item.members?.length || 0}
+                  description={item.description}
+                />
+                <View style={{height: 12}} />
+              </View>
+            ))}
+            <Separator />
           </>
         )}
       </ScrollView>

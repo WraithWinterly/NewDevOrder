@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {Member, Team, TeamInvite} from 'prisma/generated';
 import {useEffect, useId, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -8,7 +9,7 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
-import {InviteToTeamPOSTData, Member, Team} from 'src/sharedTypes';
+import {InviteToTeamPOSTData} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
 
 import useTeamsStore from 'src/stores/teamsStore';
@@ -36,17 +37,25 @@ export default function InviteMembers() {
 
   async function fetchInvitedMembers() {
     if (!!selectedTeam) {
-      console.log(
-        getServerEndpoint(Endpoints.GET_TEAM_BY_ID) + `/${selectedTeam.id}`,
-      );
       const data = await axios.get(
         getServerEndpoint(Endpoints.GET_TEAM_BY_ID) + `/${selectedTeam.id}`,
       );
 
-      console.log('ddd:', data);
-      if (data.status === 200) {
+      console.log(
+        getServerEndpoint(Endpoints.GET_TEAM_PENDING_INVITES) +
+          `/${selectedTeam.id}`,
+      );
+      const pendingInvitesFetch = await axios.get(
+        getServerEndpoint(Endpoints.GET_TEAM_PENDING_INVITES) +
+          `/${selectedTeam.id}`,
+      );
+      const pendingInvites = pendingInvitesFetch.data as TeamInvite[];
+
+      if (data.status === 200 && pendingInvitesFetch.status === 200) {
         const team = data.data as Team;
-        const newMembersArr = team.pendingInvites;
+        const newMembersArr = pendingInvites.map(invite => {
+          return invite.memberAddress;
+        });
 
         // fetch member cards
         const memberData = await axios.post(
@@ -74,10 +83,6 @@ export default function InviteMembers() {
     setLoadingUser(true);
     setFetchUserError(false);
     try {
-      console.log(
-        getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
-          `/${searchUsers.trim()}`,
-      );
       const data = await axios.get(
         getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
           `/${searchUsers.trim()}`,
@@ -119,12 +124,14 @@ export default function InviteMembers() {
         toAddress: currentUser!.walletAddress,
         toTeam: selectedTeam!.id,
       };
-      const data = await axios.post(
-        getServerEndpoint(Endpoints.INVITE_TO_TEAM),
-        body,
-      );
-      // console.log(data);
 
+      const data = await fetch(getServerEndpoint(Endpoints.INVITE_TO_TEAM), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body),
+      });
+
+      console.log(data.json());
       if (data.status === 200) {
         setInviteUserError(false);
         fetchInvitedMembers();

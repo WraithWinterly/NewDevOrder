@@ -4,10 +4,11 @@ import Bubble from 'src/components/ui/Bubble';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useMemberStore from 'src/stores/membersStore';
-import {Member} from 'src/sharedTypes';
+
 import useSolanaContext from 'src/web3/SolanaProvider';
 import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {Member} from 'prisma/generated';
 
 type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
 
@@ -15,6 +16,7 @@ export default function Profile({route, navigation}: Props) {
   const myProfile = useMemberStore(state => state.myProfile);
   const memberViewing = useMemberStore(state => state.memberViewing);
   const fetchProfile = useMemberStore(state => state.fetchProfile);
+  const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
   const wallet = useSolanaContext();
 
   const viewProfileAddress = route.params?.viewProfileAddress ?? undefined;
@@ -26,7 +28,7 @@ export default function Profile({route, navigation}: Props) {
       fetchProfile(viewProfileAddress.toString());
       return;
     } else {
-      fetchProfile(wallet?.wallet?.publicKey.toBase58().toString(), true);
+      fetchMyProfile(wallet?.wallet?.publicKey.toBase58().toString());
     }
   }, []);
 
@@ -55,7 +57,7 @@ function ProfileCard({profile}: {profile: Member}) {
       <StyledText>@{profile.username}</StyledText>
       <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 14}}>
         {profile.roles.map((role, i) => (
-          <Bubble key={`${i}-${id}-${role.id}`} text={role.title} />
+          <Bubble key={`${i}-${id}-${role}`} text={role} />
         ))}
       </View>
 

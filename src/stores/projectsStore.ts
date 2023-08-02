@@ -2,13 +2,13 @@ import {create} from 'zustand';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import axios from 'axios';
-import {Bounty, CreateProjectData, Project} from 'src/sharedTypes';
+import {CreateProjectDataPOSTData} from 'src/sharedTypes';
+import {Bounty, Project} from 'prisma/generated';
 
 type ProjectsStore = {
-  createProjectData: CreateProjectData | undefined;
-  setCreateProjectData: (data: CreateProjectData | undefined) => void;
+  createProjectData: CreateProjectDataPOSTData | undefined;
+  setCreateProjectData: (data: CreateProjectDataPOSTData | undefined) => void;
   projects: Project[] | undefined;
-  finalizeCreateProject: () => void;
   fetchProjects: () => Promise<void>;
   selectedProject?: Project;
   setSelectedProject: (fetchId: string | undefined) => Promise<void>;
@@ -22,25 +22,11 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
   },
 
   projects: [],
-  finalizeCreateProject: () => {
-    set(state => ({
-      projects: [
-        {
-          ...state.createProjectData!,
-          id: String(state.projects!.length + 1),
-          accepted: false,
-          stage: 'WaitingBountyMgrQuote',
-          bountyIDs: [],
-          quotePrice: 0,
-        },
-        ...state.projects!,
-      ],
-    }));
-  },
   selectedProject: undefined,
   fetchProjects: async () => {
     set(() => ({projects: []}));
     const {data} = await axios.get(getServerEndpoint(Endpoints.GET_PROJECTS));
+    console.log(data);
     set(() => ({projects: data}));
   },
   setSelectedProject: async (fetchId: string | undefined) => {
@@ -55,8 +41,6 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
     }));
     // Find project from loaded projects list
     const data = get().projects?.find(p => p.id === fetchId);
-    // console.log(get().projects);
-    // console.log(data);
 
     // When a project is selected, load the bounty(s) information for the project
     const idData = (await axios.get(

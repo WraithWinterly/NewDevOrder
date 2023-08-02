@@ -12,11 +12,12 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 
-import useBountyStore, {Bounty} from 'src/stores/bountyStore';
+import useBountyStore from 'src/stores/bountyStore';
 import Bubble from '../ui/Bubble';
 import CheckIcon from '../icons/CheckIcon';
 import WarningIcon from '../icons/WarningIcon';
 import StyledButton from '../ui/styled/StyledButton';
+import {Bounty, Project} from 'prisma/generated';
 
 export default function BountyList({
   bounties,
@@ -25,7 +26,9 @@ export default function BountyList({
   designerView,
   validatorView,
 }: {
-  bounties: Bounty[] | undefined;
+  bounties: (Bounty & {
+    project: Project;
+  })[];
   onRefresh: () => void;
   refreshing: boolean;
   designerView?: boolean;
@@ -116,7 +119,7 @@ export default function BountyList({
                 flexWrap: 'wrap',
                 gap: 8,
               }}>
-              <Bubble type="purple" text={bounty.projectName} />
+              <Bubble type="purple" text={bounty.project.title} />
               {bounty.stage === 'Active' && (
                 <Bubble type="green" text="Accepting Submissions" />
               )}
@@ -151,7 +154,7 @@ export default function BountyList({
             <View style={{flexDirection: 'row', gap: 6, alignItems: 'center'}}>
               <TeamsIcon small />
               <StyledText>
-                Teams Currently Hacking: {bounty.teamCount}
+                Teams Currently Hacking: {bounty.participantsTeamIDs.length}
               </StyledText>
             </View>
             {bounty.stage === 'Active' && !designerView && !validatorView && (

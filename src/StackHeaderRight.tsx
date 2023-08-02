@@ -10,7 +10,7 @@ import StyledButton from './components/ui/styled/StyledButton';
 import RefreshIcon from './components/icons/RefreshIcon';
 import useSolanaContext from './web3/SolanaProvider';
 
-import {CreateTeam} from './sharedTypes';
+import {CreateTeamPOSTData} from './sharedTypes';
 import axios from 'axios';
 import {Endpoints, getServerEndpoint} from './utils/server';
 import {useState} from 'react';
@@ -21,7 +21,7 @@ export default function StackHeaderRight({route}: {route: string}) {
   const createTeamData = useTeamsStore(state => state.createTeamData);
   const setCreateTeamData = useTeamsStore(state => state.setCreateTeamData);
   const isCreateTeamValid = useTeamsStore(state => state.isCreateTeamValid);
-  const finalizeCreateTeam = useTeamsStore(state => state.finalizeCreateTeam);
+
   const canProceedCreateTeam =
     !!createTeamData && isCreateTeamValid(createTeamData);
   const wallet = useSolanaContext();
@@ -30,9 +30,6 @@ export default function StackHeaderRight({route}: {route: string}) {
     state => state.setCreateProjectData,
   );
 
-  // const finalizeCreateProject = useProjectsStore(
-  //   state => state.finalizeCreateProject,
-  // );
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
 
   const [loading, setLoading] = useState(false);
@@ -60,7 +57,7 @@ export default function StackHeaderRight({route}: {route: string}) {
               const walletAddress = wallet.wallet?.publicKey
                 .toBase58()
                 .toString();
-              const createData: CreateTeam = {
+              const createData: CreateTeamPOSTData = {
                 ...createTeamData!,
                 creatorAddress: walletAddress!,
               };

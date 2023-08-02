@@ -4,21 +4,26 @@ import SearchIcon from 'src/components/icons/SearchIcon';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 import useBountyStore from 'src/stores/bountyStore';
+import useTeamsStore from 'src/stores/teamsStore';
 
-export default function DiscoverBounties() {
+export default function YourBounties() {
   const [searchText, setSearchBounties] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const bounties = useBountyStore(state => state.bounties);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
 
-  const search = !!bounties
+  const teams = useTeamsStore(state => state.teams);
+
+  const bountiesWithSearch = !!bounties
     ? bounties?.filter(bounty => {
         if (
           bounty.title.includes(searchText || '') &&
           bounty.stage === 'Active'
         ) {
-          // return bounty.youJoined;
-          return true;
+          const myTeamIds = teams?.map(team => team.id);
+          return myTeamIds?.some(teamId => {
+            return bounty.participantsTeamIDs.includes(teamId);
+          });
         }
       })
     : undefined;
@@ -38,11 +43,13 @@ export default function DiscoverBounties() {
         placeholder="Search Bounties"
         icon={<SearchIcon />}
       />
-      <BountyList
-        refreshing={refreshing}
-        bounties={search}
-        onRefresh={onRefresh}
-      />
+      {!!bountiesWithSearch && (
+        <BountyList
+          refreshing={refreshing}
+          bounties={bountiesWithSearch}
+          onRefresh={onRefresh}
+        />
+      )}
     </Layout>
   );
 }

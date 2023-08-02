@@ -7,7 +7,7 @@ import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
-import {BountyMgrDeclineProject} from 'src/sharedTypes';
+import {BountyMgrDeclineProjectPOSTData} from 'src/sharedTypes';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
@@ -24,7 +24,7 @@ export default function ConfirmDecline() {
     try {
       if (!proj) return;
 
-      const body: BountyMgrDeclineProject = {
+      const body: BountyMgrDeclineProjectPOSTData = {
         projectID: proj.id,
       };
       const data = await axios.post(

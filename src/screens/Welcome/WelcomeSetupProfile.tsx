@@ -9,7 +9,7 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import {CreateProfile} from 'src/sharedTypes';
+import {CreateProfilePOSTData} from 'src/sharedTypes';
 import useWalletStore from 'src/stores/walletStore';
 import useSolanaContext from 'src/web3/SolanaProvider';
 import axios from 'axios';

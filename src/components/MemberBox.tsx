@@ -8,7 +8,7 @@ import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
-import {Member} from 'src/sharedTypes';
+import {Member} from 'prisma/generated';
 
 export default function MemberBox({
   member,
@@ -40,7 +40,7 @@ export default function MemberBox({
       <View style={{padding: 8, borderRadius: 8}}>
         <StyledText>{member.firstName}</StyledText>
         <StyledText style={{color: Colors.Gray[400], fontSize: 15}}>
-          {member.username}
+          @{member.username}
         </StyledText>
       </View>
       {rightChildren}

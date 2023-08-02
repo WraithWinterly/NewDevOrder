@@ -1,4 +1,4 @@
-import {Member} from 'src/sharedTypes';
+import {Member} from 'prisma/generated';
 import {create} from 'zustand';
 
 type LeaderboardStore = {

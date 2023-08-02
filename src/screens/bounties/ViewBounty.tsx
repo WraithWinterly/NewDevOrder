@@ -13,14 +13,9 @@ import CashIcon from 'src/components/icons/CashIcon';
 import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
 import StyledButton from 'src/components/ui/styled/StyledButton';
-import {
-  RouteProp,
-  StackRouterOptions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+
 import {StackParamList} from 'src/StackNavigator';
-import {StackNavigationProp} from '@react-navigation/stack';
+
 import useBountyStore from 'src/stores/bountyStore';
 import Separator from 'src/components/ui/Separator';
 import Bubble from 'src/components/ui/Bubble';
@@ -42,16 +37,28 @@ export default function ViewBounty({route, navigation}: Props) {
 
   const [startedByTeams, setStartedByTeams] = useState<string[]>([]);
 
-  useEffect(() => {
-    setStartedByTeams([]);
+  function updateStartedBy() {
+    console.log('vewi teams changed');
+    if (!bounties) return;
+    if (!bounty) return;
+
+    const localTeams: Array<string> = [];
     teams?.forEach(team => {
-      console.log(bounty?.participantsTeamIDs);
       if (bounty?.participantsTeamIDs.includes(team.id)) {
         console.log(bounty?.participantsTeamIDs);
-        setStartedByTeams(prev => [...prev, team.name]);
+        localTeams.push(team.name);
       }
     });
-  }, [teams, bounties]);
+    setStartedByTeams(localTeams);
+  }
+
+  useEffect(() => {
+    updateStartedBy();
+  }, [bounty]);
+
+  useEffect(() => {
+    updateStartedBy();
+  }, []);
 
   return (
     <Layout>
@@ -135,7 +142,7 @@ export default function ViewBounty({route, navigation}: Props) {
                   flexWrap: 'wrap',
                   gap: 8,
                 }}>
-                <Bubble type="purple" text={bounty.projectName} />
+                <Bubble type="purple" text={bounty.project?.title} />
 
                 {bounty.stage === 'Active' && (
                   <Bubble type="green" text="Accepting Submissions" />
@@ -179,21 +186,23 @@ export default function ViewBounty({route, navigation}: Props) {
                     }}>
                     <TeamsIcon small />
                     <StyledText>
-                      Teams Currently Hacking: {bounty.teamCount}
+                      Teams Currently Hacking:{' '}
+                      {bounty.participantsTeamIDs?.length}
                     </StyledText>
                   </View>
                 </View>
               </DropdownSection>
 
-              {!!bounty.headerSections &&
+              {/* {!!bounty.headerSections &&
                 Object.keys(bounty.headerSections).map((section, i) => (
                   <DropdownSection title={section} key={`${id}-${i}`}>
                     {!!bounty.headerSections &&
+                      (bounty.headerSections as {[key: string]: string[]}) &&
                       bounty.headerSections[section].map((text, index) => (
                         <StyledText key={index}>- {text}</StyledText>
                       ))}
                   </DropdownSection>
-                ))}
+                ))} */}
 
               {/* Founder */}
               {!!bounty.founder && (

@@ -23,7 +23,7 @@ export default function PhantomConnectButton({
     state => state.setWalletConnectError,
   );
 
-  const fetchProfile = useMemberStore(state => state.fetchProfile);
+  const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 
   function onWalletConnectComplete(publicKey: PublicKey | null) {
     if (!publicKey) {
@@ -41,7 +41,7 @@ export default function PhantomConnectButton({
     }
     // Fetch user profile
     try {
-      fetchProfile(publicKey.toBase58().toString(), true);
+      fetchMyProfile(publicKey.toBase58().toString());
     } catch {}
   }
 
