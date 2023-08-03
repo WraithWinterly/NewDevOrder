@@ -1,12 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import axios from 'axios';
-import {useEffect, useState} from 'react';
+
+import {useState} from 'react';
 import {Keyboard, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
+import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
 import {BountyMgrSetQuotePricePOSTData} from 'src/sharedTypes';
 import useProjectsStore from 'src/stores/projectsStore';
@@ -19,35 +20,24 @@ export default function AcceptAndSendQuote() {
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
 
   const [quoteAmount, setQuoteAmount] = useState<number | undefined>();
-  const [loading, setLoading] = useState(false);
+
+  const {data, loading, error, mutate} = useMutation(
+    getServerEndpoint(Endpoints.BOUNTYMGR_SET_QUOTE_PRICE),
+  );
 
   async function onSubmit() {
     // Set quote price and remove the cash icon upon submission for our data purposes
-    try {
-      console.log(!selectedProject);
-
-      if (!!quoteAmount && !!selectedProject && quoteAmount > 0) {
-        console.log('');
-        Keyboard.dismiss();
-        const body: BountyMgrSetQuotePricePOSTData = {
-          quotePrice: quoteAmount,
-          projectID: selectedProject.id,
-        };
-        const data = await axios.post(
-          getServerEndpoint(Endpoints.BOUNTYMGR_SET_QUOTE_PRICE),
-          body,
-        );
-        if (data.status === 200) {
-          fetchProjects();
-          navigation.navigate('HomeNavigation');
-        } else {
-          throw data;
-        }
+    if (!!quoteAmount && !!selectedProject && quoteAmount > 0) {
+      Keyboard.dismiss();
+      const body: BountyMgrSetQuotePricePOSTData = {
+        quotePrice: quoteAmount,
+        projectID: selectedProject.id,
+      };
+      const data = await mutate(body);
+      if (data) {
+        fetchProjects();
+        navigation.navigate('HomeNavigation');
       }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
     }
   }
 

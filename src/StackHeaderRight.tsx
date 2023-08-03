@@ -11,9 +11,9 @@ import RefreshIcon from './components/icons/RefreshIcon';
 import useSolanaContext from './web3/SolanaProvider';
 
 import {CreateTeamPOSTData} from './sharedTypes';
-import axios from 'axios';
+
 import {Endpoints, getServerEndpoint} from './utils/server';
-import {useState} from 'react';
+import useMutation from './hooks/usePost';
 
 export default function StackHeaderRight({route}: {route: string}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -32,7 +32,12 @@ export default function StackHeaderRight({route}: {route: string}) {
 
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
 
-  const [loading, setLoading] = useState(false);
+  const {
+    data: createTeamMutationData,
+    loading: createTeamLoading,
+    error: createTeamError,
+    mutate: createTeamMutate,
+  } = useMutation(getServerEndpoint(Endpoints.CREATE_TEAM));
 
   return (
     <View style={{paddingRight: 18}}>
@@ -52,35 +57,27 @@ export default function StackHeaderRight({route}: {route: string}) {
         <StyledText
           onPress={async () => {
             if (!canProceedCreateTeam) return;
-            setLoading(true);
-            try {
-              const walletAddress = wallet.wallet?.publicKey
-                .toBase58()
-                .toString();
-              const createData: CreateTeamPOSTData = {
-                ...createTeamData!,
-                creatorAddress: walletAddress!,
-              };
-              const data = await axios.post(
-                getServerEndpoint(Endpoints.CREATE_TEAM),
-                createData,
-              );
-              if (data.status === 200) {
-                setCreateProjectData(undefined);
-                navigation.navigate('HomeNavigation');
-              } else {
-                throw data;
-              }
+
+            const walletAddress = wallet.wallet?.publicKey
+              .toBase58()
+              .toString();
+            const createData: CreateTeamPOSTData = {
+              ...createTeamData!,
+              creatorAddress: walletAddress!,
+            };
+            const data = await createTeamMutate(createData);
+
+            if (data) {
+              setCreateProjectData(undefined);
+              navigation.navigate('HomeNavigation');
               fetchTeams();
-            } catch (e) {
-              console.error(e);
-            } finally {
-              setLoading(false);
             }
           }}
-          style={{color: Colors.Primary}}>
-          {loading ? (
-            <ActivityIndicator color={Colors.White} />
+          style={{color: createTeamError ? Colors.Red[500] : Colors.Primary}}>
+          {createTeamLoading ? (
+            <ActivityIndicator
+              color={createTeamError ? Colors.Red[500] : Colors.White}
+            />
           ) : canProceedCreateTeam ? (
             'Create Team'
           ) : (

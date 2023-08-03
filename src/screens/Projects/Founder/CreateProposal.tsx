@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import axios from 'axios';
+
 import {useEffect, useState} from 'react';
 import {Keyboard, View} from 'react-native';
 import {ScrollView} from 'react-native';
@@ -9,6 +9,7 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledPhoneInput from 'src/components/ui/styled/StyledPhoneInput';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
+import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
 import {CreateProjectDataPOSTData} from 'src/sharedTypes';
 import useProjectsStore from 'src/stores/projectsStore';
@@ -25,6 +26,10 @@ export default function CreateProposal() {
   const [createProjectData, setCreateProjectData] =
     useState<CreateProjectDataPOSTData>();
 
+  const {data, loading, error, mutate} = useMutation(
+    getServerEndpoint(Endpoints.CREATE_PROPOSAL),
+  );
+
   function canProceedCreateProject() {
     if (!createProjectData) return false;
     if (createProjectData.title.trim().length < 3) return false;
@@ -37,29 +42,19 @@ export default function CreateProposal() {
     return true;
   }
 
-  const [loading, setLoading] = useState(false);
-
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
 
   async function onSubmit() {
     if (!canProceedCreateProject()) return;
-    setLoading(true);
-    try {
-      Keyboard.dismiss();
-      await axios.post(
-        getServerEndpoint(Endpoints.CREATE_PROPOSAL),
-        createProjectData,
-      );
+
+    Keyboard.dismiss();
+
+    const data = await mutate(createProjectData);
+    if (data) {
       fetchProjects();
       setCreateProjectData(undefined);
       navigation.navigate('HomeNavigation');
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
     }
-
-    // return
   }
 
   useEffect(() => {
@@ -69,7 +64,6 @@ export default function CreateProposal() {
       email,
       phone: countryCode + phone,
     });
-    console.log(countryCode + phone);
   }, [projectName, description, email, phone]);
 
   return (

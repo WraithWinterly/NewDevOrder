@@ -1,13 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import axios from 'axios';
-import {useState} from 'react';
+
 import {Text, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
+import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
-import {BountyMgrDeclineProjectPOSTData} from 'src/sharedTypes';
+
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
@@ -15,34 +15,16 @@ export default function ConfirmDecline() {
   const proj = useProjectsStore(state => state.selectedProject);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+
+  const {data, loading, error, mutate} = useMutation(
+    getServerEndpoint(Endpoints.BOUNTYMGR_DECLINE),
+  );
 
   async function onDecline() {
-    setLoading(true);
-    setError(false);
-    try {
-      if (!proj) return;
-
-      const body: BountyMgrDeclineProjectPOSTData = {
-        projectID: proj.id,
-      };
-      const data = await axios.post(
-        getServerEndpoint(Endpoints.BOUNTYMGR_DECLINE),
-        body,
-      );
-
-      if (data.status === 200) {
-        fetchProjects();
-        navigation.navigate('HomeNavigation');
-      } else {
-        throw data;
-      }
-    } catch (e) {
-      console.error(e);
-      setError(true);
-    } finally {
-      setLoading(false);
+    const data = await mutate(proj);
+    if (data) {
+      fetchProjects();
+      navigation.navigate('HomeNavigation');
     }
   }
   return (
@@ -72,7 +54,7 @@ export default function ConfirmDecline() {
       </View>
 
       <View>
-        <StyledButton onPress={onDecline} error={error} loading={loading}>
+        <StyledButton onPress={onDecline} error={!!error} loading={loading}>
           Decline Proposal
         </StyledButton>
         <StyledButton

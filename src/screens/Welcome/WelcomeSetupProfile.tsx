@@ -7,12 +7,12 @@ import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
+import useMutation from 'src/hooks/usePost';
+import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
-import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {CreateProfilePOSTData} from 'src/sharedTypes';
-import useWalletStore from 'src/stores/walletStore';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useSolanaContext from 'src/web3/SolanaProvider';
-import axios from 'axios';
 
 export default function WelcomeSetupProfile() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -24,11 +24,19 @@ export default function WelcomeSetupProfile() {
   // const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const {data, loading, error, query} = useQuery(
+    getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
+      `/${wallet!.publicKey!.toBase58().toString()}`,
+  );
+
+  const {
+    data: createTeamMutationData,
+    loading: loadingCreateTeam,
+    error: errorCreateTeam,
+    mutate: mutateCreateTeam,
+  } = useMutation(getServerEndpoint(Endpoints.CREATE_PROFILE));
+
   async function onSubmit() {
-    setIsLoading(true);
-    setError('');
     setErrors([]);
     const localErrors: string[] = [];
     if (username.trim().length < 3) {
@@ -53,46 +61,30 @@ export default function WelcomeSetupProfile() {
     if (localErrors.length > 0) {
       return;
     }
-    try {
-      const data = await axios.post(
-        getServerEndpoint(Endpoints.CREATE_PROFILE),
-        {
-          username,
-          firstName,
-          lastName,
-          email,
-          walletAddress: wallet!.publicKey!.toBase58().toString(),
-        },
-      );
-      if (data.status === 200) {
-        navigation.replace('WelcomeComplete');
-      } else {
-        throw new Error('Something went wrong');
-      }
-    } catch (e) {
-      if ((e as Error).message.length > 0) {
-        setIsLoading(false);
-        setError((e as Error).message);
-        return;
-      }
+    const body = {
+      username,
+      firstName,
+      lastName,
+      email,
+      walletAddress: wallet!.publicKey!.toBase58().toString(),
+    } as CreateProfilePOSTData;
+
+    const data = await mutateCreateTeam(body);
+    if (data) {
+      navigation.replace('WelcomeComplete');
     }
   }
 
   const [noUserAccount, setNoUserAccount] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(
-        getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
-          `/${wallet!.publicKey!.toBase58().toString()}`,
-      )
-      .then(res => {
-        // You already have an account with us
-        navigation.navigate('WelcomeComplete');
-      })
-      .catch(e => {
+    query().then(data => {
+      if (data) {
+        setNoUserAccount(false);
+      } else {
         setNoUserAccount(true);
-      });
+      }
+    });
   }, []);
 
   return (
@@ -141,11 +133,14 @@ export default function WelcomeSetupProfile() {
                   /> */}
             </View>
 
-            <StyledButton onPress={onSubmit} loading={isLoading}>
+            <StyledButton
+              onPress={onSubmit}
+              loading={loadingCreateTeam}
+              error={!!errorCreateTeam}>
               Next Step
             </StyledButton>
             <StyledText style={{color: 'red', alignSelf: 'center'}}>
-              {error}
+              {errorCreateTeam}
             </StyledText>
           </View>
         )}

@@ -2,6 +2,7 @@ import {SERVER_URL, TEST_SERVER_URL, USE_LOCAL_SERVER} from '@env';
 
 export enum Endpoints {
   ALIVE = '/alive',
+  ALIVE_POST = '/alive-post',
   SEED = '/seed',
   CREATE_PROFILE = '/create-profile',
   GET_MEMBER_BY_WALLET_ADDRESS = '/get-member-by-wallet-address',

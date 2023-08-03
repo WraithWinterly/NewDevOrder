@@ -43,12 +43,13 @@ export default function ViewBounty({route, navigation}: Props) {
     if (!bounty) return;
 
     const localTeams: Array<string> = [];
+
     teams?.forEach(team => {
       if (bounty?.participantsTeamIDs.includes(team.id)) {
-        console.log(bounty?.participantsTeamIDs);
         localTeams.push(team.name);
       }
     });
+
     setStartedByTeams(localTeams);
   }
 

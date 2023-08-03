@@ -12,9 +12,9 @@ import useMemberStore from 'src/stores/membersStore';
 import {PublicKey} from '@solana/web3.js';
 
 export default function PhantomConnectButton({
-  successRoute,
+  onSuccess,
 }: {
-  successRoute: keyof StackParamList;
+  onSuccess: (wallet: string) => void;
 }) {
   const solana = useSolanaContext();
   const navigator = useNavigation<StackNavigationProp<StackParamList>>();
@@ -34,8 +34,7 @@ export default function PhantomConnectButton({
     // Check Solana Token
     const hasMemberShipToken = true;
     if (hasMemberShipToken) {
-      //@ts-expect-error Passing screen as string by name is valid and works
-      navigator.navigate(successRoute);
+      onSuccess(publicKey.toBase58().toString());
     } else {
       navigator.navigate('WelcomeNoMembershipToken');
     }

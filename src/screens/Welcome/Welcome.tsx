@@ -66,7 +66,11 @@ export default function Welcome() {
               width: '100%',
               paddingTop: 80,
             }}>
-            <PhantomConnectButton successRoute="WelcomeMintMembershipToken" />
+            <PhantomConnectButton
+              onSuccess={() => {
+                navigation.navigate('WelcomeMintMembershipToken');
+              }}
+            />
             {/* <NDO_Button type="noBg" onPress={() => {}}>
               Create new wallet
             </NDO_Button> */}

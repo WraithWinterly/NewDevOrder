@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import {RoleType} from 'prisma/generated';
 import {useState} from 'react';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
 import PhantomConnectButton from 'src/components/ui/PhantomConnectButton';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
+import useMutation from 'src/hooks/usePost';
+import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import useMemberStore from 'src/stores/membersStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
@@ -14,48 +15,71 @@ import {Endpoints, getServerEndpoint} from 'src/utils/server';
 export default function DeveloperMenu() {
   const [resetFeedback, setResetFeedback] = useState('');
 
+  const myProfile = useMemberStore(state => state.myProfile);
+  const setPlayingRole = useMemberStore(state => state.setPlayingRole);
+
+  const [connectionQueryFeedback, setConnectionQueryFeedback] = useState('');
+  const [connectionMutationFeedback, setConnectionMutationFeedback] =
+    useState('');
+  const [seedFeedback, setSeedFeedback] = useState('');
+
+  const {
+    loading: loadingQuery,
+    error: errorQuery,
+    query,
+  } = useQuery(getServerEndpoint(Endpoints.ALIVE));
+
+  const {
+    loading: loadingSeed,
+    error: errorSeed,
+    query: querySeed,
+  } = useQuery(getServerEndpoint(Endpoints.SEED));
+
+  const {
+    loading: loadingMutation,
+    error: errorMutation,
+    mutate,
+  } = useMutation(getServerEndpoint(Endpoints.ALIVE_POST));
+
   async function onResetWelcomeScreen() {
     await AsyncStorage.clear();
     setResetFeedback('Storage data erased. Restart the app.');
   }
 
-  const myProfile = useMemberStore(state => state.myProfile);
-  const setPlayingRole = useMemberStore(state => state.setPlayingRole);
+  async function testConnectionQuery() {
+    setConnectionQueryFeedback('Connecting...');
 
-  const [connectionFeedback, setConnectionFeedback] = useState('');
-  async function testConnection() {
-    setConnectionFeedback('Connecting...');
+    const data = await query();
 
-    try {
-      const data = await axios.get(getServerEndpoint(Endpoints.ALIVE), {
-        timeout: 3000,
-      });
-      if (data.data === 'Alive!') {
-        setConnectionFeedback('Connected');
-      } else {
-        setConnectionFeedback(
-          'Connected, but did not receive the correct data.',
-        );
-      }
-    } catch (error) {
-      const e = error as Error;
-      setConnectionFeedback(`Connection failed: ${e.message}`);
+    if (!data) {
+      setConnectionQueryFeedback('Connection failed');
+      return;
+    }
+    if (data.message === 'Alive!') {
+      setConnectionQueryFeedback('Connected');
+    } else {
+      setConnectionQueryFeedback(
+        'Connected, but did not receive the correct data.',
+      );
     }
   }
-  const [seedFeedback, setSeedFeedback] = useState('');
+
+  async function testConnectionMutation() {
+    setConnectionMutationFeedback('Connecting...');
+
+    const data = await mutate({testData: 'testData'});
+
+    setConnectionMutationFeedback(JSON.stringify(data));
+  }
+
   async function seed() {
     setSeedFeedback('Seeding...');
 
-    try {
-      const data = await axios.get(getServerEndpoint(Endpoints.SEED), {
-        timeout: 3000,
-      });
-      if (data.status === 200) {
-        setSeedFeedback('Success');
-      }
-    } catch (error) {
-      const e = error as Error;
-      setSeedFeedback(`Connection failed: ${e.message}`);
+    const data = await querySeed();
+    if (data) {
+      setSeedFeedback('Seeding complete');
+    } else {
+      setSeedFeedback('Seeding failed');
     }
   }
 
@@ -83,21 +107,9 @@ export default function DeveloperMenu() {
   ];
   return (
     <Layout>
-      <PhantomConnectButton successRoute="HomeNavigation" />
-      <View style={{gap: 8, marginTop: 24}}>
-        <StyledButton onPress={onResetWelcomeScreen}>
-          Erase Storage Data
-        </StyledButton>
-        <StyledText style={{paddingBottom: 24}}>{resetFeedback}</StyledText>
-        <StyledButton onPress={testConnection}>
-          Test Server Connection
-        </StyledButton>
-        <StyledText style={{paddingBottom: 24}}>
-          {connectionFeedback}
-        </StyledText>
-        <StyledButton onPress={seed}>Seed Database</StyledButton>
-        <StyledText style={{paddingBottom: 24}}>{seedFeedback}</StyledText>
-        <StyledText style={{paddingBottom: 2}}>Playing as role...</StyledText>
+      <ScrollView>
+        <PhantomConnectButton onSuccess={() => {}} />
+        <StyledText style={{paddingVertical: 8}}>Playing as role...</StyledText>
         <DropdownMenu
           data={RoleDict || []}
           onSelect={(itemID, itemIndex) => {
@@ -114,7 +126,37 @@ export default function DeveloperMenu() {
             ''
           }
         />
-      </View>
+        <View style={{gap: 8, marginTop: 24}}>
+          <StyledButton onPress={onResetWelcomeScreen}>
+            Erase Storage Data
+          </StyledButton>
+          <StyledText style={{paddingBottom: 24}}>{resetFeedback}</StyledText>
+          <StyledButton
+            onPress={testConnectionQuery}
+            loading={loadingQuery}
+            error={(errorQuery?.length || 0) > 0}>
+            Test Server Connection Query
+          </StyledButton>
+          <StyledText>{connectionQueryFeedback}</StyledText>
+          <StyledText>{errorQuery}</StyledText>
+          <StyledButton
+            onPress={testConnectionMutation}
+            loading={loadingMutation}
+            error={(errorMutation?.length || 0) > 0}>
+            Test Server Connection Mutation
+          </StyledButton>
+          <StyledText>{connectionMutationFeedback}</StyledText>
+          <StyledText>{errorMutation}</StyledText>
+
+          <StyledButton
+            onPress={seed}
+            loading={loadingSeed}
+            error={!!errorSeed}>
+            Seed Database
+          </StyledButton>
+          <StyledText style={{paddingBottom: 24}}>{seedFeedback}</StyledText>
+        </View>
+      </ScrollView>
     </Layout>
   );
 }

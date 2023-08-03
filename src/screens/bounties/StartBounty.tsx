@@ -11,11 +11,11 @@ import useBountyStore from 'src/stores/bountyStore';
 import Separator from 'src/components/ui/Separator';
 import useSolanaContext from 'src/web3/SolanaProvider';
 import useTeamsStore from 'src/stores/teamsStore';
-import axios from 'axios';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import {StartBountyPOSTData} from 'src/sharedTypes';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
+import useMutation from 'src/hooks/usePost';
+import {StartBountyPOSTData} from 'src/sharedTypes';
 
 export default function StartBounty() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -23,17 +23,18 @@ export default function StartBounty() {
   const selectedFullBounty = useBountyStore(state => state.selectedBounty);
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
+
+  const teams = useTeamsStore(state => state.teams);
+  const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
 
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const fetchBounties = useBountyStore(state => state.fetchBounties);
-
-  const teams = useTeamsStore(state => state.teams);
-  const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
+  const {data, loading, error, mutate} = useMutation(
+    getServerEndpoint(Endpoints.START_BOUNTY),
+  );
 
   const viewTeams = teams
     ?.filter(t => t.creatorAddress == walletAddress)
@@ -42,37 +43,35 @@ export default function StartBounty() {
     );
 
   useEffect(() => {
-    console.log('vewi teams changed');
-
     // setSelectedTeam(undefined);
     setSelectedTeam((!!viewTeams && viewTeams[0]?.id) || undefined);
-  }, [viewTeams]);
+  }, []);
 
   async function startBounty() {
     // start bounty
-    if (!selectedTeam?.id) return;
-    if (!walletAddress) return;
-    if (!selectedFullBounty?.id) return;
-    console.log('eh');
-    try {
-      setError(false);
-      const body: StartBountyPOSTData = {
-        address: walletAddress,
-        forTeam: selectedTeam.id,
-        bountyID: selectedFullBounty.id,
-      };
-      await axios.post(getServerEndpoint(Endpoints.START_BOUNTY), body);
-      // redirect
+    if (!selectedTeam?.id || !walletAddress || !selectedFullBounty?.id) {
+      console.error(
+        'missing data',
+        selectedTeam?.id,
+        walletAddress,
+        selectedFullBounty?.id,
+      );
+      return;
+    }
+
+    const data = await mutate({
+      address: walletAddress,
+      forTeam: selectedTeam.id,
+      bountyID: selectedFullBounty.id,
+    } as StartBountyPOSTData);
+    if (data) {
+      // Force refetch bonuty
+      setSelectedBounty(selectedFullBounty.id);
       fetchBounties();
-      setSelectedBounty(body.bountyID);
-      navigation.goBack();
-    } catch (e) {
-      setError(true);
-    } finally {
-      setLoading(false);
+      navigation.navigate('ViewBounty');
     }
   }
-  console.log(viewTeams?.map(team => ({id: team.id, title: team.name})));
+
   return (
     <Layout>
       <View style={{justifyContent: 'space-between', height: '98%'}}>
@@ -111,7 +110,7 @@ export default function StartBounty() {
           onPress={startBounty}
           enabled={!!selectedTeam}
           loading={loading}
-          error={error}>
+          error={!!error}>
           <StyledText style={{color: Colors.BtnTextColor, alignSelf: 'center'}}>
             Start Bounty for Team {selectedTeam?.name}
           </StyledText>

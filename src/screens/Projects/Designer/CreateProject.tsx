@@ -25,7 +25,6 @@ export default function CreateProject() {
       email,
       phone: countryCode + phone,
     });
-    console.log(countryCode + phone);
   }, [projectName, description, email, phone]);
 
   return (

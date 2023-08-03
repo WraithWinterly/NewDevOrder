@@ -14,14 +14,16 @@ export default function TeamVar() {
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
   const id = useId();
 
-  const selectedTeamMembers = useTeamsStore(state => state.selectedTeamMembers);
   return (
     <Layout>
       {!!selectedTeam && (
         <View>
           <StyledText>{selectedTeam.description}</StyledText>
           <View style={{flexDirection: 'row', gap: 12, marginTop: 12}}>
-            <Bubble lowHeight text={`${selectedTeam.members.length} Members`} />
+            <Bubble
+              lowHeight
+              text={`${selectedTeam.members?.length} Members`}
+            />
             <TouchableOpacity
               style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}
               onPress={() => Linking.openURL(selectedTeam.link)}>
@@ -38,7 +40,7 @@ export default function TeamVar() {
               Members
             </StyledText>
             <FlatList
-              data={selectedTeamMembers}
+              data={selectedTeam.members}
               keyExtractor={(item, index) =>
                 `${item.walletAddress}-${index}-${id}`
               }

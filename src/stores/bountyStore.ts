@@ -38,7 +38,7 @@ const useBountyStore = create<BountyStore>((set, get) => ({
       project: Project;
       founder: Member;
     };
-    console.log('b', data);
+
     set(() => ({selectedBounty: data}));
   },
 }));

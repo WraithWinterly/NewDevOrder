@@ -1,5 +1,4 @@
-import axios from 'axios';
-import {Member, Team, TeamInvite} from 'prisma/generated';
+import {Member, TeamInvite} from 'prisma/generated';
 import {useEffect, useId, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -8,6 +7,8 @@ import SearchIcon from 'src/components/icons/SearchIcon';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
+import useMutation from 'src/hooks/usePost';
+import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import {InviteToTeamPOSTData} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
@@ -19,130 +20,108 @@ import {Endpoints, getServerEndpoint} from 'src/utils/server';
 export default function InviteMembers() {
   const [searchUsers, setSearchUsers] = useState('');
 
-  let invitedMembers: Member[] | undefined = [];
   const id = useId();
   const id2 = useId();
-  const [currentUser, setCurrentUser] = useState<Member>();
-
-  const [fetchUserError, setFetchUserError] = useState(false);
-  const [loadingUser, setLoadingUser] = useState(false);
-
-  const [inviteUserError, setInviteUserError] = useState(false);
-
-  const [loadingInvite, setLoadingInvite] = useState(false);
 
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
 
+  const myProfile = useMemberStore(state => state.myProfile);
+
   const [newInvitesMembers, setNewInvitesMembers] = useState<Member[]>([]);
+  const [currentUser, setCurrentUser] = useState<Member>();
 
-  async function fetchInvitedMembers() {
-    if (!!selectedTeam) {
-      const data = await axios.get(
-        getServerEndpoint(Endpoints.GET_TEAM_BY_ID) + `/${selectedTeam.id}`,
-      );
+  const {
+    data: dataMemberByID,
+    loading: loadingMemberByID,
+    error: errorMemberByID,
+    query: queryMemberByID,
+  } = useQuery();
 
-      console.log(
-        getServerEndpoint(Endpoints.GET_TEAM_PENDING_INVITES) +
-          `/${selectedTeam.id}`,
-      );
-      const pendingInvitesFetch = await axios.get(
-        getServerEndpoint(Endpoints.GET_TEAM_PENDING_INVITES) +
-          `/${selectedTeam.id}`,
-      );
-      const pendingInvites = pendingInvitesFetch.data as TeamInvite[];
+  const {
+    data: dataMembersByIDs,
+    loading: loadingMembersByIDs,
+    error: errorMembersByIDs,
+    mutate: queryMembersByIDs,
+  } = useMutation(getServerEndpoint(Endpoints.GET_MEMBERS_BY_WALLET_ADDRESSES));
 
-      if (data.status === 200 && pendingInvitesFetch.status === 200) {
-        const team = data.data as Team;
-        const newMembersArr = pendingInvites.map(invite => {
-          return invite.memberAddress;
-        });
+  const {
+    data: dataPendingInvites,
+    loading: loadingPendingInvites,
+    error: errorPendingInvites,
+    query: queryPendingInvites,
+  } = useQuery();
 
-        // fetch member cards
-        const memberData = await axios.post(
-          getServerEndpoint(Endpoints.GET_MEMBERS_BY_WALLET_ADDRESSES),
-          {
-            addresses: newMembersArr || [],
-          },
-        );
-        if (memberData.status === 200) {
-          setNewInvitesMembers(memberData.data);
-        }
-      } else {
-        console.error(data);
-      }
-    }
-  }
+  const {
+    data: dataInviteToTeam,
+    loading: loadingInviteToTeam,
+    error: errorInviteToTeam,
+    mutate: mutateInviteToTeam,
+  } = useMutation(getServerEndpoint(Endpoints.INVITE_TO_TEAM));
 
   useEffect(() => {
     fetchInvitedMembers();
   }, []);
 
-  const myProfile = useMemberStore(state => state.myProfile);
+  async function fetchInvitedMembers() {
+    if (!!selectedTeam) {
+      const url =
+        getServerEndpoint(Endpoints.GET_TEAM_PENDING_INVITES) +
+        `/${selectedTeam.id}`;
+
+      const data = await queryPendingInvites(url);
+
+      if (data) {
+        const pendingInvites = data as TeamInvite[];
+
+        const newMembersArr = pendingInvites.map(invite => {
+          return invite.memberAddress;
+        });
+        const members = await queryMembersByIDs(newMembersArr);
+        if (members) {
+          setNewInvitesMembers(members);
+        }
+      }
+    }
+  }
 
   async function fetchUser() {
-    setLoadingUser(true);
-    setFetchUserError(false);
-    try {
-      const data = await axios.get(
-        getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
-          `/${searchUsers.trim()}`,
-      );
+    const url =
+      getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
+      `/${searchUsers.trim()}`;
 
-      if (data.status === 200) {
-        setFetchUserError(false);
-        setCurrentUser(data.data);
-      } else {
-        setFetchUserError(true);
-      }
-    } catch (e) {
-      console.error(e);
-      setFetchUserError(true);
-    } finally {
-      setLoadingUser(false);
+    const data = await queryMemberByID(url);
+    if (data) {
+      const member = data as Member;
+      setCurrentUser(member);
     }
   }
 
   async function inviteUser() {
-    setLoadingInvite(true);
-    setInviteUserError(false);
-    try {
-      if (
-        !currentUser?.walletAddress ||
-        !selectedTeam?.id ||
-        !myProfile?.walletAddress
-      ) {
-        console.error(
-          'missing data',
-          !!currentUser?.walletAddress,
-          !!selectedTeam?.id,
-          !!myProfile?.walletAddress,
-        );
-        return;
-      }
-      const body: InviteToTeamPOSTData = {
-        fromAddress: myProfile!.walletAddress,
-        toAddress: currentUser!.walletAddress,
-        toTeam: selectedTeam!.id,
-      };
+    if (
+      !currentUser?.walletAddress ||
+      !selectedTeam?.id ||
+      !myProfile?.walletAddress
+    ) {
+      console.error(
+        'missing data, please refresh user / connect wallet',
+        'selected user wallet',
+        !!currentUser?.walletAddress,
+        'selected team id ',
+        !!selectedTeam?.id,
+        'your wallet addres ',
+        !!myProfile?.walletAddress,
+      );
+      return;
+    }
+    const body: InviteToTeamPOSTData = {
+      fromAddress: myProfile!.walletAddress,
+      toAddress: currentUser!.walletAddress,
+      toTeam: selectedTeam!.id,
+    };
 
-      const data = await fetch(getServerEndpoint(Endpoints.INVITE_TO_TEAM), {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(body),
-      });
-
-      console.log(data.json());
-      if (data.status === 200) {
-        setInviteUserError(false);
-        fetchInvitedMembers();
-      } else {
-        setFetchUserError(true);
-      }
-    } catch (e) {
-      console.error(e);
-      setInviteUserError(true);
-    } finally {
-      setLoadingInvite(false);
+    const data = await mutateInviteToTeam(body);
+    if (data) {
+      fetchInvitedMembers();
     }
   }
 
@@ -158,21 +137,23 @@ export default function InviteMembers() {
       <StyledButton
         enabled={searchUsers.length >= 3}
         onPress={fetchUser}
-        loading={loadingUser}
-        error={fetchUserError}>
+        loading={loadingMemberByID}
+        error={!!errorMemberByID}>
         Search user by wallet address
       </StyledButton>
       <View style={{height: 12}} />
       {!!currentUser && <MemberBox member={currentUser} />}
-      {fetchUserError && (
-        <StyledText style={{color: Colors.Red[300]}}>User not found</StyledText>
+      {errorMemberByID && (
+        <StyledText style={{color: Colors.Red[300]}}>
+          {errorMemberByID}
+        </StyledText>
       )}
       <View style={{height: 12}} />
       <StyledButton
         enabled={currentUser != null}
         onPress={inviteUser}
-        loading={loadingInvite}
-        error={inviteUserError}>
+        loading={loadingInviteToTeam}
+        error={!!errorInviteToTeam}>
         Invite User
       </StyledButton>
       <StyledText style={{marginTop: 12}}>Pending Invites</StyledText>
@@ -186,21 +167,6 @@ export default function InviteMembers() {
             ))}
         </View>
       </ScrollView>
-
-      <View style={{marginVertical: 8}}>
-        {!!invitedMembers &&
-          invitedMembers.map((member, i) => (
-            <MemberBox
-              member={member}
-              key={`${i}-${id}`}
-              rightChildren={
-                <StyledText style={{color: Colors.Red[300]}}>
-                  Remove Invite
-                </StyledText>
-              }
-            />
-          ))}
-      </View>
     </Layout>
   );
 }

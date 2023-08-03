@@ -32,7 +32,7 @@ export default function AddTestCases() {
         </StyledText>
         <StyledText>
           <Text style={{color: Colors.Gray[400]}}>
-            {selectedFullBounty?.projectName} /{' '}
+            {selectedFullBounty?.project?.title} /{' '}
           </Text>{' '}
           {selectedFullBounty?.title}
         </StyledText>
