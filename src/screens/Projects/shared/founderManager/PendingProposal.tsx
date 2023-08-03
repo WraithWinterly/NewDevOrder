@@ -19,7 +19,6 @@ export default function PendingProposal() {
   const proj = useProjectsStore(state => state.selectedProject);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const role = useMemberStore(state => state.myProfile?.playingRole);
-  console.log('', proj?.quotePrice);
 
   return (
     <Layout>

@@ -1,6 +1,6 @@
-import axios from 'axios';
 import {Member, Team} from 'prisma/generated';
 import {CreateTeamPOSTData} from 'src/sharedTypes';
+import query from 'src/utils/query';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
@@ -40,9 +40,11 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
   selectedTeam: undefined,
   fetchTeams: async () => {
     set(() => ({teams: undefined}));
-    const {data} = await axios.get(getServerEndpoint(Endpoints.GET_TEAMS));
-    // console.log('fetch data: ', data);
-    set(() => ({teams: data ?? undefined}));
+
+    const {result, error} = await query(getServerEndpoint(Endpoints.GET_TEAMS));
+    if (result) {
+      set(() => ({teams: result}));
+    }
   },
   setSelectedTeam: async (fetchId: string | undefined) => {
     if (!fetchId) {
@@ -53,9 +55,20 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
     set(() => ({selectedTeam: undefined}));
     // console.log(fetchId);
     // const data = get().teams?.find(team => team.id == fetchId);
-    const {data} = await axios.get(
+    // const {data} = await axios.get(
+    //   getServerEndpoint(Endpoints.GET_TEAM_BY_ID) + `/${fetchId}`,
+    // );
+
+    const {result, error} = await query(
       getServerEndpoint(Endpoints.GET_TEAM_BY_ID) + `/${fetchId}`,
     );
+
+    if (result) {
+      const data = result as Team & {
+        members: Member[];
+      };
+      set(() => ({selectedTeam: data}));
+    }
 
     // console.log('sdf');
     // console.log(getServerEndpoint(Endpoints.GET_MEMBERS_BY_WALLET_ADDRESSES));
@@ -66,7 +79,7 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
     //     addresses: walletAddresses || [],
     //   },
     // );
-    set(() => ({selectedTeam: data}));
+
     // set(() => ({selectedTeamMembers: teamMembers}));
   },
   selectedTeamMembers: [],

@@ -1,6 +1,6 @@
 import {LogBox} from 'react-native';
 
-export default async function query(url: string) {
+export default async function mutate(url: string, body: any) {
   let result: any = null;
   let error: string | null = null;
 
@@ -9,7 +9,8 @@ export default async function query(url: string) {
       headers: {
         'Content-Type': 'application/json',
       },
-      method: 'GET',
+      method: 'POST',
+      body: JSON.stringify(body),
     });
     const localResult = await response.json();
 

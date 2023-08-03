@@ -38,7 +38,6 @@ export default function ViewBounty({route, navigation}: Props) {
   const [startedByTeams, setStartedByTeams] = useState<string[]>([]);
 
   function updateStartedBy() {
-    console.log('vewi teams changed');
     if (!bounties) return;
     if (!bounty) return;
 
@@ -55,7 +54,7 @@ export default function ViewBounty({route, navigation}: Props) {
 
   useEffect(() => {
     updateStartedBy();
-  }, [bounty]);
+  }, [bounty, bounties, teams]);
 
   useEffect(() => {
     updateStartedBy();

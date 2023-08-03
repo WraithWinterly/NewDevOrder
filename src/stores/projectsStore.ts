@@ -1,10 +1,10 @@
 import {create} from 'zustand';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import axios from 'axios';
 
 import {Bounty, Member, Project} from 'prisma/generated';
 import {CreateProjectPOSTData} from 'src/sharedTypes';
+import query from 'src/utils/query';
 
 type ProjectsStore = {
   createProjectData: CreateProjectPOSTData | undefined;
@@ -28,9 +28,15 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
   selectedProject: undefined,
   fetchProjects: async () => {
     set(() => ({projects: []}));
-    const {data} = await axios.get(getServerEndpoint(Endpoints.GET_PROJECTS));
-    console.log(data);
-    set(() => ({projects: data}));
+
+    const {result, error} = await query(
+      getServerEndpoint(Endpoints.GET_PROJECTS),
+    );
+
+    if (result) {
+      const data = result as Project[];
+      set(() => ({projects: data}));
+    }
   },
   setSelectedProject: async (fetchId: string | undefined) => {
     if (!fetchId) {
@@ -42,27 +48,26 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
     set(() => ({
       bountiesById: undefined,
     }));
-    // Find project from loaded projects list
-    const fetch = await axios.get(
+
+    const {result, error} = await query(
       getServerEndpoint(Endpoints.GET_PROJECT_BY_ID) + `/${fetchId}`,
     );
-    const data = fetch.data as Project & {
-      founder: Member;
-    };
+    if (result) {
+      const data = result as Project & {
+        founder: Member;
+      };
 
-    if (!data) {
-      console.error('Project not found');
-      return;
+      const {result: resultBounties, error: errorID} = await query(
+        getServerEndpoint(Endpoints.GET_BOUNTIES_FOR_PROJECT) + `/${data?.id}`,
+      );
+
+      const dataID = resultBounties as Bounty[];
+
+      set(() => ({selectedProject: data}));
+      set(() => ({
+        bountiesById: resultBounties,
+      }));
     }
-    // When a project is selected, load the bounty(s) information for the project
-    const idData = (await axios.get(
-      getServerEndpoint(Endpoints.GET_BOUNTIES_FOR_PROJECT) + `/${data?.id}`,
-    )) as {data: Bounty[] | undefined};
-    // console.log('idData: : ', idData);
-    set(() => ({selectedProject: data}));
-    set(() => ({
-      bountiesById: idData.data,
-    }));
   },
 
   bountiesById: undefined,

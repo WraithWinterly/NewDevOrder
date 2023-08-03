@@ -67,6 +67,7 @@ export default function StartBounty() {
     if (data) {
       // Force refetch bonuty
       setSelectedBounty(selectedFullBounty.id);
+      console.log(selectedFullBounty.id);
       fetchBounties();
       navigation.navigate('ViewBounty');
     }
@@ -95,8 +96,7 @@ export default function StartBounty() {
             }
             onSelect={(itemID, itemIndex) => {
               const v = viewTeams?.find(team => team.id == itemID);
-              console.log('', itemID);
-              console.log('', viewTeams);
+
               if (v) {
                 setSelectedTeam(v.id);
               }

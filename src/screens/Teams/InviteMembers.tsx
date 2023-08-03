@@ -85,6 +85,9 @@ export default function InviteMembers() {
   }
 
   async function fetchUser() {
+    if (!searchUsers.trim() || searchUsers.trim().length < 3) {
+      return;
+    }
     const url =
       getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
       `/${searchUsers.trim()}`;
