@@ -11,9 +11,11 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
-import {CreateProjectDataPOSTData} from 'src/sharedTypes';
+import {CreateProjectPOSTData} from 'src/sharedTypes';
+
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function CreateProposal() {
   const [projectName, setProjectName] = useState('');
@@ -23,8 +25,12 @@ export default function CreateProposal() {
   const [countryCode, setCountryCode] = useState('1');
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
+
   const [createProjectData, setCreateProjectData] =
-    useState<CreateProjectDataPOSTData>();
+    useState<CreateProjectPOSTData>();
 
   const {data, loading, error, mutate} = useMutation(
     getServerEndpoint(Endpoints.CREATE_PROPOSAL),
@@ -63,6 +69,7 @@ export default function CreateProposal() {
       description,
       email,
       phone: countryCode + phone,
+      walletAddress: walletAddress || '',
     });
   }, [projectName, description, email, phone]);
 

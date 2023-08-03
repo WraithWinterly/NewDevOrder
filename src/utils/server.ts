@@ -19,9 +19,11 @@ export enum Endpoints {
   JOIN_TEAM_FROM_INVITE = '/join-team-from-invite',
   DENY_TEAM_FROM_INVITE = '/deny-team-from-invite',
   GET_PROJECTS = '/get-projects',
+  GET_PROJECT_BY_ID = '/get-project-by-id',
   CREATE_PROPOSAL = '/create-proposal',
   BOUNTYMGR_SET_QUOTE_PRICE = '/bountymgr-set-quote-price',
   BOUNTYMGR_DECLINE = '/bountymgr-decline',
+  FOUNDER_CONFIRM_PAY = '/founder-confirm-pay',
   GET_INBOX = '/get-inbox',
   GET_BOUNTIES_FOR_PROJECT = '/get-bounties-for-project',
 }

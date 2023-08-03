@@ -6,17 +6,44 @@ import MemberBox from 'src/components/MemberBox';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
+import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
+import {FounderConfirmPayPostData} from 'src/sharedTypes';
 
 import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function ConfirmAndPay() {
   const proj = useProjectsStore(state => state.selectedProject);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  function onClickConfirmPayButton() {
-    navigation.navigate('HomeNavigation');
+  const fetchProjects = useProjectsStore(state => state.fetchProjects);
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
+
+  const {data, loading, error, mutate} = useMutation(
+    getServerEndpoint(Endpoints.FOUNDER_CONFIRM_PAY),
+  );
+
+  async function onSubmit() {
+    if (!proj?.id || !walletAddress) {
+      console.error('No project or wallet address');
+      return;
+    }
+    const body = {
+      projectID: proj.id,
+      walletAddress: walletAddress,
+    } as FounderConfirmPayPostData;
+
+    const data = await mutate(body);
+    if (data) {
+      fetchProjects();
+      navigation.navigate('HomeNavigation');
+    }
   }
+
   return (
     <Layout>
       <View style={{height: '90%', justifyContent: 'space-around'}}>
@@ -38,7 +65,7 @@ export default function ConfirmAndPay() {
           </StyledText>
         </View>
 
-        <StyledButton onPress={onClickConfirmPayButton}>
+        <StyledButton onPress={onSubmit} loading={loading} error={!!error}>
           <StyledText style={{fontSize: 18, color: Colors.BtnTextColor}}>
             Confirm and pay{' '}
             <Text style={{fontWeight: '500'}}>${proj?.quotePrice}</Text>.

@@ -30,23 +30,38 @@ export default function PendingProposal() {
         </StyledText>
         {role === RoleType.Founder &&
         proj?.quotePrice &&
-        proj.quotePrice > 0 ? (
+        proj.quotePrice > 0 &&
+        proj.stage != 'WaitingBountyMgrQuote' ? (
           <View>
-            <StyledText style={{fontSize: 18, marginBottom: 18}}>
-              <Text>Your quote is </Text>
-              <Text style={{fontWeight: 'bold'}}>${proj?.quotePrice}.</Text>
-            </StyledText>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginHorizontal: 12,
-              }}>
-              <StyledButton
-                onPress={() => navigation.navigate('ConfirmAndPay')}>
-                Confirm and checkout
-              </StyledButton>
-            </View>
+            {proj?.stage === 'WaitingFounderPay' && (
+              <>
+                <StyledText style={{fontSize: 18, marginBottom: 18}}>
+                  <Text>Your quote is </Text>
+                  <Text style={{fontWeight: 'bold'}}>${proj?.quotePrice}.</Text>
+                </StyledText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginHorizontal: 12,
+                  }}>
+                  <StyledButton
+                    onPress={() => navigation.navigate('ConfirmAndPay')}>
+                    Confirm and checkout
+                  </StyledButton>
+                </View>
+              </>
+            )}
+            {proj?.stage === 'WaitingBountyDesign' && (
+              <StyledText style={{fontSize: 18, marginBottom: 18}}>
+                <Text>
+                  You already paid{' '}
+                  <Text style={{fontWeight: 'bold'}}>${proj?.quotePrice}</Text>{' '}
+                  for this project. The bounty designer is working on it.
+                </Text>
+              </StyledText>
+            )}
+
             <Separator />
           </View>
         ) : null}
@@ -56,6 +71,9 @@ export default function PendingProposal() {
             <View>
               <StyledText style={{fontSize: 18}}>
                 Quoted for ${proj?.quotePrice}
+                {proj?.stage === 'WaitingBountyDesign' && (
+                  <Text style={{fontWeight: 'bold'}}> Already Paid.</Text>
+                )}
               </StyledText>
               {proj?.stage === 'WaitingFounderPay' && (
                 <StyledText>Pending Founder Payment</StyledText>
@@ -67,13 +85,22 @@ export default function PendingProposal() {
         <StyledText style={{fontSize: 18, marginBottom: 12}}>
           Contact information
         </StyledText>
-        {/* <MemberBox member={SAMPLE_MEMBERS[0]} /> */}
+
         <View style={{height: 8}}></View>
         <StyledText>
           <Text style={{fontWeight: 'bold'}}>Email: </Text>
           {proj?.email}{' '}
         </StyledText>
         <StyledText>Phone: {proj?.phone} </StyledText>
+
+        {proj?.founder && (
+          <>
+            <View style={{height: 14}} />
+            <StyledText style={{paddingBottom: 4}}>Founder:</StyledText>
+            <MemberBox member={proj.founder} />
+          </>
+        )}
+
         <Separator />
         <StyledText style={{fontSize: 18, marginBottom: 12}}>
           Project information
