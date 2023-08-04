@@ -4,7 +4,7 @@ import Layout from 'src/layout/Layout';
 import useProjectsStore from 'src/stores/projectsStore';
 
 export default function PendingSubmissions() {
-  const bounties = useProjectsStore(state => state.bountiesById);
+  const bounties = useProjectsStore(state => state.bountiesForProject);
   // Used to force refresh project info, which will refetch bounties
   const selectedProject = useProjectsStore(state => state.selectedProject);
   const setSelectedProject = useProjectsStore(

@@ -43,11 +43,10 @@ export default function ConfirmDecline() {
             Project information
           </StyledText>
           <StyledText>
-            <Text style={{fontWeight: 'bold'}}>Project Name: </Text>{' '}
-            {proj?.title}
+            <Text style={{fontWeight: 'bold'}}>Name: </Text> {proj?.title}
           </StyledText>
           <StyledText>
-            <Text style={{fontWeight: 'bold'}}>Project Details: </Text>
+            <Text style={{fontWeight: 'bold'}}>Details: </Text>
             {proj?.description}
           </StyledText>
         </View>

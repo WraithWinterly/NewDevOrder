@@ -3,25 +3,29 @@ import {create} from 'zustand';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 import {Bounty, Member, Project} from 'prisma/generated';
-import {CreateProjectPOSTData} from 'src/sharedTypes';
+import {CreateProposalPOSTData} from 'src/sharedTypes';
 import query from 'src/utils/query';
 
 type ProjectsStore = {
-  createProjectData: CreateProjectPOSTData | undefined;
-  setCreateProjectData: (data: CreateProjectPOSTData | undefined) => void;
+  createProposalData: CreateProposalPOSTData | undefined;
+  setCreateProposalData: (data: CreateProposalPOSTData | undefined) => void;
   projects: Project[] | undefined;
   fetchProjects: () => Promise<void>;
   selectedProject?: Project & {
     founder: Member;
   };
   setSelectedProject: (fetchId: string | undefined) => Promise<void>;
-  bountiesById: Bounty[] | undefined;
+  bountiesForProject:
+    | (Bounty & {
+        project: Project;
+      })[]
+    | undefined;
 };
 
 const useProjectsStore = create<ProjectsStore>((set, get) => ({
-  createProjectData: undefined,
-  setCreateProjectData: data => {
-    set(() => ({createProjectData: data}));
+  createProposalData: undefined,
+  setCreateProposalData: data => {
+    set(() => ({createProposalData: data}));
   },
 
   projects: [],
@@ -41,12 +45,12 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
   setSelectedProject: async (fetchId: string | undefined) => {
     if (!fetchId) {
       set(() => ({selectedProject: undefined}));
-      set(() => ({bountiesById: undefined}));
+      set(() => ({bountiesForProject: undefined}));
       return;
     }
     set(() => ({selectedProject: undefined}));
     set(() => ({
-      bountiesById: undefined,
+      bountiesForProject: undefined,
     }));
 
     const {result, error} = await query(
@@ -65,12 +69,12 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
 
       set(() => ({selectedProject: data}));
       set(() => ({
-        bountiesById: resultBounties,
+        bountiesForProject: resultBounties,
       }));
     }
   },
 
-  bountiesById: undefined,
+  bountiesForProject: undefined,
 }));
 
 export default useProjectsStore;

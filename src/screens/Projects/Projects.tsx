@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Project, RoleType} from 'prisma/generated';
+import {Project, ProjectStage, RoleType} from 'prisma/generated';
 import {useEffect, useId} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native';
@@ -19,7 +19,7 @@ export default function Projects() {
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
   const projects = useProjectsStore(state => state.projects);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
+  const myprofile = useMemberStore(state => state.myProfile);
   const id = useId();
   const id2 = useId();
 
@@ -27,16 +27,35 @@ export default function Projects() {
     fetchProjects();
   }, []);
 
-  const playingRole = useMemberStore(state => state.myProfile?.playingRole);
+  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
 
   const projectsPending =
     typeof projects !== 'undefined'
-      ? projects?.filter(p => p.stage == 'WaitingBountyMgrQuote')
+      ? projects?.filter(p => getFirstFilter()?.includes(p.stage))
       : undefined;
   const projectsAccepted =
     typeof projects !== 'undefined'
-      ? projects?.filter(p => p.stage !== 'WaitingBountyMgrQuote')
+      ? projects?.filter(p => !getFirstFilter()?.includes(p.stage))
       : undefined;
+
+  function getFirstFilter(): ProjectStage[] | null {
+    const role = playingRole ?? RoleType.BountyHunter;
+    if (role === RoleType.BountyHunter) {
+      return null;
+    } else if (role === RoleType.BountyManager) {
+      return [ProjectStage.PendingBountyMgrQuote];
+    } else if (role === RoleType.BountyDesigner) {
+      return [ProjectStage.PendingBountyDesign];
+    } else if (role === RoleType.Founder) {
+      return [
+        ProjectStage.PendingFounderPay,
+        ProjectStage.PendingBountyMgrQuote,
+        ProjectStage.PendingBountyDesign,
+        ProjectStage.PendingBountyValidator,
+      ];
+    }
+    return null;
+  }
 
   return (
     <Layout>
@@ -50,17 +69,10 @@ export default function Projects() {
             <Separator />
           </>
         )}
-        {playingRole === RoleType.BountyManager && (
-          <>
-            <StyledButton onPress={() => navigation.navigate('CreateProject')}>
-              Create a new project
-            </StyledButton>
-            <Separator />
-          </>
-        )}
+
         {!!projectsPending && projectsPending.length > 0 && (
           <>
-            <StyledText style={{marginBottom: 16}}>Pending Projects</StyledText>
+            <StyledText style={{marginBottom: 16}}>For You</StyledText>
             {projectsPending.map((item, index) => (
               <View key={`${item.id}-${index}-${id}`}>
                 <ProjectCard project={item}></ProjectCard>
@@ -96,7 +108,11 @@ function ProjectCard({project}: {project: Project}) {
   async function onClick() {
     setSelectedProject(project.id);
     if (role === RoleType.BountyDesigner) {
-      navigation.navigate('ProjectWorkspaceNavigator');
+      if (project.stage === ProjectStage.PendingBountyDesign) {
+        navigation.navigate('DesignerWorkspaceNavigator');
+      } else {
+        navigation.navigate('PendingProposal');
+      }
     } else if (role === RoleType.Founder || role === RoleType.BountyManager) {
       navigation.navigate('PendingProposal');
     } else if (role === RoleType.BountyValidator) {
@@ -119,10 +135,10 @@ function ProjectCard({project}: {project: Project}) {
       </View>
       <StyledText style={{fontSize: 16, fontWeight: '500'}}>
         {project.stage === 'Ready' ? 'Ready' : ''}
-        {project.stage === 'WaitingBountyMgrQuote' ? 'Pending Review' : ''}
-        {project.stage === 'WaitingFounderPay' ? 'Pending founder payment' : ''}
+        {project.stage === 'PendingBountyMgrQuote' ? 'Pending Review' : ''}
+        {project.stage === 'PendingFounderPay' ? 'Pending founder payment' : ''}
         {project.stage === 'Declined' ? 'Declined' : ''}
-        {project.stage === 'WaitingBountyDesign'
+        {project.stage === 'PendingBountyDesign'
           ? 'Pending design from bounty designer'
           : ''}
       </StyledText>

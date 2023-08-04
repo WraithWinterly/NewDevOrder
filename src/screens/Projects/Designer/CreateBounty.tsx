@@ -10,8 +10,9 @@ import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
 import useProjectsStore from 'src/stores/projectsStore';
+import Layout from 'src/layout/Layout';
 
-export default function NewBounty() {
+export default function CreateBounty() {
   const [bountyName, setBountyName] = useState('');
   const [bountyOverview, setBountyOverview] = useState('');
   const [submissionStartDate, setSubmissionStartDate] = useState(new Date());
@@ -30,55 +31,59 @@ export default function NewBounty() {
   };
 
   return (
-    <View>
-      {/* Dropdown for selecting the project */}
-      <StyledText>Select Project:</StyledText>
-      <DropdownMenu
-        data={projects || []}
-        onSelect={(itemID, itemIndex) => {
-          const proj = projects?.find(proj => proj.id == itemID);
+    <Layout>
+      <View style={{gap: 12}}>
+        {/* Dropdown for selecting the project */}
+        <StyledText>
+          Creating bounty for Project: {selectedProject?.title}
+        </StyledText>
+        {/* <DropdownMenu
+          data={projects || []}
+          onSelect={(itemID, itemIndex) => {
+            const proj = projects?.find(proj => proj.id == itemID);
 
-          if (proj) {
-            setSelectedProject(proj.id);
-          }
-        }}
-        displayText={selectedProject?.title || ''}
-        selectedValue={selectedProject?.id || ''}
-        disabled
-      />
+            if (proj) {
+              setSelectedProject(proj.id);
+            }
+          }}
+          displayText={selectedProject?.title || ''}
+          selectedValue={selectedProject?.id || ''}
+          disabled
+        /> */}
 
-      {/* Styled input for bounty name */}
-      <StyledText>Bounty Name:</StyledText>
-      <StyledTextInput
-        value={bountyName}
-        onChangeText={text => setBountyName(text)}
-        placeholder="Enter Bounty Name"
-      />
+        {/* Styled input for bounty name */}
+        <StyledText>Bounty Name:</StyledText>
+        <StyledTextInput
+          value={bountyName}
+          onChangeText={text => setBountyName(text)}
+          placeholder="Enter Bounty Name"
+        />
 
-      {/* Styled input for bounty overview */}
-      <StyledText>Bounty Overview:</StyledText>
-      <StyledTextInput
-        value={bountyOverview}
-        onChangeText={text => setBountyOverview(text)}
-        placeholder="Enter Bounty Overview"
-        multiLine
-      />
+        {/* Styled input for bounty overview */}
+        <StyledText>Bounty Overview:</StyledText>
+        <StyledTextInput
+          value={bountyOverview}
+          onChangeText={text => setBountyOverview(text)}
+          placeholder="Enter Bounty Overview"
+          multiLine
+        />
 
-      {/* Date inputs for submission start and end dates */}
-      <StyledText>Submission Start Date:</StyledText>
-      {/* <DatePicker
+        {/* Date inputs for submission start and end dates */}
+        <StyledText>Submission Start Date:</StyledText>
+        {/* <DatePicker
         selectedDate={submissionStartDate}
         onDateChange={date => setSubmissionStartDate(date)}
       /> */}
 
-      <StyledText>Submission End Date:</StyledText>
-      {/* <DatePicker
+        <StyledText>Submission End Date:</StyledText>
+        {/* <DatePicker
         selectedDate={submissionEndDate}
         onDateChange={date => setSubmissionEndDate(date)}
       /> */}
 
-      {/* Button to submit the new bounty */}
-      <StyledButton onPress={handleCreateBounty}>Create Bounty</StyledButton>
-    </View>
+        {/* Button to submit the new bounty */}
+        <StyledButton onPress={handleCreateBounty}>Create Bounty</StyledButton>
+      </View>
+    </Layout>
   );
 }

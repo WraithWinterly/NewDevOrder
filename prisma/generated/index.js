@@ -1,8 +1,10 @@
 exports.$Enums = {};
 exports.ProjectStage = exports.$Enums.ProjectStage = {
-  WaitingBountyMgrQuote: 'WaitingBountyMgrQuote',
-  WaitingFounderPay: 'WaitingFounderPay',
-  WaitingBountyDesign: 'WaitingBountyDesign',
+  PendingBountyMgrQuote: 'PendingBountyMgrQuote',
+  PendingFounderPay: 'PendingFounderPay',
+  PendingBountyDesign: 'PendingBountyDesign',
+  PendingBountyValidator: 'PendingBountyValidator',
+  PendingApproval: 'PendingApproval',
   Declined: 'Declined',
   Ready: 'Ready',
 };

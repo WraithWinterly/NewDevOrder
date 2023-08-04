@@ -30,9 +30,9 @@ export default function PendingProposal() {
         {role === RoleType.Founder &&
         proj?.quotePrice &&
         proj.quotePrice > 0 &&
-        proj.stage != 'WaitingBountyMgrQuote' ? (
+        proj.stage != 'PendingBountyMgrQuote' ? (
           <View>
-            {proj?.stage === 'WaitingFounderPay' && (
+            {proj?.stage === 'PendingFounderPay' && (
               <>
                 <StyledText style={{fontSize: 18, marginBottom: 18}}>
                   <Text>Your quote is </Text>
@@ -51,7 +51,7 @@ export default function PendingProposal() {
                 </View>
               </>
             )}
-            {proj?.stage === 'WaitingBountyDesign' && (
+            {proj?.stage === 'PendingBountyDesign' && (
               <StyledText style={{fontSize: 18, marginBottom: 18}}>
                 <Text>
                   You already paid{' '}
@@ -65,16 +65,16 @@ export default function PendingProposal() {
           </View>
         ) : null}
 
-        {role === RoleType.BountyManager &&
-          proj?.stage !== 'WaitingBountyMgrQuote' && (
+        {role != RoleType.Founder &&
+          proj?.stage !== 'PendingBountyMgrQuote' && (
             <View>
               <StyledText style={{fontSize: 18}}>
                 Quoted for ${proj?.quotePrice}
-                {proj?.stage === 'WaitingBountyDesign' && (
+                {proj?.stage === 'PendingBountyDesign' && (
                   <Text style={{fontWeight: 'bold'}}> Already Paid.</Text>
                 )}
               </StyledText>
-              {proj?.stage === 'WaitingFounderPay' && (
+              {proj?.stage === 'PendingFounderPay' && (
                 <StyledText>Pending Founder Payment</StyledText>
               )}
               <Separator />
@@ -105,15 +105,15 @@ export default function PendingProposal() {
           Project information
         </StyledText>
         <StyledText>
-          <Text style={{fontWeight: 'bold'}}>Project Name: </Text> {proj?.title}
+          <Text style={{fontWeight: 'bold'}}>Name: </Text> {proj?.title}
         </StyledText>
         <StyledText>
-          <Text style={{fontWeight: 'bold'}}>Project Details: </Text>
+          <Text style={{fontWeight: 'bold'}}>Details: </Text>
           {proj?.description}
         </StyledText>
         <Separator />
         {role === RoleType.BountyManager &&
-          proj?.stage === 'WaitingBountyMgrQuote' && (
+          proj?.stage === 'PendingBountyMgrQuote' && (
             <View style={{marginTop: 16}}>
               <TouchableOpacity
                 style={{

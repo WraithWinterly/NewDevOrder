@@ -38,7 +38,7 @@ export default function DropdownMenu({
           gap: 10,
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderColor: Colors.Primary,
+          borderColor: disabled ? Colors.Gray[400] : Colors.Primary,
           borderWidth: 1,
           padding: 16,
           borderRadius: 8,

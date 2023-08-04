@@ -26,19 +26,19 @@ import useTeamsStore from './stores/teamsStore';
 import InviteMembers from './screens/teams/InviteMembers';
 import CreateTeam from './screens/teams/CreateTeam';
 import Profile from './screens/profile/Profile';
-import CreateProject from './screens/projects/designer/CreateProject';
 import LeaderboardNavigation from './screens/leaderboard/LeaderboardNavigation';
 import ReconnectWallet from './screens/home/ReconnectWallet';
-import ProjectWorkspaceNavigator from './screens/projects/designer/ProjectWorkspace/ProjectWorkspaceNavigator';
+import DesignerWorkspaceNavigator from './screens/projects/designer/workspace/DesignerWorkspaceNavigator';
 import CreateProposal from './screens/projects/founder/CreateProposal';
 import ConfirmAndPay from './screens/projects/founder/ConfirmAndPay';
 import AcceptAndSendQuote from './screens/projects/manager/AcceptAndSendQuote';
 import ConfirmDecline from './screens/projects/manager/ConfirmDecline';
 import AddTestCases from './screens/projects/validator/AddTestCases';
 import Submissions from './screens/projects/validator/Submissions';
-import PendingProposal from './screens/projects/shared/founderManager/PendingProposal';
+import PendingProposal from './screens/projects/shared/PendingProposal';
 import useProjectsStore from './stores/projectsStore';
 import ValidatorNavigator from './screens/projects/validator/ValidatorNavigator';
+import CreateBounty from './screens/projects/designer/CreateBounty';
 
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
@@ -85,8 +85,8 @@ export type WalletParamList = {
 
 export type ProjectParamList = {
   // Designer
-  ProjectWorkspaceNavigator: undefined;
-  CreateProject: undefined;
+  DesignerWorkspaceNavigator: undefined;
+  CreateBounty: undefined;
   // Founder
   CreateProposal: undefined;
   ConfirmAndPay: undefined;
@@ -212,17 +212,17 @@ export default function StackNavigator() {
 
         {/* Projects */}
         <Stack.Screen
-          name="ProjectWorkspaceNavigator"
-          component={ProjectWorkspaceNavigator}
+          name="DesignerWorkspaceNavigator"
+          component={DesignerWorkspaceNavigator}
           options={{
             title: `Project ${project?.title}`,
           }}
         />
         <Stack.Screen
-          name="CreateProject"
-          component={CreateProject}
+          name="CreateBounty"
+          component={CreateBounty}
           options={{
-            title: '',
+            title: ``,
           }}
         />
         <Stack.Screen

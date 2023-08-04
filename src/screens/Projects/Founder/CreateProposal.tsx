@@ -11,7 +11,7 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
-import {CreateProjectPOSTData} from 'src/sharedTypes';
+import {CreateProposalPOSTData} from 'src/sharedTypes';
 
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
@@ -29,21 +29,21 @@ export default function CreateProposal() {
     .wallet?.publicKey.toBase58()
     .toString();
 
-  const [createProjectData, setCreateProjectData] =
-    useState<CreateProjectPOSTData>();
+  const [createProposalData, setCreateProposalData] =
+    useState<CreateProposalPOSTData>();
 
   const {data, loading, error, mutate} = useMutation(
     getServerEndpoint(Endpoints.CREATE_PROPOSAL),
   );
 
-  function canProceedCreateProject() {
-    if (!createProjectData) return false;
-    if (createProjectData.title.trim().length < 3) return false;
-    if (createProjectData.description.trim().length < 3) return false;
-    if (createProjectData.email.trim().length < 3) return false;
+  function canProceedCreateProposal() {
+    if (!createProposalData) return false;
+    if (createProposalData.title.trim().length < 3) return false;
+    if (createProposalData.description.trim().length < 3) return false;
+    if (createProposalData.email.trim().length < 3) return false;
     let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    if (!emailReg.test(createProjectData.email)) return false;
-    if (createProjectData.phone.trim().length < 10) return false;
+    if (!emailReg.test(createProposalData.email)) return false;
+    if (createProposalData.phone.trim().length < 10) return false;
 
     return true;
   }
@@ -51,20 +51,20 @@ export default function CreateProposal() {
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
 
   async function onSubmit() {
-    if (!canProceedCreateProject()) return;
+    if (!canProceedCreateProposal()) return;
 
     Keyboard.dismiss();
 
-    const data = await mutate(createProjectData);
+    const data = await mutate(createProposalData);
     if (data) {
       fetchProjects();
-      setCreateProjectData(undefined);
+      setCreateProposalData(undefined);
       navigation.navigate('HomeNavigation');
     }
   }
 
   useEffect(() => {
-    setCreateProjectData({
+    setCreateProposalData({
       title: projectName,
       description,
       email,
@@ -124,7 +124,7 @@ export default function CreateProposal() {
         </View>
         <View style={{height: 24}} />
         <StyledButton
-          enabled={canProceedCreateProject()}
+          enabled={canProceedCreateProposal()}
           onPress={onSubmit}
           loading={loading}>
           Submit Proposal

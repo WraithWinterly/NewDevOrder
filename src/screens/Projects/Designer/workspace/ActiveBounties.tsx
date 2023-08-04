@@ -1,10 +1,11 @@
 import {useState} from 'react';
 import BountyList from 'src/components/home/BountyList';
+import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useProjectsStore from 'src/stores/projectsStore';
 
 export default function ActiveBounties() {
-  const bounties = useProjectsStore(state => state.bountiesById);
+  const bounties = useProjectsStore(state => state.bountiesForProject);
   // Used to force refresh project info, which will refetch bounties
   const selectedProject = useProjectsStore(state => state.selectedProject);
   const setSelectedProject = useProjectsStore(
@@ -24,12 +25,27 @@ export default function ActiveBounties() {
 
   return (
     <Layout>
-      <BountyList
-        refreshing={refreshing}
-        bounties={shown}
-        onRefresh={onRefresh}
-        designerView
-      />
+      {shown && (
+        <>
+          <BountyList
+            refreshing={refreshing}
+            bounties={shown}
+            onRefresh={onRefresh}
+            designerView
+          />
+          {shown?.length === 0 && (
+            <StyledText
+              style={{
+                textAlign: 'center',
+                marginTop: 32,
+                fontWeight: '500',
+                fontSize: 18,
+              }}>
+              There are no drafts currently.
+            </StyledText>
+          )}
+        </>
+      )}
     </Layout>
   );
 }

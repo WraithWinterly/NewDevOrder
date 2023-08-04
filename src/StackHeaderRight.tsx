@@ -19,15 +19,15 @@ export default function StackHeaderRight({route}: {route: string}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const createTeamData = useTeamsStore(state => state.createTeamData);
-  const setCreateTeamData = useTeamsStore(state => state.setCreateTeamData);
+
   const isCreateTeamValid = useTeamsStore(state => state.isCreateTeamValid);
 
   const canProceedCreateTeam =
     !!createTeamData && isCreateTeamValid(createTeamData);
   const wallet = useSolanaContext();
-  const createProjectData = useProjectsStore(state => state.createProjectData);
-  const setCreateProjectData = useProjectsStore(
-    state => state.setCreateProjectData,
+
+  const setCreateProposalData = useProjectsStore(
+    state => state.setCreateProposalData,
   );
 
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
@@ -68,7 +68,7 @@ export default function StackHeaderRight({route}: {route: string}) {
             const data = await createTeamMutate(createData);
 
             if (data) {
-              setCreateProjectData(undefined);
+              setCreateProposalData(undefined);
               navigation.navigate('HomeNavigation');
               fetchTeams();
             }
@@ -93,6 +93,12 @@ export default function StackHeaderRight({route}: {route: string}) {
             color: canProceedCreateTeam ? Colors.Primary : Colors.Gray[500],
           }}>
           Next
+        </StyledText>
+      ) : route === 'DesignerWorkspaceNavigator' ? (
+        <StyledText
+          style={{color: Colors.Primary}}
+          onPress={() => navigation.navigate('PendingProposal')}>
+          View Proposal
         </StyledText>
       ) : route === 'MyWallet' ? (
         <StyledButton>

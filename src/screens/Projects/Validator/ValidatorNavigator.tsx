@@ -3,12 +3,13 @@ import {Colors} from 'src/styles/styles';
 import PendingBounties from './PendingBounties';
 import PendingSubmissions from './PendingSubmissions';
 
-type ProjectWorkspaceNavigatorParamList = {
+type DesignerWorkspaceNavigatorParamList = {
   PendingBounties: undefined;
   PendingSubmissions: undefined;
 };
 
-const Tab = createMaterialTopTabNavigator<ProjectWorkspaceNavigatorParamList>();
+const Tab =
+  createMaterialTopTabNavigator<DesignerWorkspaceNavigatorParamList>();
 
 export default function ValidatorNavigator() {
   return (

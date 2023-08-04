@@ -26,7 +26,7 @@ export type CreateTeamPOSTData = {
   creatorAddress: string;
 };
 
-export type CreateProjectPOSTData = {
+export type CreateProposalPOSTData = {
   title: string;
   description: string;
   email: string;
