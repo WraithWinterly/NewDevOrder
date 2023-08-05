@@ -1575,6 +1575,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-community/checkbox@^0.5.16":
+  version "0.5.16"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.16.tgz#3265260e5fd961a4f032d0c088bbfbdfa96ee44e"
+  integrity sha512-j4fmWe77EAayGnKJ52BljlN8apLT3xjxG/pJOA6HZ4ew63FiXmnY7VtxTzmvDKgSPrETdQc2lmx5mdXTAufJnw==
+
 "@react-native-community/cli-clean@11.3.5":
   version "11.3.5"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-clean/-/cli-clean-11.3.5.tgz#07c8a01e433ea6c6e32eb647908be48952888cdd"
@@ -6169,6 +6174,13 @@ react-native-country-picker-modal@^2.0.0:
     node-emoji "1.10.0"
     prop-types "15.7.2"
     react-async-hook "3.6.1"
+
+react-native-date-picker@^4.2.13:
+  version "4.2.13"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-4.2.13.tgz#b5b894ee6c5a154a752f9094342170515e169ea6"
+  integrity sha512-cQ3k+ExXggAnytomeNGNrtV/l2a7WzVUeWKo7Gs2pv/z3TCjjlmKn0ZBMPgcThrFAgFMxgYI0XzKVKT7TPsOmw==
+  dependencies:
+    prop-types "^15.8.1"
 
 react-native-dotenv@^3.4.9:
   version "3.4.9"

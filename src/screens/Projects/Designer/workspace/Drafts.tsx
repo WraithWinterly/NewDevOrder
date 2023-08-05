@@ -9,6 +9,7 @@ import AddButtonIcon from 'src/components/icons/AddButtonIcon';
 import PlusIcon from 'src/components/icons/PlusIcon';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
+import useBountyStore from 'src/stores/bountyStore';
 import useProjectsStore from 'src/stores/projectsStore';
 
 export default function Drafts() {
@@ -20,6 +21,9 @@ export default function Drafts() {
   );
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+  const setCreateBountyData = useBountyStore(
+    state => state.setCreateBountyData,
+  );
   function onRefresh() {
     setRefreshing(true);
     if (!selectedProject) return;
@@ -57,6 +61,7 @@ export default function Drafts() {
         <View style={{position: 'absolute', bottom: 0, right: 4}}>
           <TouchableOpacity
             onPress={() => {
+              setCreateBountyData(undefined);
               navigation.navigate('CreateBounty');
             }}>
             <AddButtonIcon />

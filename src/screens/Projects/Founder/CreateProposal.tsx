@@ -12,15 +12,17 @@ import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
 import {CreateProposalPOSTData} from 'src/sharedTypes';
+import useMemberStore from 'src/stores/membersStore';
 
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function CreateProposal() {
+  const myProfile = useMemberStore(state => state.myProfile);
   const [projectName, setProjectName] = useState('');
   const [description, setDescription] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(myProfile?.email ?? '');
   const [phone, setPhone] = useState('');
   const [countryCode, setCountryCode] = useState('1');
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();

@@ -1,10 +1,14 @@
 import {Bounty, Member, Project} from 'prisma/generated';
+import {CreateBountyData, CreateBountyPostData} from 'src/sharedTypes';
 import query from 'src/utils/query';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
 
 type BountyStore = {
+  createBountyData: CreateBountyData | undefined;
+  setCreateBountyData: (data: CreateBountyData | undefined) => void;
+
   bounties: (Bounty & {project: Project})[] | undefined;
   fetchBounties: () => Promise<void>;
   selectedBounty?: Bounty & {
@@ -15,6 +19,10 @@ type BountyStore = {
 };
 
 const useBountyStore = create<BountyStore>((set, get) => ({
+  createBountyData: undefined,
+  setCreateBountyData: async (data: CreateBountyData | undefined) => {
+    set(() => ({createBountyData: data}));
+  },
   bounties: [],
   selectedBounty: undefined,
   fetchBounties: async () => {

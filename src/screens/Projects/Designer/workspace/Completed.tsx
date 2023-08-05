@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import BountyList from 'src/components/home/BountyList';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
@@ -21,21 +21,28 @@ export default function Completed() {
     });
   }
 
-  const shown = bounties?.filter(
-    bounty => bounty.stage === 'Completed' || bounty.stage === 'ReadyForTests',
-  );
+  const [shownBounties, setShownBounties] = useState<typeof bounties>([]);
+
+  useEffect(() => {
+    setShownBounties(
+      bounties?.filter(
+        bounty =>
+          bounty.stage === 'Completed' || bounty.stage === 'ReadyForTests',
+      ),
+    );
+  }, [bounties]);
 
   return (
     <Layout>
-      {shown && (
+      {shownBounties && (
         <>
           <BountyList
             refreshing={refreshing}
-            bounties={shown}
+            bounties={shownBounties}
             onRefresh={onRefresh}
             designerView
           />
-          {shown?.length === 0 && (
+          {shownBounties?.length === 0 && (
             <StyledText
               style={{
                 textAlign: 'center',

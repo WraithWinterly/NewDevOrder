@@ -36,6 +36,7 @@ export default function BountyList({
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
+  const id2 = useId();
 
   const setSelectedFullBounty = useBountyStore(
     state => state.setSelectedBounty,
@@ -126,7 +127,14 @@ export default function BountyList({
               {bounty.stage === 'Completed' && (
                 <Bubble type="green" text="Completed" />
               )}
-              <Bubble type="normal" text={bounty.type} />
+
+              {bounty.types.map((type, index) => (
+                <Bubble
+                  type="normal"
+                  text={type}
+                  key={`type-${index}-${id2}`}
+                />
+              ))}
             </View>
             <StyledText
               style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>

@@ -21,21 +21,39 @@ import Separator from 'src/components/ui/Separator';
 import Bubble from 'src/components/ui/Bubble';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import useTeamsStore from 'src/stores/teamsStore';
+import useProjectsStore from 'src/stores/projectsStore';
+import {Bounty, Member, Project} from 'prisma/generated';
+import useQuery from 'src/hooks/useQuery';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import useMutation from 'src/hooks/usePost';
+import {CreateBountyPostData} from 'src/sharedTypes';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
 export default function ViewBounty({route, navigation}: Props) {
-  const bounty = useBountyStore(state => state.selectedBounty);
   const bounties = useBountyStore(state => state.bounties);
   // const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
   const id2 = useId();
+  const id3 = useId();
   // const route = useRoute <RouteProp<StackParamList>();
   const isValidator = route.params?.isValidator ?? false;
+  const isDesigner = route.params?.isDesigner ?? false;
+
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
 
   const teams = useTeamsStore(state => state.teams);
 
   const [startedByTeams, setStartedByTeams] = useState<string[]>([]);
+
+  const createBountyData = useBountyStore(state => state.createBountyData);
+  const selectedBounty = useBountyStore(state => state.selectedBounty);
+
+  const project = useProjectsStore(state => state.selectedProject);
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
 
   function updateStartedBy() {
     if (!bounties) return;
@@ -52,17 +70,125 @@ export default function ViewBounty({route, navigation}: Props) {
     setStartedByTeams(localTeams);
   }
 
+  const [bounty, setBounty] = useState<
+    (Bounty & {project: Project; founder: Member}) | undefined
+  >(undefined);
+
+  const createBounty = useMutation(getServerEndpoint(Endpoints.CREATE_BOUNTY));
+
+  async function onSubmitCreateBounty(draft: boolean) {
+    if (!createBountyData) {
+      console.error('No create bounty data');
+      return;
+    }
+    if (!walletAddress) {
+      console.error('No wallet address');
+      return;
+    }
+
+    const body: CreateBountyPostData = {
+      bounty: createBountyData,
+      draft: draft === true ? true : false,
+      walletAddress: walletAddress,
+    };
+    const data = await createBounty.mutate(body);
+    if (data) {
+      fetchBounties();
+      navigation.navigate('DesignerWorkspaceNavigator');
+    }
+  }
+
+  useEffect(() => {
+    if (isDesigner && !!createBountyData) {
+      setBounty(coerceIntoBounty());
+    } else {
+      setBounty(selectedBounty);
+    }
+  }, [isDesigner, selectedBounty, createBountyData]);
+
+  function coerceIntoBounty() {
+    if (!createBountyData?.amount) {
+      console.error("Error: Missing 'amount' in create bounty data!");
+      return;
+    }
+
+    if (!createBountyData.deadline) {
+      console.error("Error: Missing 'deadline' in create bounty data!");
+      return;
+    }
+
+    if (!createBountyData.description) {
+      console.error("Error: Missing 'description' in create bounty data!");
+      return;
+    }
+
+    if (!createBountyData.title) {
+      console.error("Error: Missing 'title' in create bounty data!");
+      return;
+    }
+
+    if (!createBountyData.startDate) {
+      console.error("Error: Missing 'startDate' in create bounty data!");
+      return;
+    }
+
+    if (!project?.founder.walletAddress) {
+      console.error('Error: Missing founder wallet address!');
+      return;
+    }
+
+    return {
+      id: '0',
+      participantsTeamIDs: [],
+      postDate: new Date(),
+      reward: createBountyData.amount,
+      stage: 'Draft', // Assuming 'BountyStage' is an enum type for stage
+      title: createBountyData.title,
+      types: createBountyData.types, // Assuming 'BountyType' is an enum type for type
+      founderAddress: project.founder.walletAddress,
+      description: createBountyData.description,
+      deadline: createBountyData.deadline,
+      aboutProject: createBountyData.description,
+      submissions: [], // Assuming it's an empty array for now
+      headerSections: createBountyData.headerSections, // Assuming it's null for now
+      projectId: null, // Assuming it's null for now
+      project: {
+        ...project,
+      },
+      founder: {
+        ...project.founder,
+      },
+    } as Bounty & {
+      project: Project;
+      founder: Member;
+    };
+  }
+
   useEffect(() => {
     updateStartedBy();
   }, [bounty, bounties, teams]);
 
-  useEffect(() => {
-    updateStartedBy();
-  }, []);
+  // useEffect(() => {
+  //   updateStartedBy();
+  // }, []);
+
+  // console.log(bounty?.headerSections || {});
+
+  const headerSections =
+    (bounty?.headerSections as {[x: string]: string[]}) || {};
 
   return (
     <Layout>
       <View style={{height: '100%'}}>
+        {isDesigner && (
+          <View>
+            <StyledText style={{fontSize: 24}}>Review your bounty</StyledText>
+            <StyledText>
+              This will be posted on the bounty feed when submitted and reviewed
+            </StyledText>
+            <Separator />
+          </View>
+        )}
         <View
           style={{
             position: 'absolute',
@@ -75,7 +201,18 @@ export default function ViewBounty({route, navigation}: Props) {
             backgroundColor: Colors.AppBar,
             zIndex: 1,
           }}>
-          {isValidator ? (
+          {isDesigner ? (
+            <View style={{gap: 12}}>
+              <StyledButton
+                type="normal2"
+                onPress={() => onSubmitCreateBounty(true)}>
+                Save as Draft
+              </StyledButton>
+              <StyledButton onPress={() => onSubmitCreateBounty(false)}>
+                Send for approval
+              </StyledButton>
+            </View>
+          ) : isValidator ? (
             bounty?.stage === 'ReadyForTests' ? (
               <StyledButton
                 type="normal2"
@@ -148,7 +285,13 @@ export default function ViewBounty({route, navigation}: Props) {
                   <Bubble type="green" text="Accepting Submissions" />
                 )}
 
-                <Bubble type="normal" text={bounty.type} />
+                {bounty.types.map((type, index) => (
+                  <Bubble
+                    type="normal"
+                    text={type}
+                    key={`type-${index}-${id3}`}
+                  />
+                ))}
               </View>
 
               <View style={{height: 12}}></View>
@@ -192,17 +335,21 @@ export default function ViewBounty({route, navigation}: Props) {
                   </View>
                 </View>
               </DropdownSection>
+              <DropdownSection title={`About ${bounty.title}`}>
+                <StyledText>{bounty.aboutProject}</StyledText>
+              </DropdownSection>
 
-              {/* {!!bounty.headerSections &&
+              {!!bounty.headerSections &&
                 Object.keys(bounty.headerSections).map((section, i) => (
                   <DropdownSection title={section} key={`${id}-${i}`}>
-                    {!!bounty.headerSections &&
-                      (bounty.headerSections as {[key: string]: string[]}) &&
-                      bounty.headerSections[section].map((text, index) => (
+                    {!!headerSections &&
+                      headerSections &&
+                      !!headerSections[section] &&
+                      headerSections[section].map((text, index) => (
                         <StyledText key={index}>- {text}</StyledText>
                       ))}
                   </DropdownSection>
-                ))} */}
+                ))}
 
               {/* Founder */}
               {!!bounty.founder && (
@@ -226,7 +373,7 @@ export default function ViewBounty({route, navigation}: Props) {
               )}
             </View>
           )}
-          <View style={{paddingVertical: 30}}></View>
+          <View style={{paddingVertical: 52}}></View>
         </ScrollView>
       </View>
     </Layout>

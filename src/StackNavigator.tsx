@@ -39,6 +39,9 @@ import PendingProposal from './screens/projects/shared/PendingProposal';
 import useProjectsStore from './stores/projectsStore';
 import ValidatorNavigator from './screens/projects/validator/ValidatorNavigator';
 import CreateBounty from './screens/projects/designer/CreateBounty';
+import AddRewards from './screens/projects/designer/AddRewards';
+import AddSections from './screens/projects/designer/AddSections';
+import AddTags from './screens/projects/designer/AddTags';
 
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
@@ -49,6 +52,7 @@ export type StackParamList = WelcomeStackParamList &
     ViewBounty:
       | {
           isValidator?: boolean;
+          isDesigner?: boolean;
         }
       | undefined;
     StartBounty: undefined;
@@ -87,6 +91,9 @@ export type ProjectParamList = {
   // Designer
   DesignerWorkspaceNavigator: undefined;
   CreateBounty: undefined;
+  AddTags: undefined;
+  AddRewards: undefined;
+  AddSections: undefined;
   // Founder
   CreateProposal: undefined;
   ConfirmAndPay: undefined;
@@ -222,7 +229,28 @@ export default function StackNavigator() {
           name="CreateBounty"
           component={CreateBounty}
           options={{
-            title: ``,
+            title: 'Create Bounty',
+          }}
+        />
+        <Stack.Screen
+          name="AddTags"
+          component={AddTags}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="AddRewards"
+          component={AddRewards}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="AddSections"
+          component={AddSections}
+          options={{
+            title: 'Add Sections',
           }}
         />
         <Stack.Screen

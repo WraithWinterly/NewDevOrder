@@ -9,6 +9,8 @@ import {StackParamList} from 'src/StackNavigator';
 
 import asyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect, useState} from 'react';
+import query from 'src/utils/query';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 export default function Welcome() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -67,8 +69,22 @@ export default function Welcome() {
               paddingTop: 80,
             }}>
             <PhantomConnectButton
-              onSuccess={() => {
-                navigation.navigate('WelcomeMintMembershipToken');
+              onSuccess={async walletAddress => {
+                const data = await query(
+                  getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
+                    `/${walletAddress}`,
+                );
+                if (!data) {
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'WelcomeMintMembershipToken'}],
+                  });
+                } else {
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'HomeNavigation'}],
+                  });
+                }
               }}
             />
             {/* <NDO_Button type="noBg" onPress={() => {}}>

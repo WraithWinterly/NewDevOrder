@@ -51,9 +51,15 @@ export default function ReconnectWallet() {
                   `/${walletAddress}`,
               );
               if (!data) {
-                navigation.navigate('WelcomeMintMembershipToken');
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'WelcomeMintMembershipToken'}],
+                });
               } else {
-                navigation.navigate('HomeNavigation');
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'HomeNavigation'}],
+                });
               }
             }}
           />
