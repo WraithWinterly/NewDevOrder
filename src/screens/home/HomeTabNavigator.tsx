@@ -105,17 +105,15 @@ export default function HomeTabNavigator() {
           fontWeight: 'bold',
         },
       })}>
-      {playingRole === RoleType.BountyHunter && (
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarIcon: ({focused}) => (
-              <TabBarIcon focused={focused} icon={<HomeIcon />} />
-            ),
-          }}
-        />
-      )}
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <TabBarIcon focused={focused} icon={<HomeIcon />} />
+          ),
+        }}
+      />
 
       <Tab.Screen
         name="Teams"

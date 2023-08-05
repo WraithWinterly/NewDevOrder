@@ -9,19 +9,25 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import useMutation from 'src/hooks/usePost';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
+import {ChangeRolePOSTData} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function DeveloperMenu() {
   const [resetFeedback, setResetFeedback] = useState('');
 
   const myProfile = useMemberStore(state => state.myProfile);
-  const setPlayingRole = useMemberStore(state => state.setPlayingRole);
+  const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 
   const [connectionQueryFeedback, setConnectionQueryFeedback] = useState('');
   const [connectionMutationFeedback, setConnectionMutationFeedback] =
     useState('');
   const [seedFeedback, setSeedFeedback] = useState('');
+
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
 
   const {
     loading: loadingQuery,
@@ -40,6 +46,12 @@ export default function DeveloperMenu() {
     error: errorMutation,
     mutate,
   } = useMutation(getServerEndpoint(Endpoints.ALIVE_POST));
+
+  const {
+    loading: loadingRole,
+    error: errorRole,
+    mutate: mutateRole,
+  } = useMutation(getServerEndpoint(Endpoints.CHANGE_ROLE));
 
   async function onResetWelcomeScreen() {
     await AsyncStorage.clear();
@@ -112,12 +124,24 @@ export default function DeveloperMenu() {
         <StyledText style={{paddingVertical: 8}}>Playing as role...</StyledText>
         <DropdownMenu
           data={RoleDict || []}
-          onSelect={(itemID, itemIndex) => {
+          onSelect={async (itemID, itemIndex) => {
             // console.log(itemID);
             const role = RoleDict?.find(role => role.id == itemID);
-
-            if (role) {
-              setPlayingRole(role?.title as RoleType);
+            if (!walletAddress) {
+              console.error('No wallet address');
+              return;
+            }
+            if (!role) {
+              console.error('Selected role not found');
+              return;
+            }
+            const body = {
+              role: role.title,
+              walletAddress: walletAddress,
+            } as ChangeRolePOSTData;
+            const data = await mutateRole(body);
+            if (data) {
+              fetchMyProfile(walletAddress);
             }
           }}
           displayText={myProfile?.playingRole || ''}
@@ -125,6 +149,7 @@ export default function DeveloperMenu() {
             RoleDict.find(role => role.title == myProfile?.playingRole)?.id ||
             ''
           }
+          loading={loadingRole}
         />
         <View style={{gap: 8, marginTop: 24}}>
           <StyledButton onPress={onResetWelcomeScreen}>

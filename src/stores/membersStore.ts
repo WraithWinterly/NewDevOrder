@@ -12,7 +12,6 @@ type MemberStore = {
         teamInvites: TeamInvite[] | undefined;
       })
     | undefined;
-  setPlayingRole: (role: RoleType) => void;
 };
 
 const useMemberStore = create<MemberStore>((set, get) => ({
@@ -49,9 +48,6 @@ const useMemberStore = create<MemberStore>((set, get) => ({
     return;
   },
   myProfile: undefined,
-  setPlayingRole: (role: RoleType) => {
-    set(() => ({myProfile: {...get().myProfile!, playingRole: role}}));
-  },
 }));
 
 export default useMemberStore;

@@ -1,6 +1,12 @@
 import {Picker} from '@react-native-picker/picker';
 import {useId, useRef} from 'react';
-import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import StyledText from './styled/StyledText';
 import DropdownIcon from '../icons/DropdownIcon';
@@ -17,6 +23,7 @@ interface DropdownMenuProps {
   onSelect: (itemID: string, itemIndex: number) => void;
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 export default function DropdownMenu({
@@ -26,6 +33,7 @@ export default function DropdownMenu({
   onSelect,
   style,
   disabled = false,
+  loading = false,
 }: DropdownMenuProps) {
   const pickerRef = useRef<Picker<any>>(null);
   const id = useId();
@@ -48,18 +56,20 @@ export default function DropdownMenu({
             pickerRef.current.focus();
           }
         }}>
-        <StyledText style={{fontSize: 20}}>
+        <StyledText
+          style={{fontSize: 20, height: 26, justifyContent: 'center'}}>
           {/* {selectedTeamId
             ? teams?.find(team => team.id === selectedTeamId)?.title
             : 'Select Team'} */}
-          {displayText}
+          {!loading && displayText}
+          {loading && <ActivityIndicator color={Colors.Primary} />}
         </StyledText>
         <DropdownIcon />
       </TouchableOpacity>
 
       <Picker
         ref={pickerRef}
-        enabled={!disabled}
+        enabled={!disabled || loading}
         // selectedValue={selectedTeamId}
         selectedValue={selectedValue}
         itemStyle={{color: Colors.Text}}
