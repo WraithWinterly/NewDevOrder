@@ -3700,6 +3700,9 @@ export namespace Prisma {
     deadline: Date | null;
     stage: $Enums.BountyStage | null;
     aboutProject: string | null;
+    approvedByFounder: boolean | null;
+    approvedByManager: boolean | null;
+    approvedByValidator: boolean | null;
     reward: number | null;
     founderAddress: string | null;
     projectId: string | null;
@@ -3713,6 +3716,9 @@ export namespace Prisma {
     deadline: Date | null;
     stage: $Enums.BountyStage | null;
     aboutProject: string | null;
+    approvedByFounder: boolean | null;
+    approvedByManager: boolean | null;
+    approvedByValidator: boolean | null;
     reward: number | null;
     founderAddress: string | null;
     projectId: string | null;
@@ -3730,6 +3736,9 @@ export namespace Prisma {
     submissions: number;
     aboutProject: number;
     headerSections: number;
+    approvedByFounder: number;
+    approvedByManager: number;
+    approvedByValidator: number;
     reward: number;
     founderAddress: number;
     projectId: number;
@@ -3752,6 +3761,9 @@ export namespace Prisma {
     deadline?: true;
     stage?: true;
     aboutProject?: true;
+    approvedByFounder?: true;
+    approvedByManager?: true;
+    approvedByValidator?: true;
     reward?: true;
     founderAddress?: true;
     projectId?: true;
@@ -3765,6 +3777,9 @@ export namespace Prisma {
     deadline?: true;
     stage?: true;
     aboutProject?: true;
+    approvedByFounder?: true;
+    approvedByManager?: true;
+    approvedByValidator?: true;
     reward?: true;
     founderAddress?: true;
     projectId?: true;
@@ -3782,6 +3797,9 @@ export namespace Prisma {
     submissions?: true;
     aboutProject?: true;
     headerSections?: true;
+    approvedByFounder?: true;
+    approvedByManager?: true;
+    approvedByValidator?: true;
     reward?: true;
     founderAddress?: true;
     projectId?: true;
@@ -3889,6 +3907,9 @@ export namespace Prisma {
     submissions: string[];
     aboutProject: string | null;
     headerSections: JsonValue | null;
+    approvedByFounder: boolean;
+    approvedByManager: boolean;
+    approvedByValidator: boolean;
     reward: number;
     founderAddress: string | null;
     projectId: string | null;
@@ -3927,6 +3948,9 @@ export namespace Prisma {
       submissions?: boolean;
       aboutProject?: boolean;
       headerSections?: boolean;
+      approvedByFounder?: boolean;
+      approvedByManager?: boolean;
+      approvedByValidator?: boolean;
       reward?: boolean;
       founderAddress?: boolean;
       projectId?: boolean;
@@ -3948,6 +3972,9 @@ export namespace Prisma {
     submissions?: boolean;
     aboutProject?: boolean;
     headerSections?: boolean;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: boolean;
     founderAddress?: boolean;
     projectId?: boolean;
@@ -3981,6 +4008,9 @@ export namespace Prisma {
         submissions: string[];
         aboutProject: string | null;
         headerSections: Prisma.JsonValue | null;
+        approvedByFounder: boolean;
+        approvedByManager: boolean;
+        approvedByValidator: boolean;
         reward: number;
         founderAddress: string | null;
         projectId: string | null;
@@ -4479,6 +4509,9 @@ export namespace Prisma {
     readonly submissions: FieldRef<'Bounty', 'String[]'>;
     readonly aboutProject: FieldRef<'Bounty', 'String'>;
     readonly headerSections: FieldRef<'Bounty', 'Json'>;
+    readonly approvedByFounder: FieldRef<'Bounty', 'Boolean'>;
+    readonly approvedByManager: FieldRef<'Bounty', 'Boolean'>;
+    readonly approvedByValidator: FieldRef<'Bounty', 'Boolean'>;
     readonly reward: FieldRef<'Bounty', 'Int'>;
     readonly founderAddress: FieldRef<'Bounty', 'String'>;
     readonly projectId: FieldRef<'Bounty', 'String'>;
@@ -7263,6 +7296,9 @@ export namespace Prisma {
     submissions: 'submissions';
     aboutProject: 'aboutProject';
     headerSections: 'headerSections';
+    approvedByFounder: 'approvedByFounder';
+    approvedByManager: 'approvedByManager';
+    approvedByValidator: 'approvedByValidator';
     reward: 'reward';
     founderAddress: 'founderAddress';
     projectId: 'projectId';
@@ -7445,6 +7481,14 @@ export namespace Prisma {
   >;
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'Boolean'
+  >;
+
+  /**
    * Reference to a field of type 'RoleType[]'
    */
   export type ListEnumRoleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
@@ -7458,14 +7502,6 @@ export namespace Prisma {
   export type EnumRoleTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
     'RoleType'
-  >;
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    'Boolean'
   >;
 
   /**
@@ -7657,6 +7693,9 @@ export namespace Prisma {
     submissions?: StringNullableListFilter<'Bounty'>;
     aboutProject?: StringNullableFilter<'Bounty'> | string | null;
     headerSections?: JsonNullableFilter<'Bounty'>;
+    approvedByFounder?: BoolFilter<'Bounty'> | boolean;
+    approvedByManager?: BoolFilter<'Bounty'> | boolean;
+    approvedByValidator?: BoolFilter<'Bounty'> | boolean;
     reward?: IntFilter<'Bounty'> | number;
     founderAddress?: StringNullableFilter<'Bounty'> | string | null;
     projectId?: StringNullableFilter<'Bounty'> | string | null;
@@ -7676,6 +7715,9 @@ export namespace Prisma {
     submissions?: SortOrder;
     aboutProject?: SortOrderInput | SortOrder;
     headerSections?: SortOrderInput | SortOrder;
+    approvedByFounder?: SortOrder;
+    approvedByManager?: SortOrder;
+    approvedByValidator?: SortOrder;
     reward?: SortOrder;
     founderAddress?: SortOrderInput | SortOrder;
     projectId?: SortOrderInput | SortOrder;
@@ -7699,6 +7741,9 @@ export namespace Prisma {
       submissions?: StringNullableListFilter<'Bounty'>;
       aboutProject?: StringNullableFilter<'Bounty'> | string | null;
       headerSections?: JsonNullableFilter<'Bounty'>;
+      approvedByFounder?: BoolFilter<'Bounty'> | boolean;
+      approvedByManager?: BoolFilter<'Bounty'> | boolean;
+      approvedByValidator?: BoolFilter<'Bounty'> | boolean;
       reward?: IntFilter<'Bounty'> | number;
       founderAddress?: StringNullableFilter<'Bounty'> | string | null;
       projectId?: StringNullableFilter<'Bounty'> | string | null;
@@ -7720,6 +7765,9 @@ export namespace Prisma {
     submissions?: SortOrder;
     aboutProject?: SortOrderInput | SortOrder;
     headerSections?: SortOrderInput | SortOrder;
+    approvedByFounder?: SortOrder;
+    approvedByManager?: SortOrder;
+    approvedByValidator?: SortOrder;
     reward?: SortOrder;
     founderAddress?: SortOrderInput | SortOrder;
     projectId?: SortOrderInput | SortOrder;
@@ -7749,6 +7797,9 @@ export namespace Prisma {
     submissions?: StringNullableListFilter<'Bounty'>;
     aboutProject?: StringNullableWithAggregatesFilter<'Bounty'> | string | null;
     headerSections?: JsonNullableWithAggregatesFilter<'Bounty'>;
+    approvedByFounder?: BoolWithAggregatesFilter<'Bounty'> | boolean;
+    approvedByManager?: BoolWithAggregatesFilter<'Bounty'> | boolean;
+    approvedByValidator?: BoolWithAggregatesFilter<'Bounty'> | boolean;
     reward?: IntWithAggregatesFilter<'Bounty'> | number;
     founderAddress?:
       | StringNullableWithAggregatesFilter<'Bounty'>
@@ -8101,6 +8152,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     founder?: MemberCreateNestedOneWithoutBountiesInput;
     project?: ProjectCreateNestedOneWithoutBountiesInput;
@@ -8118,6 +8172,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     founderAddress?: string | null;
     projectId?: string | null;
@@ -8135,6 +8192,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     founder?: MemberUpdateOneWithoutBountiesNestedInput;
     project?: ProjectUpdateOneWithoutBountiesNestedInput;
@@ -8152,6 +8212,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     founderAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     projectId?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -8169,6 +8232,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     founderAddress?: string | null;
     projectId?: string | null;
@@ -8186,6 +8252,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
   };
 
@@ -8201,6 +8270,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     founderAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     projectId?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -8669,6 +8741,11 @@ export namespace Prisma {
       | JsonNullValueFilter;
   };
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
+    not?: NestedBoolFilter<$PrismaModel> | boolean;
+  };
+
   export type MemberNullableRelationFilter = {
     is?: MemberWhereInput | null;
     isNot?: MemberWhereInput | null;
@@ -8696,6 +8773,9 @@ export namespace Prisma {
     submissions?: SortOrder;
     aboutProject?: SortOrder;
     headerSections?: SortOrder;
+    approvedByFounder?: SortOrder;
+    approvedByManager?: SortOrder;
+    approvedByValidator?: SortOrder;
     reward?: SortOrder;
     founderAddress?: SortOrder;
     projectId?: SortOrder;
@@ -8713,6 +8793,9 @@ export namespace Prisma {
     deadline?: SortOrder;
     stage?: SortOrder;
     aboutProject?: SortOrder;
+    approvedByFounder?: SortOrder;
+    approvedByManager?: SortOrder;
+    approvedByValidator?: SortOrder;
     reward?: SortOrder;
     founderAddress?: SortOrder;
     projectId?: SortOrder;
@@ -8726,6 +8809,9 @@ export namespace Prisma {
     deadline?: SortOrder;
     stage?: SortOrder;
     aboutProject?: SortOrder;
+    approvedByFounder?: SortOrder;
+    approvedByManager?: SortOrder;
+    approvedByValidator?: SortOrder;
     reward?: SortOrder;
     founderAddress?: SortOrder;
     projectId?: SortOrder;
@@ -8826,6 +8912,14 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>;
   };
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedBoolFilter<$PrismaModel>;
+    _max?: NestedBoolFilter<$PrismaModel>;
+  };
+
   export type EnumRoleTypeNullableListFilter<$PrismaModel = never> = {
     equals?:
       | $Enums.RoleType[]
@@ -8842,11 +8936,6 @@ export namespace Prisma {
     in?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>;
     notIn?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>;
     not?: NestedEnumRoleTypeFilter<$PrismaModel> | $Enums.RoleType;
-  };
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
-    not?: NestedBoolFilter<$PrismaModel> | boolean;
   };
 
   export type TeamInviteListRelationFilter = {
@@ -8945,14 +9034,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumRoleTypeFilter<$PrismaModel>;
     _max?: NestedEnumRoleTypeFilter<$PrismaModel>;
-  };
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedBoolFilter<$PrismaModel>;
-    _max?: NestedBoolFilter<$PrismaModel>;
   };
 
   export type TeamInviteCountOrderByAggregateInput = {
@@ -9284,6 +9365,10 @@ export namespace Prisma {
     set?: string | null;
   };
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean;
+  };
+
   export type MemberUpdateOneWithoutBountiesNestedInput = {
     create?: XOR<
       MemberCreateWithoutBountiesInput,
@@ -9490,10 +9575,6 @@ export namespace Prisma {
   export type MemberUpdateteamsJoinedInput = {
     set?: string[];
     push?: string | string[];
-  };
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean;
   };
 
   export type TeamInviteUpdateManyWithoutMemberNestedInput = {
@@ -9935,6 +10016,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null;
   };
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
+    not?: NestedBoolFilter<$PrismaModel> | boolean;
+  };
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
@@ -10033,16 +10119,19 @@ export namespace Prisma {
       | JsonNullValueFilter;
   };
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedBoolFilter<$PrismaModel>;
+    _max?: NestedBoolFilter<$PrismaModel>;
+  };
+
   export type NestedEnumRoleTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.RoleType | EnumRoleTypeFieldRefInput<$PrismaModel>;
     in?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>;
     notIn?: $Enums.RoleType[] | ListEnumRoleTypeFieldRefInput<$PrismaModel>;
     not?: NestedEnumRoleTypeFilter<$PrismaModel> | $Enums.RoleType;
-  };
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
-    not?: NestedBoolFilter<$PrismaModel> | boolean;
   };
 
   export type NestedEnumRoleTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -10055,14 +10144,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumRoleTypeFilter<$PrismaModel>;
     _max?: NestedEnumRoleTypeFilter<$PrismaModel>;
-  };
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedBoolFilter<$PrismaModel>;
-    _max?: NestedBoolFilter<$PrismaModel>;
   };
 
   export type MemberCreateWithoutTeamsInput = {
@@ -10280,6 +10361,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     founder?: MemberCreateNestedOneWithoutBountiesInput;
   };
@@ -10296,6 +10380,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     founderAddress?: string | null;
   };
@@ -10404,6 +10491,9 @@ export namespace Prisma {
     submissions?: StringNullableListFilter<'Bounty'>;
     aboutProject?: StringNullableFilter<'Bounty'> | string | null;
     headerSections?: JsonNullableFilter<'Bounty'>;
+    approvedByFounder?: BoolFilter<'Bounty'> | boolean;
+    approvedByManager?: BoolFilter<'Bounty'> | boolean;
+    approvedByValidator?: BoolFilter<'Bounty'> | boolean;
     reward?: IntFilter<'Bounty'> | number;
     founderAddress?: StringNullableFilter<'Bounty'> | string | null;
     projectId?: StringNullableFilter<'Bounty'> | string | null;
@@ -10694,6 +10784,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     project?: ProjectCreateNestedOneWithoutBountiesInput;
   };
@@ -10710,6 +10803,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     projectId?: string | null;
   };
@@ -11171,6 +11267,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     founderAddress?: string | null;
   };
@@ -11187,6 +11286,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     founder?: MemberUpdateOneWithoutBountiesNestedInput;
   };
@@ -11203,6 +11305,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     founderAddress?: NullableStringFieldUpdateOperationsInput | string | null;
   };
@@ -11219,6 +11324,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     founderAddress?: NullableStringFieldUpdateOperationsInput | string | null;
   };
@@ -11243,6 +11351,9 @@ export namespace Prisma {
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
     reward?: number;
     projectId?: string | null;
   };
@@ -11301,6 +11412,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     project?: ProjectUpdateOneWithoutBountiesNestedInput;
   };
@@ -11317,6 +11431,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     projectId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
@@ -11333,6 +11450,9 @@ export namespace Prisma {
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     projectId?: NullableStringFieldUpdateOperationsInput | string | null;
   };

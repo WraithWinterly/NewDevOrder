@@ -11,7 +11,7 @@ import TeamsIcon from 'src/components/icons/TeamsIcon';
 import CalendarIcon from 'src/components/icons/CalendarIcon';
 import CashIcon from 'src/components/icons/CashIcon';
 import {Colors} from 'src/styles/styles';
-import {formatTimeAgo} from 'src/utils/utils';
+import {didIApprove, formatTimeAgo} from 'src/utils/utils';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 
 import {StackParamList} from 'src/StackNavigator';
@@ -26,8 +26,15 @@ import {Bounty, Member, Project} from 'prisma/generated';
 import useQuery from 'src/hooks/useQuery';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useMutation from 'src/hooks/usePost';
-import {CreateBountyPostData, SubmitDraftBountyPostData} from 'src/sharedTypes';
+import {
+  CreateBountyPostData,
+  SetApproveBountyPostData,
+  SubmitDraftBountyPostData,
+} from 'src/sharedTypes';
 import useSolanaContext from 'src/web3/SolanaProvider';
+import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
+import useMemberStore from 'src/stores/membersStore';
+import {RoleType} from 'prisma/generated';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
@@ -52,8 +59,9 @@ export default function ViewBounty({route, navigation}: Props) {
 
   const createBountyData = useBountyStore(state => state.createBountyData);
   const selectedBounty = useBountyStore(state => state.selectedBounty);
-
+  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
   const project = useProjectsStore(state => state.selectedProject);
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
   const setSelectedProject = useProjectsStore(
     state => state.setSelectedProject,
   );
@@ -82,6 +90,11 @@ export default function ViewBounty({route, navigation}: Props) {
     getServerEndpoint(Endpoints.SUBMIT_BOUNTY_DRAFT),
   );
 
+  const setBountyApproval = useMutation(
+    getServerEndpoint(Endpoints.SET_BOUNTY_APPROVAL),
+  );
+  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
+
   async function onSubmitCreateBounty(draft: boolean) {
     if (!createBountyData) {
       console.error('No create bounty data');
@@ -101,6 +114,37 @@ export default function ViewBounty({route, navigation}: Props) {
     if (data) {
       setSelectedProject(body.bounty.projectID);
       navigation.navigate('DesignerWorkspaceNavigator');
+    }
+  }
+
+  async function toggleApproval() {
+    if (!walletAddress) {
+      console.error('No walletAddress');
+      return;
+    }
+    if (!bounty?.id) {
+      console.error('No bounty id');
+      return;
+    }
+    if (!playingRole) {
+      console.error('No playingRole');
+      return;
+    }
+    if (!bounty?.projectId) {
+      console.error('No projectId');
+      return;
+    }
+
+    const body: SetApproveBountyPostData = {
+      approve: !didIApprove(bounty, playingRole),
+      bountyID: bounty.id,
+      walletAddress: walletAddress,
+    };
+    const data = await setBountyApproval.mutate(body);
+    if (data) {
+      fetchBounties();
+      setSelectedBounty(bounty.id);
+      navigation.replace('ViewBounty');
     }
   }
 
@@ -178,6 +222,9 @@ export default function ViewBounty({route, navigation}: Props) {
       founderAddress: project.founder.walletAddress,
       description: createBountyData.description,
       deadline: createBountyData.deadline,
+      approvedByFounder: false,
+      approvedByManager: false,
+      approvedByValidator: false,
       aboutProject: createBountyData.description,
       submissions: [], // Assuming it's an empty array for now
       headerSections: createBountyData.headerSections,
@@ -198,24 +245,57 @@ export default function ViewBounty({route, navigation}: Props) {
     updateStartedBy();
   }, [bounty, bounties, teams]);
 
-  // useEffect(() => {
-  //   updateStartedBy();
-  // }, []);
-
-  // console.log(bounty?.headerSections || {});
-
   const headerSections =
     (bounty?.headerSections as {[x: string]: string[]}) || {};
 
   return (
     <Layout>
       <View style={{height: '100%'}}>
-        {isDesigner && (
+        {isDesigner && bounty?.stage === 'Draft' && (
           <View>
             <StyledText style={{fontSize: 24}}>Review your bounty</StyledText>
             <StyledText>
               This will be posted on the bounty feed when submitted and reviewed
             </StyledText>
+            <Separator />
+          </View>
+        )}
+        {bounty?.stage === 'PendingApproval' && (
+          <View>
+            <StyledText style={{fontSize: 24}}>Pending Approval</StyledText>
+            <StyledText>
+              Still waiting approval from the following members:
+            </StyledText>
+            <View style={{height: 24}} />
+            <StyledCheckbox
+              value={bounty.approvedByFounder}
+              onValueChange={() => {}}
+              title="Founder"
+            />
+            <StyledCheckbox
+              value={bounty.approvedByManager}
+              onValueChange={() => {}}
+              title="Bounty Manager"
+            />
+            <StyledCheckbox
+              value={bounty.approvedByValidator}
+              onValueChange={() => {}}
+              title="Bounty Validator"
+            />
+            <View style={{height: 24}} />
+            {(playingRole === RoleType.Founder ||
+              playingRole === RoleType.BountyManager ||
+              playingRole === RoleType.BountyValidator) && (
+              <StyledButton
+                loading={setBountyApproval.loading}
+                error={!!setBountyApproval.error}
+                onPress={() => {
+                  toggleApproval();
+                }}
+                type="normal2">
+                {didIApprove(bounty, playingRole) ? 'Unapprove' : 'Approve'}
+              </StyledButton>
+            )}
             <Separator />
           </View>
         )}
@@ -268,35 +348,41 @@ export default function ViewBounty({route, navigation}: Props) {
                 Add test cases
               </StyledButton>
             ) : (
-              <StyledButton
-                type="normal2"
-                onPress={() => navigation.navigate('AddTestCases')}>
-                View submissions
-              </StyledButton>
+              bounty?.stage === 'Active' && (
+                <StyledButton
+                  type="normal2"
+                  onPress={() => navigation.navigate('AddTestCases')}>
+                  View submissions
+                </StyledButton>
+              )
             )
           ) : (
-            <View>
-              <StyledButton
-                type="normal2"
-                onPress={() => navigation.navigate('StartBounty')}>
-                Start Bounty
-              </StyledButton>
+            bounty?.stage === 'Active' && (
+              <View>
+                <StyledButton
+                  type="normal2"
+                  onPress={() => navigation.navigate('StartBounty')}>
+                  Start Bounty
+                </StyledButton>
 
-              {startedByTeams.length > 0 && (
-                <View style={{paddingLeft: 8}}>
-                  <View style={{height: 12}}></View>
+                {startedByTeams.length > 0 && (
+                  <View style={{paddingLeft: 8}}>
+                    <View style={{height: 12}}></View>
 
-                  {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
-                  <StyledText key={`${0}-${id2}`}>
-                    Started by:{' '}
-                    {startedByTeams.map(
-                      (team, i) =>
-                        `${team}${i === startedByTeams.length - 1 ? '' : ', '}`,
-                    )}
-                  </StyledText>
-                </View>
-              )}
-            </View>
+                    {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
+                    <StyledText key={`${0}-${id2}`}>
+                      Started by:{' '}
+                      {startedByTeams.map(
+                        (team, i) =>
+                          `${team}${
+                            i === startedByTeams.length - 1 ? '' : ', '
+                          }`,
+                      )}
+                    </StyledText>
+                  </View>
+                )}
+              </View>
+            )
           )}
         </View>
         <ScrollView>

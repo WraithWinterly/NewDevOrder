@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {ScrollView} from 'react-native';
 import BountyList from 'src/components/home/BountyList';
 import Layout from 'src/layout/Layout';
 import useProjectsStore from 'src/stores/projectsStore';
@@ -20,16 +21,24 @@ export default function PendingSubmissions() {
     });
   }
 
-  const shown = bounties?.filter(bounty => bounty.stage === 'Active');
+  const [pendingBounties, setPendingBounties] = useState<typeof bounties>([]);
+
+  useEffect(() => {
+    setPendingBounties(bounties?.filter(bounty => bounty.stage === 'Active'));
+  }, [bounties]);
 
   return (
     <Layout>
-      <BountyList
-        refreshing={refreshing}
-        bounties={shown}
-        onRefresh={onRefresh}
-        validatorView
-      />
+      <ScrollView>
+        {!!pendingBounties && (
+          <BountyList
+            refreshing={refreshing}
+            bounties={pendingBounties}
+            onRefresh={onRefresh}
+            validatorView
+          />
+        )}
+      </ScrollView>
     </Layout>
   );
 }

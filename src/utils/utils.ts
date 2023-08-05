@@ -1,3 +1,5 @@
+import {Bounty, RoleType} from 'prisma/generated';
+
 export function formatTimeAgo(date: Date) {
   const ensuredDate = new Date(date);
 
@@ -45,4 +47,25 @@ export function formatTimeAgo(date: Date) {
   } else {
     return 'just now';
   }
+}
+
+export function didIApprove(bounty: Bounty, playingRole: RoleType) {
+  if (!bounty?.id) {
+    return;
+  }
+  let didIApprove = false;
+  switch (playingRole) {
+    case RoleType.Founder:
+      didIApprove = bounty.approvedByFounder;
+      break;
+    case RoleType.BountyManager:
+      didIApprove = bounty.approvedByManager;
+      break;
+    case RoleType.BountyValidator:
+      didIApprove = bounty.approvedByValidator;
+      break;
+    default:
+      didIApprove = false;
+  }
+  return didIApprove;
 }

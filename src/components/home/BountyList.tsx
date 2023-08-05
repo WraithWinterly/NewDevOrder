@@ -18,6 +18,7 @@ import CheckIcon from '../icons/CheckIcon';
 import WarningIcon from '../icons/WarningIcon';
 import StyledButton from '../ui/styled/StyledButton';
 import {Bounty, Project} from 'prisma/generated';
+import {BountyStage} from 'prisma/generated';
 
 export default function BountyList({
   bounties,
@@ -101,6 +102,18 @@ export default function BountyList({
               <StyledText>Required action: Add test cases</StyledText>
             </View>
           )}
+          {bounty.stage === 'PendingApproval' && (
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 6,
+                alignItems: 'center',
+                paddingVertical: 8,
+              }}>
+              <WarningIcon />
+              <StyledText>Pending Approvals</StyledText>
+            </View>
+          )}
           {validatorView && bounty.stage === 'Active' && (
             <View
               style={{
@@ -177,22 +190,25 @@ export default function BountyList({
               Teams Currently Hacking: {bounty.participantsTeamIDs.length}
             </StyledText>
           </View>
-          {bounty.stage === 'Active' && !designerView && !validatorView && (
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 8,
-                paddingTop: 8,
-              }}
-              onPress={() => {
-                setSelectedFullBounty(bounty.id);
-                navigation.navigate('ViewBounty');
-              }}>
-              <StyledText style={{color: '#D0BCFF'}}>View Details</StyledText>
-              <RightArrowIcon />
-            </TouchableOpacity>
-          )}
+          {(bounty.stage === BountyStage.Active ||
+            bounty.stage === BountyStage.PendingApproval) &&
+            !designerView &&
+            !validatorView && (
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                  paddingTop: 8,
+                }}
+                onPress={() => {
+                  setSelectedFullBounty(bounty.id);
+                  navigation.navigate('ViewBounty');
+                }}>
+                <StyledText style={{color: '#D0BCFF'}}>View Details</StyledText>
+                <RightArrowIcon />
+              </TouchableOpacity>
+            )}
           {designerView && bounty.stage === 'Active' && (
             <View
               style={{
