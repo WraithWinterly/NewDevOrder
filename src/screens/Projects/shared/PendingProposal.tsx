@@ -1,11 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RoleType} from 'prisma/generated';
+import {useState} from 'react';
 import {Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StackParamList} from 'src/StackNavigator';
 import MemberBox from 'src/components/MemberBox';
+import BountyList from 'src/components/home/BountyList';
 import RightArrowIcon from 'src/components/icons/RightArrowIcon';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
@@ -19,7 +21,13 @@ export default function PendingProposal() {
   const proj = useProjectsStore(state => state.selectedProject);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const role = useMemberStore(state => state.myProfile?.playingRole);
+  const bounties = useProjectsStore(state => state.bountiesForProject);
 
+  const viewBounties = bounties?.filter(
+    bounty => bounty.stage === 'PendingApproval',
+  );
+
+  const [refreshing, setRefreshing] = useState(false);
   return (
     <Layout>
       <ScrollView>
@@ -149,6 +157,18 @@ export default function PendingProposal() {
               <Separator customH={8} />
             </View>
           )}
+        {viewBounties && viewBounties.length > 0 && (
+          <View>
+            <StyledText
+              style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
+              Your todo: Pending Approvals
+            </StyledText>
+            <BountyList
+              bounties={viewBounties}
+              onRefresh={() => setRefreshing(true)}
+              refreshing={refreshing}></BountyList>
+          </View>
+        )}
       </ScrollView>
     </Layout>
   );

@@ -56,8 +56,9 @@ export namespace $Enums {
   export const BountyStage: {
     Active: 'Active';
     Draft: 'Draft';
-    Completed: 'Completed';
+    PendingApproval: 'PendingApproval';
     ReadyForTests: 'ReadyForTests';
+    Completed: 'Completed';
   };
 
   export type BountyStage = (typeof BountyStage)[keyof typeof BountyStage];

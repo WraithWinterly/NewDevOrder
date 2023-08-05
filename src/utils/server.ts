@@ -18,6 +18,7 @@ export enum Endpoints {
   GET_BOUNTY_BY_ID = '/get-bounty-by-id',
   START_BOUNTY = '/start-bounty',
   CREATE_BOUNTY = '/create-bounty',
+  SUBMIT_BOUNTY_DRAFT = '/submit-bounty-draft',
   // TEAMS
   GET_TEAMS = '/get-teams',
   GET_TEAM_BY_ID = '/get-team-by-id',

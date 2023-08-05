@@ -26,7 +26,7 @@ import {Bounty, Member, Project} from 'prisma/generated';
 import useQuery from 'src/hooks/useQuery';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useMutation from 'src/hooks/usePost';
-import {CreateBountyPostData} from 'src/sharedTypes';
+import {CreateBountyPostData, SubmitDraftBountyPostData} from 'src/sharedTypes';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
@@ -39,6 +39,7 @@ export default function ViewBounty({route, navigation}: Props) {
   const id3 = useId();
   // const route = useRoute <RouteProp<StackParamList>();
   const isValidator = route.params?.isValidator ?? false;
+  const isDesignerCreation = route.params?.isDesignerCreation ?? false;
   const isDesigner = route.params?.isDesigner ?? false;
 
   const walletAddress = useSolanaContext()
@@ -53,7 +54,9 @@ export default function ViewBounty({route, navigation}: Props) {
   const selectedBounty = useBountyStore(state => state.selectedBounty);
 
   const project = useProjectsStore(state => state.selectedProject);
-  const fetchBounties = useBountyStore(state => state.fetchBounties);
+  const setSelectedProject = useProjectsStore(
+    state => state.setSelectedProject,
+  );
 
   function updateStartedBy() {
     if (!bounties) return;
@@ -75,6 +78,9 @@ export default function ViewBounty({route, navigation}: Props) {
   >(undefined);
 
   const createBounty = useMutation(getServerEndpoint(Endpoints.CREATE_BOUNTY));
+  const submitBountyDraft = useMutation(
+    getServerEndpoint(Endpoints.SUBMIT_BOUNTY_DRAFT),
+  );
 
   async function onSubmitCreateBounty(draft: boolean) {
     if (!createBountyData) {
@@ -93,13 +99,37 @@ export default function ViewBounty({route, navigation}: Props) {
     };
     const data = await createBounty.mutate(body);
     if (data) {
-      fetchBounties();
+      setSelectedProject(body.bounty.projectID);
+      navigation.navigate('DesignerWorkspaceNavigator');
+    }
+  }
+
+  async function onSubmitSendBounty() {
+    if (!walletAddress) {
+      console.error('No wallet address');
+      return;
+    }
+    if (!bounty?.id) {
+      console.error('No bounty id');
+      return;
+    }
+    if (!bounty?.projectId) {
+      console.error('No projectId');
+      return;
+    }
+    const body: SubmitDraftBountyPostData = {
+      bountyID: bounty?.id,
+      walletAddress: walletAddress,
+    };
+    const data = await submitBountyDraft.mutate(body);
+    if (data) {
+      setSelectedProject(bounty.projectId);
       navigation.navigate('DesignerWorkspaceNavigator');
     }
   }
 
   useEffect(() => {
-    if (isDesigner && !!createBountyData) {
+    if (isDesigner && isDesignerCreation && !!createBountyData) {
       setBounty(coerceIntoBounty());
     } else {
       setBounty(selectedBounty);
@@ -150,7 +180,7 @@ export default function ViewBounty({route, navigation}: Props) {
       deadline: createBountyData.deadline,
       aboutProject: createBountyData.description,
       submissions: [], // Assuming it's an empty array for now
-      headerSections: createBountyData.headerSections, // Assuming it's null for now
+      headerSections: createBountyData.headerSections,
       projectId: null, // Assuming it's null for now
       project: {
         ...project,
@@ -202,16 +232,34 @@ export default function ViewBounty({route, navigation}: Props) {
             zIndex: 1,
           }}>
           {isDesigner ? (
-            <View style={{gap: 12}}>
-              <StyledButton
-                type="normal2"
-                onPress={() => onSubmitCreateBounty(true)}>
-                Save as Draft
-              </StyledButton>
-              <StyledButton onPress={() => onSubmitCreateBounty(false)}>
-                Send for approval
-              </StyledButton>
-            </View>
+            isDesignerCreation ? (
+              <View style={{gap: 12}}>
+                <StyledButton
+                  type="normal2"
+                  onPress={() => onSubmitCreateBounty(true)}
+                  loading={createBounty.loading}
+                  error={!!createBounty.error}>
+                  Create and save as Draft
+                </StyledButton>
+                <StyledButton
+                  onPress={() => onSubmitCreateBounty(false)}
+                  loading={createBounty.loading}
+                  error={!!createBounty.error}>
+                  Create and send for approval
+                </StyledButton>
+              </View>
+            ) : (
+              <View>
+                {bounty?.stage === 'Draft' && (
+                  <StyledButton
+                    onPress={() => onSubmitSendBounty()}
+                    loading={submitBountyDraft.loading}
+                    error={!!submitBountyDraft.error}>
+                    Send for approval
+                  </StyledButton>
+                )}
+              </View>
+            )
           ) : isValidator ? (
             bounty?.stage === 'ReadyForTests' ? (
               <StyledButton

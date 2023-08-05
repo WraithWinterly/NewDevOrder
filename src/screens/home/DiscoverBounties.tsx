@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {ScrollView} from 'react-native-gesture-handler';
 import BountyList from 'src/components/home/BountyList';
 import SearchIcon from 'src/components/icons/SearchIcon';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
@@ -38,19 +39,21 @@ export default function DiscoverBounties() {
 
   return (
     <Layout>
-      <StyledTextInput
-        value={searchText}
-        onChangeText={e => setSearchBounties(e)}
-        placeholder="Search Bounties"
-        icon={<SearchIcon />}
-      />
-      {!!bountiesWithSearch && (
-        <BountyList
-          refreshing={refreshing}
-          bounties={bountiesWithSearch}
-          onRefresh={onRefresh}
+      <ScrollView>
+        <StyledTextInput
+          value={searchText}
+          onChangeText={e => setSearchBounties(e)}
+          placeholder="Search Bounties"
+          icon={<SearchIcon />}
         />
-      )}
+        {!!bountiesWithSearch && (
+          <BountyList
+            refreshing={refreshing}
+            bounties={bountiesWithSearch}
+            onRefresh={onRefresh}
+          />
+        )}
+      </ScrollView>
     </Layout>
   );
 }

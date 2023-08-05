@@ -19,8 +19,9 @@ exports.BountyType = exports.$Enums.BountyType = {
 exports.BountyStage = exports.$Enums.BountyStage = {
   Active: 'Active',
   Draft: 'Draft',
-  Completed: 'Completed',
+  PendingApproval: 'PendingApproval',
   ReadyForTests: 'ReadyForTests',
+  Completed: 'Completed',
 };
 
 exports.RoleType = exports.$Enums.RoleType = {

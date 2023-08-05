@@ -53,6 +53,7 @@ export type StackParamList = WelcomeStackParamList &
       | {
           isValidator?: boolean;
           isDesigner?: boolean;
+          isDesignerCreation?: boolean;
         }
       | undefined;
     StartBounty: undefined;

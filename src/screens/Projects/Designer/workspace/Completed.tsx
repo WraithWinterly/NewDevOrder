@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {ScrollView} from 'react-native';
 import BountyList from 'src/components/home/BountyList';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
@@ -27,34 +28,38 @@ export default function Completed() {
     setShownBounties(
       bounties?.filter(
         bounty =>
-          bounty.stage === 'Completed' || bounty.stage === 'ReadyForTests',
+          bounty.stage === 'Completed' ||
+          bounty.stage === 'ReadyForTests' ||
+          bounty.stage === 'PendingApproval',
       ),
     );
   }, [bounties]);
 
   return (
     <Layout>
-      {shownBounties && (
-        <>
-          <BountyList
-            refreshing={refreshing}
-            bounties={shownBounties}
-            onRefresh={onRefresh}
-            designerView
-          />
-          {shownBounties?.length === 0 && (
-            <StyledText
-              style={{
-                textAlign: 'center',
-                marginTop: 32,
-                fontWeight: '500',
-                fontSize: 18,
-              }}>
-              There are no completed bounties currently.
-            </StyledText>
-          )}
-        </>
-      )}
+      <ScrollView>
+        {shownBounties && (
+          <>
+            <BountyList
+              refreshing={refreshing}
+              bounties={shownBounties}
+              onRefresh={onRefresh}
+              designerView
+            />
+            {shownBounties?.length === 0 && (
+              <StyledText
+                style={{
+                  textAlign: 'center',
+                  marginTop: 32,
+                  fontWeight: '500',
+                  fontSize: 18,
+                }}>
+                There are no completed bounties currently.
+              </StyledText>
+            )}
+          </>
+        )}
+      </ScrollView>
     </Layout>
   );
 }

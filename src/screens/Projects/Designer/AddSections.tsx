@@ -45,6 +45,7 @@ export default function AddSections() {
     });
     navigation.navigate('ViewBounty', {
       isDesigner: true,
+      isDesignerCreation: true,
     });
   }
 

@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {ScrollView} from 'react-native-gesture-handler';
 import BountyList from 'src/components/home/BountyList';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
@@ -25,27 +26,29 @@ export default function ActiveBounties() {
 
   return (
     <Layout>
-      {shown && (
-        <>
-          <BountyList
-            refreshing={refreshing}
-            bounties={shown}
-            onRefresh={onRefresh}
-            designerView
-          />
-          {shown?.length === 0 && (
-            <StyledText
-              style={{
-                textAlign: 'center',
-                marginTop: 32,
-                fontWeight: '500',
-                fontSize: 18,
-              }}>
-              There are no drafts currently.
-            </StyledText>
-          )}
-        </>
-      )}
+      <ScrollView>
+        {shown && (
+          <>
+            <BountyList
+              refreshing={refreshing}
+              bounties={shown}
+              onRefresh={onRefresh}
+              designerView
+            />
+            {shown?.length === 0 && (
+              <StyledText
+                style={{
+                  textAlign: 'center',
+                  marginTop: 32,
+                  fontWeight: '500',
+                  fontSize: 18,
+                }}>
+                There are no drafts currently.
+              </StyledText>
+            )}
+          </>
+        )}
+      </ScrollView>
     </Layout>
   );
 }

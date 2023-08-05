@@ -66,11 +66,12 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
       );
 
       const dataID = resultBounties as Bounty[];
-
-      set(() => ({selectedProject: data}));
-      set(() => ({
-        bountiesForProject: resultBounties,
-      }));
+      if (dataID) {
+        set(() => ({selectedProject: data}));
+        set(() => ({
+          bountiesForProject: resultBounties,
+        }));
+      }
     }
   },
 
