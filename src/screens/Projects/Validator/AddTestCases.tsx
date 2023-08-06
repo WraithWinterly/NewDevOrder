@@ -11,19 +11,61 @@ import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
+import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
+import {SetTestCasesPostData} from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';
 import {Colors} from 'src/styles/styles';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function AddTestCases() {
   const selectedFullBounty = useBountyStore(state => state.selectedBounty);
-  const [testCases, setTestCases] = useState<string[]>([]);
+  const [testCases, setTestCases] = useState<string[]>(
+    selectedFullBounty?.testCases || [],
+  );
   const [addingTestCase, setAddingTestCase] = useState(false);
 
   const [newTestCase, setNewTestCase] = useState('');
 
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
+  const addTestCases = useMutation(getServerEndpoint(Endpoints.ADD_TEST_CASES));
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
+  function validate() {
+    if (testCases.length === 0) {
+      return false;
+    }
+    return true;
+  }
+
+  async function onSubmit() {
+    if (!validate()) {
+      return;
+    }
+    if (!selectedFullBounty?.id) {
+      console.error('No bounty selected');
+      return;
+    }
+    if (!walletAddress) {
+      console.error('No wallet address');
+      return;
+    }
+    const body: SetTestCasesPostData = {
+      bountyID: selectedFullBounty.id,
+      testCases,
+      walletAddress,
+    };
+    const data = await addTestCases.mutate(body);
+    if (data) {
+      fetchBounties();
+      navigation.navigate('ValidatorNavigator');
+    }
+  }
+
   return (
     <Layout>
       <ScrollView>
@@ -76,15 +118,14 @@ export default function AddTestCases() {
         )}
         <Separator customH={12} />
         {testCases.map((testCase, index) => (
-          <View style={{gap: 10, paddingTop: 16}}>
+          <View style={{gap: 10, paddingTop: 16}} key={`${id}-${index}`}>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 gap: 10,
                 marginTop: 12,
-              }}
-              key={`${id}-${index}`}>
+              }}>
               <View>
                 <StyledText style={{fontSize: 20, fontWeight: '500'}}>
                   Test Case {index + 1}
@@ -150,9 +191,10 @@ export default function AddTestCases() {
         <View style={{height: 64}}></View>
         <StyledButton
           type="normal2"
-          onPress={() => {
-            navigation.navigate('ValidatorNavigator');
-          }}>
+          onPress={onSubmit}
+          enabled={validate()}
+          loading={addTestCases.loading}
+          error={!!addTestCases.error}>
           Submit Test Cases
         </StyledButton>
         <View style={{height: 24}}></View>

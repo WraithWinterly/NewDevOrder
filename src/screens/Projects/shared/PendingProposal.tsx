@@ -53,7 +53,7 @@ export default function PendingProposal() {
       <ScrollView>
         <StyledText
           style={{fontSize: 26, fontWeight: 'bold', marginBottom: 22}}>
-          Pending Proposal
+          {proj?.stage === 'Ready' ? 'Active Project' : 'Pending Proposal'}
         </StyledText>
         {role === RoleType.Founder &&
         proj?.quotePrice &&

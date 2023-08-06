@@ -144,7 +144,7 @@ export default function ViewBounty({route, navigation}: Props) {
     if (data) {
       fetchBounties();
       setSelectedBounty(bounty.id);
-      navigation.replace('ViewBounty');
+      // navigation.replace('ViewBounty');
     }
   }
 
@@ -225,6 +225,7 @@ export default function ViewBounty({route, navigation}: Props) {
       approvedByFounder: false,
       approvedByManager: false,
       approvedByValidator: false,
+      testCases: [],
       aboutProject: createBountyData.description,
       submissions: [], // Assuming it's an empty array for now
       headerSections: createBountyData.headerSections,
@@ -341,23 +342,23 @@ export default function ViewBounty({route, navigation}: Props) {
               </View>
             )
           ) : isValidator ? (
-            bounty?.stage === 'ReadyForTests' ? (
+            bounty?.stage === 'Active' &&
+            (bounty?.testCases.length === 0 ? (
               <StyledButton
                 type="normal2"
                 onPress={() => navigation.navigate('AddTestCases')}>
                 Add test cases
               </StyledButton>
             ) : (
-              bounty?.stage === 'Active' && (
-                <StyledButton
-                  type="normal2"
-                  onPress={() => navigation.navigate('AddTestCases')}>
-                  View submissions
-                </StyledButton>
-              )
-            )
+              <StyledButton
+                type="normal2"
+                onPress={() => navigation.navigate('AddTestCases')}>
+                View submissions
+              </StyledButton>
+            ))
           ) : (
-            bounty?.stage === 'Active' && (
+            bounty?.stage === 'Active' &&
+            playingRole === RoleType.BountyHunter && (
               <View>
                 <StyledButton
                   type="normal2"

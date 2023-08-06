@@ -20,6 +20,7 @@ export enum Endpoints {
   CREATE_BOUNTY = '/create-bounty',
   SUBMIT_BOUNTY_DRAFT = '/submit-bounty-draft',
   SET_BOUNTY_APPROVAL = '/set-bounty-approval',
+  ADD_TEST_CASES = '/add-test-cases',
   // TEAMS
   GET_TEAMS = '/get-teams',
   GET_TEAM_BY_ID = '/get-team-by-id',

@@ -90,18 +90,20 @@ export default function BountyList({
               Posted {formatTimeAgo(bounty.postDate)}
             </StyledText>
           )}
-          {validatorView && bounty.stage === 'ReadyForTests' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 6,
-                alignItems: 'center',
-                paddingVertical: 8,
-              }}>
-              <WarningIcon />
-              <StyledText>Required action: Add test cases</StyledText>
-            </View>
-          )}
+          {validatorView &&
+            bounty.stage === 'Active' &&
+            bounty.testCases.length === 0 && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 6,
+                  alignItems: 'center',
+                  paddingVertical: 8,
+                }}>
+                <WarningIcon />
+                <StyledText>Required action: Add test cases</StyledText>
+              </View>
+            )}
           {bounty.stage === 'PendingApproval' && (
             <View
               style={{
@@ -114,7 +116,7 @@ export default function BountyList({
               <StyledText>Pending Approvals</StyledText>
             </View>
           )}
-          {validatorView && bounty.stage === 'Active' && (
+          {/* {validatorView && bounty.stage === 'Active' && (
             <View
               style={{
                 flexDirection: 'row',
@@ -127,7 +129,7 @@ export default function BountyList({
                 There are submissions that need to be reviewed.
               </StyledText>
             </View>
-          )}
+          )} */}
 
           <View
             style={{
@@ -192,8 +194,7 @@ export default function BountyList({
           </View>
           {(bounty.stage === BountyStage.Active ||
             bounty.stage === BountyStage.PendingApproval) &&
-            !designerView &&
-            !validatorView && (
+            (!designerView || bounty.stage === BountyStage.PendingApproval) && (
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
@@ -246,7 +247,6 @@ export default function BountyList({
           {designerView &&
             (bounty.stage === 'Draft' ||
               bounty.stage === 'Completed' ||
-              bounty.stage === 'ReadyForTests' ||
               bounty.stage === 'PendingApproval') && (
               <View
                 style={{
@@ -289,7 +289,7 @@ export default function BountyList({
                 </TouchableOpacity>
               </View>
             )}
-          {validatorView && (
+          {validatorView && bounty.stage === 'Active' && (
             <View
               style={{
                 flexDirection: 'row',
@@ -322,7 +322,7 @@ export default function BountyList({
                     color: '#D0BCFF',
                     alignItems: 'center',
                   }}>
-                  {bounty.stage === 'ReadyForTests'
+                  {bounty.stage === 'Active' && bounty.testCases.length === 0
                     ? 'View Bounty'
                     : 'View Submissions'}
                 </StyledText>

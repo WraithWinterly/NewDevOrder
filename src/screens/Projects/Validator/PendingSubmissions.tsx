@@ -24,7 +24,11 @@ export default function PendingSubmissions() {
   const [pendingBounties, setPendingBounties] = useState<typeof bounties>([]);
 
   useEffect(() => {
-    setPendingBounties(bounties?.filter(bounty => bounty.stage === 'Active'));
+    setPendingBounties(
+      bounties?.filter(
+        bounty => bounty.stage === 'Active' && bounty.testCases.length > 0,
+      ),
+    );
   }, [bounties]);
 
   return (

@@ -57,7 +57,6 @@ export namespace $Enums {
     Active: 'Active';
     Draft: 'Draft';
     PendingApproval: 'PendingApproval';
-    ReadyForTests: 'ReadyForTests';
     Completed: 'Completed';
   };
 
@@ -3732,6 +3731,7 @@ export namespace Prisma {
     types: number;
     deadline: number;
     participantsTeamIDs: number;
+    testCases: number;
     stage: number;
     submissions: number;
     aboutProject: number;
@@ -3793,6 +3793,7 @@ export namespace Prisma {
     types?: true;
     deadline?: true;
     participantsTeamIDs?: true;
+    testCases?: true;
     stage?: true;
     submissions?: true;
     aboutProject?: true;
@@ -3903,6 +3904,7 @@ export namespace Prisma {
     types: $Enums.BountyType[];
     deadline: Date;
     participantsTeamIDs: string[];
+    testCases: string[];
     stage: $Enums.BountyStage;
     submissions: string[];
     aboutProject: string | null;
@@ -3944,6 +3946,7 @@ export namespace Prisma {
       types?: boolean;
       deadline?: boolean;
       participantsTeamIDs?: boolean;
+      testCases?: boolean;
       stage?: boolean;
       submissions?: boolean;
       aboutProject?: boolean;
@@ -3968,6 +3971,7 @@ export namespace Prisma {
     types?: boolean;
     deadline?: boolean;
     participantsTeamIDs?: boolean;
+    testCases?: boolean;
     stage?: boolean;
     submissions?: boolean;
     aboutProject?: boolean;
@@ -4004,6 +4008,7 @@ export namespace Prisma {
         types: $Enums.BountyType[];
         deadline: Date;
         participantsTeamIDs: string[];
+        testCases: string[];
         stage: $Enums.BountyStage;
         submissions: string[];
         aboutProject: string | null;
@@ -4505,6 +4510,7 @@ export namespace Prisma {
     readonly types: FieldRef<'Bounty', 'BountyType[]'>;
     readonly deadline: FieldRef<'Bounty', 'DateTime'>;
     readonly participantsTeamIDs: FieldRef<'Bounty', 'String[]'>;
+    readonly testCases: FieldRef<'Bounty', 'String[]'>;
     readonly stage: FieldRef<'Bounty', 'BountyStage'>;
     readonly submissions: FieldRef<'Bounty', 'String[]'>;
     readonly aboutProject: FieldRef<'Bounty', 'String'>;
@@ -7292,6 +7298,7 @@ export namespace Prisma {
     types: 'types';
     deadline: 'deadline';
     participantsTeamIDs: 'participantsTeamIDs';
+    testCases: 'testCases';
     stage: 'stage';
     submissions: 'submissions';
     aboutProject: 'aboutProject';
@@ -7689,6 +7696,7 @@ export namespace Prisma {
     types?: EnumBountyTypeNullableListFilter<'Bounty'>;
     deadline?: DateTimeFilter<'Bounty'> | Date | string;
     participantsTeamIDs?: StringNullableListFilter<'Bounty'>;
+    testCases?: StringNullableListFilter<'Bounty'>;
     stage?: EnumBountyStageFilter<'Bounty'> | $Enums.BountyStage;
     submissions?: StringNullableListFilter<'Bounty'>;
     aboutProject?: StringNullableFilter<'Bounty'> | string | null;
@@ -7711,6 +7719,7 @@ export namespace Prisma {
     types?: SortOrder;
     deadline?: SortOrder;
     participantsTeamIDs?: SortOrder;
+    testCases?: SortOrder;
     stage?: SortOrder;
     submissions?: SortOrder;
     aboutProject?: SortOrderInput | SortOrder;
@@ -7737,6 +7746,7 @@ export namespace Prisma {
       types?: EnumBountyTypeNullableListFilter<'Bounty'>;
       deadline?: DateTimeFilter<'Bounty'> | Date | string;
       participantsTeamIDs?: StringNullableListFilter<'Bounty'>;
+      testCases?: StringNullableListFilter<'Bounty'>;
       stage?: EnumBountyStageFilter<'Bounty'> | $Enums.BountyStage;
       submissions?: StringNullableListFilter<'Bounty'>;
       aboutProject?: StringNullableFilter<'Bounty'> | string | null;
@@ -7761,6 +7771,7 @@ export namespace Prisma {
     types?: SortOrder;
     deadline?: SortOrder;
     participantsTeamIDs?: SortOrder;
+    testCases?: SortOrder;
     stage?: SortOrder;
     submissions?: SortOrder;
     aboutProject?: SortOrderInput | SortOrder;
@@ -7793,6 +7804,7 @@ export namespace Prisma {
     types?: EnumBountyTypeNullableListFilter<'Bounty'>;
     deadline?: DateTimeWithAggregatesFilter<'Bounty'> | Date | string;
     participantsTeamIDs?: StringNullableListFilter<'Bounty'>;
+    testCases?: StringNullableListFilter<'Bounty'>;
     stage?: EnumBountyStageWithAggregatesFilter<'Bounty'> | $Enums.BountyStage;
     submissions?: StringNullableListFilter<'Bounty'>;
     aboutProject?: StringNullableWithAggregatesFilter<'Bounty'> | string | null;
@@ -8148,6 +8160,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -8168,6 +8181,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -8188,6 +8202,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -8208,6 +8223,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -8228,6 +8244,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -8248,6 +8265,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -8266,6 +8284,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -8769,6 +8788,7 @@ export namespace Prisma {
     types?: SortOrder;
     deadline?: SortOrder;
     participantsTeamIDs?: SortOrder;
+    testCases?: SortOrder;
     stage?: SortOrder;
     submissions?: SortOrder;
     aboutProject?: SortOrder;
@@ -9316,6 +9336,10 @@ export namespace Prisma {
     set: string[];
   };
 
+  export type BountyCreatetestCasesInput = {
+    set: string[];
+  };
+
   export type BountyCreatesubmissionsInput = {
     set: string[];
   };
@@ -9348,6 +9372,11 @@ export namespace Prisma {
   };
 
   export type BountyUpdateparticipantsTeamIDsInput = {
+    set?: string[];
+    push?: string | string[];
+  };
+
+  export type BountyUpdatetestCasesInput = {
     set?: string[];
     push?: string | string[];
   };
@@ -10357,6 +10386,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -10376,6 +10406,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -10487,6 +10518,7 @@ export namespace Prisma {
     types?: EnumBountyTypeNullableListFilter<'Bounty'>;
     deadline?: DateTimeFilter<'Bounty'> | Date | string;
     participantsTeamIDs?: StringNullableListFilter<'Bounty'>;
+    testCases?: StringNullableListFilter<'Bounty'>;
     stage?: EnumBountyStageFilter<'Bounty'> | $Enums.BountyStage;
     submissions?: StringNullableListFilter<'Bounty'>;
     aboutProject?: StringNullableFilter<'Bounty'> | string | null;
@@ -10780,6 +10812,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -10799,6 +10832,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -11263,6 +11297,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -11282,6 +11317,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -11301,6 +11337,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -11320,6 +11357,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -11347,6 +11385,7 @@ export namespace Prisma {
     types?: BountyCreatetypesInput | $Enums.BountyType[];
     deadline: Date | string;
     participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
     stage?: $Enums.BountyStage;
     submissions?: BountyCreatesubmissionsInput | string[];
     aboutProject?: string | null;
@@ -11408,6 +11447,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -11427,6 +11467,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -11446,6 +11487,7 @@ export namespace Prisma {
     types?: BountyUpdatetypesInput | $Enums.BountyType[];
     deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
     participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     submissions?: BountyUpdatesubmissionsInput | string[];
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;

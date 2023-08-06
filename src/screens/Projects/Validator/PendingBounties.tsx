@@ -27,8 +27,7 @@ export default function PendingBounties() {
     setPendingBounties(
       bounties?.filter(
         bounty =>
-          bounty.stage === 'PendingApproval' ||
-          bounty.stage === 'ReadyForTests',
+          bounty.stage === 'PendingApproval' || bounty.testCases.length === 0,
       ),
     );
   }, [bounties]);

@@ -20,7 +20,6 @@ exports.BountyStage = exports.$Enums.BountyStage = {
   Active: 'Active',
   Draft: 'Draft',
   PendingApproval: 'PendingApproval',
-  ReadyForTests: 'ReadyForTests',
   Completed: 'Completed',
 };
 
