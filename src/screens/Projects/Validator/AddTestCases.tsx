@@ -35,6 +35,7 @@ export default function AddTestCases() {
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
+
   function validate() {
     if (testCases.length === 0) {
       return false;

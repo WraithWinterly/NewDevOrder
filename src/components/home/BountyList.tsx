@@ -1,8 +1,7 @@
-import {RefreshControl, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
 import StyledText from '../ui/styled/StyledText';
-import {FlatList} from 'react-native';
 import {useId} from 'react';
 import CashIcon from '../icons/CashIcon';
 import TeamsIcon from '../icons/TeamsIcon';
@@ -16,22 +15,18 @@ import useBountyStore from 'src/stores/bountyStore';
 import Bubble from '../ui/Bubble';
 import CheckIcon from '../icons/CheckIcon';
 import WarningIcon from '../icons/WarningIcon';
-import StyledButton from '../ui/styled/StyledButton';
+
 import {Bounty, Project} from 'prisma/generated';
 import {BountyStage} from 'prisma/generated';
 
 export default function BountyList({
   bounties,
-  onRefresh,
-  refreshing,
   designerView,
   validatorView,
 }: {
   bounties: (Bounty & {
     project: Project;
   })[];
-  onRefresh: () => void;
-  refreshing: boolean;
   designerView?: boolean;
   validatorView?: boolean;
 }) {
@@ -47,12 +42,6 @@ export default function BountyList({
 
   return (
     <>
-      {/* {!bounties && (
-        <View style={{alignItems: 'center'}}>
-          <StyledText>No Bounties Found Yet</StyledText>
-          <StyledButton onPress={() => fetchBounties()}>Refresh</StyledButton>
-        </View>
-      )} */}
       {bounties.map((bounty, index) => (
         <View
           key={`${bounty.id}-${index}-${id}`}
@@ -67,20 +56,9 @@ export default function BountyList({
             {bounty.title}
           </StyledText>
           {designerView && bounty.stage === 'Active' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 6,
-                alignItems: 'center',
-                paddingVertical: 8,
-              }}>
-              <CheckIcon />
-              <StyledText>
-                You posted this bounty {formatTimeAgo(bounty.postDate)}.
-              </StyledText>
-            </View>
+            <YouPostedThisBounty date={bounty.postDate} />
           )}
-          {!designerView && !validatorView && bounty.stage === 'Active' && (
+          {bounty.stage === 'Active' && (
             <StyledText
               style={{
                 color: Colors.Text2,
@@ -92,29 +70,13 @@ export default function BountyList({
           )}
           {validatorView &&
             bounty.stage === 'Active' &&
-            bounty.testCases.length === 0 && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  gap: 6,
-                  alignItems: 'center',
-                  paddingVertical: 8,
-                }}>
-                <WarningIcon />
-                <StyledText>Required action: Add test cases</StyledText>
-              </View>
-            )}
+            (bounty.testCases.length === 0 ? (
+              <BountyWarning text="Required action: Add test cases" />
+            ) : (
+              <BountyWarning text="Required action: Review Submissions" />
+            ))}
           {bounty.stage === 'PendingApproval' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 6,
-                alignItems: 'center',
-                paddingVertical: 8,
-              }}>
-              <WarningIcon />
-              <StyledText>Pending Approvals</StyledText>
-            </View>
+            <BountyWarning text="Pending Approval" />
           )}
           {/* {validatorView && bounty.stage === 'Active' && (
             <View
@@ -192,9 +154,9 @@ export default function BountyList({
               Teams Currently Hacking: {bounty.participantsTeamIDs.length}
             </StyledText>
           </View>
-          {(bounty.stage === BountyStage.Active ||
-            bounty.stage === BountyStage.PendingApproval) &&
-            (!designerView || bounty.stage === BountyStage.PendingApproval) && (
+          {bounty.stage === BountyStage.Active &&
+            !designerView &&
+            !validatorView && (
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
@@ -210,128 +172,139 @@ export default function BountyList({
                 <RightArrowIcon />
               </TouchableOpacity>
             )}
-          {designerView && bounty.stage === 'Active' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 24,
-                marginTop: 8,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <StyledText style={{color: Colors.Primary}}>
-                Edit Bounty
-              </StyledText>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 12,
-                  paddingVertical: 12,
-                  paddingHorizontal: 22,
-                  borderColor: Colors.BorderColor,
-                  borderWidth: 1,
-                  borderRadius: 50,
-                }}
+
+          {designerView &&
+            (bounty.stage === 'Draft' || bounty.stage === 'Completed' ? (
+              <RoundArrowButton
+                title={
+                  bounty.stage === 'Draft' ? 'Continue Editing' : 'View Details'
+                }
                 onPress={() => {
                   setSelectedFullBounty(bounty.id);
-                  navigation.navigate('ViewBounty');
-                }}>
-                <StyledText style={{color: '#D0BCFF'}}>
-                  View Submissions
-                </StyledText>
-                <RightArrowIcon />
-              </TouchableOpacity>
-            </View>
-          )}
-          {designerView &&
-            (bounty.stage === 'Draft' ||
-              bounty.stage === 'Completed' ||
-              bounty.stage === 'PendingApproval') && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  gap: 24,
-                  justifyContent: 'center',
-                  alignItems: 'stretch',
-                  marginTop: 8,
-                  marginHorizontal: 22,
-                }}>
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 12,
-                    paddingVertical: 12,
-                    paddingHorizontal: 22,
-                    borderColor: Colors.BorderColor,
-                    borderWidth: 1,
-                    borderRadius: 50,
-                    width: '100%',
-                  }}
+                  navigation.navigate('ViewBounty', {
+                    isDesigner: true,
+                  });
+                }}
+              />
+            ) : (
+              bounty.stage === 'Active' && (
+                <RoundArrowButton
+                  title="View Submissions"
                   onPress={() => {
                     setSelectedFullBounty(bounty.id);
-                    navigation.navigate('ViewBounty', {
-                      isDesigner: true,
-                    });
-                  }}>
-                  <StyledText
-                    style={{
-                      color: '#D0BCFF',
-                      alignItems: 'center',
-                    }}>
-                    {bounty.stage === 'Draft'
-                      ? 'Continue editing'
-                      : 'View Details'}
-                  </StyledText>
-                  <RightArrowIcon />
-                </TouchableOpacity>
-              </View>
-            )}
-          {validatorView && bounty.stage === 'Active' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 24,
-                justifyContent: 'center',
-                alignItems: 'stretch',
-                marginHorizontal: 22,
-              }}>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 12,
-                  paddingVertical: 12,
-                  paddingHorizontal: 22,
-                  borderColor: Colors.BorderColor,
-                  borderWidth: 1,
-                  borderRadius: 50,
-                  width: '100%',
-                }}
+                    navigation.navigate('ViewBounty');
+                  }}
+                />
+              )
+            ))}
+          {validatorView &&
+            bounty.stage === 'Active' &&
+            (bounty.testCases.length === 0 ? (
+              <RoundArrowButton
+                title="View Bounty"
                 onPress={() => {
                   setSelectedFullBounty(bounty.id);
                   navigation.navigate('ViewBounty', {
                     isValidator: true,
                   });
-                }}>
-                <StyledText
-                  style={{
-                    color: '#D0BCFF',
-                    alignItems: 'center',
-                  }}>
-                  {bounty.stage === 'Active' && bounty.testCases.length === 0
-                    ? 'View Bounty'
-                    : 'View Submissions'}
-                </StyledText>
-                <RightArrowIcon />
-              </TouchableOpacity>
-            </View>
+                }}
+              />
+            ) : (
+              <RoundArrowButton
+                title="View Submissions"
+                onPress={() => {
+                  setSelectedFullBounty(bounty.id);
+                  navigation.navigate('ViewBounty', {
+                    isValidator: true,
+                  });
+                }}
+              />
+            ))}
+          {bounty.stage === 'PendingApproval' && (
+            <RoundArrowButton
+              title="View Approvals"
+              onPress={() => {
+                setSelectedFullBounty(bounty.id);
+                navigation.navigate('ViewBounty');
+              }}
+            />
           )}
         </View>
       ))}
     </>
+  );
+}
+
+function BountyWarning({text}: {text: string}) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        gap: 6,
+        alignItems: 'center',
+        paddingVertical: 8,
+      }}>
+      <WarningIcon />
+      <StyledText>{text}</StyledText>
+    </View>
+  );
+}
+
+function RoundArrowButton({
+  title,
+  onPress,
+}: {
+  title: string;
+  onPress: () => void;
+}) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        gap: 24,
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        marginHorizontal: 22,
+        paddingTop: 12,
+      }}>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 12,
+          paddingVertical: 12,
+          paddingHorizontal: 22,
+          borderColor: Colors.BorderColor,
+          borderWidth: 1,
+          borderRadius: 50,
+          width: '100%',
+        }}
+        onPress={onPress}>
+        <StyledText
+          style={{
+            color: '#D0BCFF',
+            alignItems: 'center',
+          }}>
+          {title}
+        </StyledText>
+        <RightArrowIcon />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function YouPostedThisBounty({date}: {date: Date}) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        gap: 6,
+        alignItems: 'center',
+        paddingVertical: 8,
+      }}>
+      <CheckIcon />
+      <StyledText>You posted this bounty {formatTimeAgo(date)}.</StyledText>
+    </View>
   );
 }

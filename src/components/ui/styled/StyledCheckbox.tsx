@@ -1,6 +1,6 @@
 import CheckBox from '@react-native-community/checkbox';
 import {Dispatch, SetStateAction} from 'react';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import StyledText from './StyledText';
 

@@ -4,7 +4,7 @@ import {Project, ProjectStage, RoleType} from 'prisma/generated';
 import {useEffect, useId} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 
 import Separator from 'src/components/ui/Separator';

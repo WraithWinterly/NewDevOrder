@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 import BountyList from 'src/components/home/BountyList';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';

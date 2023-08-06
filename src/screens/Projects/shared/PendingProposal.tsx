@@ -4,7 +4,7 @@ import {RoleType} from 'prisma/generated';
 import {useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import MemberBox from 'src/components/MemberBox';
 import BountyList from 'src/components/home/BountyList';
@@ -27,6 +27,7 @@ export default function PendingProposal() {
 
   const [pendingBounties, setPendingBounties] = useState<typeof bounties>([]);
   const [approvedBounties, setApprovedBounties] = useState<typeof bounties>([]);
+  const [activeBounties, setActiveBounties] = useState<typeof bounties>([]);
 
   useEffect(() => {
     if (playingRole) {
@@ -44,10 +45,10 @@ export default function PendingProposal() {
             didIApprove(bounty, playingRole),
         ),
       );
+      setActiveBounties(bounties?.filter(bounty => bounty.stage === 'Active'));
     }
   }, [playingRole, bounties]);
 
-  const [refreshing, setRefreshing] = useState(false);
   return (
     <Layout>
       <ScrollView>
@@ -177,33 +178,41 @@ export default function PendingProposal() {
               <Separator customH={8} />
             </View>
           )}
-        {pendingBounties &&
-          pendingBounties.length > 0 &&
-          playingRole != RoleType.BountyDesigner && (
-            <View>
-              <StyledText
-                style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
-                Your todo: Pending Approvals
-              </StyledText>
-              <BountyList
-                bounties={pendingBounties}
-                onRefresh={() => setRefreshing(true)}
-                refreshing={refreshing}></BountyList>
-              {!!approvedBounties && approvedBounties.length > 0 && (
-                <>
-                  <Separator />
-                  <StyledText
-                    style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
-                    Approved Bounties
-                  </StyledText>
-                  <BountyList
-                    bounties={approvedBounties}
-                    onRefresh={() => setRefreshing(true)}
-                    refreshing={refreshing}></BountyList>
-                </>
-              )}
-            </View>
-          )}
+        {playingRole != RoleType.BountyDesigner && (
+          <View>
+            {pendingBounties && pendingBounties.length > 0 && (
+              <>
+                <StyledText
+                  style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
+                  Your todo: Pending Approvals
+                </StyledText>
+                <BountyList bounties={pendingBounties}></BountyList>
+                <Separator />
+              </>
+            )}
+
+            {!!approvedBounties && approvedBounties.length > 0 && (
+              <>
+                <StyledText
+                  style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
+                  Approved Bounties
+                </StyledText>
+                <BountyList bounties={approvedBounties}></BountyList>
+                <Separator />
+              </>
+            )}
+            {!!activeBounties && activeBounties.length > 0 && (
+              <>
+                <StyledText
+                  style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
+                  Active Bounties
+                </StyledText>
+                <BountyList bounties={activeBounties}></BountyList>
+                <Separator />
+              </>
+            )}
+          </View>
+        )}
       </ScrollView>
     </Layout>
   );

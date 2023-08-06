@@ -1,12 +1,9 @@
-import {TouchableOpacity, View} from 'react-native';
-
+import {View} from 'react-native';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 
-import Collapsible from 'react-native-collapsible';
 import {useEffect, useId, useState} from 'react';
 import {ScrollView} from 'react-native';
-import CollapsibleArrow from 'src/components/icons/CollapsibleArrow';
 import TeamsIcon from 'src/components/icons/TeamsIcon';
 import CalendarIcon from 'src/components/icons/CalendarIcon';
 import CashIcon from 'src/components/icons/CashIcon';
@@ -35,16 +32,15 @@ import useSolanaContext from 'src/web3/SolanaProvider';
 import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
 import {RoleType} from 'prisma/generated';
+import {DropdownSection} from 'src/components/ui/styled/StyledDropdown';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
 export default function ViewBounty({route, navigation}: Props) {
   const bounties = useBountyStore(state => state.bounties);
-  // const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
   const id2 = useId();
   const id3 = useId();
-  // const route = useRoute <RouteProp<StackParamList>();
   const isValidator = route.params?.isValidator ?? false;
   const isDesignerCreation = route.params?.isDesignerCreation ?? false;
   const isDesigner = route.params?.isDesigner ?? false;
@@ -62,6 +58,7 @@ export default function ViewBounty({route, navigation}: Props) {
   const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
   const project = useProjectsStore(state => state.selectedProject);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
+
   const setSelectedProject = useProjectsStore(
     state => state.setSelectedProject,
   );
@@ -117,7 +114,7 @@ export default function ViewBounty({route, navigation}: Props) {
     }
   }
 
-  async function toggleApproval() {
+  async function onSubmitToggleApproval() {
     if (!walletAddress) {
       console.error('No walletAddress');
       return;
@@ -143,8 +140,8 @@ export default function ViewBounty({route, navigation}: Props) {
     const data = await setBountyApproval.mutate(body);
     if (data) {
       fetchBounties();
+      setSelectedProject(bounty.projectId);
       setSelectedBounty(bounty.id);
-      // navigation.replace('ViewBounty');
     }
   }
 
@@ -252,54 +249,6 @@ export default function ViewBounty({route, navigation}: Props) {
   return (
     <Layout>
       <View style={{height: '100%'}}>
-        {isDesigner && bounty?.stage === 'Draft' && (
-          <View>
-            <StyledText style={{fontSize: 24}}>Review your bounty</StyledText>
-            <StyledText>
-              This will be posted on the bounty feed when submitted and reviewed
-            </StyledText>
-            <Separator />
-          </View>
-        )}
-        {bounty?.stage === 'PendingApproval' && (
-          <View>
-            <StyledText style={{fontSize: 24}}>Pending Approval</StyledText>
-            <StyledText>
-              Still waiting approval from the following members:
-            </StyledText>
-            <View style={{height: 24}} />
-            <StyledCheckbox
-              value={bounty.approvedByFounder}
-              onValueChange={() => {}}
-              title="Founder"
-            />
-            <StyledCheckbox
-              value={bounty.approvedByManager}
-              onValueChange={() => {}}
-              title="Bounty Manager"
-            />
-            <StyledCheckbox
-              value={bounty.approvedByValidator}
-              onValueChange={() => {}}
-              title="Bounty Validator"
-            />
-            <View style={{height: 24}} />
-            {(playingRole === RoleType.Founder ||
-              playingRole === RoleType.BountyManager ||
-              playingRole === RoleType.BountyValidator) && (
-              <StyledButton
-                loading={setBountyApproval.loading}
-                error={!!setBountyApproval.error}
-                onPress={() => {
-                  toggleApproval();
-                }}
-                type="normal2">
-                {didIApprove(bounty, playingRole) ? 'Unapprove' : 'Approve'}
-              </StyledButton>
-            )}
-            <Separator />
-          </View>
-        )}
         <View
           style={{
             position: 'absolute',
@@ -312,8 +261,9 @@ export default function ViewBounty({route, navigation}: Props) {
             backgroundColor: Colors.AppBar,
             zIndex: 1,
           }}>
-          {isDesigner ? (
-            isDesignerCreation ? (
+          {isDesigner &&
+            (isDesignerCreation ? (
+              // Create bounty buttons
               <View style={{gap: 12}}>
                 <StyledButton
                   type="normal2"
@@ -330,6 +280,7 @@ export default function ViewBounty({route, navigation}: Props) {
                 </StyledButton>
               </View>
             ) : (
+              // Send draft for approval button
               <View>
                 {bounty?.stage === 'Draft' && (
                   <StyledButton
@@ -340,64 +291,105 @@ export default function ViewBounty({route, navigation}: Props) {
                   </StyledButton>
                 )}
               </View>
-            )
-          ) : isValidator ? (
-            bounty?.stage === 'Active' &&
-            (bounty?.testCases.length === 0 ? (
-              <StyledButton
-                type="normal2"
-                onPress={() => navigation.navigate('AddTestCases')}>
-                Add test cases
-              </StyledButton>
-            ) : (
-              <StyledButton
-                type="normal2"
-                onPress={() => navigation.navigate('AddTestCases')}>
-                View submissions
-              </StyledButton>
-            ))
-          ) : (
-            bounty?.stage === 'Active' &&
-            playingRole === RoleType.BountyHunter && (
-              <View>
+            ))}
+
+          {isValidator
+            ? bounty?.stage === 'Active' &&
+              (bounty?.testCases.length === 0 ? (
                 <StyledButton
                   type="normal2"
-                  onPress={() => navigation.navigate('StartBounty')}>
-                  Start Bounty
+                  onPress={() => navigation.navigate('AddTestCases')}>
+                  Add test cases
                 </StyledButton>
+              ) : (
+                <StyledButton
+                  type="normal2"
+                  onPress={() => navigation.navigate('AddTestCases')}>
+                  View submissions
+                </StyledButton>
+              ))
+            : playingRole === RoleType.BountyHunter && (
+                <View>
+                  <StyledButton
+                    type="normal2"
+                    onPress={() => navigation.navigate('StartBounty')}>
+                    Start Bounty
+                  </StyledButton>
 
-                {startedByTeams.length > 0 && (
-                  <View style={{paddingLeft: 8}}>
-                    <View style={{height: 12}}></View>
+                  {startedByTeams.length > 0 && (
+                    <View style={{paddingLeft: 8}}>
+                      <View style={{height: 12}}></View>
 
-                    {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
-                    <StyledText key={`${0}-${id2}`}>
-                      Started by:{' '}
-                      {startedByTeams.map(
-                        (team, i) =>
-                          `${team}${
-                            i === startedByTeams.length - 1 ? '' : ', '
-                          }`,
-                      )}
-                    </StyledText>
-                  </View>
-                )}
-              </View>
-            )
-          )}
+                      {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
+                      <StyledText key={`${0}-${id2}`}>
+                        Started by:{' '}
+                        {startedByTeams.map(
+                          (team, i) =>
+                            `${team}${
+                              i === startedByTeams.length - 1 ? '' : ', '
+                            }`,
+                        )}
+                      </StyledText>
+                    </View>
+                  )}
+                </View>
+              )}
         </View>
         <ScrollView>
           {!!bounty && (
             <View style={{flexDirection: 'column', gap: 10}}>
-              {isValidator && (
+              {isDesigner && bounty?.stage === 'Draft' && (
                 <View>
-                  <StyledText style={{fontWeight: 'bold', fontSize: 28}}>
-                    Review bounty
+                  <StyledText style={{fontSize: 24}}>
+                    Review your bounty
                   </StyledText>
-                  <StyledText style={{fontSize: 16}}>
+                  <StyledText>
                     This will be posted on the bounty feed when submitted and
-                    reviewed.
+                    reviewed
                   </StyledText>
+                  <Separator />
+                </View>
+              )}
+              {bounty?.stage === 'PendingApproval' && (
+                <View>
+                  <StyledText style={{fontSize: 24}}>
+                    Pending Approval
+                  </StyledText>
+                  <StyledText>
+                    Still waiting approval from the following members:
+                  </StyledText>
+                  <View style={{height: 24}} />
+                  <StyledCheckbox
+                    value={bounty.approvedByFounder}
+                    onValueChange={() => {}}
+                    title="Founder"
+                  />
+                  <StyledCheckbox
+                    value={bounty.approvedByManager}
+                    onValueChange={() => {}}
+                    title="Bounty Manager"
+                  />
+                  <StyledCheckbox
+                    value={bounty.approvedByValidator}
+                    onValueChange={() => {}}
+                    title="Bounty Validator"
+                  />
+                  <View style={{height: 24}} />
+                  {(playingRole === RoleType.Founder ||
+                    playingRole === RoleType.BountyManager ||
+                    playingRole === RoleType.BountyValidator) && (
+                    <StyledButton
+                      loading={setBountyApproval.loading}
+                      error={!!setBountyApproval.error}
+                      onPress={() => {
+                        onSubmitToggleApproval();
+                      }}
+                      type="normal2">
+                      {didIApprove(bounty, playingRole)
+                        ? 'Unapprove'
+                        : 'Approve'}
+                    </StyledButton>
+                  )}
                   <Separator />
                 </View>
               )}
@@ -512,36 +504,5 @@ export default function ViewBounty({route, navigation}: Props) {
         </ScrollView>
       </View>
     </Layout>
-  );
-}
-
-function DropdownSection({
-  title,
-
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  const [collapsed, setCollapsed] = useState(false);
-  return (
-    <>
-      <TouchableOpacity onPress={() => setCollapsed(prev => !prev)}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}>
-          <StyledText style={{fontSize: 20, fontWeight: '500'}}>
-            {title}
-          </StyledText>
-          <CollapsibleArrow faceDown={!collapsed} />
-        </View>
-      </TouchableOpacity>
-
-      <Collapsible collapsed={collapsed}>{children}</Collapsible>
-      <Separator />
-    </>
   );
 }

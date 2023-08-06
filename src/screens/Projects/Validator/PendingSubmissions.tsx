@@ -6,20 +6,6 @@ import useProjectsStore from 'src/stores/projectsStore';
 
 export default function PendingSubmissions() {
   const bounties = useProjectsStore(state => state.bountiesForProject);
-  // Used to force refresh project info, which will refetch bounties
-  const selectedProject = useProjectsStore(state => state.selectedProject);
-  const setSelectedProject = useProjectsStore(
-    state => state.setSelectedProject,
-  );
-  const [refreshing, setRefreshing] = useState(false);
-
-  function onRefresh() {
-    setRefreshing(true);
-    if (!selectedProject) return;
-    setSelectedProject(selectedProject.id).then(() => {
-      setRefreshing(false);
-    });
-  }
 
   const [pendingBounties, setPendingBounties] = useState<typeof bounties>([]);
 
@@ -35,12 +21,7 @@ export default function PendingSubmissions() {
     <Layout>
       <ScrollView>
         {!!pendingBounties && (
-          <BountyList
-            refreshing={refreshing}
-            bounties={pendingBounties}
-            onRefresh={onRefresh}
-            validatorView
-          />
+          <BountyList bounties={pendingBounties} validatorView />
         )}
       </ScrollView>
     </Layout>

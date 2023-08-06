@@ -1,7 +1,7 @@
 import {Member, TeamInvite} from 'prisma/generated';
 import {useEffect, useId, useState} from 'react';
 import {View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 import MemberBox from 'src/components/MemberBox';
 import SearchIcon from 'src/components/icons/SearchIcon';
 import StyledButton from 'src/components/ui/styled/StyledButton';

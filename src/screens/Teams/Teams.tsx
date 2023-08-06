@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId, useState} from 'react';
 import {LogBox, TouchableOpacity, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import Bubble from 'src/components/ui/Bubble';
 import Separator from 'src/components/ui/Separator';
