@@ -8,7 +8,6 @@ import {create} from 'zustand';
 type BountyStore = {
   createBountyData: CreateBountyData | undefined;
   setCreateBountyData: (data: CreateBountyData | undefined) => void;
-
   bounties: (Bounty & {project: Project})[] | undefined;
   fetchBounties: () => Promise<void>;
   selectedBounty?: Bounty & {

@@ -309,16 +309,25 @@ export default function ViewBounty({route, navigation}: Props) {
                 </StyledButton>
               ))
             : playingRole === RoleType.BountyHunter && (
-                <View>
+                <View style={{gap: 12}}>
                   <StyledButton
                     type="normal2"
                     onPress={() => navigation.navigate('StartBounty')}>
-                    Start Bounty
+                    {startedByTeams.length === 0
+                      ? 'Start Bounty'
+                      : 'Start bounty for another team'}
                   </StyledButton>
+                  {startedByTeams.length > 0 && (
+                    <StyledButton
+                      type="normal2"
+                      onPress={() => navigation.navigate('Submissions')}>
+                      Submit Deliverables
+                    </StyledButton>
+                  )}
 
                   {startedByTeams.length > 0 && (
                     <View style={{paddingLeft: 8}}>
-                      <View style={{height: 12}}></View>
+                      <View style={{height: 4}}></View>
 
                       {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
                       <StyledText key={`${0}-${id2}`}>

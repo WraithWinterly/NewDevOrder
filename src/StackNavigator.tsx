@@ -105,6 +105,7 @@ export type ProjectParamList = {
   ValidatorNavigator: undefined;
   AddTestCases: undefined;
   Submissions: undefined;
+
   // Shared
   PendingProposal: undefined;
 };

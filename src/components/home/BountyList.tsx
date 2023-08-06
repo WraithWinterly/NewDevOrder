@@ -157,20 +157,13 @@ export default function BountyList({
           {bounty.stage === BountyStage.Active &&
             !designerView &&
             !validatorView && (
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 8,
-                  paddingTop: 8,
-                }}
+              <RoundArrowButton
+                title="View Details"
                 onPress={() => {
                   setSelectedFullBounty(bounty.id);
                   navigation.navigate('ViewBounty');
-                }}>
-                <StyledText style={{color: '#D0BCFF'}}>View Details</StyledText>
-                <RightArrowIcon />
-              </TouchableOpacity>
+                }}
+              />
             )}
 
           {designerView &&

@@ -16,6 +16,7 @@ import {useEffect} from 'react';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
 import useMutation from 'src/hooks/usePost';
 import {StartBountyPOSTData} from 'src/sharedTypes';
+import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
 
 export default function StartBounty() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -78,12 +79,7 @@ export default function StartBounty() {
       <View style={{justifyContent: 'space-between', height: '98%'}}>
         <View style={{gap: 10}}>
           <StyledText style={{fontSize: 24}}>Start Bounty</StyledText>
-          <StyledText>
-            <Text style={{color: Colors.Gray[400]}}>
-              {selectedFullBounty?.project.title} /{' '}
-            </Text>{' '}
-            {selectedFullBounty?.title}
-          </StyledText>
+          <ProjBountyBreadcrumb bounty={selectedFullBounty} />
           <Separator />
           <View style={{height: 24}}></View>
           <StyledText>

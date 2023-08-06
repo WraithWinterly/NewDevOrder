@@ -1,4 +1,5 @@
 import {ReactNode} from 'react';
+import {Text} from 'react-native';
 import {Platform, TextInput, View} from 'react-native';
 import {Colors} from 'src/styles/styles';
 
@@ -11,6 +12,7 @@ interface TextInputProps {
   isLinkInput?: boolean;
   multiLine?: boolean;
   numberInput?: boolean;
+  label?: string;
 }
 
 export default function StyledTextInput({
@@ -22,9 +24,29 @@ export default function StyledTextInput({
   isLinkInput = false,
   multiLine = false,
   numberInput = false,
+  label,
 }: TextInputProps) {
   return (
     <View>
+      {!!label && (
+        <View
+          style={{
+            position: 'absolute',
+            top: -10,
+            left: 8,
+            backgroundColor: Colors.Background,
+            zIndex: 2,
+            paddingHorizontal: 4,
+          }}>
+          <Text
+            style={{
+              fontWeight: '300',
+              fontSize: 13,
+            }}>
+            {label}
+          </Text>
+        </View>
+      )}
       <TextInput
         placeholderTextColor={Colors.Gray[400]}
         autoCorrect={!isLinkInput}

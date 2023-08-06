@@ -7,6 +7,7 @@ import {StackParamList} from 'src/StackNavigator';
 import CollapsibleArrow from 'src/components/icons/CollapsibleArrow';
 import DeleteIcon from 'src/components/icons/DeleteIcon';
 import PlusIcon from 'src/components/icons/PlusIcon';
+import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
@@ -73,12 +74,7 @@ export default function AddTestCases() {
         <StyledText style={{fontSize: 26, fontWeight: 'bold'}}>
           Add test cases
         </StyledText>
-        <StyledText>
-          <Text style={{color: Colors.Gray[400]}}>
-            {selectedFullBounty?.project?.title} /{' '}
-          </Text>{' '}
-          {selectedFullBounty?.title}
-        </StyledText>
+        <ProjBountyBreadcrumb bounty={selectedFullBounty} />
         <Separator customH={16} />
 
         <TouchableOpacity
