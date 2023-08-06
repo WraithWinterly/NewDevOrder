@@ -18,7 +18,7 @@ export default function AddRewards() {
   const project = useProjectsStore(state => state.selectedProject);
   const create = useBountyStore(state => state.createBountyData);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  console.log(create?.amount);
+
   const [bountyRewardAmount, setBountyRewardAmount] = useState(
     String(create?.amount) || '',
   );

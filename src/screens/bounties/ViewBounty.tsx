@@ -320,7 +320,7 @@ export default function ViewBounty({route, navigation}: Props) {
                   {startedByTeams.length > 0 && (
                     <StyledButton
                       type="normal2"
-                      onPress={() => navigation.navigate('Submissions')}>
+                      onPress={() => navigation.navigate('SubmitDeliverables')}>
                       Submit Deliverables
                     </StyledButton>
                   )}

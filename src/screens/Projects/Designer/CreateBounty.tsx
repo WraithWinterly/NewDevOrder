@@ -36,7 +36,7 @@ export default function CreateBounty() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const [errors, setErrors] = useState<Array<string>>([]);
-  console.log(submissionEndDate);
+
   const createBountyData = useBountyStore(state => state.createBountyData);
   const setCreateBountyData = useBountyStore(
     state => state.setCreateBountyData,

@@ -34,7 +34,7 @@ import ConfirmAndPay from './screens/projects/founder/ConfirmAndPay';
 import AcceptAndSendQuote from './screens/projects/manager/AcceptAndSendQuote';
 import ConfirmDecline from './screens/projects/manager/ConfirmDecline';
 import AddTestCases from './screens/projects/validator/AddTestCases';
-import Submissions from './screens/projects/validator/Submissions';
+import SubmitDeliverables from './screens/bounties/SubmitDeliverables';
 import PendingProposal from './screens/projects/shared/PendingProposal';
 import useProjectsStore from './stores/projectsStore';
 import ValidatorNavigator from './screens/projects/validator/ValidatorNavigator';
@@ -57,6 +57,7 @@ export type StackParamList = WelcomeStackParamList &
         }
       | undefined;
     StartBounty: undefined;
+    SubmitDeliverables: undefined;
 
     Profile: {viewProfileAddress?: string} | undefined;
     Leaderboard: undefined;
@@ -104,7 +105,6 @@ export type ProjectParamList = {
   // Validator
   ValidatorNavigator: undefined;
   AddTestCases: undefined;
-  Submissions: undefined;
 
   // Shared
   PendingProposal: undefined;
@@ -213,6 +213,13 @@ export default function StackNavigator() {
           component={StartBounty}
           options={{title: ''}}
         />
+        <Stack.Screen
+          name="SubmitDeliverables"
+          component={SubmitDeliverables}
+          options={{
+            title: '',
+          }}
+        />
 
         {/* End Home */}
 
@@ -293,13 +300,6 @@ export default function StackNavigator() {
         <Stack.Screen
           name="AddTestCases"
           component={AddTestCases}
-          options={{
-            title: '',
-          }}
-        />
-        <Stack.Screen
-          name="Submissions"
-          component={Submissions}
           options={{
             title: '',
           }}

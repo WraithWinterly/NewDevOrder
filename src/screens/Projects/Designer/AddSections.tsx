@@ -55,7 +55,7 @@ export default function AddSections() {
     sections.forEach(section => {
       obj[section.header] = section.content.split('\n');
     });
-    console.log('adding obj', obj);
+
     return obj;
   }
 

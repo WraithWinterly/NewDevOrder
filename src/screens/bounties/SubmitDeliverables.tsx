@@ -19,7 +19,7 @@ import {Colors} from 'src/styles/styles';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
-export default function Submissions() {
+export default function SubmitDeliverables() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const selectedFullBounty = useBountyStore(state => state.selectedBounty);
   const teams = useTeamsStore(state => state.teams);
@@ -60,7 +60,6 @@ export default function Submissions() {
         setLinkToVideoDemo(data?.videoDemo);
       });
     }
-    console.log(dataGetSubmission);
   }, [selectedTeam, walletAddress, selectedFullBounty]);
 
   async function onSubmit() {
