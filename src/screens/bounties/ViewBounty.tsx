@@ -304,7 +304,7 @@ export default function ViewBounty({route, navigation}: Props) {
               ) : (
                 <StyledButton
                   type="normal2"
-                  onPress={() => navigation.navigate('AddTestCases')}>
+                  onPress={() => navigation.navigate('ViewSubmissions')}>
                   View submissions
                 </StyledButton>
               ))

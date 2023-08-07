@@ -20,6 +20,7 @@ export default function StyledCheckbox({
         gap: 10,
         alignItems: 'center',
         marginVertical: 10,
+        padding: 6,
       }}
       onPress={() => onValueChange(prev => !prev)}>
       <CheckBox

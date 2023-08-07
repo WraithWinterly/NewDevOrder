@@ -23,6 +23,8 @@ export enum Endpoints {
   ADD_TEST_CASES = '/add-test-cases',
   GET_SUBMISSION = '/get-submission',
   SUBMIT_DELIVERABLES = '/submit-deliverables',
+  GET_TEST_CASES = '/get-test-cases',
+  APPROVE_TEST_CASES = '/approve-test-cases',
   // TEAMS
   GET_TEAMS = '/get-teams',
   GET_TEAM_BY_ID = '/get-team-by-id',

@@ -42,6 +42,8 @@ import CreateBounty from './screens/projects/designer/CreateBounty';
 import AddRewards from './screens/projects/designer/AddRewards';
 import AddSections from './screens/projects/designer/AddSections';
 import AddTags from './screens/projects/designer/AddTags';
+import ViewSubmissions from './screens/projects/validator/ViewSubmissions';
+import StartTestCases from './screens/projects/validator/StartTestCases';
 
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
@@ -105,7 +107,10 @@ export type ProjectParamList = {
   // Validator
   ValidatorNavigator: undefined;
   AddTestCases: undefined;
-
+  ViewSubmissions: undefined;
+  StartTestCases: {
+    submissionID: string;
+  };
   // Shared
   PendingProposal: undefined;
 };
@@ -300,6 +305,20 @@ export default function StackNavigator() {
         <Stack.Screen
           name="AddTestCases"
           component={AddTestCases}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="ViewSubmissions"
+          component={ViewSubmissions}
+          options={{
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="StartTestCases"
+          component={StartTestCases}
           options={{
             title: '',
           }}

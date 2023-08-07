@@ -34,6 +34,11 @@ export type Bounty = $Result.DefaultSelection<Prisma.$BountyPayload>
  */
 export type Submission = $Result.DefaultSelection<Prisma.$SubmissionPayload>
 /**
+ * Model TestCase
+ * 
+ */
+export type TestCase = $Result.DefaultSelection<Prisma.$TestCasePayload>
+/**
  * Model Member
  * 
  */
@@ -270,6 +275,16 @@ export class PrismaClient<
     * ```
     */
   get submission(): Prisma.SubmissionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.testCase`: Exposes CRUD operations for the **TestCase** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TestCases
+    * const testCases = await prisma.testCase.findMany()
+    * ```
+    */
+  get testCase(): Prisma.TestCaseDelegate<ExtArgs>;
 
   /**
    * `prisma.member`: Exposes CRUD operations for the **Member** model.
@@ -764,6 +779,7 @@ export namespace Prisma {
     Project: 'Project',
     Bounty: 'Bounty',
     Submission: 'Submission',
+    TestCase: 'TestCase',
     Member: 'Member',
     TeamInvite: 'TeamInvite'
   };
@@ -782,7 +798,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'team' | 'project' | 'bounty' | 'submission' | 'member' | 'teamInvite'
+      modelProps: 'team' | 'project' | 'bounty' | 'submission' | 'testCase' | 'member' | 'teamInvite'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -1047,6 +1063,72 @@ export namespace Prisma {
           count: {
             args: Prisma.SubmissionCountArgs<ExtArgs>,
             result: $Utils.Optional<SubmissionCountAggregateOutputType> | number
+          }
+        }
+      }
+      TestCase: {
+        payload: Prisma.$TestCasePayload<ExtArgs>
+        fields: Prisma.TestCaseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TestCaseFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TestCaseFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload>
+          }
+          findFirst: {
+            args: Prisma.TestCaseFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TestCaseFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload>
+          }
+          findMany: {
+            args: Prisma.TestCaseFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload>[]
+          }
+          create: {
+            args: Prisma.TestCaseCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload>
+          }
+          createMany: {
+            args: Prisma.TestCaseCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.TestCaseDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload>
+          }
+          update: {
+            args: Prisma.TestCaseUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload>
+          }
+          deleteMany: {
+            args: Prisma.TestCaseDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TestCaseUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.TestCaseUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TestCasePayload>
+          }
+          aggregate: {
+            args: Prisma.TestCaseAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateTestCase>
+          }
+          groupBy: {
+            args: Prisma.TestCaseGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<TestCaseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TestCaseCountArgs<ExtArgs>,
+            result: $Utils.Optional<TestCaseCountAggregateOutputType> | number
           }
         }
       }
@@ -1433,6 +1515,40 @@ export namespace Prisma {
    */
   export type BountyCountOutputTypeCountSubmissionsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: SubmissionWhereInput
+  }
+
+
+
+  /**
+   * Count Type SubmissionCountOutputType
+   */
+
+  export type SubmissionCountOutputType = {
+    testCases: number
+  }
+
+  export type SubmissionCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    testCases?: boolean | SubmissionCountOutputTypeCountTestCasesArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * SubmissionCountOutputType without action
+   */
+  export type SubmissionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubmissionCountOutputType
+     */
+    select?: SubmissionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * SubmissionCountOutputType without action
+   */
+  export type SubmissionCountOutputTypeCountTestCasesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: TestCaseWhereInput
   }
 
 
@@ -4654,6 +4770,7 @@ export namespace Prisma {
     id: string | null
     videoDemo: string | null
     repo: string | null
+    createdAt: Date | null
     bountyId: string | null
     teamId: string | null
   }
@@ -4662,6 +4779,7 @@ export namespace Prisma {
     id: string | null
     videoDemo: string | null
     repo: string | null
+    createdAt: Date | null
     bountyId: string | null
     teamId: string | null
   }
@@ -4670,6 +4788,7 @@ export namespace Prisma {
     id: number
     videoDemo: number
     repo: number
+    createdAt: number
     bountyId: number
     teamId: number
     _all: number
@@ -4680,6 +4799,7 @@ export namespace Prisma {
     id?: true
     videoDemo?: true
     repo?: true
+    createdAt?: true
     bountyId?: true
     teamId?: true
   }
@@ -4688,6 +4808,7 @@ export namespace Prisma {
     id?: true
     videoDemo?: true
     repo?: true
+    createdAt?: true
     bountyId?: true
     teamId?: true
   }
@@ -4696,6 +4817,7 @@ export namespace Prisma {
     id?: true
     videoDemo?: true
     repo?: true
+    createdAt?: true
     bountyId?: true
     teamId?: true
     _all?: true
@@ -4777,6 +4899,7 @@ export namespace Prisma {
     id: string
     videoDemo: string
     repo: string
+    createdAt: Date
     bountyId: string
     teamId: string
     _count: SubmissionCountAggregateOutputType | null
@@ -4802,29 +4925,36 @@ export namespace Prisma {
     id?: boolean
     videoDemo?: boolean
     repo?: boolean
+    createdAt?: boolean
     bountyId?: boolean
     teamId?: boolean
+    testCases?: boolean | Submission$testCasesArgs<ExtArgs>
     bounty?: boolean | BountyDefaultArgs<ExtArgs>
     team?: boolean | TeamDefaultArgs<ExtArgs>
+    _count?: boolean | SubmissionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["submission"]>
 
   export type SubmissionSelectScalar = {
     id?: boolean
     videoDemo?: boolean
     repo?: boolean
+    createdAt?: boolean
     bountyId?: boolean
     teamId?: boolean
   }
 
   export type SubmissionInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    testCases?: boolean | Submission$testCasesArgs<ExtArgs>
     bounty?: boolean | BountyDefaultArgs<ExtArgs>
     team?: boolean | TeamDefaultArgs<ExtArgs>
+    _count?: boolean | SubmissionCountOutputTypeDefaultArgs<ExtArgs>
   }
 
 
   export type $SubmissionPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     name: "Submission"
     objects: {
+      testCases: Prisma.$TestCasePayload<ExtArgs>[]
       bounty: Prisma.$BountyPayload<ExtArgs>
       team: Prisma.$TeamPayload<ExtArgs>
     }
@@ -4832,6 +4962,7 @@ export namespace Prisma {
       id: string
       videoDemo: string
       repo: string
+      createdAt: Date
       bountyId: string
       teamId: string
     }, ExtArgs["result"]["submission"]>
@@ -5199,6 +5330,8 @@ export namespace Prisma {
   export interface Prisma__SubmissionClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
+    testCases<T extends Submission$testCasesArgs<ExtArgs> = {}>(args?: Subset<T, Submission$testCasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'findMany'> | Null>;
+
     bounty<T extends BountyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BountyDefaultArgs<ExtArgs>>): Prisma__BountyClient<$Result.GetResult<Prisma.$BountyPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
 
     team<T extends TeamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamDefaultArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
@@ -5234,6 +5367,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Submission", 'String'>
     readonly videoDemo: FieldRef<"Submission", 'String'>
     readonly repo: FieldRef<"Submission", 'String'>
+    readonly createdAt: FieldRef<"Submission", 'DateTime'>
     readonly bountyId: FieldRef<"Submission", 'String'>
     readonly teamId: FieldRef<"Submission", 'String'>
   }
@@ -5548,6 +5682,27 @@ export namespace Prisma {
 
 
   /**
+   * Submission.testCases
+   */
+  export type Submission$testCasesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    where?: TestCaseWhereInput
+    orderBy?: TestCaseOrderByWithRelationInput | TestCaseOrderByWithRelationInput[]
+    cursor?: TestCaseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TestCaseScalarFieldEnum | TestCaseScalarFieldEnum[]
+  }
+
+
+  /**
    * Submission without action
    */
   export type SubmissionDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
@@ -5559,6 +5714,929 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: SubmissionInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model TestCase
+   */
+
+  export type AggregateTestCase = {
+    _count: TestCaseCountAggregateOutputType | null
+    _min: TestCaseMinAggregateOutputType | null
+    _max: TestCaseMaxAggregateOutputType | null
+  }
+
+  export type TestCaseMinAggregateOutputType = {
+    id: string | null
+    text: string | null
+    approved: boolean | null
+    submissionId: string | null
+  }
+
+  export type TestCaseMaxAggregateOutputType = {
+    id: string | null
+    text: string | null
+    approved: boolean | null
+    submissionId: string | null
+  }
+
+  export type TestCaseCountAggregateOutputType = {
+    id: number
+    text: number
+    approved: number
+    submissionId: number
+    _all: number
+  }
+
+
+  export type TestCaseMinAggregateInputType = {
+    id?: true
+    text?: true
+    approved?: true
+    submissionId?: true
+  }
+
+  export type TestCaseMaxAggregateInputType = {
+    id?: true
+    text?: true
+    approved?: true
+    submissionId?: true
+  }
+
+  export type TestCaseCountAggregateInputType = {
+    id?: true
+    text?: true
+    approved?: true
+    submissionId?: true
+    _all?: true
+  }
+
+  export type TestCaseAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TestCase to aggregate.
+     */
+    where?: TestCaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TestCases to fetch.
+     */
+    orderBy?: TestCaseOrderByWithRelationInput | TestCaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TestCaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TestCases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TestCases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TestCases
+    **/
+    _count?: true | TestCaseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TestCaseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TestCaseMaxAggregateInputType
+  }
+
+  export type GetTestCaseAggregateType<T extends TestCaseAggregateArgs> = {
+        [P in keyof T & keyof AggregateTestCase]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTestCase[P]>
+      : GetScalarType<T[P], AggregateTestCase[P]>
+  }
+
+
+
+
+  export type TestCaseGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: TestCaseWhereInput
+    orderBy?: TestCaseOrderByWithAggregationInput | TestCaseOrderByWithAggregationInput[]
+    by: TestCaseScalarFieldEnum[] | TestCaseScalarFieldEnum
+    having?: TestCaseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TestCaseCountAggregateInputType | true
+    _min?: TestCaseMinAggregateInputType
+    _max?: TestCaseMaxAggregateInputType
+  }
+
+  export type TestCaseGroupByOutputType = {
+    id: string
+    text: string
+    approved: boolean
+    submissionId: string | null
+    _count: TestCaseCountAggregateOutputType | null
+    _min: TestCaseMinAggregateOutputType | null
+    _max: TestCaseMaxAggregateOutputType | null
+  }
+
+  type GetTestCaseGroupByPayload<T extends TestCaseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TestCaseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TestCaseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TestCaseGroupByOutputType[P]>
+            : GetScalarType<T[P], TestCaseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TestCaseSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    text?: boolean
+    approved?: boolean
+    submissionId?: boolean
+    submission?: boolean | TestCase$submissionArgs<ExtArgs>
+  }, ExtArgs["result"]["testCase"]>
+
+  export type TestCaseSelectScalar = {
+    id?: boolean
+    text?: boolean
+    approved?: boolean
+    submissionId?: boolean
+  }
+
+  export type TestCaseInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    submission?: boolean | TestCase$submissionArgs<ExtArgs>
+  }
+
+
+  export type $TestCasePayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    name: "TestCase"
+    objects: {
+      submission: Prisma.$SubmissionPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetResult<{
+      id: string
+      text: string
+      approved: boolean
+      submissionId: string | null
+    }, ExtArgs["result"]["testCase"]>
+    composites: {}
+  }
+
+
+  type TestCaseGetPayload<S extends boolean | null | undefined | TestCaseDefaultArgs> = $Result.GetResult<Prisma.$TestCasePayload, S>
+
+  type TestCaseCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<TestCaseFindManyArgs, 'select' | 'include'> & {
+      select?: TestCaseCountAggregateInputType | true
+    }
+
+  export interface TestCaseDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TestCase'], meta: { name: 'TestCase' } }
+    /**
+     * Find zero or one TestCase that matches the filter.
+     * @param {TestCaseFindUniqueArgs} args - Arguments to find a TestCase
+     * @example
+     * // Get one TestCase
+     * const testCase = await prisma.testCase.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends TestCaseFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, TestCaseFindUniqueArgs<ExtArgs>>
+    ): Prisma__TestCaseClient<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one TestCase that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {TestCaseFindUniqueOrThrowArgs} args - Arguments to find a TestCase
+     * @example
+     * // Get one TestCase
+     * const testCase = await prisma.testCase.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends TestCaseFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TestCaseFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TestCaseClient<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first TestCase that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestCaseFindFirstArgs} args - Arguments to find a TestCase
+     * @example
+     * // Get one TestCase
+     * const testCase = await prisma.testCase.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends TestCaseFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, TestCaseFindFirstArgs<ExtArgs>>
+    ): Prisma__TestCaseClient<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first TestCase that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestCaseFindFirstOrThrowArgs} args - Arguments to find a TestCase
+     * @example
+     * // Get one TestCase
+     * const testCase = await prisma.testCase.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends TestCaseFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TestCaseFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TestCaseClient<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more TestCases that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestCaseFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TestCases
+     * const testCases = await prisma.testCase.findMany()
+     * 
+     * // Get first 10 TestCases
+     * const testCases = await prisma.testCase.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const testCaseWithIdOnly = await prisma.testCase.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends TestCaseFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TestCaseFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a TestCase.
+     * @param {TestCaseCreateArgs} args - Arguments to create a TestCase.
+     * @example
+     * // Create one TestCase
+     * const TestCase = await prisma.testCase.create({
+     *   data: {
+     *     // ... data to create a TestCase
+     *   }
+     * })
+     * 
+    **/
+    create<T extends TestCaseCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, TestCaseCreateArgs<ExtArgs>>
+    ): Prisma__TestCaseClient<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many TestCases.
+     *     @param {TestCaseCreateManyArgs} args - Arguments to create many TestCases.
+     *     @example
+     *     // Create many TestCases
+     *     const testCase = await prisma.testCase.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends TestCaseCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TestCaseCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a TestCase.
+     * @param {TestCaseDeleteArgs} args - Arguments to delete one TestCase.
+     * @example
+     * // Delete one TestCase
+     * const TestCase = await prisma.testCase.delete({
+     *   where: {
+     *     // ... filter to delete one TestCase
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends TestCaseDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, TestCaseDeleteArgs<ExtArgs>>
+    ): Prisma__TestCaseClient<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one TestCase.
+     * @param {TestCaseUpdateArgs} args - Arguments to update one TestCase.
+     * @example
+     * // Update one TestCase
+     * const testCase = await prisma.testCase.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends TestCaseUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, TestCaseUpdateArgs<ExtArgs>>
+    ): Prisma__TestCaseClient<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more TestCases.
+     * @param {TestCaseDeleteManyArgs} args - Arguments to filter TestCases to delete.
+     * @example
+     * // Delete a few TestCases
+     * const { count } = await prisma.testCase.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends TestCaseDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TestCaseDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TestCases.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestCaseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TestCases
+     * const testCase = await prisma.testCase.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends TestCaseUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, TestCaseUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TestCase.
+     * @param {TestCaseUpsertArgs} args - Arguments to update or create a TestCase.
+     * @example
+     * // Update or create a TestCase
+     * const testCase = await prisma.testCase.upsert({
+     *   create: {
+     *     // ... data to create a TestCase
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TestCase we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends TestCaseUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, TestCaseUpsertArgs<ExtArgs>>
+    ): Prisma__TestCaseClient<$Result.GetResult<Prisma.$TestCasePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of TestCases.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestCaseCountArgs} args - Arguments to filter TestCases to count.
+     * @example
+     * // Count the number of TestCases
+     * const count = await prisma.testCase.count({
+     *   where: {
+     *     // ... the filter for the TestCases we want to count
+     *   }
+     * })
+    **/
+    count<T extends TestCaseCountArgs>(
+      args?: Subset<T, TestCaseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TestCaseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TestCase.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestCaseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TestCaseAggregateArgs>(args: Subset<T, TestCaseAggregateArgs>): Prisma.PrismaPromise<GetTestCaseAggregateType<T>>
+
+    /**
+     * Group by TestCase.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TestCaseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TestCaseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TestCaseGroupByArgs['orderBy'] }
+        : { orderBy?: TestCaseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TestCaseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTestCaseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TestCase model
+   */
+  readonly fields: TestCaseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TestCase.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TestCaseClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    submission<T extends TestCase$submissionArgs<ExtArgs> = {}>(args?: Subset<T, TestCase$submissionArgs<ExtArgs>>): Prisma__SubmissionClient<$Result.GetResult<Prisma.$SubmissionPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the TestCase model
+   */ 
+  interface TestCaseFieldRefs {
+    readonly id: FieldRef<"TestCase", 'String'>
+    readonly text: FieldRef<"TestCase", 'String'>
+    readonly approved: FieldRef<"TestCase", 'Boolean'>
+    readonly submissionId: FieldRef<"TestCase", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * TestCase findUnique
+   */
+  export type TestCaseFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * Filter, which TestCase to fetch.
+     */
+    where: TestCaseWhereUniqueInput
+  }
+
+
+  /**
+   * TestCase findUniqueOrThrow
+   */
+  export type TestCaseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * Filter, which TestCase to fetch.
+     */
+    where: TestCaseWhereUniqueInput
+  }
+
+
+  /**
+   * TestCase findFirst
+   */
+  export type TestCaseFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * Filter, which TestCase to fetch.
+     */
+    where?: TestCaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TestCases to fetch.
+     */
+    orderBy?: TestCaseOrderByWithRelationInput | TestCaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TestCases.
+     */
+    cursor?: TestCaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TestCases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TestCases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TestCases.
+     */
+    distinct?: TestCaseScalarFieldEnum | TestCaseScalarFieldEnum[]
+  }
+
+
+  /**
+   * TestCase findFirstOrThrow
+   */
+  export type TestCaseFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * Filter, which TestCase to fetch.
+     */
+    where?: TestCaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TestCases to fetch.
+     */
+    orderBy?: TestCaseOrderByWithRelationInput | TestCaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TestCases.
+     */
+    cursor?: TestCaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TestCases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TestCases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TestCases.
+     */
+    distinct?: TestCaseScalarFieldEnum | TestCaseScalarFieldEnum[]
+  }
+
+
+  /**
+   * TestCase findMany
+   */
+  export type TestCaseFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * Filter, which TestCases to fetch.
+     */
+    where?: TestCaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TestCases to fetch.
+     */
+    orderBy?: TestCaseOrderByWithRelationInput | TestCaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TestCases.
+     */
+    cursor?: TestCaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TestCases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TestCases.
+     */
+    skip?: number
+    distinct?: TestCaseScalarFieldEnum | TestCaseScalarFieldEnum[]
+  }
+
+
+  /**
+   * TestCase create
+   */
+  export type TestCaseCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TestCase.
+     */
+    data: XOR<TestCaseCreateInput, TestCaseUncheckedCreateInput>
+  }
+
+
+  /**
+   * TestCase createMany
+   */
+  export type TestCaseCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TestCases.
+     */
+    data: TestCaseCreateManyInput | TestCaseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * TestCase update
+   */
+  export type TestCaseUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TestCase.
+     */
+    data: XOR<TestCaseUpdateInput, TestCaseUncheckedUpdateInput>
+    /**
+     * Choose, which TestCase to update.
+     */
+    where: TestCaseWhereUniqueInput
+  }
+
+
+  /**
+   * TestCase updateMany
+   */
+  export type TestCaseUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TestCases.
+     */
+    data: XOR<TestCaseUpdateManyMutationInput, TestCaseUncheckedUpdateManyInput>
+    /**
+     * Filter which TestCases to update
+     */
+    where?: TestCaseWhereInput
+  }
+
+
+  /**
+   * TestCase upsert
+   */
+  export type TestCaseUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TestCase to update in case it exists.
+     */
+    where: TestCaseWhereUniqueInput
+    /**
+     * In case the TestCase found by the `where` argument doesn't exist, create a new TestCase with this data.
+     */
+    create: XOR<TestCaseCreateInput, TestCaseUncheckedCreateInput>
+    /**
+     * In case the TestCase was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TestCaseUpdateInput, TestCaseUncheckedUpdateInput>
+  }
+
+
+  /**
+   * TestCase delete
+   */
+  export type TestCaseDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
+    /**
+     * Filter which TestCase to delete.
+     */
+    where: TestCaseWhereUniqueInput
+  }
+
+
+  /**
+   * TestCase deleteMany
+   */
+  export type TestCaseDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TestCases to delete
+     */
+    where?: TestCaseWhereInput
+  }
+
+
+  /**
+   * TestCase.submission
+   */
+  export type TestCase$submissionArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Submission
+     */
+    select?: SubmissionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: SubmissionInclude<ExtArgs> | null
+    where?: SubmissionWhereInput
+  }
+
+
+  /**
+   * TestCase without action
+   */
+  export type TestCaseDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestCase
+     */
+    select?: TestCaseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TestCaseInclude<ExtArgs> | null
   }
 
 
@@ -7742,11 +8820,22 @@ export namespace Prisma {
     id: 'id',
     videoDemo: 'videoDemo',
     repo: 'repo',
+    createdAt: 'createdAt',
     bountyId: 'bountyId',
     teamId: 'teamId'
   };
 
   export type SubmissionScalarFieldEnum = (typeof SubmissionScalarFieldEnum)[keyof typeof SubmissionScalarFieldEnum]
+
+
+  export const TestCaseScalarFieldEnum: {
+    id: 'id',
+    text: 'text',
+    approved: 'approved',
+    submissionId: 'submissionId'
+  };
+
+  export type TestCaseScalarFieldEnum = (typeof TestCaseScalarFieldEnum)[keyof typeof TestCaseScalarFieldEnum]
 
 
   export const MemberScalarFieldEnum: {
@@ -8226,8 +9315,10 @@ export namespace Prisma {
     id?: StringFilter<"Submission"> | string
     videoDemo?: StringFilter<"Submission"> | string
     repo?: StringFilter<"Submission"> | string
+    createdAt?: DateTimeFilter<"Submission"> | Date | string
     bountyId?: StringFilter<"Submission"> | string
     teamId?: StringFilter<"Submission"> | string
+    testCases?: TestCaseListRelationFilter
     bounty?: XOR<BountyRelationFilter, BountyWhereInput>
     team?: XOR<TeamRelationFilter, TeamWhereInput>
   }
@@ -8236,8 +9327,10 @@ export namespace Prisma {
     id?: SortOrder
     videoDemo?: SortOrder
     repo?: SortOrder
+    createdAt?: SortOrder
     bountyId?: SortOrder
     teamId?: SortOrder
+    testCases?: TestCaseOrderByRelationAggregateInput
     bounty?: BountyOrderByWithRelationInput
     team?: TeamOrderByWithRelationInput
   }
@@ -8249,8 +9342,10 @@ export namespace Prisma {
     NOT?: SubmissionWhereInput | SubmissionWhereInput[]
     videoDemo?: StringFilter<"Submission"> | string
     repo?: StringFilter<"Submission"> | string
+    createdAt?: DateTimeFilter<"Submission"> | Date | string
     bountyId?: StringFilter<"Submission"> | string
     teamId?: StringFilter<"Submission"> | string
+    testCases?: TestCaseListRelationFilter
     bounty?: XOR<BountyRelationFilter, BountyWhereInput>
     team?: XOR<TeamRelationFilter, TeamWhereInput>
   }, "id">
@@ -8259,6 +9354,7 @@ export namespace Prisma {
     id?: SortOrder
     videoDemo?: SortOrder
     repo?: SortOrder
+    createdAt?: SortOrder
     bountyId?: SortOrder
     teamId?: SortOrder
     _count?: SubmissionCountOrderByAggregateInput
@@ -8273,8 +9369,59 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Submission"> | string
     videoDemo?: StringWithAggregatesFilter<"Submission"> | string
     repo?: StringWithAggregatesFilter<"Submission"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Submission"> | Date | string
     bountyId?: StringWithAggregatesFilter<"Submission"> | string
     teamId?: StringWithAggregatesFilter<"Submission"> | string
+  }
+
+  export type TestCaseWhereInput = {
+    AND?: TestCaseWhereInput | TestCaseWhereInput[]
+    OR?: TestCaseWhereInput[]
+    NOT?: TestCaseWhereInput | TestCaseWhereInput[]
+    id?: StringFilter<"TestCase"> | string
+    text?: StringFilter<"TestCase"> | string
+    approved?: BoolFilter<"TestCase"> | boolean
+    submissionId?: StringNullableFilter<"TestCase"> | string | null
+    submission?: XOR<SubmissionNullableRelationFilter, SubmissionWhereInput> | null
+  }
+
+  export type TestCaseOrderByWithRelationInput = {
+    id?: SortOrder
+    text?: SortOrder
+    approved?: SortOrder
+    submissionId?: SortOrderInput | SortOrder
+    submission?: SubmissionOrderByWithRelationInput
+  }
+
+  export type TestCaseWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TestCaseWhereInput | TestCaseWhereInput[]
+    OR?: TestCaseWhereInput[]
+    NOT?: TestCaseWhereInput | TestCaseWhereInput[]
+    text?: StringFilter<"TestCase"> | string
+    approved?: BoolFilter<"TestCase"> | boolean
+    submissionId?: StringNullableFilter<"TestCase"> | string | null
+    submission?: XOR<SubmissionNullableRelationFilter, SubmissionWhereInput> | null
+  }, "id">
+
+  export type TestCaseOrderByWithAggregationInput = {
+    id?: SortOrder
+    text?: SortOrder
+    approved?: SortOrder
+    submissionId?: SortOrderInput | SortOrder
+    _count?: TestCaseCountOrderByAggregateInput
+    _max?: TestCaseMaxOrderByAggregateInput
+    _min?: TestCaseMinOrderByAggregateInput
+  }
+
+  export type TestCaseScalarWhereWithAggregatesInput = {
+    AND?: TestCaseScalarWhereWithAggregatesInput | TestCaseScalarWhereWithAggregatesInput[]
+    OR?: TestCaseScalarWhereWithAggregatesInput[]
+    NOT?: TestCaseScalarWhereWithAggregatesInput | TestCaseScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TestCase"> | string
+    text?: StringWithAggregatesFilter<"TestCase"> | string
+    approved?: BoolWithAggregatesFilter<"TestCase"> | boolean
+    submissionId?: StringNullableWithAggregatesFilter<"TestCase"> | string | null
   }
 
   export type MemberWhereInput = {
@@ -8742,6 +9889,8 @@ export namespace Prisma {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
+    testCases?: TestCaseCreateNestedManyWithoutSubmissionInput
     bounty: BountyCreateNestedOneWithoutSubmissionsInput
     team: TeamCreateNestedOneWithoutSubmissionInput
   }
@@ -8750,14 +9899,18 @@ export namespace Prisma {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
     bountyId: string
     teamId: string
+    testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type SubmissionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput
   }
@@ -8766,14 +9919,17 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bountyId?: StringFieldUpdateOperationsInput | string
     teamId?: StringFieldUpdateOperationsInput | string
+    testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type SubmissionCreateManyInput = {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
     bountyId: string
     teamId: string
   }
@@ -8782,14 +9938,64 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SubmissionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bountyId?: StringFieldUpdateOperationsInput | string
     teamId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestCaseCreateInput = {
+    id?: string
+    text: string
+    approved?: boolean
+    submission?: SubmissionCreateNestedOneWithoutTestCasesInput
+  }
+
+  export type TestCaseUncheckedCreateInput = {
+    id?: string
+    text: string
+    approved?: boolean
+    submissionId?: string | null
+  }
+
+  export type TestCaseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    approved?: BoolFieldUpdateOperationsInput | boolean
+    submission?: SubmissionUpdateOneWithoutTestCasesNestedInput
+  }
+
+  export type TestCaseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    approved?: BoolFieldUpdateOperationsInput | boolean
+    submissionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TestCaseCreateManyInput = {
+    id?: string
+    text: string
+    approved?: boolean
+    submissionId?: string | null
+  }
+
+  export type TestCaseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    approved?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TestCaseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    approved?: BoolFieldUpdateOperationsInput | boolean
+    submissionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MemberCreateInput = {
@@ -9390,6 +10596,12 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type TestCaseListRelationFilter = {
+    every?: TestCaseWhereInput
+    some?: TestCaseWhereInput
+    none?: TestCaseWhereInput
+  }
+
   export type BountyRelationFilter = {
     is?: BountyWhereInput
     isNot?: BountyWhereInput
@@ -9400,10 +10612,15 @@ export namespace Prisma {
     isNot?: TeamWhereInput
   }
 
+  export type TestCaseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type SubmissionCountOrderByAggregateInput = {
     id?: SortOrder
     videoDemo?: SortOrder
     repo?: SortOrder
+    createdAt?: SortOrder
     bountyId?: SortOrder
     teamId?: SortOrder
   }
@@ -9412,6 +10629,7 @@ export namespace Prisma {
     id?: SortOrder
     videoDemo?: SortOrder
     repo?: SortOrder
+    createdAt?: SortOrder
     bountyId?: SortOrder
     teamId?: SortOrder
   }
@@ -9420,8 +10638,35 @@ export namespace Prisma {
     id?: SortOrder
     videoDemo?: SortOrder
     repo?: SortOrder
+    createdAt?: SortOrder
     bountyId?: SortOrder
     teamId?: SortOrder
+  }
+
+  export type SubmissionNullableRelationFilter = {
+    is?: SubmissionWhereInput | null
+    isNot?: SubmissionWhereInput | null
+  }
+
+  export type TestCaseCountOrderByAggregateInput = {
+    id?: SortOrder
+    text?: SortOrder
+    approved?: SortOrder
+    submissionId?: SortOrder
+  }
+
+  export type TestCaseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    text?: SortOrder
+    approved?: SortOrder
+    submissionId?: SortOrder
+  }
+
+  export type TestCaseMinOrderByAggregateInput = {
+    id?: SortOrder
+    text?: SortOrder
+    approved?: SortOrder
+    submissionId?: SortOrder
   }
 
   export type EnumRoleTypeNullableListFilter<$PrismaModel = never> = {
@@ -9854,6 +11099,13 @@ export namespace Prisma {
     deleteMany?: SubmissionScalarWhereInput | SubmissionScalarWhereInput[]
   }
 
+  export type TestCaseCreateNestedManyWithoutSubmissionInput = {
+    create?: XOR<TestCaseCreateWithoutSubmissionInput, TestCaseUncheckedCreateWithoutSubmissionInput> | TestCaseCreateWithoutSubmissionInput[] | TestCaseUncheckedCreateWithoutSubmissionInput[]
+    connectOrCreate?: TestCaseCreateOrConnectWithoutSubmissionInput | TestCaseCreateOrConnectWithoutSubmissionInput[]
+    createMany?: TestCaseCreateManySubmissionInputEnvelope
+    connect?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+  }
+
   export type BountyCreateNestedOneWithoutSubmissionsInput = {
     create?: XOR<BountyCreateWithoutSubmissionsInput, BountyUncheckedCreateWithoutSubmissionsInput>
     connectOrCreate?: BountyCreateOrConnectWithoutSubmissionsInput
@@ -9864,6 +11116,27 @@ export namespace Prisma {
     create?: XOR<TeamCreateWithoutSubmissionInput, TeamUncheckedCreateWithoutSubmissionInput>
     connectOrCreate?: TeamCreateOrConnectWithoutSubmissionInput
     connect?: TeamWhereUniqueInput
+  }
+
+  export type TestCaseUncheckedCreateNestedManyWithoutSubmissionInput = {
+    create?: XOR<TestCaseCreateWithoutSubmissionInput, TestCaseUncheckedCreateWithoutSubmissionInput> | TestCaseCreateWithoutSubmissionInput[] | TestCaseUncheckedCreateWithoutSubmissionInput[]
+    connectOrCreate?: TestCaseCreateOrConnectWithoutSubmissionInput | TestCaseCreateOrConnectWithoutSubmissionInput[]
+    createMany?: TestCaseCreateManySubmissionInputEnvelope
+    connect?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+  }
+
+  export type TestCaseUpdateManyWithoutSubmissionNestedInput = {
+    create?: XOR<TestCaseCreateWithoutSubmissionInput, TestCaseUncheckedCreateWithoutSubmissionInput> | TestCaseCreateWithoutSubmissionInput[] | TestCaseUncheckedCreateWithoutSubmissionInput[]
+    connectOrCreate?: TestCaseCreateOrConnectWithoutSubmissionInput | TestCaseCreateOrConnectWithoutSubmissionInput[]
+    upsert?: TestCaseUpsertWithWhereUniqueWithoutSubmissionInput | TestCaseUpsertWithWhereUniqueWithoutSubmissionInput[]
+    createMany?: TestCaseCreateManySubmissionInputEnvelope
+    set?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+    disconnect?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+    delete?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+    connect?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+    update?: TestCaseUpdateWithWhereUniqueWithoutSubmissionInput | TestCaseUpdateWithWhereUniqueWithoutSubmissionInput[]
+    updateMany?: TestCaseUpdateManyWithWhereWithoutSubmissionInput | TestCaseUpdateManyWithWhereWithoutSubmissionInput[]
+    deleteMany?: TestCaseScalarWhereInput | TestCaseScalarWhereInput[]
   }
 
   export type BountyUpdateOneRequiredWithoutSubmissionsNestedInput = {
@@ -9880,6 +11153,36 @@ export namespace Prisma {
     upsert?: TeamUpsertWithoutSubmissionInput
     connect?: TeamWhereUniqueInput
     update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutSubmissionInput, TeamUpdateWithoutSubmissionInput>, TeamUncheckedUpdateWithoutSubmissionInput>
+  }
+
+  export type TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput = {
+    create?: XOR<TestCaseCreateWithoutSubmissionInput, TestCaseUncheckedCreateWithoutSubmissionInput> | TestCaseCreateWithoutSubmissionInput[] | TestCaseUncheckedCreateWithoutSubmissionInput[]
+    connectOrCreate?: TestCaseCreateOrConnectWithoutSubmissionInput | TestCaseCreateOrConnectWithoutSubmissionInput[]
+    upsert?: TestCaseUpsertWithWhereUniqueWithoutSubmissionInput | TestCaseUpsertWithWhereUniqueWithoutSubmissionInput[]
+    createMany?: TestCaseCreateManySubmissionInputEnvelope
+    set?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+    disconnect?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+    delete?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+    connect?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[]
+    update?: TestCaseUpdateWithWhereUniqueWithoutSubmissionInput | TestCaseUpdateWithWhereUniqueWithoutSubmissionInput[]
+    updateMany?: TestCaseUpdateManyWithWhereWithoutSubmissionInput | TestCaseUpdateManyWithWhereWithoutSubmissionInput[]
+    deleteMany?: TestCaseScalarWhereInput | TestCaseScalarWhereInput[]
+  }
+
+  export type SubmissionCreateNestedOneWithoutTestCasesInput = {
+    create?: XOR<SubmissionCreateWithoutTestCasesInput, SubmissionUncheckedCreateWithoutTestCasesInput>
+    connectOrCreate?: SubmissionCreateOrConnectWithoutTestCasesInput
+    connect?: SubmissionWhereUniqueInput
+  }
+
+  export type SubmissionUpdateOneWithoutTestCasesNestedInput = {
+    create?: XOR<SubmissionCreateWithoutTestCasesInput, SubmissionUncheckedCreateWithoutTestCasesInput>
+    connectOrCreate?: SubmissionCreateOrConnectWithoutTestCasesInput
+    upsert?: SubmissionUpsertWithoutTestCasesInput
+    disconnect?: SubmissionWhereInput | boolean
+    delete?: SubmissionWhereInput | boolean
+    connect?: SubmissionWhereUniqueInput
+    update?: XOR<XOR<SubmissionUpdateToOneWithWhereWithoutTestCasesInput, SubmissionUpdateWithoutTestCasesInput>, SubmissionUncheckedUpdateWithoutTestCasesInput>
   }
 
   export type MemberCreaterolesInput = {
@@ -10442,6 +11745,8 @@ export namespace Prisma {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
+    testCases?: TestCaseCreateNestedManyWithoutSubmissionInput
     bounty: BountyCreateNestedOneWithoutSubmissionsInput
   }
 
@@ -10449,7 +11754,9 @@ export namespace Prisma {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
     bountyId: string
+    testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type SubmissionCreateOrConnectWithoutTeamInput = {
@@ -10571,6 +11878,7 @@ export namespace Prisma {
     id?: StringFilter<"Submission"> | string
     videoDemo?: StringFilter<"Submission"> | string
     repo?: StringFilter<"Submission"> | string
+    createdAt?: DateTimeFilter<"Submission"> | Date | string
     bountyId?: StringFilter<"Submission"> | string
     teamId?: StringFilter<"Submission"> | string
   }
@@ -10764,6 +12072,8 @@ export namespace Prisma {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
+    testCases?: TestCaseCreateNestedManyWithoutSubmissionInput
     team: TeamCreateNestedOneWithoutSubmissionInput
   }
 
@@ -10771,7 +12081,9 @@ export namespace Prisma {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
     teamId: string
+    testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
   export type SubmissionCreateOrConnectWithoutBountyInput = {
@@ -10960,6 +12272,28 @@ export namespace Prisma {
     memberWalletAddress?: StringFieldUpdateOperationsInput | string
   }
 
+  export type TestCaseCreateWithoutSubmissionInput = {
+    id?: string
+    text: string
+    approved?: boolean
+  }
+
+  export type TestCaseUncheckedCreateWithoutSubmissionInput = {
+    id?: string
+    text: string
+    approved?: boolean
+  }
+
+  export type TestCaseCreateOrConnectWithoutSubmissionInput = {
+    where: TestCaseWhereUniqueInput
+    create: XOR<TestCaseCreateWithoutSubmissionInput, TestCaseUncheckedCreateWithoutSubmissionInput>
+  }
+
+  export type TestCaseCreateManySubmissionInputEnvelope = {
+    data: TestCaseCreateManySubmissionInput | TestCaseCreateManySubmissionInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BountyCreateWithoutSubmissionsInput = {
     id?: string
     title: string
@@ -11026,6 +12360,32 @@ export namespace Prisma {
   export type TeamCreateOrConnectWithoutSubmissionInput = {
     where: TeamWhereUniqueInput
     create: XOR<TeamCreateWithoutSubmissionInput, TeamUncheckedCreateWithoutSubmissionInput>
+  }
+
+  export type TestCaseUpsertWithWhereUniqueWithoutSubmissionInput = {
+    where: TestCaseWhereUniqueInput
+    update: XOR<TestCaseUpdateWithoutSubmissionInput, TestCaseUncheckedUpdateWithoutSubmissionInput>
+    create: XOR<TestCaseCreateWithoutSubmissionInput, TestCaseUncheckedCreateWithoutSubmissionInput>
+  }
+
+  export type TestCaseUpdateWithWhereUniqueWithoutSubmissionInput = {
+    where: TestCaseWhereUniqueInput
+    data: XOR<TestCaseUpdateWithoutSubmissionInput, TestCaseUncheckedUpdateWithoutSubmissionInput>
+  }
+
+  export type TestCaseUpdateManyWithWhereWithoutSubmissionInput = {
+    where: TestCaseScalarWhereInput
+    data: XOR<TestCaseUpdateManyMutationInput, TestCaseUncheckedUpdateManyWithoutSubmissionInput>
+  }
+
+  export type TestCaseScalarWhereInput = {
+    AND?: TestCaseScalarWhereInput | TestCaseScalarWhereInput[]
+    OR?: TestCaseScalarWhereInput[]
+    NOT?: TestCaseScalarWhereInput | TestCaseScalarWhereInput[]
+    id?: StringFilter<"TestCase"> | string
+    text?: StringFilter<"TestCase"> | string
+    approved?: BoolFilter<"TestCase"> | boolean
+    submissionId?: StringNullableFilter<"TestCase"> | string | null
   }
 
   export type BountyUpsertWithoutSubmissionsInput = {
@@ -11106,6 +12466,58 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     creatorAddress?: StringFieldUpdateOperationsInput | string
     members?: MemberUncheckedUpdateManyWithoutTeamsNestedInput
+  }
+
+  export type SubmissionCreateWithoutTestCasesInput = {
+    id?: string
+    videoDemo: string
+    repo: string
+    createdAt?: Date | string
+    bounty: BountyCreateNestedOneWithoutSubmissionsInput
+    team: TeamCreateNestedOneWithoutSubmissionInput
+  }
+
+  export type SubmissionUncheckedCreateWithoutTestCasesInput = {
+    id?: string
+    videoDemo: string
+    repo: string
+    createdAt?: Date | string
+    bountyId: string
+    teamId: string
+  }
+
+  export type SubmissionCreateOrConnectWithoutTestCasesInput = {
+    where: SubmissionWhereUniqueInput
+    create: XOR<SubmissionCreateWithoutTestCasesInput, SubmissionUncheckedCreateWithoutTestCasesInput>
+  }
+
+  export type SubmissionUpsertWithoutTestCasesInput = {
+    update: XOR<SubmissionUpdateWithoutTestCasesInput, SubmissionUncheckedUpdateWithoutTestCasesInput>
+    create: XOR<SubmissionCreateWithoutTestCasesInput, SubmissionUncheckedCreateWithoutTestCasesInput>
+    where?: SubmissionWhereInput
+  }
+
+  export type SubmissionUpdateToOneWithWhereWithoutTestCasesInput = {
+    where?: SubmissionWhereInput
+    data: XOR<SubmissionUpdateWithoutTestCasesInput, SubmissionUncheckedUpdateWithoutTestCasesInput>
+  }
+
+  export type SubmissionUpdateWithoutTestCasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    videoDemo?: StringFieldUpdateOperationsInput | string
+    repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput
+    team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput
+  }
+
+  export type SubmissionUncheckedUpdateWithoutTestCasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    videoDemo?: StringFieldUpdateOperationsInput | string
+    repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bountyId?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
   }
 
   export type TeamInviteCreateWithoutMemberInput = {
@@ -11487,6 +12899,7 @@ export namespace Prisma {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
     bountyId: string
   }
 
@@ -11550,6 +12963,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput
   }
 
@@ -11557,13 +12972,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bountyId?: StringFieldUpdateOperationsInput | string
+    testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type SubmissionUncheckedUpdateManyWithoutTeamInput = {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bountyId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -11649,6 +13067,7 @@ export namespace Prisma {
     id?: string
     videoDemo: string
     repo: string
+    createdAt?: Date | string
     teamId: string
   }
 
@@ -11656,6 +13075,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput
   }
 
@@ -11663,14 +13084,41 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teamId?: StringFieldUpdateOperationsInput | string
+    testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
   export type SubmissionUncheckedUpdateManyWithoutBountyInput = {
     id?: StringFieldUpdateOperationsInput | string
     videoDemo?: StringFieldUpdateOperationsInput | string
     repo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     teamId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TestCaseCreateManySubmissionInput = {
+    id?: string
+    text: string
+    approved?: boolean
+  }
+
+  export type TestCaseUpdateWithoutSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    approved?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TestCaseUncheckedUpdateWithoutSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    approved?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TestCaseUncheckedUpdateManyWithoutSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    approved?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TeamInviteCreateManyMemberInput = {
@@ -11908,6 +13356,10 @@ export namespace Prisma {
      * @deprecated Use SubmissionDefaultArgs instead
      */
     export type SubmissionArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = SubmissionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TestCaseDefaultArgs instead
+     */
+    export type TestCaseArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = TestCaseDefaultArgs<ExtArgs>
     /**
      * @deprecated Use MemberDefaultArgs instead
      */

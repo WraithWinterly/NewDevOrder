@@ -76,7 +76,10 @@ export default function AddTestCases() {
         </StyledText>
         <ProjBountyBreadcrumb bounty={selectedFullBounty} />
         <Separator customH={16} />
-
+        <StyledText>
+          Warning! If you already added test cases, submitting will override all
+          existing test cases, and all test cases you approved.
+        </StyledText>
         <TouchableOpacity
           style={{
             flexDirection: 'row',

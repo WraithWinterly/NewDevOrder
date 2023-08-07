@@ -75,8 +75,11 @@ export function StyledButton({
     case 'borderNoFill':
       style = {
         fontSize: 16,
-        paddingTop: 8,
-        paddingBottom: 10,
+        // paddingTop: 8,
+        // paddingBottom: 10,
+        justifyContent: 'center',
+        paddingBottom: 4,
+        height: 52,
         paddingHorizontal: 28,
         backgroundColor: Colors.Transparent,
         borderWidth: 1,
@@ -102,6 +105,7 @@ export function StyledButton({
         : '#381E72',
     fontWeight: '500',
     alignSelf: 'center',
+
     fontSize: 16,
   };
   const noBg = type != 'noBg' && type != 'noBgDanger' && type != 'noBgPurple';

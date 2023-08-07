@@ -66,9 +66,8 @@ export default function StartBounty() {
       bountyID: selectedFullBounty.id,
     } as StartBountyPOSTData);
     if (data) {
-      // Force refetch bonuty
+      // Force refetch bounty
       setSelectedBounty(selectedFullBounty.id);
-      console.log(selectedFullBounty.id);
       fetchBounties();
       navigation.navigate('ViewBounty');
     }
