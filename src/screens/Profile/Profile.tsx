@@ -19,7 +19,7 @@ type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
 
 const RoleDict = [
   {
-    id: '0',
+    id: '5',
     title: 'Bounty Designer',
   },
   {
@@ -111,6 +111,7 @@ function ProfileCard({profile}: {profile: Member}) {
       <DropdownMenu
         data={RoleDict || []}
         onSelect={async (itemID, itemIndex) => {
+          console.log('ac');
           // console.log(itemID);
           const role = RoleDict?.find(role => role.id == itemID);
 

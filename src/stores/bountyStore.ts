@@ -21,6 +21,7 @@ type BountyStore = {
     project: Project;
     founder: Member;
     submissions: (Submission & {team: Team})[] | undefined;
+    winningSubmission: (Submission & {team: Team}) | undefined;
   };
   selectedBountyWinner: BountyWinner | undefined;
   setSelectedBounty: (fetchId: string | undefined) => void;
@@ -61,6 +62,7 @@ const useBountyStore = create<BountyStore>((set, get) => ({
         project: Project;
         founder: Member;
         submissions: (Submission & {team: Team})[] | undefined;
+        winningSubmission: (Submission & {team: Team}) | undefined;
       };
       set(() => ({selectedBounty: data}));
       const {result: resWinner, error: errorWInner} = await query(

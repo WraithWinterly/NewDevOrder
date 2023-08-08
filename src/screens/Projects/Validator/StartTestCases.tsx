@@ -5,6 +5,7 @@ import {TestCase} from 'prisma/generated';
 import {useEffect, useId, useState} from 'react';
 import {Text, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
+import CheckIcon from 'src/components/icons/CheckIcon';
 import WarningIcon from 'src/components/icons/WarningIcon';
 import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
 import Separator from 'src/components/ui/Separator';
@@ -179,6 +180,7 @@ export default function StartTestCases({route, navigation}: Props) {
     selectedBountyWinner.submissionId === submissionID;
 
   console.log('', selectedBountyWinner);
+  const isBountyValidator = playingRole === RoleType.BountyValidator;
   return (
     <Layout>
       <StyledText style={{fontSize: 24}}>
@@ -193,87 +195,112 @@ export default function StartTestCases({route, navigation}: Props) {
       </StyledText>
       <ProjBountyBreadcrumb bounty={selectedBounty} />
       <Separator />
-      {optimisticTestCases.map((testCase, index) => (
-        <View key={`test-case-${id}-${index}`}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <View>
-              <StyledText style={{fontSize: 24}}>
-                Test Case {index + 1}
-              </StyledText>
-              <StyledText>{testCase.text}</StyledText>
-            </View>
+      {selectedBounty?.stage === 'Active' && (
+        <>
+          {optimisticTestCases.map((testCase, index) => (
+            <View key={`test-case-${id}-${index}`}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <View>
+                  <StyledText style={{fontSize: 24}}>
+                    Test Case {index + 1}
+                  </StyledText>
+                  <StyledText>{testCase.text}</StyledText>
+                </View>
 
-            <StyledCheckbox
-              title=""
-              value={testCase.approved}
-              onValueChange={() => {
-                const newTestCases = [...optimisticTestCases];
-                newTestCases[index].approved = !newTestCases[index].approved;
-                setOptimisticTestCases(newTestCases);
-              }}
-            />
-          </View>
-          <Separator />
-        </View>
-      ))}
-      <StyledButton
-        loading={loadingSubmit}
-        error={!!errorSubmit}
-        onPress={onSubmit}>
-        Submit
-      </StyledButton>
-      <View style={{height: 64}} />
-      {isWinner && (
-        <View>
-          <StyledText>You already chose a winner.</StyledText>
-          <StyledCheckbox
-            title="Approved By Founder"
-            onValueChange={() => {}}
-            value={selectedBountyWinner.approvedByFounder}
-          />
-          <StyledCheckbox
-            title="Approved By Bounty Manager"
-            onValueChange={() => {}}
-            value={selectedBountyWinner.approvedByManager}
-          />
-          {playingRole !== RoleType.BountyValidator && (
+                <StyledCheckbox
+                  title=""
+                  value={testCase.approved}
+                  onValueChange={() => {
+                    if (!isBountyValidator) return;
+                    const newTestCases = [...optimisticTestCases];
+                    newTestCases[index].approved =
+                      !newTestCases[index].approved;
+                    setOptimisticTestCases(newTestCases);
+                  }}
+                />
+              </View>
+              <Separator />
+            </View>
+          ))}
+          {isBountyValidator && (
             <StyledButton
-              loading={loadingApproveDisapproveBountyWinner}
-              error={!!errorApproveDisapproveBountyWinner}
-              onPress={() => approveDisapproveBountyWinner(true)}
-              type="normal2">
-              Accept winner
+              loading={loadingSubmit}
+              error={!!errorSubmit}
+              onPress={onSubmit}>
+              Submit
             </StyledButton>
           )}
-          <View style={{height: 72}}></View>
-          <StyledButton
-            loading={loadingApproveDisapproveBountyWinner}
-            error={!!errorApproveDisapproveBountyWinner}
-            onPress={() => approveDisapproveBountyWinner(false)}
-            type="normal2">
-            Reject winner
-          </StyledButton>
-        </View>
-      )}
-      {!selectedBountyWinner && (
-        <StyledButton
-          loading={loadingSelectWinner}
-          error={!!errorSelectWinner}
-          onPress={onSubmitWinner}
-          type="normal2">
-          Confirm as winner
-        </StyledButton>
-      )}
 
-      {selectedBountyWinner && !isWinner && (
-        <View style={{flexDirection: 'row', gap: 12, alignItems: 'center'}}>
-          <WarningIcon />
-          <StyledText>A winner was already chosen.</StyledText>
+          <View style={{height: 32}} />
+          {isWinner && (
+            <View>
+              <StyledText style={{fontWeight: '500', fontSize: 18}}>
+                Accepting Status:
+              </StyledText>
+
+              <StyledCheckbox
+                title="Approved By Founder"
+                onValueChange={() => {}}
+                value={selectedBountyWinner.approvedByFounder}
+              />
+              <StyledCheckbox
+                title="Approved By Bounty Manager"
+                onValueChange={() => {}}
+                value={selectedBountyWinner.approvedByManager}
+              />
+              <View style={{height: 32}} />
+              {playingRole !== RoleType.BountyValidator &&
+                ((playingRole === RoleType.Founder &&
+                  !selectedBountyWinner.approvedByFounder) ||
+                  (playingRole === RoleType.BountyManager &&
+                    !selectedBountyWinner.approvedByManager)) && (
+                  <StyledButton
+                    loading={loadingApproveDisapproveBountyWinner}
+                    error={!!errorApproveDisapproveBountyWinner}
+                    onPress={() => approveDisapproveBountyWinner(true)}
+                    type="normal2">
+                    Accept winner
+                  </StyledButton>
+                )}
+              <View style={{height: 64}}></View>
+              <StyledButton
+                loading={loadingApproveDisapproveBountyWinner}
+                error={!!errorApproveDisapproveBountyWinner}
+                onPress={() => approveDisapproveBountyWinner(false)}
+                type="normal2">
+                Reject winner
+              </StyledButton>
+            </View>
+          )}
+          {!selectedBountyWinner && (
+            <StyledButton
+              loading={loadingSelectWinner}
+              error={!!errorSelectWinner}
+              onPress={onSubmitWinner}
+              type="normal2">
+              Confirm as winner
+            </StyledButton>
+          )}
+
+          {selectedBountyWinner && !isWinner && (
+            <View style={{flexDirection: 'row', gap: 12, alignItems: 'center'}}>
+              <WarningIcon />
+              <StyledText>A winner was already chosen.</StyledText>
+            </View>
+          )}
+        </>
+      )}
+      {selectedBounty?.stage === 'Completed' && (
+        <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+          <CheckIcon />
+          <StyledText>
+            Looks like this winner of the project has already been selected!
+          </StyledText>
         </View>
       )}
     </Layout>

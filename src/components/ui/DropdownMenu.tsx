@@ -89,9 +89,15 @@ export default function DropdownMenu({
         //   }
         // }}>
         onValueChange={disabled ? () => {} : onSelect}>
+        <Picker.Item
+          label={'Select Role...'}
+          value={''}
+          key={''}
+          style={{display: 'none'}}
+        />
         {data?.map(data => (
           <Picker.Item
-            label={data.title}
+            label={`-  ${data.title}`}
             value={data.id}
             key={`${data.title}-${data.id}-${id}`}
           />

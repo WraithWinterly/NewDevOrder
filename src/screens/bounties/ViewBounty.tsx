@@ -33,6 +33,7 @@ import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
 import {RoleType} from 'prisma/generated';
 import {DropdownSection} from 'src/components/ui/styled/StyledDropdown';
+import {BountyStage} from 'prisma/generated';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
@@ -227,6 +228,7 @@ export default function ViewBounty({route, navigation}: Props) {
       approvedByFounder: false,
       approvedByManager: false,
       approvedByValidator: false,
+      winningSubmissionId: '',
       testCases: [],
       aboutProject: createBountyData.description,
       submissions: [], // Assuming it's an empty array for now
@@ -299,7 +301,8 @@ export default function ViewBounty({route, navigation}: Props) {
             ))}
           {(playingRole === RoleType.BountyManager ||
             playingRole === RoleType.Founder) &&
-            isWinner && (
+            isWinner &&
+            bounty?.stage === 'Active' && (
               <StyledButton
                 type="normal2"
                 onPress={() => {
@@ -313,6 +316,15 @@ export default function ViewBounty({route, navigation}: Props) {
                 View and approve winner
               </StyledButton>
             )}
+          {bounty?.stage === BountyStage.Completed && (
+            <StyledButton
+              onPress={() => {
+                // setSelectedFullBounty(bounty.id);
+                navigation.navigate('ViewSolution');
+              }}>
+              View Solution
+            </StyledButton>
+          )}
           {isValidator
             ? bounty?.stage === 'Active' &&
               (bounty?.testCases.length === 0 ? (

@@ -28,6 +28,9 @@ export default function PendingProposal() {
   const [pendingBounties, setPendingBounties] = useState<typeof bounties>([]);
   const [approvedBounties, setApprovedBounties] = useState<typeof bounties>([]);
   const [activeBounties, setActiveBounties] = useState<typeof bounties>([]);
+  const [completedBounties, setCompletedBounties] = useState<typeof bounties>(
+    [],
+  );
 
   useEffect(() => {
     if (playingRole) {
@@ -46,6 +49,9 @@ export default function PendingProposal() {
         ),
       );
       setActiveBounties(bounties?.filter(bounty => bounty.stage === 'Active'));
+      setCompletedBounties(
+        bounties?.filter(bounty => bounty.stage === 'Completed'),
+      );
     }
   }, [playingRole, bounties]);
 
@@ -208,6 +214,16 @@ export default function PendingProposal() {
                   Active Bounties
                 </StyledText>
                 <BountyList bounties={activeBounties}></BountyList>
+                <Separator />
+              </>
+            )}
+            {!!completedBounties && completedBounties.length > 0 && (
+              <>
+                <StyledText
+                  style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
+                  Completed Bounties
+                </StyledText>
+                <BountyList bounties={completedBounties}></BountyList>
                 <Separator />
               </>
             )}

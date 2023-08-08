@@ -4099,6 +4099,7 @@ export namespace Prisma {
     deadline: Date | null;
     stage: $Enums.BountyStage | null;
     aboutProject: string | null;
+    winningSubmissionId: string | null;
     approvedByFounder: boolean | null;
     approvedByManager: boolean | null;
     approvedByValidator: boolean | null;
@@ -4115,6 +4116,7 @@ export namespace Prisma {
     deadline: Date | null;
     stage: $Enums.BountyStage | null;
     aboutProject: string | null;
+    winningSubmissionId: string | null;
     approvedByFounder: boolean | null;
     approvedByManager: boolean | null;
     approvedByValidator: boolean | null;
@@ -4135,6 +4137,7 @@ export namespace Prisma {
     stage: number;
     aboutProject: number;
     headerSections: number;
+    winningSubmissionId: number;
     approvedByFounder: number;
     approvedByManager: number;
     approvedByValidator: number;
@@ -4160,6 +4163,7 @@ export namespace Prisma {
     deadline?: true;
     stage?: true;
     aboutProject?: true;
+    winningSubmissionId?: true;
     approvedByFounder?: true;
     approvedByManager?: true;
     approvedByValidator?: true;
@@ -4176,6 +4180,7 @@ export namespace Prisma {
     deadline?: true;
     stage?: true;
     aboutProject?: true;
+    winningSubmissionId?: true;
     approvedByFounder?: true;
     approvedByManager?: true;
     approvedByValidator?: true;
@@ -4196,6 +4201,7 @@ export namespace Prisma {
     stage?: true;
     aboutProject?: true;
     headerSections?: true;
+    winningSubmissionId?: true;
     approvedByFounder?: true;
     approvedByManager?: true;
     approvedByValidator?: true;
@@ -4306,6 +4312,7 @@ export namespace Prisma {
     stage: $Enums.BountyStage;
     aboutProject: string | null;
     headerSections: JsonValue | null;
+    winningSubmissionId: string | null;
     approvedByFounder: boolean;
     approvedByManager: boolean;
     approvedByValidator: boolean;
@@ -4347,6 +4354,7 @@ export namespace Prisma {
       stage?: boolean;
       aboutProject?: boolean;
       headerSections?: boolean;
+      winningSubmissionId?: boolean;
       approvedByFounder?: boolean;
       approvedByManager?: boolean;
       approvedByValidator?: boolean;
@@ -4354,6 +4362,7 @@ export namespace Prisma {
       founderAddress?: boolean;
       projectId?: boolean;
       submissions?: boolean | Bounty$submissionsArgs<ExtArgs>;
+      winningSubmission?: boolean | Bounty$winningSubmissionArgs<ExtArgs>;
       founder?: boolean | Bounty$founderArgs<ExtArgs>;
       project?: boolean | Bounty$projectArgs<ExtArgs>;
       BountyWinner?: boolean | Bounty$BountyWinnerArgs<ExtArgs>;
@@ -4374,6 +4383,7 @@ export namespace Prisma {
     stage?: boolean;
     aboutProject?: boolean;
     headerSections?: boolean;
+    winningSubmissionId?: boolean;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -4386,6 +4396,7 @@ export namespace Prisma {
     ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs,
   > = {
     submissions?: boolean | Bounty$submissionsArgs<ExtArgs>;
+    winningSubmission?: boolean | Bounty$winningSubmissionArgs<ExtArgs>;
     founder?: boolean | Bounty$founderArgs<ExtArgs>;
     project?: boolean | Bounty$projectArgs<ExtArgs>;
     BountyWinner?: boolean | Bounty$BountyWinnerArgs<ExtArgs>;
@@ -4398,6 +4409,7 @@ export namespace Prisma {
     name: 'Bounty';
     objects: {
       submissions: Prisma.$SubmissionPayload<ExtArgs>[];
+      winningSubmission: Prisma.$SubmissionPayload<ExtArgs> | null;
       founder: Prisma.$MemberPayload<ExtArgs> | null;
       project: Prisma.$ProjectPayload<ExtArgs> | null;
       BountyWinner: Prisma.$BountyWinnerPayload<ExtArgs>[];
@@ -4415,6 +4427,7 @@ export namespace Prisma {
         stage: $Enums.BountyStage;
         aboutProject: string | null;
         headerSections: Prisma.JsonValue | null;
+        winningSubmissionId: string | null;
         approvedByFounder: boolean;
         approvedByManager: boolean;
         approvedByValidator: boolean;
@@ -4848,6 +4861,18 @@ export namespace Prisma {
       | Null
     >;
 
+    winningSubmission<T extends Bounty$winningSubmissionArgs<ExtArgs> = {}>(
+      args?: Subset<T, Bounty$winningSubmissionArgs<ExtArgs>>,
+    ): Prisma__SubmissionClient<
+      $Result.GetResult<
+        Prisma.$SubmissionPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow'
+      > | null,
+      null,
+      ExtArgs
+    >;
+
     founder<T extends Bounty$founderArgs<ExtArgs> = {}>(
       args?: Subset<T, Bounty$founderArgs<ExtArgs>>,
     ): Prisma__MemberClient<
@@ -4930,6 +4955,7 @@ export namespace Prisma {
     readonly stage: FieldRef<'Bounty', 'BountyStage'>;
     readonly aboutProject: FieldRef<'Bounty', 'String'>;
     readonly headerSections: FieldRef<'Bounty', 'Json'>;
+    readonly winningSubmissionId: FieldRef<'Bounty', 'String'>;
     readonly approvedByFounder: FieldRef<'Bounty', 'Boolean'>;
     readonly approvedByManager: FieldRef<'Bounty', 'Boolean'>;
     readonly approvedByValidator: FieldRef<'Bounty', 'Boolean'>;
@@ -5283,6 +5309,23 @@ export namespace Prisma {
   };
 
   /**
+   * Bounty.winningSubmission
+   */
+  export type Bounty$winningSubmissionArgs<
+    ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Submission
+     */
+    select?: SubmissionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: SubmissionInclude<ExtArgs> | null;
+    where?: SubmissionWhereInput;
+  };
+
+  /**
    * Bounty.founder
    */
   export type Bounty$founderArgs<
@@ -5537,6 +5580,7 @@ export namespace Prisma {
       testCases?: boolean | Submission$testCasesArgs<ExtArgs>;
       bounty?: boolean | BountyDefaultArgs<ExtArgs>;
       team?: boolean | TeamDefaultArgs<ExtArgs>;
+      winningSubmission?: boolean | Submission$winningSubmissionArgs<ExtArgs>;
       _count?: boolean | SubmissionCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['submission']
@@ -5557,6 +5601,7 @@ export namespace Prisma {
     testCases?: boolean | Submission$testCasesArgs<ExtArgs>;
     bounty?: boolean | BountyDefaultArgs<ExtArgs>;
     team?: boolean | TeamDefaultArgs<ExtArgs>;
+    winningSubmission?: boolean | Submission$winningSubmissionArgs<ExtArgs>;
     _count?: boolean | SubmissionCountOutputTypeDefaultArgs<ExtArgs>;
   };
 
@@ -5568,6 +5613,7 @@ export namespace Prisma {
       testCases: Prisma.$TestCasePayload<ExtArgs>[];
       bounty: Prisma.$BountyPayload<ExtArgs>;
       team: Prisma.$TeamPayload<ExtArgs>;
+      winningSubmission: Prisma.$BountyPayload<ExtArgs> | null;
     };
     scalars: $Extensions.GetResult<
       {
@@ -6042,6 +6088,18 @@ export namespace Prisma {
       ExtArgs
     >;
 
+    winningSubmission<T extends Submission$winningSubmissionArgs<ExtArgs> = {}>(
+      args?: Subset<T, Submission$winningSubmissionArgs<ExtArgs>>,
+    ): Prisma__BountyClient<
+      $Result.GetResult<
+        Prisma.$BountyPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow'
+      > | null,
+      null,
+      ExtArgs
+    >;
+
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6441,6 +6499,23 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: TestCaseScalarFieldEnum | TestCaseScalarFieldEnum[];
+  };
+
+  /**
+   * Submission.winningSubmission
+   */
+  export type Submission$winningSubmissionArgs<
+    ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Bounty
+     */
+    select?: BountySelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: BountyInclude<ExtArgs> | null;
+    where?: BountyWhereInput;
   };
 
   /**
@@ -8841,6 +8916,7 @@ export namespace Prisma {
   export type BountyWinnerMinAggregateOutputType = {
     id: string | null;
     bountyId: string | null;
+    confirmed: boolean | null;
     submissionId: string | null;
     memberAddress: string | null;
     approvedByFounder: boolean | null;
@@ -8850,6 +8926,7 @@ export namespace Prisma {
   export type BountyWinnerMaxAggregateOutputType = {
     id: string | null;
     bountyId: string | null;
+    confirmed: boolean | null;
     submissionId: string | null;
     memberAddress: string | null;
     approvedByFounder: boolean | null;
@@ -8859,6 +8936,7 @@ export namespace Prisma {
   export type BountyWinnerCountAggregateOutputType = {
     id: number;
     bountyId: number;
+    confirmed: number;
     submissionId: number;
     memberAddress: number;
     approvedByFounder: number;
@@ -8869,6 +8947,7 @@ export namespace Prisma {
   export type BountyWinnerMinAggregateInputType = {
     id?: true;
     bountyId?: true;
+    confirmed?: true;
     submissionId?: true;
     memberAddress?: true;
     approvedByFounder?: true;
@@ -8878,6 +8957,7 @@ export namespace Prisma {
   export type BountyWinnerMaxAggregateInputType = {
     id?: true;
     bountyId?: true;
+    confirmed?: true;
     submissionId?: true;
     memberAddress?: true;
     approvedByFounder?: true;
@@ -8887,6 +8967,7 @@ export namespace Prisma {
   export type BountyWinnerCountAggregateInputType = {
     id?: true;
     bountyId?: true;
+    confirmed?: true;
     submissionId?: true;
     memberAddress?: true;
     approvedByFounder?: true;
@@ -8976,6 +9057,7 @@ export namespace Prisma {
   export type BountyWinnerGroupByOutputType = {
     id: string;
     bountyId: string;
+    confirmed: boolean;
     submissionId: string;
     memberAddress: string;
     approvedByFounder: boolean;
@@ -9005,6 +9087,7 @@ export namespace Prisma {
     {
       id?: boolean;
       bountyId?: boolean;
+      confirmed?: boolean;
       submissionId?: boolean;
       memberAddress?: boolean;
       approvedByFounder?: boolean;
@@ -9018,6 +9101,7 @@ export namespace Prisma {
   export type BountyWinnerSelectScalar = {
     id?: boolean;
     bountyId?: boolean;
+    confirmed?: boolean;
     submissionId?: boolean;
     memberAddress?: boolean;
     approvedByFounder?: boolean;
@@ -9043,6 +9127,7 @@ export namespace Prisma {
       {
         id: string;
         bountyId: string;
+        confirmed: boolean;
         submissionId: string;
         memberAddress: string;
         approvedByFounder: boolean;
@@ -9552,6 +9637,7 @@ export namespace Prisma {
   interface BountyWinnerFieldRefs {
     readonly id: FieldRef<'BountyWinner', 'String'>;
     readonly bountyId: FieldRef<'BountyWinner', 'String'>;
+    readonly confirmed: FieldRef<'BountyWinner', 'Boolean'>;
     readonly submissionId: FieldRef<'BountyWinner', 'String'>;
     readonly memberAddress: FieldRef<'BountyWinner', 'String'>;
     readonly approvedByFounder: FieldRef<'BountyWinner', 'Boolean'>;
@@ -11027,6 +11113,7 @@ export namespace Prisma {
     stage: 'stage';
     aboutProject: 'aboutProject';
     headerSections: 'headerSections';
+    winningSubmissionId: 'winningSubmissionId';
     approvedByFounder: 'approvedByFounder';
     approvedByManager: 'approvedByManager';
     approvedByValidator: 'approvedByValidator';
@@ -11082,6 +11169,7 @@ export namespace Prisma {
   export const BountyWinnerScalarFieldEnum: {
     id: 'id';
     bountyId: 'bountyId';
+    confirmed: 'confirmed';
     submissionId: 'submissionId';
     memberAddress: 'memberAddress';
     approvedByFounder: 'approvedByFounder';
@@ -11461,6 +11549,7 @@ export namespace Prisma {
     stage?: EnumBountyStageFilter<'Bounty'> | $Enums.BountyStage;
     aboutProject?: StringNullableFilter<'Bounty'> | string | null;
     headerSections?: JsonNullableFilter<'Bounty'>;
+    winningSubmissionId?: StringNullableFilter<'Bounty'> | string | null;
     approvedByFounder?: BoolFilter<'Bounty'> | boolean;
     approvedByManager?: BoolFilter<'Bounty'> | boolean;
     approvedByValidator?: BoolFilter<'Bounty'> | boolean;
@@ -11468,6 +11557,10 @@ export namespace Prisma {
     founderAddress?: StringNullableFilter<'Bounty'> | string | null;
     projectId?: StringNullableFilter<'Bounty'> | string | null;
     submissions?: SubmissionListRelationFilter;
+    winningSubmission?: XOR<
+      SubmissionNullableRelationFilter,
+      SubmissionWhereInput
+    > | null;
     founder?: XOR<MemberNullableRelationFilter, MemberWhereInput> | null;
     project?: XOR<ProjectNullableRelationFilter, ProjectWhereInput> | null;
     BountyWinner?: BountyWinnerListRelationFilter;
@@ -11485,6 +11578,7 @@ export namespace Prisma {
     stage?: SortOrder;
     aboutProject?: SortOrderInput | SortOrder;
     headerSections?: SortOrderInput | SortOrder;
+    winningSubmissionId?: SortOrderInput | SortOrder;
     approvedByFounder?: SortOrder;
     approvedByManager?: SortOrder;
     approvedByValidator?: SortOrder;
@@ -11492,6 +11586,7 @@ export namespace Prisma {
     founderAddress?: SortOrderInput | SortOrder;
     projectId?: SortOrderInput | SortOrder;
     submissions?: SubmissionOrderByRelationAggregateInput;
+    winningSubmission?: SubmissionOrderByWithRelationInput;
     founder?: MemberOrderByWithRelationInput;
     project?: ProjectOrderByWithRelationInput;
     BountyWinner?: BountyWinnerOrderByRelationAggregateInput;
@@ -11500,6 +11595,7 @@ export namespace Prisma {
   export type BountyWhereUniqueInput = Prisma.AtLeast<
     {
       id?: string;
+      winningSubmissionId?: string;
       AND?: BountyWhereInput | BountyWhereInput[];
       OR?: BountyWhereInput[];
       NOT?: BountyWhereInput | BountyWhereInput[];
@@ -11520,11 +11616,15 @@ export namespace Prisma {
       founderAddress?: StringNullableFilter<'Bounty'> | string | null;
       projectId?: StringNullableFilter<'Bounty'> | string | null;
       submissions?: SubmissionListRelationFilter;
+      winningSubmission?: XOR<
+        SubmissionNullableRelationFilter,
+        SubmissionWhereInput
+      > | null;
       founder?: XOR<MemberNullableRelationFilter, MemberWhereInput> | null;
       project?: XOR<ProjectNullableRelationFilter, ProjectWhereInput> | null;
       BountyWinner?: BountyWinnerListRelationFilter;
     },
-    'id'
+    'id' | 'winningSubmissionId'
   >;
 
   export type BountyOrderByWithAggregationInput = {
@@ -11539,6 +11639,7 @@ export namespace Prisma {
     stage?: SortOrder;
     aboutProject?: SortOrderInput | SortOrder;
     headerSections?: SortOrderInput | SortOrder;
+    winningSubmissionId?: SortOrderInput | SortOrder;
     approvedByFounder?: SortOrder;
     approvedByManager?: SortOrder;
     approvedByValidator?: SortOrder;
@@ -11571,6 +11672,10 @@ export namespace Prisma {
     stage?: EnumBountyStageWithAggregatesFilter<'Bounty'> | $Enums.BountyStage;
     aboutProject?: StringNullableWithAggregatesFilter<'Bounty'> | string | null;
     headerSections?: JsonNullableWithAggregatesFilter<'Bounty'>;
+    winningSubmissionId?:
+      | StringNullableWithAggregatesFilter<'Bounty'>
+      | string
+      | null;
     approvedByFounder?: BoolWithAggregatesFilter<'Bounty'> | boolean;
     approvedByManager?: BoolWithAggregatesFilter<'Bounty'> | boolean;
     approvedByValidator?: BoolWithAggregatesFilter<'Bounty'> | boolean;
@@ -11595,6 +11700,10 @@ export namespace Prisma {
     testCases?: TestCaseListRelationFilter;
     bounty?: XOR<BountyRelationFilter, BountyWhereInput>;
     team?: XOR<TeamRelationFilter, TeamWhereInput>;
+    winningSubmission?: XOR<
+      BountyNullableRelationFilter,
+      BountyWhereInput
+    > | null;
   };
 
   export type SubmissionOrderByWithRelationInput = {
@@ -11607,6 +11716,7 @@ export namespace Prisma {
     testCases?: TestCaseOrderByRelationAggregateInput;
     bounty?: BountyOrderByWithRelationInput;
     team?: TeamOrderByWithRelationInput;
+    winningSubmission?: BountyOrderByWithRelationInput;
   };
 
   export type SubmissionWhereUniqueInput = Prisma.AtLeast<
@@ -11623,6 +11733,10 @@ export namespace Prisma {
       testCases?: TestCaseListRelationFilter;
       bounty?: XOR<BountyRelationFilter, BountyWhereInput>;
       team?: XOR<TeamRelationFilter, TeamWhereInput>;
+      winningSubmission?: XOR<
+        BountyNullableRelationFilter,
+        BountyWhereInput
+      > | null;
     },
     'id'
   >;
@@ -11846,6 +11960,7 @@ export namespace Prisma {
     NOT?: BountyWinnerWhereInput | BountyWinnerWhereInput[];
     id?: StringFilter<'BountyWinner'> | string;
     bountyId?: StringFilter<'BountyWinner'> | string;
+    confirmed?: BoolFilter<'BountyWinner'> | boolean;
     submissionId?: StringFilter<'BountyWinner'> | string;
     memberAddress?: StringFilter<'BountyWinner'> | string;
     approvedByFounder?: BoolFilter<'BountyWinner'> | boolean;
@@ -11857,6 +11972,7 @@ export namespace Prisma {
   export type BountyWinnerOrderByWithRelationInput = {
     id?: SortOrder;
     bountyId?: SortOrder;
+    confirmed?: SortOrder;
     submissionId?: SortOrder;
     memberAddress?: SortOrder;
     approvedByFounder?: SortOrder;
@@ -11873,6 +11989,7 @@ export namespace Prisma {
       AND?: BountyWinnerWhereInput | BountyWinnerWhereInput[];
       OR?: BountyWinnerWhereInput[];
       NOT?: BountyWinnerWhereInput | BountyWinnerWhereInput[];
+      confirmed?: BoolFilter<'BountyWinner'> | boolean;
       memberAddress?: StringFilter<'BountyWinner'> | string;
       approvedByFounder?: BoolFilter<'BountyWinner'> | boolean;
       approvedByManager?: BoolFilter<'BountyWinner'> | boolean;
@@ -11885,6 +12002,7 @@ export namespace Prisma {
   export type BountyWinnerOrderByWithAggregationInput = {
     id?: SortOrder;
     bountyId?: SortOrder;
+    confirmed?: SortOrder;
     submissionId?: SortOrder;
     memberAddress?: SortOrder;
     approvedByFounder?: SortOrder;
@@ -11904,6 +12022,7 @@ export namespace Prisma {
       | BountyWinnerScalarWhereWithAggregatesInput[];
     id?: StringWithAggregatesFilter<'BountyWinner'> | string;
     bountyId?: StringWithAggregatesFilter<'BountyWinner'> | string;
+    confirmed?: BoolWithAggregatesFilter<'BountyWinner'> | boolean;
     submissionId?: StringWithAggregatesFilter<'BountyWinner'> | string;
     memberAddress?: StringWithAggregatesFilter<'BountyWinner'> | string;
     approvedByFounder?: BoolWithAggregatesFilter<'BountyWinner'> | boolean;
@@ -12147,6 +12266,7 @@ export namespace Prisma {
     approvedByValidator?: boolean;
     reward?: number;
     submissions?: SubmissionCreateNestedManyWithoutBountyInput;
+    winningSubmission?: SubmissionCreateNestedOneWithoutWinningSubmissionInput;
     founder?: MemberCreateNestedOneWithoutBountiesInput;
     project?: ProjectCreateNestedOneWithoutBountiesInput;
     BountyWinner?: BountyWinnerCreateNestedManyWithoutBountyInput;
@@ -12164,6 +12284,7 @@ export namespace Prisma {
     stage?: $Enums.BountyStage;
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?: string | null;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -12191,6 +12312,7 @@ export namespace Prisma {
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     submissions?: SubmissionUpdateManyWithoutBountyNestedInput;
+    winningSubmission?: SubmissionUpdateOneWithoutWinningSubmissionNestedInput;
     founder?: MemberUpdateOneWithoutBountiesNestedInput;
     project?: ProjectUpdateOneWithoutBountiesNestedInput;
     BountyWinner?: BountyWinnerUpdateManyWithoutBountyNestedInput;
@@ -12208,6 +12330,10 @@ export namespace Prisma {
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
@@ -12230,6 +12356,7 @@ export namespace Prisma {
     stage?: $Enums.BountyStage;
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?: string | null;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -12268,6 +12395,10 @@ export namespace Prisma {
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
@@ -12284,6 +12415,7 @@ export namespace Prisma {
     testCases?: TestCaseCreateNestedManyWithoutSubmissionInput;
     bounty: BountyCreateNestedOneWithoutSubmissionsInput;
     team: TeamCreateNestedOneWithoutSubmissionInput;
+    winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateInput = {
@@ -12294,6 +12426,7 @@ export namespace Prisma {
     bountyId: string;
     teamId: string;
     testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
+    winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
   };
 
   export type SubmissionUpdateInput = {
@@ -12304,6 +12437,7 @@ export namespace Prisma {
     testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput;
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
+    winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateInput = {
@@ -12314,6 +12448,7 @@ export namespace Prisma {
     bountyId?: StringFieldUpdateOperationsInput | string;
     teamId?: StringFieldUpdateOperationsInput | string;
     testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
+    winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
   };
 
   export type SubmissionCreateManyInput = {
@@ -12527,6 +12662,7 @@ export namespace Prisma {
 
   export type BountyWinnerCreateInput = {
     id?: string;
+    confirmed?: boolean;
     submissionId: string;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
@@ -12537,6 +12673,7 @@ export namespace Prisma {
   export type BountyWinnerUncheckedCreateInput = {
     id?: string;
     bountyId: string;
+    confirmed?: boolean;
     submissionId: string;
     memberAddress: string;
     approvedByFounder?: boolean;
@@ -12545,6 +12682,7 @@ export namespace Prisma {
 
   export type BountyWinnerUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
@@ -12555,6 +12693,7 @@ export namespace Prisma {
   export type BountyWinnerUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     bountyId?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     memberAddress?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
@@ -12564,6 +12703,7 @@ export namespace Prisma {
   export type BountyWinnerCreateManyInput = {
     id?: string;
     bountyId: string;
+    confirmed?: boolean;
     submissionId: string;
     memberAddress: string;
     approvedByFounder?: boolean;
@@ -12572,6 +12712,7 @@ export namespace Prisma {
 
   export type BountyWinnerUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
@@ -12580,6 +12721,7 @@ export namespace Prisma {
   export type BountyWinnerUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     bountyId?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     memberAddress?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
@@ -12932,6 +13074,11 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean;
   };
 
+  export type SubmissionNullableRelationFilter = {
+    is?: SubmissionWhereInput | null;
+    isNot?: SubmissionWhereInput | null;
+  };
+
   export type MemberNullableRelationFilter = {
     is?: MemberWhereInput | null;
     isNot?: MemberWhereInput | null;
@@ -12969,6 +13116,7 @@ export namespace Prisma {
     stage?: SortOrder;
     aboutProject?: SortOrder;
     headerSections?: SortOrder;
+    winningSubmissionId?: SortOrder;
     approvedByFounder?: SortOrder;
     approvedByManager?: SortOrder;
     approvedByValidator?: SortOrder;
@@ -12989,6 +13137,7 @@ export namespace Prisma {
     deadline?: SortOrder;
     stage?: SortOrder;
     aboutProject?: SortOrder;
+    winningSubmissionId?: SortOrder;
     approvedByFounder?: SortOrder;
     approvedByManager?: SortOrder;
     approvedByValidator?: SortOrder;
@@ -13005,6 +13154,7 @@ export namespace Prisma {
     deadline?: SortOrder;
     stage?: SortOrder;
     aboutProject?: SortOrder;
+    winningSubmissionId?: SortOrder;
     approvedByFounder?: SortOrder;
     approvedByManager?: SortOrder;
     approvedByValidator?: SortOrder;
@@ -13132,6 +13282,11 @@ export namespace Prisma {
     isNot?: TeamWhereInput;
   };
 
+  export type BountyNullableRelationFilter = {
+    is?: BountyWhereInput | null;
+    isNot?: BountyWhereInput | null;
+  };
+
   export type TestCaseOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -13161,11 +13316,6 @@ export namespace Prisma {
     createdAt?: SortOrder;
     bountyId?: SortOrder;
     teamId?: SortOrder;
-  };
-
-  export type SubmissionNullableRelationFilter = {
-    is?: SubmissionWhereInput | null;
-    isNot?: SubmissionWhereInput | null;
   };
 
   export type TestCaseCountOrderByAggregateInput = {
@@ -13308,6 +13458,7 @@ export namespace Prisma {
   export type BountyWinnerCountOrderByAggregateInput = {
     id?: SortOrder;
     bountyId?: SortOrder;
+    confirmed?: SortOrder;
     submissionId?: SortOrder;
     memberAddress?: SortOrder;
     approvedByFounder?: SortOrder;
@@ -13317,6 +13468,7 @@ export namespace Prisma {
   export type BountyWinnerMaxOrderByAggregateInput = {
     id?: SortOrder;
     bountyId?: SortOrder;
+    confirmed?: SortOrder;
     submissionId?: SortOrder;
     memberAddress?: SortOrder;
     approvedByFounder?: SortOrder;
@@ -13326,6 +13478,7 @@ export namespace Prisma {
   export type BountyWinnerMinOrderByAggregateInput = {
     id?: SortOrder;
     bountyId?: SortOrder;
+    confirmed?: SortOrder;
     submissionId?: SortOrder;
     memberAddress?: SortOrder;
     approvedByFounder?: SortOrder;
@@ -13717,6 +13870,15 @@ export namespace Prisma {
     connect?: SubmissionWhereUniqueInput | SubmissionWhereUniqueInput[];
   };
 
+  export type SubmissionCreateNestedOneWithoutWinningSubmissionInput = {
+    create?: XOR<
+      SubmissionCreateWithoutWinningSubmissionInput,
+      SubmissionUncheckedCreateWithoutWinningSubmissionInput
+    >;
+    connectOrCreate?: SubmissionCreateOrConnectWithoutWinningSubmissionInput;
+    connect?: SubmissionWhereUniqueInput;
+  };
+
   export type MemberCreateNestedOneWithoutBountiesInput = {
     create?: XOR<
       MemberCreateWithoutBountiesInput,
@@ -13837,6 +13999,25 @@ export namespace Prisma {
       | SubmissionUpdateManyWithWhereWithoutBountyInput
       | SubmissionUpdateManyWithWhereWithoutBountyInput[];
     deleteMany?: SubmissionScalarWhereInput | SubmissionScalarWhereInput[];
+  };
+
+  export type SubmissionUpdateOneWithoutWinningSubmissionNestedInput = {
+    create?: XOR<
+      SubmissionCreateWithoutWinningSubmissionInput,
+      SubmissionUncheckedCreateWithoutWinningSubmissionInput
+    >;
+    connectOrCreate?: SubmissionCreateOrConnectWithoutWinningSubmissionInput;
+    upsert?: SubmissionUpsertWithoutWinningSubmissionInput;
+    disconnect?: SubmissionWhereInput | boolean;
+    delete?: SubmissionWhereInput | boolean;
+    connect?: SubmissionWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        SubmissionUpdateToOneWithWhereWithoutWinningSubmissionInput,
+        SubmissionUpdateWithoutWinningSubmissionInput
+      >,
+      SubmissionUncheckedUpdateWithoutWinningSubmissionInput
+    >;
   };
 
   export type MemberUpdateOneWithoutBountiesNestedInput = {
@@ -13994,6 +14175,15 @@ export namespace Prisma {
     connect?: TeamWhereUniqueInput;
   };
 
+  export type BountyCreateNestedOneWithoutWinningSubmissionInput = {
+    create?: XOR<
+      BountyCreateWithoutWinningSubmissionInput,
+      BountyUncheckedCreateWithoutWinningSubmissionInput
+    >;
+    connectOrCreate?: BountyCreateOrConnectWithoutWinningSubmissionInput;
+    connect?: BountyWhereUniqueInput;
+  };
+
   export type TestCaseUncheckedCreateNestedManyWithoutSubmissionInput = {
     create?:
       | XOR<
@@ -14007,6 +14197,15 @@ export namespace Prisma {
       | TestCaseCreateOrConnectWithoutSubmissionInput[];
     createMany?: TestCaseCreateManySubmissionInputEnvelope;
     connect?: TestCaseWhereUniqueInput | TestCaseWhereUniqueInput[];
+  };
+
+  export type BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput = {
+    create?: XOR<
+      BountyCreateWithoutWinningSubmissionInput,
+      BountyUncheckedCreateWithoutWinningSubmissionInput
+    >;
+    connectOrCreate?: BountyCreateOrConnectWithoutWinningSubmissionInput;
+    connect?: BountyWhereUniqueInput;
   };
 
   export type TestCaseUpdateManyWithoutSubmissionNestedInput = {
@@ -14071,6 +14270,25 @@ export namespace Prisma {
     >;
   };
 
+  export type BountyUpdateOneWithoutWinningSubmissionNestedInput = {
+    create?: XOR<
+      BountyCreateWithoutWinningSubmissionInput,
+      BountyUncheckedCreateWithoutWinningSubmissionInput
+    >;
+    connectOrCreate?: BountyCreateOrConnectWithoutWinningSubmissionInput;
+    upsert?: BountyUpsertWithoutWinningSubmissionInput;
+    disconnect?: BountyWhereInput | boolean;
+    delete?: BountyWhereInput | boolean;
+    connect?: BountyWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        BountyUpdateToOneWithWhereWithoutWinningSubmissionInput,
+        BountyUpdateWithoutWinningSubmissionInput
+      >,
+      BountyUncheckedUpdateWithoutWinningSubmissionInput
+    >;
+  };
+
   export type TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput = {
     create?:
       | XOR<
@@ -14097,6 +14315,25 @@ export namespace Prisma {
       | TestCaseUpdateManyWithWhereWithoutSubmissionInput
       | TestCaseUpdateManyWithWhereWithoutSubmissionInput[];
     deleteMany?: TestCaseScalarWhereInput | TestCaseScalarWhereInput[];
+  };
+
+  export type BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput = {
+    create?: XOR<
+      BountyCreateWithoutWinningSubmissionInput,
+      BountyUncheckedCreateWithoutWinningSubmissionInput
+    >;
+    connectOrCreate?: BountyCreateOrConnectWithoutWinningSubmissionInput;
+    upsert?: BountyUpsertWithoutWinningSubmissionInput;
+    disconnect?: BountyWhereInput | boolean;
+    delete?: BountyWhereInput | boolean;
+    connect?: BountyWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        BountyUpdateToOneWithWhereWithoutWinningSubmissionInput,
+        BountyUpdateWithoutWinningSubmissionInput
+      >,
+      BountyUncheckedUpdateWithoutWinningSubmissionInput
+    >;
   };
 
   export type SubmissionCreateNestedOneWithoutTestCasesInput = {
@@ -15111,6 +15348,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     testCases?: TestCaseCreateNestedManyWithoutSubmissionInput;
     bounty: BountyCreateNestedOneWithoutSubmissionsInput;
+    winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateWithoutTeamInput = {
@@ -15120,6 +15358,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     bountyId: string;
     testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
+    winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
   };
 
   export type SubmissionCreateOrConnectWithoutTeamInput = {
@@ -15301,6 +15540,7 @@ export namespace Prisma {
     approvedByValidator?: boolean;
     reward?: number;
     submissions?: SubmissionCreateNestedManyWithoutBountyInput;
+    winningSubmission?: SubmissionCreateNestedOneWithoutWinningSubmissionInput;
     founder?: MemberCreateNestedOneWithoutBountiesInput;
     BountyWinner?: BountyWinnerCreateNestedManyWithoutBountyInput;
   };
@@ -15317,6 +15557,7 @@ export namespace Prisma {
     stage?: $Enums.BountyStage;
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?: string | null;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -15432,6 +15673,7 @@ export namespace Prisma {
     stage?: EnumBountyStageFilter<'Bounty'> | $Enums.BountyStage;
     aboutProject?: StringNullableFilter<'Bounty'> | string | null;
     headerSections?: JsonNullableFilter<'Bounty'>;
+    winningSubmissionId?: StringNullableFilter<'Bounty'> | string | null;
     approvedByFounder?: BoolFilter<'Bounty'> | boolean;
     approvedByManager?: BoolFilter<'Bounty'> | boolean;
     approvedByValidator?: BoolFilter<'Bounty'> | boolean;
@@ -15509,6 +15751,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     testCases?: TestCaseCreateNestedManyWithoutSubmissionInput;
     team: TeamCreateNestedOneWithoutSubmissionInput;
+    winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateWithoutBountyInput = {
@@ -15518,6 +15761,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     teamId: string;
     testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
+    winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
   };
 
   export type SubmissionCreateOrConnectWithoutBountyInput = {
@@ -15531,6 +15775,34 @@ export namespace Prisma {
   export type SubmissionCreateManyBountyInputEnvelope = {
     data: SubmissionCreateManyBountyInput | SubmissionCreateManyBountyInput[];
     skipDuplicates?: boolean;
+  };
+
+  export type SubmissionCreateWithoutWinningSubmissionInput = {
+    id?: string;
+    videoDemo: string;
+    repo: string;
+    createdAt?: Date | string;
+    testCases?: TestCaseCreateNestedManyWithoutSubmissionInput;
+    bounty: BountyCreateNestedOneWithoutSubmissionsInput;
+    team: TeamCreateNestedOneWithoutSubmissionInput;
+  };
+
+  export type SubmissionUncheckedCreateWithoutWinningSubmissionInput = {
+    id?: string;
+    videoDemo: string;
+    repo: string;
+    createdAt?: Date | string;
+    bountyId: string;
+    teamId: string;
+    testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
+  };
+
+  export type SubmissionCreateOrConnectWithoutWinningSubmissionInput = {
+    where: SubmissionWhereUniqueInput;
+    create: XOR<
+      SubmissionCreateWithoutWinningSubmissionInput,
+      SubmissionUncheckedCreateWithoutWinningSubmissionInput
+    >;
   };
 
   export type MemberCreateWithoutBountiesInput = {
@@ -15617,6 +15889,7 @@ export namespace Prisma {
 
   export type BountyWinnerCreateWithoutBountyInput = {
     id?: string;
+    confirmed?: boolean;
     submissionId: string;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
@@ -15625,6 +15898,7 @@ export namespace Prisma {
 
   export type BountyWinnerUncheckedCreateWithoutBountyInput = {
     id?: string;
+    confirmed?: boolean;
     submissionId: string;
     memberAddress: string;
     approvedByFounder?: boolean;
@@ -15672,6 +15946,46 @@ export namespace Prisma {
       SubmissionUpdateManyMutationInput,
       SubmissionUncheckedUpdateManyWithoutBountyInput
     >;
+  };
+
+  export type SubmissionUpsertWithoutWinningSubmissionInput = {
+    update: XOR<
+      SubmissionUpdateWithoutWinningSubmissionInput,
+      SubmissionUncheckedUpdateWithoutWinningSubmissionInput
+    >;
+    create: XOR<
+      SubmissionCreateWithoutWinningSubmissionInput,
+      SubmissionUncheckedCreateWithoutWinningSubmissionInput
+    >;
+    where?: SubmissionWhereInput;
+  };
+
+  export type SubmissionUpdateToOneWithWhereWithoutWinningSubmissionInput = {
+    where?: SubmissionWhereInput;
+    data: XOR<
+      SubmissionUpdateWithoutWinningSubmissionInput,
+      SubmissionUncheckedUpdateWithoutWinningSubmissionInput
+    >;
+  };
+
+  export type SubmissionUpdateWithoutWinningSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    videoDemo?: StringFieldUpdateOperationsInput | string;
+    repo?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput;
+    bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
+    team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
+  };
+
+  export type SubmissionUncheckedUpdateWithoutWinningSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    videoDemo?: StringFieldUpdateOperationsInput | string;
+    repo?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bountyId?: StringFieldUpdateOperationsInput | string;
+    teamId?: StringFieldUpdateOperationsInput | string;
+    testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
   };
 
   export type MemberUpsertWithoutBountiesInput = {
@@ -15814,6 +16128,7 @@ export namespace Prisma {
     NOT?: BountyWinnerScalarWhereInput | BountyWinnerScalarWhereInput[];
     id?: StringFilter<'BountyWinner'> | string;
     bountyId?: StringFilter<'BountyWinner'> | string;
+    confirmed?: BoolFilter<'BountyWinner'> | boolean;
     submissionId?: StringFilter<'BountyWinner'> | string;
     memberAddress?: StringFilter<'BountyWinner'> | string;
     approvedByFounder?: BoolFilter<'BountyWinner'> | boolean;
@@ -15863,6 +16178,7 @@ export namespace Prisma {
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
     reward?: number;
+    winningSubmission?: SubmissionCreateNestedOneWithoutWinningSubmissionInput;
     founder?: MemberCreateNestedOneWithoutBountiesInput;
     project?: ProjectCreateNestedOneWithoutBountiesInput;
     BountyWinner?: BountyWinnerCreateNestedManyWithoutBountyInput;
@@ -15880,6 +16196,7 @@ export namespace Prisma {
     stage?: $Enums.BountyStage;
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?: string | null;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -15920,6 +16237,58 @@ export namespace Prisma {
     create: XOR<
       TeamCreateWithoutSubmissionInput,
       TeamUncheckedCreateWithoutSubmissionInput
+    >;
+  };
+
+  export type BountyCreateWithoutWinningSubmissionInput = {
+    id?: string;
+    title: string;
+    description: string;
+    postDate: Date | string;
+    types?: BountyCreatetypesInput | $Enums.BountyType[];
+    deadline: Date | string;
+    participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
+    stage?: $Enums.BountyStage;
+    aboutProject?: string | null;
+    headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
+    reward?: number;
+    submissions?: SubmissionCreateNestedManyWithoutBountyInput;
+    founder?: MemberCreateNestedOneWithoutBountiesInput;
+    project?: ProjectCreateNestedOneWithoutBountiesInput;
+    BountyWinner?: BountyWinnerCreateNestedManyWithoutBountyInput;
+  };
+
+  export type BountyUncheckedCreateWithoutWinningSubmissionInput = {
+    id?: string;
+    title: string;
+    description: string;
+    postDate: Date | string;
+    types?: BountyCreatetypesInput | $Enums.BountyType[];
+    deadline: Date | string;
+    participantsTeamIDs?: BountyCreateparticipantsTeamIDsInput | string[];
+    testCases?: BountyCreatetestCasesInput | string[];
+    stage?: $Enums.BountyStage;
+    aboutProject?: string | null;
+    headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    approvedByValidator?: boolean;
+    reward?: number;
+    founderAddress?: string | null;
+    projectId?: string | null;
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutBountyInput;
+    BountyWinner?: BountyWinnerUncheckedCreateNestedManyWithoutBountyInput;
+  };
+
+  export type BountyCreateOrConnectWithoutWinningSubmissionInput = {
+    where: BountyWhereUniqueInput;
+    create: XOR<
+      BountyCreateWithoutWinningSubmissionInput,
+      BountyUncheckedCreateWithoutWinningSubmissionInput
     >;
   };
 
@@ -15997,6 +16366,7 @@ export namespace Prisma {
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
+    winningSubmission?: SubmissionUpdateOneWithoutWinningSubmissionNestedInput;
     founder?: MemberUpdateOneWithoutBountiesNestedInput;
     project?: ProjectUpdateOneWithoutBountiesNestedInput;
     BountyWinner?: BountyWinnerUpdateManyWithoutBountyNestedInput;
@@ -16014,6 +16384,10 @@ export namespace Prisma {
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
@@ -16061,6 +16435,70 @@ export namespace Prisma {
     members?: MemberUncheckedUpdateManyWithoutTeamsNestedInput;
   };
 
+  export type BountyUpsertWithoutWinningSubmissionInput = {
+    update: XOR<
+      BountyUpdateWithoutWinningSubmissionInput,
+      BountyUncheckedUpdateWithoutWinningSubmissionInput
+    >;
+    create: XOR<
+      BountyCreateWithoutWinningSubmissionInput,
+      BountyUncheckedCreateWithoutWinningSubmissionInput
+    >;
+    where?: BountyWhereInput;
+  };
+
+  export type BountyUpdateToOneWithWhereWithoutWinningSubmissionInput = {
+    where?: BountyWhereInput;
+    data: XOR<
+      BountyUpdateWithoutWinningSubmissionInput,
+      BountyUncheckedUpdateWithoutWinningSubmissionInput
+    >;
+  };
+
+  export type BountyUpdateWithoutWinningSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    postDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    types?: BountyUpdatetypesInput | $Enums.BountyType[];
+    deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
+    participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
+    stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
+    aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
+    headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
+    reward?: IntFieldUpdateOperationsInput | number;
+    submissions?: SubmissionUpdateManyWithoutBountyNestedInput;
+    founder?: MemberUpdateOneWithoutBountiesNestedInput;
+    project?: ProjectUpdateOneWithoutBountiesNestedInput;
+    BountyWinner?: BountyWinnerUpdateManyWithoutBountyNestedInput;
+  };
+
+  export type BountyUncheckedUpdateWithoutWinningSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    postDate?: DateTimeFieldUpdateOperationsInput | Date | string;
+    types?: BountyUpdatetypesInput | $Enums.BountyType[];
+    deadline?: DateTimeFieldUpdateOperationsInput | Date | string;
+    participantsTeamIDs?: BountyUpdateparticipantsTeamIDsInput | string[];
+    testCases?: BountyUpdatetestCasesInput | string[];
+    stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
+    aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
+    headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
+    reward?: IntFieldUpdateOperationsInput | number;
+    founderAddress?: NullableStringFieldUpdateOperationsInput | string | null;
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null;
+    submissions?: SubmissionUncheckedUpdateManyWithoutBountyNestedInput;
+    BountyWinner?: BountyWinnerUncheckedUpdateManyWithoutBountyNestedInput;
+  };
+
   export type SubmissionCreateWithoutTestCasesInput = {
     id?: string;
     videoDemo: string;
@@ -16068,6 +16506,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     bounty: BountyCreateNestedOneWithoutSubmissionsInput;
     team: TeamCreateNestedOneWithoutSubmissionInput;
+    winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateWithoutTestCasesInput = {
@@ -16077,6 +16516,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     bountyId: string;
     teamId: string;
+    winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
   };
 
   export type SubmissionCreateOrConnectWithoutTestCasesInput = {
@@ -16114,6 +16554,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
+    winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateWithoutTestCasesInput = {
@@ -16123,6 +16564,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bountyId?: StringFieldUpdateOperationsInput | string;
     teamId?: StringFieldUpdateOperationsInput | string;
+    winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
   };
 
   export type TeamInviteCreateWithoutMemberInput = {
@@ -16171,6 +16613,7 @@ export namespace Prisma {
     approvedByValidator?: boolean;
     reward?: number;
     submissions?: SubmissionCreateNestedManyWithoutBountyInput;
+    winningSubmission?: SubmissionCreateNestedOneWithoutWinningSubmissionInput;
     project?: ProjectCreateNestedOneWithoutBountiesInput;
     BountyWinner?: BountyWinnerCreateNestedManyWithoutBountyInput;
   };
@@ -16187,6 +16630,7 @@ export namespace Prisma {
     stage?: $Enums.BountyStage;
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?: string | null;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -16305,6 +16749,7 @@ export namespace Prisma {
 
   export type BountyWinnerCreateWithoutMemberInput = {
     id?: string;
+    confirmed?: boolean;
     submissionId: string;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
@@ -16314,6 +16759,7 @@ export namespace Prisma {
   export type BountyWinnerUncheckedCreateWithoutMemberInput = {
     id?: string;
     bountyId: string;
+    confirmed?: boolean;
     submissionId: string;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
@@ -16557,6 +17003,7 @@ export namespace Prisma {
     approvedByValidator?: boolean;
     reward?: number;
     submissions?: SubmissionCreateNestedManyWithoutBountyInput;
+    winningSubmission?: SubmissionCreateNestedOneWithoutWinningSubmissionInput;
     founder?: MemberCreateNestedOneWithoutBountiesInput;
     project?: ProjectCreateNestedOneWithoutBountiesInput;
   };
@@ -16573,6 +17020,7 @@ export namespace Prisma {
     stage?: $Enums.BountyStage;
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?: string | null;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -16677,6 +17125,7 @@ export namespace Prisma {
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     submissions?: SubmissionUpdateManyWithoutBountyNestedInput;
+    winningSubmission?: SubmissionUpdateOneWithoutWinningSubmissionNestedInput;
     founder?: MemberUpdateOneWithoutBountiesNestedInput;
     project?: ProjectUpdateOneWithoutBountiesNestedInput;
   };
@@ -16693,6 +17142,10 @@ export namespace Prisma {
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
@@ -16949,6 +17402,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput;
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
+    winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateWithoutTeamInput = {
@@ -16958,6 +17412,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     bountyId?: StringFieldUpdateOperationsInput | string;
     testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
+    winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateManyWithoutTeamInput = {
@@ -16980,6 +17435,7 @@ export namespace Prisma {
     stage?: $Enums.BountyStage;
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?: string | null;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -17004,6 +17460,7 @@ export namespace Prisma {
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     submissions?: SubmissionUpdateManyWithoutBountyNestedInput;
+    winningSubmission?: SubmissionUpdateOneWithoutWinningSubmissionNestedInput;
     founder?: MemberUpdateOneWithoutBountiesNestedInput;
     BountyWinner?: BountyWinnerUpdateManyWithoutBountyNestedInput;
   };
@@ -17020,6 +17477,10 @@ export namespace Prisma {
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
@@ -17041,6 +17502,10 @@ export namespace Prisma {
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
@@ -17058,6 +17523,7 @@ export namespace Prisma {
 
   export type BountyWinnerCreateManyBountyInput = {
     id?: string;
+    confirmed?: boolean;
     submissionId: string;
     memberAddress: string;
     approvedByFounder?: boolean;
@@ -17071,6 +17537,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput;
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
+    winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateWithoutBountyInput = {
@@ -17080,6 +17547,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     teamId?: StringFieldUpdateOperationsInput | string;
     testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
+    winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateManyWithoutBountyInput = {
@@ -17092,6 +17560,7 @@ export namespace Prisma {
 
   export type BountyWinnerUpdateWithoutBountyInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
@@ -17100,6 +17569,7 @@ export namespace Prisma {
 
   export type BountyWinnerUncheckedUpdateWithoutBountyInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     memberAddress?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
@@ -17108,6 +17578,7 @@ export namespace Prisma {
 
   export type BountyWinnerUncheckedUpdateManyWithoutBountyInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     memberAddress?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
@@ -17158,6 +17629,7 @@ export namespace Prisma {
     stage?: $Enums.BountyStage;
     aboutProject?: string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?: string | null;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     approvedByValidator?: boolean;
@@ -17186,6 +17658,7 @@ export namespace Prisma {
   export type BountyWinnerCreateManyMemberInput = {
     id?: string;
     bountyId: string;
+    confirmed?: boolean;
     submissionId: string;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
@@ -17232,6 +17705,7 @@ export namespace Prisma {
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
     reward?: IntFieldUpdateOperationsInput | number;
     submissions?: SubmissionUpdateManyWithoutBountyNestedInput;
+    winningSubmission?: SubmissionUpdateOneWithoutWinningSubmissionNestedInput;
     project?: ProjectUpdateOneWithoutBountiesNestedInput;
     BountyWinner?: BountyWinnerUpdateManyWithoutBountyNestedInput;
   };
@@ -17248,6 +17722,10 @@ export namespace Prisma {
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
@@ -17269,6 +17747,10 @@ export namespace Prisma {
     stage?: EnumBountyStageFieldUpdateOperationsInput | $Enums.BountyStage;
     aboutProject?: NullableStringFieldUpdateOperationsInput | string | null;
     headerSections?: NullableJsonNullValueInput | InputJsonValue;
+    winningSubmissionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     approvedByValidator?: BoolFieldUpdateOperationsInput | boolean;
@@ -17364,6 +17846,7 @@ export namespace Prisma {
 
   export type BountyWinnerUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
@@ -17373,6 +17856,7 @@ export namespace Prisma {
   export type BountyWinnerUncheckedUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string;
     bountyId?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
@@ -17381,6 +17865,7 @@ export namespace Prisma {
   export type BountyWinnerUncheckedUpdateManyWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string;
     bountyId?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
     submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;

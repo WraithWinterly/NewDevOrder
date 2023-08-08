@@ -154,17 +154,18 @@ export default function BountyList({
               Teams Currently Hacking: {bounty.participantsTeamIDs.length}
             </StyledText>
           </View>
-          {bounty.stage === BountyStage.Active &&
+          {((bounty.stage === BountyStage.Active &&
             !designerView &&
-            !validatorView && (
-              <RoundArrowButton
-                title="View Details"
-                onPress={() => {
-                  setSelectedFullBounty(bounty.id);
-                  navigation.navigate('ViewBounty');
-                }}
-              />
-            )}
+            !validatorView) ||
+            bounty.stage === 'Completed') && (
+            <RoundArrowButton
+              title="View Details"
+              onPress={() => {
+                setSelectedFullBounty(bounty.id);
+                navigation.navigate('ViewBounty');
+              }}
+            />
+          )}
 
           {designerView &&
             (bounty.stage === 'Draft' || bounty.stage === 'Completed' ? (
