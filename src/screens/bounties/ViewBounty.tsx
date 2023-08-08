@@ -55,6 +55,11 @@ export default function ViewBounty({route, navigation}: Props) {
 
   const createBountyData = useBountyStore(state => state.createBountyData);
   const selectedBounty = useBountyStore(state => state.selectedBounty);
+  const selectedBountyWinner = useBountyStore(
+    state => state.selectedBountyWinner,
+  );
+
+  const isWinner = selectedBountyWinner?.bountyId === selectedBounty?.id;
   const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
   const project = useProjectsStore(state => state.selectedProject);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
@@ -292,7 +297,22 @@ export default function ViewBounty({route, navigation}: Props) {
                 )}
               </View>
             ))}
-
+          {(playingRole === RoleType.BountyManager ||
+            playingRole === RoleType.Founder) &&
+            isWinner && (
+              <StyledButton
+                type="normal2"
+                onPress={() => {
+                  navigation.navigate('StartTestCases', {
+                    submissionID: selectedBounty?.submissions?.find(
+                      submission =>
+                        submission.id === selectedBountyWinner?.submissionId,
+                    )!.id!,
+                  });
+                }}>
+                View and approve winner
+              </StyledButton>
+            )}
           {isValidator
             ? bounty?.stage === 'Active' &&
               (bounty?.testCases.length === 0 ? (

@@ -25,6 +25,9 @@ export enum Endpoints {
   SUBMIT_DELIVERABLES = '/submit-deliverables',
   GET_TEST_CASES = '/get-test-cases',
   APPROVE_TEST_CASES = '/approve-test-cases',
+  VALIDATOR_SELECT_WINNING_SUBMISSION = '/validator-select-winning-submission',
+  GET_WINNER_BY_BOUNTY_ID = '/get-winner-by-bounty',
+  APPROVE_DISAPPROVE_BOUNTY_WINNER = '/approve-disapprove-bounty-winner',
   // TEAMS
   GET_TEAMS = '/get-teams',
   GET_TEAM_BY_ID = '/get-team-by-id',

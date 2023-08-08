@@ -118,7 +118,8 @@ export function StyledButton({
           ? {...style, backgroundColor: Colors.Gray[600]}
           : style
       }
-      onPress={onPress}>
+      onPress={enabled ? onPress : () => {}}
+      disabled={!enabled}>
       {typeof children === 'string' ? (
         !loading ? (
           <Text

@@ -1,4 +1,11 @@
-import {Bounty, Member, Project, Submission, Team} from 'prisma/generated';
+import {
+  Bounty,
+  BountyWinner,
+  Member,
+  Project,
+  Submission,
+  Team,
+} from 'prisma/generated';
 import {CreateBountyData, CreateBountyPostData} from 'src/sharedTypes';
 import query from 'src/utils/query';
 
@@ -15,6 +22,7 @@ type BountyStore = {
     founder: Member;
     submissions: (Submission & {team: Team})[] | undefined;
   };
+  selectedBountyWinner: BountyWinner | undefined;
   setSelectedBounty: (fetchId: string | undefined) => void;
 };
 
@@ -25,6 +33,7 @@ const useBountyStore = create<BountyStore>((set, get) => ({
   },
   bounties: [],
   selectedBounty: undefined,
+  selectedBountyWinner: undefined,
   fetchBounties: async () => {
     set(() => ({bounties: undefined}));
 
@@ -38,6 +47,7 @@ const useBountyStore = create<BountyStore>((set, get) => ({
   },
   setSelectedBounty: async (fetchId: string | undefined) => {
     set(() => ({selectedBounty: undefined}));
+    set(() => ({selectedBountyWinner: undefined}));
     if (!fetchId) {
       return;
     }
@@ -53,6 +63,12 @@ const useBountyStore = create<BountyStore>((set, get) => ({
         submissions: (Submission & {team: Team})[] | undefined;
       };
       set(() => ({selectedBounty: data}));
+      const {result: resWinner, error: errorWInner} = await query(
+        getServerEndpoint(Endpoints.GET_WINNER_BY_BOUNTY_ID) + `/${fetchId}`,
+      );
+      if (resWinner) {
+        set(() => ({selectedBountyWinner: resWinner}));
+      }
     }
   },
 }));
