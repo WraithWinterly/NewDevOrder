@@ -45,6 +45,7 @@ import AddTags from './screens/projects/designer/AddTags';
 import ViewSubmissions from './screens/projects/validator/ViewSubmissions';
 import StartTestCases from './screens/projects/validator/StartTestCases';
 import ViewSolution from './screens/bounties/ViewSolution';
+import ClaimReward from './screens/bounties/ClaimReward';
 
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
@@ -62,6 +63,7 @@ export type StackParamList = WelcomeStackParamList &
     StartBounty: undefined;
     SubmitDeliverables: undefined;
     ViewSolution: undefined;
+    ClaimReward: undefined;
 
     Profile: {viewProfileAddress?: string} | undefined;
     Leaderboard: undefined;
@@ -230,6 +232,13 @@ export default function StackNavigator() {
         <Stack.Screen
           name="ViewSolution"
           component={ViewSolution}
+          options={{
+            title: 'View Solution',
+          }}
+        />
+        <Stack.Screen
+          name="ClaimReward"
+          component={ClaimReward}
           options={{
             title: 'View Solution',
           }}

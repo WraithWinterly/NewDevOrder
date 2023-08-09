@@ -101,8 +101,8 @@ function ProfileCard({profile}: {profile: Member}) {
       </View>
 
       <Text>
-        {profile.bountiesWon} bounties won • {profile.teamsJoined} teams joined
-        • {profile.membersInvited} members invited
+        {profile.bountiesWon} bounties won • {profile.teamsJoined.length} teams
+        joined • {profile.membersInvited} members invited
       </Text>
       <StyledText
         style={{paddingVertical: 8, marginBottom: -10, marginLeft: 4}}>

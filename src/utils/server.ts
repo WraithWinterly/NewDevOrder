@@ -13,6 +13,8 @@ export enum Endpoints {
   GET_MEMBERS_BY_WALLET_ADDRESSES = '/get-members-by-wallet-addresses',
   GET_MY_PROFILE = '/get-my-profile',
   CHANGE_ROLE = '/change-role',
+  GET_MY_BOUNTY_WINS = '/get-my-bounty-wins',
+  CONFIRM_REWARD = '/confirm-reward',
   // BOUNTIES
   GET_BOUNTIES = '/get-bounties',
   GET_BOUNTY_BY_ID = '/get-bounty-by-id',
@@ -28,6 +30,7 @@ export enum Endpoints {
   VALIDATOR_SELECT_WINNING_SUBMISSION = '/validator-select-winning-submission',
   GET_WINNER_BY_BOUNTY_ID = '/get-winner-by-bounty',
   APPROVE_DISAPPROVE_BOUNTY_WINNER = '/approve-disapprove-bounty-winner',
+
   // TEAMS
   GET_TEAMS = '/get-teams',
   GET_TEAM_BY_ID = '/get-team-by-id',

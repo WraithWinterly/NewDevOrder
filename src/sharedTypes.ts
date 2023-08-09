@@ -1,7 +1,7 @@
 // Please do not import stuff into this file. It is shared between the client and server.
-// Only edit this file in the client repository, then copy into the server repository to avoid sync issues.
+// Only edit this file in the server repository, then copy into the client repository to avoid sync issues.
 
-import {BountyType, RoleType, TestCase} from 'prisma/generated';
+import {BountyType, RoleType, TestCase} from '../prisma/generated';
 
 // For POST Requests
 export type CreateProfilePOSTData = {
@@ -9,6 +9,10 @@ export type CreateProfilePOSTData = {
   firstName: string;
   lastName: string;
   email: string;
+  walletAddress: string;
+};
+export type ChangeRolePOSTData = {
+  role: RoleType;
   walletAddress: string;
 };
 export type BountyMgrSetQuotePricePOSTData = {
@@ -28,7 +32,7 @@ export type CreateTeamPOSTData = {
   creatorAddress: string;
 };
 
-export type CreateProposalPOSTData = {
+export type CreateProjectPOSTData = {
   title: string;
   description: string;
   email: string;
@@ -56,10 +60,6 @@ export type CreateBountyData = {
   deadline: Date;
   types: BountyType[];
   headerSections: {[x: string]: string[]};
-};
-export type ChangeRolePOSTData = {
-  role: RoleType;
-  walletAddress: string;
 };
 
 export type CreateBountyPostData = {
@@ -92,11 +92,16 @@ export type ApproveDisapproveBountyWinnerPostData = {
   walletAddress: string;
   approve: boolean;
 };
+export type ConfirmRewardPostData = {
+  submissionWinnerID: string;
+  walletAddress: string;
+};
 export type ApproveTestCasePostData = {
   submissionID: string;
   walletAddress: string;
   testCases: TestCase[];
 };
+
 export type SetTestCasesPostData = {
   bountyID: string;
   walletAddress: string;

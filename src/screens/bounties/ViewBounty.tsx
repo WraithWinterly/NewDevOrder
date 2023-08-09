@@ -64,7 +64,7 @@ export default function ViewBounty({route, navigation}: Props) {
   const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
   const project = useProjectsStore(state => state.selectedProject);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
-
+  const myBountyWins = useMemberStore(state => state.myBountyWins);
   const setSelectedProject = useProjectsStore(
     state => state.setSelectedProject,
   );
@@ -97,6 +97,10 @@ export default function ViewBounty({route, navigation}: Props) {
     getServerEndpoint(Endpoints.SET_BOUNTY_APPROVAL),
   );
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
+
+  const thisBountyWin = myBountyWins?.find(
+    win => win.bountyId === selectedBounty?.id,
+  );
 
   async function onSubmitCreateBounty(draft: boolean) {
     if (!createBountyData) {
@@ -461,6 +465,21 @@ export default function ViewBounty({route, navigation}: Props) {
                   />
                 ))}
               </View>
+              {!!thisBountyWin && (
+                <View style={{marginTop: 24, gap: 12}}>
+                  <StyledText>
+                    🎉 Your team,{' '}
+                    <StyledText style={{color: Colors.Primary}}>
+                      {thisBountyWin.submission.team.name},{' '}
+                    </StyledText>
+                    won this bounty!
+                  </StyledText>
+                  <StyledButton
+                    onPress={() => navigation.navigate('ClaimReward')}>
+                    Claim reward now
+                  </StyledButton>
+                </View>
+              )}
 
               <View style={{height: 12}}></View>
               <DropdownSection title="Bounty Overview">

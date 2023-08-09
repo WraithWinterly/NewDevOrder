@@ -1,6 +1,14 @@
 import {Endpoints, getServerEndpoint} from '../utils/server';
 import {create} from 'zustand';
-import {Member, RoleType, TeamInvite} from 'prisma/generated';
+import {
+  Bounty,
+  BountyWinner,
+  Member,
+  RoleType,
+  Submission,
+  Team,
+  TeamInvite,
+} from 'prisma/generated';
 import query from 'src/utils/query';
 
 type MemberStore = {
@@ -11,6 +19,9 @@ type MemberStore = {
     | (Member & {
         teamInvites: TeamInvite[] | undefined;
       })
+    | undefined;
+  myBountyWins:
+    | (BountyWinner & {submission: Submission & {bounty: Bounty; team: Team}})[]
     | undefined;
 };
 
@@ -43,11 +54,19 @@ const useMemberStore = create<MemberStore>((set, get) => ({
         teamInvites: TeamInvite[];
       };
       set(() => ({myProfile: data}));
+
+      const {result: resultMyBountyWins, error: errorMyBountyWins} =
+        await query(getServerEndpoint(Endpoints.GET_MY_BOUNTY_WINS) + `/${id}`);
+      console.log(':', result);
+      if (result) {
+        set(() => ({myBountyWins: resultMyBountyWins}));
+      }
     }
 
     return;
   },
   myProfile: undefined,
+  myBountyWins: undefined,
 }));
 
 export default useMemberStore;
