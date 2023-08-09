@@ -72,7 +72,7 @@ export default function Projects() {
 
         {!!projectsPending && projectsPending.length > 0 && (
           <>
-            <StyledText style={{marginBottom: 16}}>For You</StyledText>
+            <StyledText style={{marginBottom: 16}}>To Do</StyledText>
             {projectsPending.map((item, index) => (
               <View key={`${item.id}-${index}-${id}`}>
                 <ProjectCard project={item}></ProjectCard>

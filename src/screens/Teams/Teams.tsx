@@ -17,7 +17,7 @@ export default function Teams() {
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const teams = useTeamsStore(state => state.teams);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const [refreshing, setRefreshing] = useState(false);
+
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
@@ -28,12 +28,35 @@ export default function Teams() {
     fetchTeams();
   }, []);
 
-  const teamsJoined = !!teams
-    ? teams?.filter(team => team.creatorAddress !== walletAddress)
-    : undefined;
-  const teamsCreated = !!teams
-    ? teams?.filter(team => team.creatorAddress === walletAddress)
-    : undefined;
+  const [teamsCreated, setTeamsCreated] = useState<typeof teams>([]);
+  const [teamsJoined, setTeamsJoined] = useState<typeof teams>([]);
+  const [otherTeams, setOtherTeams] = useState<typeof teams>([]);
+
+  useEffect(() => {
+    if (!teams) return;
+
+    const userTeams = teams.filter(team => {
+      if (team.creatorAddress === walletAddress) return true;
+      return (
+        team.members?.some(member => member.walletAddress === walletAddress) &&
+        team.creatorAddress !== walletAddress
+      );
+    });
+
+    setTeamsCreated(
+      userTeams.filter(team => team.creatorAddress === walletAddress),
+    );
+    setTeamsJoined(
+      userTeams.filter(team => team.creatorAddress !== walletAddress),
+    );
+    setOtherTeams(
+      teams.filter(
+        team =>
+          team.creatorAddress !== walletAddress &&
+          !team.members?.some(member => member.walletAddress === walletAddress),
+      ),
+    );
+  }, [teams, walletAddress]);
 
   return (
     <Layout>
@@ -65,6 +88,23 @@ export default function Teams() {
           <>
             <StyledText style={{marginBottom: 16}}>Teams Joined</StyledText>
             {teamsJoined.map(item => (
+              <View key={`${item.id + 1}-${id2}`}>
+                <TeamCard
+                  id={item.id}
+                  title={item.name}
+                  members={item.members?.length || 0}
+                  description={item.description}
+                />
+                <View style={{height: 12}} />
+              </View>
+            ))}
+            <Separator />
+          </>
+        )}
+        {!!otherTeams && otherTeams.length > 0 && (
+          <>
+            <StyledText style={{marginBottom: 16}}>Other Teams</StyledText>
+            {otherTeams.map(item => (
               <View key={`${item.id + 1}-${id2}`}>
                 <TeamCard
                   id={item.id}

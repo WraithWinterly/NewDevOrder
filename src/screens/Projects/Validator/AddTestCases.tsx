@@ -148,7 +148,6 @@ export default function AddTestCases() {
                   onPress={() => {
                     //So what this does, it swaps values with the string before it, if it is not the first index
                     const idx = testCases.findIndex(t => t === testCase);
-                    // console.log(idx);
                     if (idx !== 0) {
                       const temp = testCases[idx];
                       testCases[idx] = testCases[idx - 1];
@@ -164,7 +163,6 @@ export default function AddTestCases() {
                   onPress={() => {
                     //So what this does, it swaps values with the string after it, if it is not the last index
                     const idx = testCases.findIndex(t => t === testCase);
-                    // console.log(idx);
                     if (idx !== testCases.length - 1) {
                       const temp = testCases[idx];
                       testCases[idx] = testCases[idx + 1];

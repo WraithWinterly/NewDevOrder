@@ -81,7 +81,6 @@ export default function StartTestCases({route, navigation}: Props) {
 
   useEffect(() => {
     if (!!submissionID && !!walletAddress) {
-      console.log('Querying Test Cases...');
       queryTestCases(
         `${getServerEndpoint(
           Endpoints.GET_TEST_CASES,
@@ -179,7 +178,6 @@ export default function StartTestCases({route, navigation}: Props) {
     !!selectedBountyWinner &&
     selectedBountyWinner.submissionId === submissionID;
 
-  console.log('', selectedBountyWinner);
   const isBountyValidator = playingRole === RoleType.BountyValidator;
   return (
     <Layout>

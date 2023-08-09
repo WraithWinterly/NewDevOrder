@@ -49,15 +49,9 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
   setSelectedTeam: async (fetchId: string | undefined) => {
     if (!fetchId) {
       set(() => ({selectedTeam: undefined}));
-      // set(() => ({selectedTeamMembers: undefined}));
       return;
     }
     set(() => ({selectedTeam: undefined}));
-    // console.log(fetchId);
-    // const data = get().teams?.find(team => team.id == fetchId);
-    // const {data} = await axios.get(
-    //   getServerEndpoint(Endpoints.GET_TEAM_BY_ID) + `/${fetchId}`,
-    // );
 
     const {result, error} = await query(
       getServerEndpoint(Endpoints.GET_TEAM_BY_ID) + `/${fetchId}`,
@@ -69,18 +63,6 @@ const useTeamsStore = create<TeamsStore>((set, get) => ({
       };
       set(() => ({selectedTeam: data}));
     }
-
-    // console.log('sdf');
-    // console.log(getServerEndpoint(Endpoints.GET_MEMBERS_BY_WALLET_ADDRESSES));
-    // const walletAddresses = data?.members?.map(member => member.walletAddress);
-    // const {data: teamMembers} = await axios.post(
-    //   getServerEndpoint(Endpoints.GET_MEMBERS_BY_WALLET_ADDRESSES),
-    //   {
-    //     addresses: walletAddresses || [],
-    //   },
-    // );
-
-    // set(() => ({selectedTeamMembers: teamMembers}));
   },
   selectedTeamMembers: [],
 }));

@@ -125,8 +125,6 @@ function ProfileCard({
           <DropdownMenu
             data={RoleDict || []}
             onSelect={async (itemID, itemIndex) => {
-              console.log('ac');
-              // console.log(itemID);
               const role = RoleDict?.find(role => role.id == itemID);
 
               if (!walletAddress) {

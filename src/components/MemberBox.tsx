@@ -9,6 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 import {Member} from 'prisma/generated';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function MemberBox({
   member,
@@ -18,7 +19,9 @@ export default function MemberBox({
   rightChildren?: ReactNode;
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
   return (
     <TouchableOpacity
       style={{
@@ -28,7 +31,10 @@ export default function MemberBox({
         gap: 12,
         paddingHorizontal: 12,
         paddingVertical: 8,
-        backgroundColor: Colors.BackgroundLighter,
+        backgroundColor:
+          walletAddress === member.walletAddress
+            ? Colors.Purple[900]
+            : Colors.BackgroundLighter,
         borderRadius: 12,
       }}
       onPress={() => {

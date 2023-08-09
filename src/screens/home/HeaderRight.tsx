@@ -61,7 +61,7 @@ export default function HeaderRight() {
       setSelectedProject(undefined);
       setSelectedBounty(undefined);
     } catch (e) {
-      console.log((e as Error).message);
+      console.error((e as Error).message);
       setRefreshError(true);
     }
 
