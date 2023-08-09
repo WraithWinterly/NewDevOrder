@@ -97,8 +97,9 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
                     textShadowColor: Colors.Black,
                     textShadowRadius: 2,
                     fontSize: 24,
+                    width: 24,
                   }}>
-                  {index}
+                  {index + 1}
                 </StyledText>
                 <View style={{flexDirection: 'column'}}>
                   <StyledText>{item.firstName}</StyledText>

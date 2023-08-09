@@ -51,8 +51,12 @@ export default function Profile({route, navigation}: Props) {
 
   const displayProfile = !!viewProfileAddress ? memberViewing : myProfile;
 
+  const isMyProfile =
+    !viewProfileAddress ||
+    viewProfileAddress === wallet?.wallet?.publicKey.toBase58().toString();
+
   useEffect(() => {
-    if (!!viewProfileAddress) {
+    if (!isMyProfile) {
       fetchProfile(viewProfileAddress.toString());
       return;
     } else {
@@ -63,15 +67,23 @@ export default function Profile({route, navigation}: Props) {
   return (
     <Layout>
       {!!displayProfile ? (
-        <ProfileCard profile={displayProfile} />
+        <ProfileCard profile={displayProfile} isMyProfile={isMyProfile} />
       ) : (
-        displayProfile && <ProfileCard profile={displayProfile} />
+        displayProfile && (
+          <ProfileCard profile={displayProfile} isMyProfile={isMyProfile} />
+        )
       )}
     </Layout>
   );
 }
 
-function ProfileCard({profile}: {profile: Member}) {
+function ProfileCard({
+  profile,
+  isMyProfile,
+}: {
+  profile: Member;
+  isMyProfile: boolean;
+}) {
   const id = useId();
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
@@ -104,46 +116,51 @@ function ProfileCard({profile}: {profile: Member}) {
         {profile.bountiesWon} bounties won • {profile.teamsJoined.length} teams
         joined • {profile.membersInvited} members invited
       </Text>
-      <StyledText
-        style={{paddingVertical: 8, marginBottom: -10, marginLeft: 4}}>
-        Play as role...
-      </StyledText>
-      <DropdownMenu
-        data={RoleDict || []}
-        onSelect={async (itemID, itemIndex) => {
-          console.log('ac');
-          // console.log(itemID);
-          const role = RoleDict?.find(role => role.id == itemID);
+      {isMyProfile && (
+        <>
+          <StyledText
+            style={{paddingVertical: 8, marginBottom: -10, marginLeft: 4}}>
+            Play as role...
+          </StyledText>
+          <DropdownMenu
+            data={RoleDict || []}
+            onSelect={async (itemID, itemIndex) => {
+              console.log('ac');
+              // console.log(itemID);
+              const role = RoleDict?.find(role => role.id == itemID);
 
-          if (!walletAddress) {
-            console.error('No wallet address');
-            return;
-          }
-          if (!role) {
-            console.error('Selected role not found');
-            return;
-          }
-          const title = role.title.replace(' ', '');
+              if (!walletAddress) {
+                console.error('No wallet address');
+                return;
+              }
+              if (!role) {
+                console.error('Selected role not found');
+                return;
+              }
+              const title = role.title.replace(' ', '');
 
-          const body = {
-            role: title,
-            walletAddress: walletAddress,
-          } as ChangeRolePOSTData;
-          const data = await mutateRole(body);
-          if (data) {
-            fetchMyProfile(walletAddress);
-          }
-        }}
-        // Add space between capital letters
-        // Eg. Change BountyType.BountyHunter to Bounty Hunter
-        displayText={
-          myProfile?.playingRole.replace(/([a-z])([A-Z])/g, '$1 $2') || ''
-        }
-        selectedValue={
-          RoleDict.find(role => role.title == myProfile?.playingRole)?.id || ''
-        }
-        loading={loadingRole}
-      />
+              const body = {
+                role: title,
+                walletAddress: walletAddress,
+              } as ChangeRolePOSTData;
+              const data = await mutateRole(body);
+              if (data) {
+                fetchMyProfile(walletAddress);
+              }
+            }}
+            // Add space between capital letters
+            // Eg. Change BountyType.BountyHunter to Bounty Hunter
+            displayText={
+              myProfile?.playingRole.replace(/([a-z])([A-Z])/g, '$1 $2') || ''
+            }
+            selectedValue={
+              RoleDict.find(role => role.title == myProfile?.playingRole)?.id ||
+              ''
+            }
+            loading={loadingRole}
+          />
+        </>
+      )}
     </View>
   );
 }

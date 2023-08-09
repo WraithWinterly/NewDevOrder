@@ -1,4 +1,6 @@
 import {Member} from 'prisma/generated';
+import query from 'src/utils/query';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
 
 type LeaderboardStore = {
@@ -11,15 +13,25 @@ type LeaderboardStore = {
 const useLeaderboardStore = create<LeaderboardStore>(set => ({
   topMembers: undefined,
   fetchTopMembers: async startId => {
-    set({
-      topMembers: undefined,
-    });
+    const {result, error} = await query(
+      getServerEndpoint(Endpoints.GET_LEADERBOARD_MEMBERS),
+    );
+    if (result) {
+      set({
+        topMembers: result,
+      });
+    }
   },
   topFounders: undefined,
   fetchTopFounders: async startId => {
-    set({
-      topFounders: undefined,
-    });
+    const {result, error} = await query(
+      getServerEndpoint(Endpoints.GET_LEADERBOARD_FOUNDERS),
+    );
+    if (result) {
+      set({
+        topFounders: result,
+      });
+    }
   },
 }));
 
