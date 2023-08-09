@@ -91,7 +91,7 @@ export default function BountyList({
       sorted = sorted.filter(bounty => bounty.stage === BountyStage.Completed);
     }
     setSortedBounties(sorted);
-  }, [sorting, sorting2]);
+  }, [sorting, sorting2, bounties]);
 
   return (
     <>

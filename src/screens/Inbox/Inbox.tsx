@@ -4,6 +4,8 @@ import {useId, useState} from 'react';
 import {RefreshControl, Text, View} from 'react-native';
 import {FlatList} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
+import CheckIcon from 'src/components/icons/CheckIcon';
+import CheckIconAccent from 'src/components/icons/CheckIconAccent';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import useMutation from 'src/hooks/usePost';
@@ -104,11 +106,19 @@ export default function Inbox() {
     // fetchNotifications().then(() => setRefreshing(false));
   }
 
+  const areMessages =
+    !!myBountyWins &&
+    !!myProfile?.teamInvites &&
+    (myProfile.teamInvites?.length > 0 || myBountyWins.length > 0);
+
   return (
     <Layout>
-      <StyledText style={{fontWeight: '500', fontSize: 20, marginBottom: 8}}>
-        Latest Messages
-      </StyledText>
+      {areMessages && (
+        <StyledText style={{fontWeight: '500', fontSize: 20, marginBottom: 8}}>
+          Latest Messages
+        </StyledText>
+      )}
+
       {!!myBountyWins &&
         myBountyWins.map((bountyWin, index) => (
           <View
@@ -319,6 +329,20 @@ export default function Inbox() {
             </View>
           </View>
         ))}
+      {!areMessages && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 12,
+            marginTop: -50,
+            height: '100%',
+          }}>
+          <CheckIconAccent />
+          <StyledText>You're all caught up!</StyledText>
+        </View>
+      )}
     </Layout>
   );
 }
