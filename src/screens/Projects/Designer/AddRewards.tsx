@@ -43,8 +43,7 @@ export default function AddRewards() {
     withoutMe?.forEach(bounty => {
       leftOver -= bounty.reward;
     });
-    console.log(withoutMe);
-    console.log(bountiesForProject);
+
     return leftOver;
   }
 
