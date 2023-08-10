@@ -28,9 +28,7 @@ export default function Completed() {
     setShownBounties(
       bounties?.filter(
         bounty =>
-          bounty.stage === 'Completed' ||
-          bounty.stage === 'ReadyForTests' ||
-          bounty.stage === 'PendingApproval',
+          bounty.stage === 'Completed' || bounty.stage === 'PendingApproval',
       ),
     );
   }, [bounties]);
@@ -40,12 +38,7 @@ export default function Completed() {
       <ScrollView>
         {shownBounties && (
           <>
-            <BountyList
-              refreshing={refreshing}
-              bounties={shownBounties}
-              onRefresh={onRefresh}
-              designerView
-            />
+            <BountyList bounties={shownBounties} designerView noSort2 />
             {shownBounties?.length === 0 && (
               <StyledText
                 style={{

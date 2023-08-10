@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 
 import StyledButton from 'src/components/ui/styled/StyledButton';
@@ -85,6 +85,7 @@ export default function StartBounty() {
             Choose a team to start this bounty on behalf of:
           </StyledText>
           <DropdownMenu
+            name="team"
             disabled={!viewTeams || viewTeams.length == 0}
             data={
               viewTeams?.map(team => ({id: team.id, title: team.name})) || []

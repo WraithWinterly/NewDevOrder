@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {ProjectStage} from 'prisma/generated';
 import {Bounty} from 'prisma/generated';
-import React, {useState} from 'react';
+import React, {useId, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import RightArrowIcon from 'src/components/icons/RightArrowIcon';
@@ -15,27 +15,57 @@ import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
 
 export default function AddRewards() {
-  const project = useProjectsStore(state => state.selectedProject);
-  const create = useBountyStore(state => state.createBountyData);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
-  const [bountyRewardAmount, setBountyRewardAmount] = useState(
-    String(create?.amount) || '',
+  const project = useProjectsStore(state => state.selectedProject);
+  const bountiesForProject = useProjectsStore(
+    state => state.bountiesForProject,
   );
+
+  const create = useBountyStore(state => state.createBountyData);
   const createBountyData = useBountyStore(state => state.createBountyData);
   const setCreateBountyData = useBountyStore(
     state => state.setCreateBountyData,
   );
 
+  const id = useId();
+
+  const [bountyRewardAmount, setBountyRewardAmount] = useState(
+    create?.amount || undefined,
+  );
+  const [errors, setErrors] = useState<string[]>([]);
+
+  function calc() {
+    let leftOver = project?.quotePrice || 0;
+    bountiesForProject?.forEach(bounty => {
+      leftOver -= bounty.reward;
+    });
+    return leftOver;
+  }
+
   function onNextStep() {
+    setErrors([]);
+    let localErrors: Array<string> = [];
+
     if (!createBountyData) {
       console.error('Missing create bounty data!');
       return;
     }
+    if ((bountyRewardAmount || 0) > calc()) {
+      localErrors.push(
+        'Insufficient funds for this action. Reduce your bounty reward.',
+      );
+    }
+    if (localErrors.length > 0) {
+      setErrors(localErrors);
+      return;
+    }
+
     setCreateBountyData({
       ...createBountyData,
       amount: Number(bountyRewardAmount) || 0,
     });
+
     navigation.navigate('AddSections');
   }
   return (
@@ -48,12 +78,30 @@ export default function AddRewards() {
         <StyledText>
           The Founder has committed {project?.quotePrice} to this project.
         </StyledText>
+        <StyledText>
+          You have <Text style={{fontWeight: '500'}}>${calc()}</Text> remaining
+          in funds.
+        </StyledText>
         <StyledText>Enter bounty reward amount:</StyledText>
         <StyledTextInput
           placeholder="Enter bounty reward amount"
           numberInput
-          value={bountyRewardAmount}
-          onChangeText={e => setBountyRewardAmount(e)}></StyledTextInput>
+          value={`$${bountyRewardAmount ?? ''}`}
+          onChangeText={e =>
+            setBountyRewardAmount(
+              e.replace('$', '').length > 0
+                ? Number(e.replace('$', ''))
+                : undefined,
+            )
+          }></StyledTextInput>
+        {errors.length > 0 &&
+          errors.map((e, i) => (
+            <StyledText
+              style={{color: Colors.Red[400]}}
+              key={`error-${i}-${id}`}>
+              {errors[0]}
+            </StyledText>
+          ))}
         <StyledButton onPress={onNextStep}>Next Step</StyledButton>
       </View>
     </Layout>

@@ -7,6 +7,7 @@ import {Colors} from 'src/styles/styles';
 
 export default function NFTDetails() {
   const nft = useWalletStore(state => state.nftById);
+
   return (
     <Layout>
       <View

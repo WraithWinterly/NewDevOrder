@@ -119,10 +119,17 @@ function ProfileCard({
       {isMyProfile && (
         <>
           <StyledText
-            style={{paddingVertical: 8, marginBottom: -10, marginLeft: 4}}>
-            Play as role...
+            style={{
+              paddingVertical: 8,
+              marginBottom: -10,
+              marginLeft: 4,
+              fontSize: 18,
+              fontWeight: 'bold',
+            }}>
+            I am...
           </StyledText>
           <DropdownMenu
+            name="role"
             data={RoleDict || []}
             onSelect={async (itemID, itemIndex) => {
               const role = RoleDict?.find(role => role.id == itemID);

@@ -6,7 +6,6 @@ import useSolanaContext from 'src/web3/SolanaProvider';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 import {useNavigation} from '@react-navigation/native';
-import useAppStore from '../../stores/store';
 import useWalletStore from 'src/stores/walletStore';
 import useMemberStore from 'src/stores/membersStore';
 import {PublicKey} from '@solana/web3.js';

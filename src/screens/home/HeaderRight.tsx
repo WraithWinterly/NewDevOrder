@@ -26,28 +26,30 @@ import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
+
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
+
   const setMemberIdViewing = useMemberStore(state => state.fetchProfile);
   const myProfile = useMemberStore(state => state.myProfile);
-
-  const fetchBounties = useBountyStore(state => state.fetchBounties);
-  const fetchTeams = useTeamsStore(state => state.fetchTeams);
-  const fetchProjects = useProjectsStore(state => state.fetchProjects);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 
-  const {wallet} = useSolanaContext();
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
+  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
 
-  const [refreshing, setRefreshing] = useState(false);
-
-  const [refreshError, setRefreshError] = useState<boolean>(false);
-
-  const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
+  const fetchProjects = useProjectsStore(state => state.fetchProjects);
   const setSelectedProject = useProjectsStore(
     state => state.setSelectedProject,
   );
-  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
+
+  const fetchTeams = useTeamsStore(state => state.fetchTeams);
+  const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
+
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshError, setRefreshError] = useState<boolean>(false);
 
   async function refresh() {
-    // if (refreshing) return;
     setRefreshError(false);
     setRefreshing(true);
     try {
@@ -55,7 +57,7 @@ export default function HeaderRight() {
         fetchBounties(),
         fetchTeams(),
         fetchProjects(),
-        fetchMyProfile(wallet?.publicKey.toBase58().toString()),
+        fetchMyProfile(walletAddress),
       ]);
       setSelectedTeam(undefined);
       setSelectedProject(undefined);
@@ -72,25 +74,27 @@ export default function HeaderRight() {
     <View
       style={{
         flexDirection: 'row',
-        gap: 24,
-
         alignItems: 'center',
         paddingRight: 18,
       }}>
-      <TouchableOpacity onPress={refresh}>
+      <TouchableOpacity onPress={refresh} style={{padding: 16}}>
         {refreshing ? (
           <ActivityIndicator color={Colors.White} />
         ) : (
           <RefreshIcon red={refreshError} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Leaderboard')}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Leaderboard')}
+        style={{padding: 12}}>
         <LeaderboardIcon />
       </TouchableOpacity>
 
       <Menu>
         <MenuTrigger>
-          <ProfileIcon size={24} />
+          <View style={{padding: 12}}>
+            <ProfileIcon size={24} />
+          </View>
         </MenuTrigger>
         <MenuOptions
           customStyles={{

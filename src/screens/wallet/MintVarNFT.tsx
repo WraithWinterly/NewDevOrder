@@ -12,7 +12,9 @@ import {Colors} from 'src/styles/styles';
 
 export default function MintVarNFT() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
   const nftToMint = useMintStore(state => state.nftToMint);
+
   function onMintPressed() {
     // Mint functionality
     const mintSuccess = true;

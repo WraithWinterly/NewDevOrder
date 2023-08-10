@@ -12,8 +12,9 @@ import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 export default function ConfirmDecline() {
-  const proj = useProjectsStore(state => state.selectedProject);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
+  const proj = useProjectsStore(state => state.selectedProject);
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
 
   const {data, loading, error, mutate} = useMutation(

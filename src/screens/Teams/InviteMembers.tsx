@@ -140,6 +140,7 @@ export default function InviteMembers() {
       <StyledButton
         enabled={searchUsers.length >= 3}
         onPress={fetchUser}
+        type="normal2"
         loading={loadingMemberByID}
         error={!!errorMemberByID}>
         Search user by wallet address

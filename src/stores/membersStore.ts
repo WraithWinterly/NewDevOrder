@@ -58,7 +58,7 @@ const useMemberStore = create<MemberStore>((set, get) => ({
       const {result: resultMyBountyWins, error: errorMyBountyWins} =
         await query(getServerEndpoint(Endpoints.GET_MY_BOUNTY_WINS) + `/${id}`);
 
-      if (result) {
+      if (!!resultMyBountyWins) {
         set(() => ({myBountyWins: resultMyBountyWins}));
       }
     }

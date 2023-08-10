@@ -16,25 +16,35 @@ import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function WelcomeSetupProfile() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
   const {wallet} = useSolanaContext();
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
+  const [noUserAccount, setNoUserAccount] = useState(false);
 
   const {data, loading, error, query} = useQuery(
     getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
       `/${wallet!.publicKey!.toBase58().toString()}`,
   );
-
   const {
     data: createTeamMutationData,
     loading: loadingCreateTeam,
     error: errorCreateTeam,
     mutate: mutateCreateTeam,
   } = useMutation(getServerEndpoint(Endpoints.CREATE_PROFILE));
+
+  useEffect(() => {
+    query().then(data => {
+      if (data) {
+        setNoUserAccount(false);
+      } else {
+        setNoUserAccount(true);
+      }
+    });
+  }, []);
 
   async function onSubmit() {
     setErrors([]);
@@ -75,18 +85,6 @@ export default function WelcomeSetupProfile() {
     }
   }
 
-  const [noUserAccount, setNoUserAccount] = useState(false);
-
-  useEffect(() => {
-    query().then(data => {
-      if (data) {
-        setNoUserAccount(false);
-      } else {
-        setNoUserAccount(true);
-      }
-    });
-  }, []);
-
   return (
     <Layout>
       <ScrollView>
@@ -125,12 +123,6 @@ export default function WelcomeSetupProfile() {
                 value={email}
                 placeholder="Email"
               />
-              {/* <StyledTextInput
-                    onChangeText={t => setPassword(t)}
-                    value={password}
-                    placeholder="Password"
-                    secureTextEntry={true}
-                  /> */}
             </View>
 
             <StyledButton

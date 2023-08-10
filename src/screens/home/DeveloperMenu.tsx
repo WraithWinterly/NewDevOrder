@@ -1,18 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {RoleType} from 'prisma/generated';
 import {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import DropdownMenu from 'src/components/ui/DropdownMenu';
 import PhantomConnectButton from 'src/components/ui/PhantomConnectButton';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import useMutation from 'src/hooks/usePost';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
-import {ChangeRolePOSTData} from 'src/sharedTypes';
-import useMemberStore from 'src/stores/membersStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function DeveloperMenu() {
   const [resetFeedback, setResetFeedback] = useState('');

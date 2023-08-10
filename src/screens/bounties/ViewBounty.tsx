@@ -38,36 +38,68 @@ import {BountyStage} from 'prisma/generated';
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
 export default function ViewBounty({route, navigation}: Props) {
-  const bounties = useBountyStore(state => state.bounties);
-  const id = useId();
-  const id2 = useId();
-  const id3 = useId();
-  const isValidator = route.params?.isValidator ?? false;
-  const isDesignerCreation = route.params?.isDesignerCreation ?? false;
-  const isDesigner = route.params?.isDesigner ?? false;
-
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
 
-  const teams = useTeamsStore(state => state.teams);
-
-  const [startedByTeams, setStartedByTeams] = useState<string[]>([]);
-
   const createBountyData = useBountyStore(state => state.createBountyData);
+  const bounties = useBountyStore(state => state.bounties);
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
   const selectedBounty = useBountyStore(state => state.selectedBounty);
+  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
   const selectedBountyWinner = useBountyStore(
     state => state.selectedBountyWinner,
   );
 
-  const isWinner = selectedBountyWinner?.bountyId === selectedBounty?.id;
-  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
-  const project = useProjectsStore(state => state.selectedProject);
-  const fetchBounties = useBountyStore(state => state.fetchBounties);
+  const teams = useTeamsStore(state => state.teams);
+
   const myBountyWins = useMemberStore(state => state.myBountyWins);
+  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
+
+  const project = useProjectsStore(state => state.selectedProject);
   const setSelectedProject = useProjectsStore(
     state => state.setSelectedProject,
   );
+
+  const createBounty = useMutation(getServerEndpoint(Endpoints.CREATE_BOUNTY));
+  const submitBountyDraft = useMutation(
+    getServerEndpoint(Endpoints.SUBMIT_BOUNTY_DRAFT),
+  );
+  const setBountyApproval = useMutation(
+    getServerEndpoint(Endpoints.SET_BOUNTY_APPROVAL),
+  );
+
+  const id = useId();
+  const id2 = useId();
+  const id3 = useId();
+
+  const [startedByTeams, setStartedByTeams] = useState<string[]>([]);
+  const [bounty, setBounty] = useState<
+    (Bounty & {project: Project; founder: Member}) | undefined
+  >(undefined);
+
+  const isWinner = selectedBountyWinner?.bountyId === selectedBounty?.id;
+  const thisBountyWin = myBountyWins?.find(
+    win => win.bountyId === selectedBounty?.id,
+  );
+  const isValidator = route.params?.isValidator ?? false;
+  const isDesignerCreation = route.params?.isDesignerCreation ?? false;
+  const isDesigner = route.params?.isDesigner ?? false;
+
+  const headerSections =
+    (bounty?.headerSections as {[x: string]: string[]}) || {};
+
+  useEffect(() => {
+    if (isDesigner && isDesignerCreation && !!createBountyData) {
+      setBounty(coerceIntoBounty());
+    } else {
+      setBounty(selectedBounty);
+    }
+  }, [isDesigner, selectedBounty, createBountyData]);
+
+  useEffect(() => {
+    updateStartedBy();
+  }, [bounty, bounties, teams]);
 
   function updateStartedBy() {
     if (!bounties) return;
@@ -83,24 +115,6 @@ export default function ViewBounty({route, navigation}: Props) {
 
     setStartedByTeams(localTeams);
   }
-
-  const [bounty, setBounty] = useState<
-    (Bounty & {project: Project; founder: Member}) | undefined
-  >(undefined);
-
-  const createBounty = useMutation(getServerEndpoint(Endpoints.CREATE_BOUNTY));
-  const submitBountyDraft = useMutation(
-    getServerEndpoint(Endpoints.SUBMIT_BOUNTY_DRAFT),
-  );
-
-  const setBountyApproval = useMutation(
-    getServerEndpoint(Endpoints.SET_BOUNTY_APPROVAL),
-  );
-  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
-
-  const thisBountyWin = myBountyWins?.find(
-    win => win.bountyId === selectedBounty?.id,
-  );
 
   async function onSubmitCreateBounty(draft: boolean) {
     if (!createBountyData) {
@@ -120,38 +134,8 @@ export default function ViewBounty({route, navigation}: Props) {
     const data = await createBounty.mutate(body);
     if (data) {
       setSelectedProject(body.bounty.projectID);
-      navigation.navigate('DesignerWorkspaceNavigator');
-    }
-  }
-
-  async function onSubmitToggleApproval() {
-    if (!walletAddress) {
-      console.error('No walletAddress');
-      return;
-    }
-    if (!bounty?.id) {
-      console.error('No bounty id');
-      return;
-    }
-    if (!playingRole) {
-      console.error('No playingRole');
-      return;
-    }
-    if (!bounty?.projectId) {
-      console.error('No projectId');
-      return;
-    }
-
-    const body: SetApproveBountyPostData = {
-      approve: !didIApprove(bounty, playingRole),
-      bountyID: bounty.id,
-      walletAddress: walletAddress,
-    };
-    const data = await setBountyApproval.mutate(body);
-    if (data) {
       fetchBounties();
-      setSelectedProject(bounty.projectId);
-      setSelectedBounty(bounty.id);
+      navigation.navigate('DesignerWorkspaceNavigator');
     }
   }
 
@@ -178,14 +162,6 @@ export default function ViewBounty({route, navigation}: Props) {
       navigation.navigate('DesignerWorkspaceNavigator');
     }
   }
-
-  useEffect(() => {
-    if (isDesigner && isDesignerCreation && !!createBountyData) {
-      setBounty(coerceIntoBounty());
-    } else {
-      setBounty(selectedBounty);
-    }
-  }, [isDesigner, selectedBounty, createBountyData]);
 
   function coerceIntoBounty() {
     if (!createBountyData?.amount) {
@@ -250,12 +226,36 @@ export default function ViewBounty({route, navigation}: Props) {
     };
   }
 
-  useEffect(() => {
-    updateStartedBy();
-  }, [bounty, bounties, teams]);
+  async function onSubmitToggleApproval() {
+    if (!walletAddress) {
+      console.error('No walletAddress');
+      return;
+    }
+    if (!bounty?.id) {
+      console.error('No bounty id');
+      return;
+    }
+    if (!playingRole) {
+      console.error('No playingRole');
+      return;
+    }
+    if (!bounty?.projectId) {
+      console.error('No projectId');
+      return;
+    }
 
-  const headerSections =
-    (bounty?.headerSections as {[x: string]: string[]}) || {};
+    const body: SetApproveBountyPostData = {
+      approve: !didIApprove(bounty, playingRole),
+      bountyID: bounty.id,
+      walletAddress: walletAddress,
+    };
+    const data = await setBountyApproval.mutate(body);
+    if (data) {
+      fetchBounties();
+      setSelectedProject(bounty.projectId);
+      setSelectedBounty(bounty.id);
+    }
+  }
 
   return (
     <Layout>
@@ -323,13 +323,12 @@ export default function ViewBounty({route, navigation}: Props) {
           {bounty?.stage === BountyStage.Completed && (
             <StyledButton
               onPress={() => {
-                // setSelectedFullBounty(bounty.id);
                 navigation.navigate('ViewSolution');
               }}>
               View Solution
             </StyledButton>
           )}
-          {isValidator
+          {isValidator || playingRole === RoleType.BountyValidator
             ? bounty?.stage === 'Active' &&
               (bounty?.testCases.length === 0 ? (
                 <StyledButton
@@ -493,7 +492,7 @@ export default function ViewBounty({route, navigation}: Props) {
                     }}>
                     <CashIcon />
                     <StyledText style={{fontWeight: '500'}}>
-                      Bonty Reward: {bounty.reward} SOL
+                      Bounty Reward: {bounty.reward} USD
                     </StyledText>
                   </View>
                   <View

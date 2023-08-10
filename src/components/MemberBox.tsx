@@ -1,8 +1,6 @@
 import {View} from 'react-native';
-import useMemberStore from 'src/stores/membersStore';
 import {Colors} from 'src/styles/styles';
 import StyledText from './ui/styled/StyledText';
-import Bubble from './ui/Bubble';
 import {ReactNode} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -19,9 +17,11 @@ export default function MemberBox({
   rightChildren?: ReactNode;
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
+
   return (
     <TouchableOpacity
       style={{

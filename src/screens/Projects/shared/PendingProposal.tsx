@@ -192,7 +192,7 @@ export default function PendingProposal() {
                   style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
                   Your todo: Pending Approvals
                 </StyledText>
-                <BountyList bounties={pendingBounties}></BountyList>
+                <BountyList bounties={pendingBounties} noSort2></BountyList>
                 <Separator />
               </>
             )}
@@ -203,7 +203,7 @@ export default function PendingProposal() {
                   style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
                   Approved Bounties
                 </StyledText>
-                <BountyList bounties={approvedBounties} noSort></BountyList>
+                <BountyList bounties={approvedBounties} noSort2></BountyList>
                 <Separator />
               </>
             )}
@@ -213,7 +213,7 @@ export default function PendingProposal() {
                   style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
                   Active Bounties
                 </StyledText>
-                <BountyList bounties={activeBounties} noSort></BountyList>
+                <BountyList bounties={activeBounties} noSort2></BountyList>
                 <Separator />
               </>
             )}
@@ -223,7 +223,7 @@ export default function PendingProposal() {
                   style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
                   Completed Bounties
                 </StyledText>
-                <BountyList bounties={completedBounties} noSort></BountyList>
+                <BountyList bounties={completedBounties} noSort2></BountyList>
                 <Separator />
               </>
             )}

@@ -13,16 +13,16 @@ import {Colors} from 'src/styles/styles';
 import {formatTimeAgo} from 'src/utils/utils';
 
 export default function ViewSubmissions() {
-  const selectedFullBounty = useBountyStore(state => state.selectedBounty);
+  const selectedBounty = useBountyStore(state => state.selectedBounty);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
   return (
     <Layout>
-      <StyledText style={{fontSize: 24}}>Submissions</StyledText>
-      <ProjBountyBreadcrumb bounty={selectedFullBounty} />
+      <StyledText style={{fontSize: 28}}>Submissions</StyledText>
+      <ProjBountyBreadcrumb bounty={selectedBounty} />
       <Separator />
       <ScrollView>
-        {selectedFullBounty?.submissions?.map((submission, index) => (
+        {selectedBounty?.submissions?.map((submission, index) => (
           <View style={{gap: 12}} key={`submission-${id}-${index}`}>
             <StyledText
               key={index}
@@ -62,6 +62,17 @@ export default function ViewSubmissions() {
             <Separator />
           </View>
         ))}
+        {selectedBounty?.submissions?.length === 0 && (
+          <StyledText
+            style={{
+              fontSize: 20,
+              fontWeight: '500',
+              marginTop: 24,
+              alignSelf: 'center',
+            }}>
+            There are currently no submissions
+          </StyledText>
+        )}
       </ScrollView>
     </Layout>
   );

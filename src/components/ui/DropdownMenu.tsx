@@ -17,6 +17,7 @@ type Data = {
 };
 
 interface DropdownMenuProps {
+  name: string;
   displayText: string;
   selectedValue: string;
   data: Data[];
@@ -27,6 +28,7 @@ interface DropdownMenuProps {
 }
 
 export default function DropdownMenu({
+  name,
   displayText,
   selectedValue,
   data,
@@ -83,14 +85,9 @@ export default function DropdownMenu({
           left: 0,
           right: 0,
         }}
-        // onValueChange={(itemValue: string, itemIndex: number) => {
-        //   if (onSelectTeam) {
-        //     onSelectTeam(itemValue);
-        //   }
-        // }}>
         onValueChange={disabled ? () => {} : onSelect}>
         <Picker.Item
-          label={'Select Role...'}
+          label={`Select ${name}...`}
           value={''}
           key={''}
           style={{display: 'none'}}

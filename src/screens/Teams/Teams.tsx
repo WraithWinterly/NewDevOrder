@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId, useState} from 'react';
-import {LogBox, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import Bubble from 'src/components/ui/Bubble';
@@ -14,23 +14,25 @@ import {Colors} from 'src/styles/styles';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function Teams() {
-  const fetchTeams = useTeamsStore(state => state.fetchTeams);
-  const teams = useTeamsStore(state => state.teams);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
+
+  const fetchTeams = useTeamsStore(state => state.fetchTeams);
+  const teams = useTeamsStore(state => state.teams);
+
   const id = useId();
   const id2 = useId();
-
-  useEffect(() => {
-    fetchTeams();
-  }, []);
 
   const [teamsCreated, setTeamsCreated] = useState<typeof teams>([]);
   const [teamsJoined, setTeamsJoined] = useState<typeof teams>([]);
   const [otherTeams, setOtherTeams] = useState<typeof teams>([]);
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
 
   useEffect(() => {
     if (!teams) return;

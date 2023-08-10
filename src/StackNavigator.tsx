@@ -254,7 +254,9 @@ export default function StackNavigator() {
           name="DesignerWorkspaceNavigator"
           component={DesignerWorkspaceNavigator}
           options={{
-            title: `Project ${project?.title}`,
+            title: `${project?.title.slice(0, 28)}${
+              (project?.title?.length || 0) > 28 ? '...' : ''
+            }`,
           }}
         />
         <Stack.Screen

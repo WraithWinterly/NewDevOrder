@@ -108,6 +108,7 @@ export default function CreateBounty() {
           {/* Dropdown for selecting the project */}
           <StyledText>Creating bounty for Project</StyledText>
           <DropdownMenu
+            name="project"
             data={projects || []}
             onSelect={(itemID, itemIndex) => {
               const proj = projects?.find(proj => proj.id == itemID);

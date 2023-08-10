@@ -1,6 +1,5 @@
 import {Linking, Text, View} from 'react-native';
 import Separator from 'src/components/ui/Separator';
-import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useBountyStore from 'src/stores/bountyStore';

@@ -18,7 +18,6 @@ import CodeIcon from 'src/components/icons/CodeIcon';
 
 import HeaderRight from './HeaderRight';
 
-import useAppStore from 'src/stores/store';
 import useMemberStore from 'src/stores/membersStore';
 import useBountyStore from 'src/stores/bountyStore';
 import {RoleType} from 'prisma/generated';

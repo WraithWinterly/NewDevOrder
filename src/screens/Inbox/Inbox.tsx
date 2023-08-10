@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useId, useState} from 'react';
-import {RefreshControl, Text, View} from 'react-native';
+import {ActivityIndicator, RefreshControl, Text, View} from 'react-native';
 import {FlatList} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import CheckIcon from 'src/components/icons/CheckIcon';
@@ -35,7 +35,7 @@ export default function Inbox() {
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
   const myBountyWins = useMemberStore(state => state.myBountyWins);
-
+  console.log('myBountyWins', myBountyWins);
   const {
     data: dataJoin,
     loading: loadingJoin,
@@ -156,22 +156,24 @@ export default function Inbox() {
                     setSelectedBounty(bountyWin.bountyId);
                     navigation.navigate('ViewBounty');
                   }}>
-                  {' '}
                   {bountyWin.submission.bounty.title}
                 </StyledText>
+                .
                 {bountyWin.submission.team.creatorAddress !==
                   myProfile?.walletAddress &&
                   'Consult with your Team Owner to claim the reward.'}
               </StyledText>
-
-              <StyledButton
-                type="borderNoFill"
-                onPress={() => {
-                  setSelectedBounty(bountyWin.bountyId);
-                  navigation.navigate('ViewBounty');
-                }}>
-                Claim reward
-              </StyledButton>
+              {bountyWin.submission.team.creatorAddress ===
+                myProfile?.walletAddress && (
+                <StyledButton
+                  type="borderNoFill"
+                  onPress={() => {
+                    setSelectedBounty(bountyWin.bountyId);
+                    navigation.navigate('ViewBounty');
+                  }}>
+                  Claim reward
+                </StyledButton>
+              )}
             </View>
           </View>
         ))}
@@ -339,8 +341,14 @@ export default function Inbox() {
             marginTop: -50,
             height: '100%',
           }}>
-          <CheckIconAccent />
-          <StyledText>You're all caught up!</StyledText>
+          {!myBountyWins || !myProfile?.teamInvites ? (
+            <ActivityIndicator color={Colors.Primary} />
+          ) : (
+            <>
+              <CheckIconAccent />
+              <StyledText>You're all caught up!</StyledText>
+            </>
+          )}
         </View>
       )}
     </Layout>

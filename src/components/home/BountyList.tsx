@@ -42,14 +42,14 @@ export default function BountyList({
   bounties,
   designerView,
   validatorView,
-  noSort,
+  noSort2,
 }: {
   bounties: (Bounty & {
     project: Project;
   })[];
   designerView?: boolean;
   validatorView?: boolean;
-  noSort?: boolean;
+  noSort2?: boolean;
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
@@ -62,13 +62,12 @@ export default function BountyList({
   const [sorting, setSorting] = useState(SortBy.Newest);
 
   const [sorting2, setSorting2] = useState(
-    noSort ? SortBy2.AllBounties : SortBy2.OpenBounties,
+    noSort2 ? SortBy2.AllBounties : SortBy2.OpenBounties,
   );
 
   const [sortedBounties, setSortedBounties] = useState(bounties);
 
   useEffect(() => {
-    if (noSort) return;
     let sorted = [...bounties];
     if (sorting === 'Newest') {
       sorted.sort(
@@ -85,10 +84,14 @@ export default function BountyList({
     } else if (sorting === '$ Low to High') {
       sorted.sort((a, b) => a.reward - b.reward);
     }
-    if (sorting2 === 'Open bounties') {
-      sorted = sorted.filter(bounty => bounty.stage === BountyStage.Active);
-    } else if (sorting2 === 'Closed bounties') {
-      sorted = sorted.filter(bounty => bounty.stage === BountyStage.Completed);
+    if (!noSort2) {
+      if (sorting2 === 'Open bounties') {
+        sorted = sorted.filter(bounty => bounty.stage === BountyStage.Active);
+      } else if (sorting2 === 'Closed bounties') {
+        sorted = sorted.filter(
+          bounty => bounty.stage === BountyStage.Completed,
+        );
+      }
     }
     setSortedBounties(sorted);
   }, [sorting, sorting2, bounties]);
@@ -96,22 +99,21 @@ export default function BountyList({
   return (
     <>
       {/* Sort by Menus */}
-      {!noSort && (
+      {bounties.length > 0 && (
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'stretch',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             gap: 8,
           }}>
-          <Menu style={{marginTop: 12, flex: 1}}>
+          <Menu style={{marginTop: 12, flex: noSort2 === true ? 0.5 : 1}}>
             <MenuTrigger>
               <View
                 style={{
                   borderColor: Colors.BorderColor,
-                  borderWidth: 1,
+                  borderWidth: 2,
                   paddingVertical: 8,
-                  paddingHorizontal: 8,
+                  paddingHorizontal: 16,
                   borderRadius: 12,
                   flexDirection: 'row',
                   gap: 8,
@@ -195,84 +197,87 @@ export default function BountyList({
               </MenuOption>
             </MenuOptions>
           </Menu>
-          <Menu style={{marginTop: 12, flex: 1}}>
-            <MenuTrigger>
-              <View
-                style={{
-                  borderColor: Colors.BorderColor,
-                  borderWidth: 1,
-                  paddingVertical: 8,
-                  paddingHorizontal: 8,
-                  borderRadius: 12,
-                  flexDirection: 'row',
-                  gap: 8,
-                  alignItems: 'center',
-                }}>
-                <StyledText style={{flex: 1}} truncate>
-                  {sorting2}
-                </StyledText>
-                <View style={{paddingTop: 4}}>
-                  <DropdownIcon />
+          {!noSort2 && (
+            <Menu style={{marginTop: 12, flex: 1}}>
+              <MenuTrigger>
+                <View
+                  style={{
+                    borderColor: Colors.BorderColor,
+                    borderWidth: 2,
+                    paddingVertical: 8,
+                    paddingHorizontal: 16,
+                    borderRadius: 12,
+                    flexDirection: 'row',
+                    gap: 8,
+                    alignItems: 'center',
+                  }}>
+                  <StyledText style={{flex: 1}} truncate>
+                    {sorting2}
+                  </StyledText>
+                  <View style={{paddingTop: 4}}>
+                    <DropdownIcon />
+                  </View>
                 </View>
-              </View>
-            </MenuTrigger>
-            <MenuOptions
-              customStyles={{
-                optionsContainer: {
-                  backgroundColor: Colors.BackgroundLighter,
-                  marginTop: 40,
+              </MenuTrigger>
+              <MenuOptions
+                customStyles={{
+                  optionsContainer: {
+                    backgroundColor: Colors.BackgroundLighter,
+                    marginTop: 40,
 
-                  borderRadius: 12,
-                },
-                optionsWrapper: {
-                  backgroundColor: Colors.BackgroundDarker,
-                  padding: 10,
-                  borderRadius: 12,
-                  width: 280,
-                  gap: 10,
-                },
-              }}>
-              <MenuOption onSelect={() => setSorting2(SortBy2.OpenBounties)}>
-                <View>
-                  <StyledText
-                    style={{
-                      color:
-                        sorting2 === SortBy2.OpenBounties
-                          ? Colors.Primary
-                          : Colors.Text,
-                    }}>
-                    Open bounties
-                  </StyledText>
-                </View>
-              </MenuOption>
-              <MenuOption onSelect={() => setSorting2(SortBy2.ClosedBounties)}>
-                <View>
-                  <StyledText
-                    style={{
-                      color:
-                        sorting2 === SortBy2.ClosedBounties
-                          ? Colors.Primary
-                          : Colors.Text,
-                    }}>
-                    Closed bounties
-                  </StyledText>
-                </View>
-              </MenuOption>
-              <MenuOption onSelect={() => setSorting2(SortBy2.AllBounties)}>
-                <View>
-                  <StyledText
-                    style={{
-                      color:
-                        sorting2 === SortBy2.AllBounties
-                          ? Colors.Primary
-                          : Colors.Text,
-                    }}>
-                    All bounties
-                  </StyledText>
-                </View>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
+                    borderRadius: 12,
+                  },
+                  optionsWrapper: {
+                    backgroundColor: Colors.BackgroundDarker,
+                    padding: 10,
+                    borderRadius: 12,
+                    width: 280,
+                    gap: 10,
+                  },
+                }}>
+                <MenuOption onSelect={() => setSorting2(SortBy2.OpenBounties)}>
+                  <View>
+                    <StyledText
+                      style={{
+                        color:
+                          sorting2 === SortBy2.OpenBounties
+                            ? Colors.Primary
+                            : Colors.Text,
+                      }}>
+                      Open bounties
+                    </StyledText>
+                  </View>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => setSorting2(SortBy2.ClosedBounties)}>
+                  <View>
+                    <StyledText
+                      style={{
+                        color:
+                          sorting2 === SortBy2.ClosedBounties
+                            ? Colors.Primary
+                            : Colors.Text,
+                      }}>
+                      Closed bounties
+                    </StyledText>
+                  </View>
+                </MenuOption>
+                <MenuOption onSelect={() => setSorting2(SortBy2.AllBounties)}>
+                  <View>
+                    <StyledText
+                      style={{
+                        color:
+                          sorting2 === SortBy2.AllBounties
+                            ? Colors.Primary
+                            : Colors.Text,
+                      }}>
+                      All bounties
+                    </StyledText>
+                  </View>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
+          )}
         </View>
       )}
 
@@ -362,7 +367,7 @@ export default function BountyList({
             }}>
             <CashIcon />
             <StyledText style={{fontWeight: '500'}}>
-              Bonty Reward: {bounty.reward} SOL
+              Bounty Reward: {bounty.reward} USD
             </StyledText>
           </View>
           <View

@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Project, ProjectStage, RoleType} from 'prisma/generated';
 import {useEffect, useId} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
@@ -16,18 +16,15 @@ import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
 
 export default function Projects() {
+  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
   const projects = useProjectsStore(state => state.projects);
-  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const myprofile = useMemberStore(state => state.myProfile);
-  const id = useId();
-  const id2 = useId();
-
-  useEffect(() => {
-    fetchProjects();
-  }, []);
 
   const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
+
+  const id = useId();
+  const id2 = useId();
 
   const projectsPending =
     typeof projects !== 'undefined'
@@ -37,6 +34,10 @@ export default function Projects() {
     typeof projects !== 'undefined'
       ? projects?.filter(p => !getFirstFilter()?.includes(p.stage))
       : undefined;
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
 
   function getFirstFilter(): ProjectStage[] | null {
     const role = playingRole ?? RoleType.BountyHunter;
@@ -69,6 +70,7 @@ export default function Projects() {
             <Separator />
           </>
         )}
+        {!projects && <ActivityIndicator color={Colors.Primary} />}
 
         {!!projectsPending && projectsPending.length > 0 && (
           <>
@@ -99,16 +101,20 @@ export default function Projects() {
 }
 
 function ProjectCard({project}: {project: Project}) {
+  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
   const setSelectedProject = useProjectsStore(
     state => state.setSelectedProject,
   );
-  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const role = useMemberStore(state => state.myProfile?.playingRole);
 
   async function onClick() {
     setSelectedProject(project.id);
     if (role === RoleType.BountyDesigner) {
-      if (project.stage === ProjectStage.PendingBountyDesign) {
+      if (
+        project.stage === ProjectStage.PendingBountyDesign ||
+        project.stage === ProjectStage.Ready
+      ) {
         navigation.navigate('DesignerWorkspaceNavigator');
       } else {
         navigation.navigate('PendingProposal');
@@ -133,7 +139,12 @@ function ProjectCard({project}: {project: Project}) {
           {project.title}
         </StyledText>
       </View>
-      <StyledText style={{fontSize: 16, fontWeight: '500'}}>
+      <StyledText
+        style={{
+          fontSize: 15,
+          fontWeight: '400',
+          fontStyle: 'italic',
+        }}>
         {project.stage === 'Ready' ? 'Ready' : ''}
         {project.stage === 'PendingBountyMgrQuote' ? 'Pending Review' : ''}
         {project.stage === 'PendingFounderPay' ? 'Pending founder payment' : ''}
@@ -144,8 +155,8 @@ function ProjectCard({project}: {project: Project}) {
       </StyledText>
 
       <StyledText style={{paddingTop: 8}}>
-        {project.description.substring(0, 20).trim()}
-        {project.description.length > 20 ? '...' : ''}
+        {project.description.substring(0, 80).trim()}
+        {project.description.length > 80 ? '...' : ''}
       </StyledText>
     </TouchableOpacity>
   );

@@ -16,14 +16,15 @@ import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
 import {SetTestCasesPostData} from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';
+import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function AddTestCases() {
-  const selectedFullBounty = useBountyStore(state => state.selectedBounty);
+  const selectedBounty = useBountyStore(state => state.selectedBounty);
   const [testCases, setTestCases] = useState<string[]>(
-    selectedFullBounty?.testCases || [],
+    selectedBounty?.testCases || [],
   );
   const [addingTestCase, setAddingTestCase] = useState(false);
 
@@ -32,6 +33,10 @@ export default function AddTestCases() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
   const fetchBounties = useBountyStore(state => state.fetchBounties);
+  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
+  const setSelectedProject = useProjectsStore(
+    state => state.setSelectedProject,
+  );
   const addTestCases = useMutation(getServerEndpoint(Endpoints.ADD_TEST_CASES));
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
@@ -48,7 +53,7 @@ export default function AddTestCases() {
     if (!validate()) {
       return;
     }
-    if (!selectedFullBounty?.id) {
+    if (!selectedBounty?.id) {
       console.error('No bounty selected');
       return;
     }
@@ -57,13 +62,15 @@ export default function AddTestCases() {
       return;
     }
     const body: SetTestCasesPostData = {
-      bountyID: selectedFullBounty.id,
+      bountyID: selectedBounty.id,
       testCases,
       walletAddress,
     };
     const data = await addTestCases.mutate(body);
     if (data) {
       fetchBounties();
+      setSelectedBounty(selectedBounty.id);
+      setSelectedProject(selectedBounty.project.id);
       navigation.navigate('ValidatorNavigator');
     }
   }
@@ -74,7 +81,7 @@ export default function AddTestCases() {
         <StyledText style={{fontSize: 26, fontWeight: 'bold'}}>
           Add test cases
         </StyledText>
-        <ProjBountyBreadcrumb bounty={selectedFullBounty} />
+        <ProjBountyBreadcrumb bounty={selectedBounty} />
         <Separator customH={16} />
         <StyledText>
           Warning! If you already added test cases, submitting will override all

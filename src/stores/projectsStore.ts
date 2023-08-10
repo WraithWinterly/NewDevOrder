@@ -3,12 +3,12 @@ import {create} from 'zustand';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 import {Bounty, Member, Project} from 'prisma/generated';
-import {CreateProposalPOSTData} from 'src/sharedTypes';
+import {CreateProjectPOSTData} from 'src/sharedTypes';
 import query from 'src/utils/query';
 
 type ProjectsStore = {
-  createProposalData: CreateProposalPOSTData | undefined;
-  setCreateProposalData: (data: CreateProposalPOSTData | undefined) => void;
+  createProposalData: CreateProjectPOSTData | undefined;
+  setCreateProposalData: (data: CreateProjectPOSTData | undefined) => void;
   projects: Project[] | undefined;
   fetchProjects: () => Promise<void>;
   selectedProject?: Project & {

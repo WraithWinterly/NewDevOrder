@@ -32,8 +32,8 @@ export default function SubmitDeliverables() {
     ?.filter(t => t.creatorAddress == walletAddress)
     .filter(team => selectedFullBounty?.participantsTeamIDs?.includes(team.id));
 
-  const [linkToVideoDemo, setLinkToVideoDemo] = useState('');
-  const [linkToCode, setLinkToCode] = useState('');
+  const [linkToVideoDemo, setLinkToVideoDemo] = useState('https://');
+  const [linkToCode, setLinkToCode] = useState('https://');
 
   const {data: dataGetSubmission, loading, error, query} = useQuery();
 
@@ -56,9 +56,14 @@ export default function SubmitDeliverables() {
           selectedFullBounty.id
         },${walletAddress}`,
       ).then(data => {
-        setLinkToCode(data?.repo);
-        setLinkToVideoDemo(data?.videoDemo);
+        if (data) {
+          setLinkToCode(data?.repo);
+          setLinkToVideoDemo(data?.videoDemo);
+        }
       });
+    } else {
+      setLinkToCode('https://');
+      setLinkToVideoDemo('https://');
     }
   }, [selectedTeam, walletAddress, selectedFullBounty]);
 
@@ -113,6 +118,7 @@ export default function SubmitDeliverables() {
           Choose a team to submit deliverables on behalf of:
         </StyledText>
         <DropdownMenu
+          name="team"
           disabled={!viewTeams || viewTeams.length == 0}
           data={viewTeams?.map(team => ({id: team.id, title: team.name})) || []}
           onSelect={(itemID, itemIndex) => {

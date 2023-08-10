@@ -11,13 +11,10 @@ import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function ReconnectWallet() {
+  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
-
-  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  useEffect(() => {}, [walletAddress]);
 
   const {loading, error, data, query} = useQuery();
 

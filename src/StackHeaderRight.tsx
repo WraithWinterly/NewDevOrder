@@ -1,43 +1,15 @@
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import StyledText from './components/ui/styled/StyledText';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from './StackNavigator';
 import {Colors} from './styles/styles';
-import useTeamsStore from './stores/teamsStore';
-import useProjectsStore from './stores/projectsStore';
+
 import StyledButton from './components/ui/styled/StyledButton';
 import RefreshIcon from './components/icons/RefreshIcon';
-import useSolanaContext from './web3/SolanaProvider';
-
-import {CreateTeamPOSTData} from './sharedTypes';
-
-import {Endpoints, getServerEndpoint} from './utils/server';
-import useMutation from './hooks/usePost';
 
 export default function StackHeaderRight({route}: {route: string}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  const createTeamData = useTeamsStore(state => state.createTeamData);
-
-  const isCreateTeamValid = useTeamsStore(state => state.isCreateTeamValid);
-
-  const canProceedCreateTeam =
-    !!createTeamData && isCreateTeamValid(createTeamData);
-  const wallet = useSolanaContext();
-
-  const setCreateProposalData = useProjectsStore(
-    state => state.setCreateProposalData,
-  );
-
-  const fetchTeams = useTeamsStore(state => state.fetchTeams);
-
-  const {
-    data: createTeamMutationData,
-    loading: createTeamLoading,
-    error: createTeamError,
-    mutate: createTeamMutate,
-  } = useMutation(getServerEndpoint(Endpoints.CREATE_TEAM));
 
   return (
     <View style={{paddingRight: 18}}>
@@ -56,47 +28,14 @@ export default function StackHeaderRight({route}: {route: string}) {
       ) : route === 'InviteMembers' ? (
         <StyledText
           onPress={async () => {
-            if (!canProceedCreateTeam) return;
-
-            const walletAddress = wallet.wallet?.publicKey
-              .toBase58()
-              .toString();
-            const createData: CreateTeamPOSTData = {
-              ...createTeamData!,
-              creatorAddress: walletAddress!,
-            };
-            const data = await createTeamMutate(createData);
-
-            if (data) {
-              setCreateProposalData(undefined);
-              navigation.navigate('HomeNavigation');
-              fetchTeams();
-            }
+            navigation.goBack();
           }}
-          style={{color: createTeamError ? Colors.Red[500] : Colors.Primary}}>
-          {createTeamLoading ? (
-            <ActivityIndicator
-              color={createTeamError ? Colors.Red[500] : Colors.White}
-            />
-          ) : canProceedCreateTeam ? (
-            'Create Team'
-          ) : (
-            'Done'
-          )}
-        </StyledText>
-      ) : route === 'CreateTeam' ? (
-        <StyledText
-          onPress={() =>
-            canProceedCreateTeam ? navigation.navigate('InviteMembers') : {}
-          }
-          style={{
-            color: canProceedCreateTeam ? Colors.Primary : Colors.Gray[500],
-          }}>
-          Next
+          style={{color: Colors.Primary}}>
+          Done
         </StyledText>
       ) : route === 'DesignerWorkspaceNavigator' ? (
         <StyledText
-          style={{color: Colors.Primary}}
+          style={{color: Colors.Primary, width: 110, textAlign: 'right'}}
           onPress={() => navigation.navigate('PendingProposal')}>
           View Proposal
         </StyledText>

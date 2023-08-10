@@ -1,4 +1,3 @@
-import CheckBox from '@react-native-community/checkbox';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RoleType} from 'prisma/generated';
 import {TestCase} from 'prisma/generated';
@@ -29,16 +28,17 @@ import useSolanaContext from 'src/web3/SolanaProvider';
 
 type Props = NativeStackScreenProps<StackParamList, 'StartTestCases'>;
 export default function StartTestCases({route, navigation}: Props) {
-  const submissionID = route.params?.submissionID ?? '';
-  const selectedBounty = useBountyStore(state => state.selectedBounty);
-  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
-  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
-  const selectedBountyWinner = useBountyStore(
-    state => state.selectedBountyWinner,
-  );
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
+
+  const selectedBounty = useBountyStore(state => state.selectedBounty);
+  const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
+  const selectedBountyWinner = useBountyStore(
+    state => state.selectedBountyWinner,
+  );
+
+  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
 
   const {data: dataTestCases, query: queryTestCases} = useQuery();
 
@@ -67,11 +67,19 @@ export default function StartTestCases({route, navigation}: Props) {
     getServerEndpoint(Endpoints.APPROVE_DISAPPROVE_BOUNTY_WINNER),
   );
 
+  const id = useId();
+
   const [optimisticTestCases, setOptimisticTestCases] = useState<TestCase[]>(
     [],
   );
 
-  const id = useId();
+  const submissionID = route.params?.submissionID ?? '';
+
+  const isWinner =
+    !!selectedBountyWinner &&
+    selectedBountyWinner.submissionId === submissionID;
+
+  const isBountyValidator = playingRole === RoleType.BountyValidator;
 
   useEffect(() => {
     if (!!dataTestCases && Array.isArray(dataTestCases)) {
@@ -174,11 +182,7 @@ export default function StartTestCases({route, navigation}: Props) {
       navigation.navigate('ViewSubmissions');
     }
   }
-  const isWinner =
-    !!selectedBountyWinner &&
-    selectedBountyWinner.submissionId === submissionID;
 
-  const isBountyValidator = playingRole === RoleType.BountyValidator;
   return (
     <Layout>
       <StyledText style={{fontSize: 24}}>

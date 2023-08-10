@@ -15,15 +15,15 @@ import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 export default function AcceptAndSendQuote() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const selectedProject = useProjectsStore(state => state.selectedProject);
-  const projects = useProjectsStore(state => state.projects);
-  const fetchProjects = useProjectsStore(state => state.fetchProjects);
 
-  const [quoteAmount, setQuoteAmount] = useState<number | undefined>();
+  const selectedProject = useProjectsStore(state => state.selectedProject);
+  const fetchProjects = useProjectsStore(state => state.fetchProjects);
 
   const {data, loading, error, mutate} = useMutation(
     getServerEndpoint(Endpoints.BOUNTYMGR_SET_QUOTE_PRICE),
   );
+
+  const [quoteAmount, setQuoteAmount] = useState<number | undefined>();
 
   async function onSubmit() {
     // Set quote price and remove the cash icon upon submission for our data purposes

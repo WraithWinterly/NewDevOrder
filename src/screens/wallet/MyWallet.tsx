@@ -16,9 +16,11 @@ import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function MyWallet() {
   const {balance} = useSolanaContext();
-  const id = useId();
+
   const nfts = useWalletStore(state => state.nfts);
   const fetchNFTs = useWalletStore(state => state.fetchNFTs);
+
+  const id = useId();
 
   useEffect(() => {
     fetchNFTs();

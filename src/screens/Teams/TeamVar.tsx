@@ -1,4 +1,4 @@
-import {useEffect, useId} from 'react';
+import {useId} from 'react';
 import {Linking, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native';
 import MemberBox from 'src/components/MemberBox';
@@ -12,6 +12,7 @@ import useTeamsStore from 'src/stores/teamsStore';
 
 export default function TeamVar() {
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
+
   const id = useId();
 
   return (

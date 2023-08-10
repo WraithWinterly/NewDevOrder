@@ -16,12 +16,14 @@ import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function ConfirmAndPay() {
-  const proj = useProjectsStore(state => state.selectedProject);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const fetchProjects = useProjectsStore(state => state.fetchProjects);
+
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
+
+  const proj = useProjectsStore(state => state.selectedProject);
+  const fetchProjects = useProjectsStore(state => state.fetchProjects);
 
   const {data, loading, error, mutate} = useMutation(
     getServerEndpoint(Endpoints.FOUNDER_CONFIRM_PAY),

@@ -6,9 +6,6 @@ import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
 
 type TeamsStore = {
-  createTeamData: CreateTeamPOSTData | undefined;
-  setCreateTeamData: (data: CreateTeamPOSTData | undefined) => void;
-  isCreateTeamValid: (data: CreateTeamPOSTData) => boolean;
   teams:
     | (Team & {
         members: Member[] | undefined;
@@ -23,19 +20,6 @@ type TeamsStore = {
 };
 
 const useTeamsStore = create<TeamsStore>((set, get) => ({
-  createTeamData: undefined,
-  setCreateTeamData: data => {
-    set(() => ({createTeamData: data}));
-  },
-  isCreateTeamValid: (data: CreateTeamPOSTData) => {
-    // sample validation
-    if (data.name.trim().length < 3) return false;
-    if (data.description.trim().length < 3) return false;
-    if (data.link.trim().length < 3) return false;
-    const linkRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-    if (!linkRegex.test(data.link)) return false;
-    return true;
-  },
   teams: [],
   selectedTeam: undefined,
   fetchTeams: async () => {

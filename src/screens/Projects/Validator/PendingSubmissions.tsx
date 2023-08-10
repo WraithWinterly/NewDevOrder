@@ -21,7 +21,7 @@ export default function PendingSubmissions() {
     <Layout>
       <ScrollView>
         {!!pendingBounties && (
-          <BountyList bounties={pendingBounties} validatorView />
+          <BountyList bounties={pendingBounties} validatorView noSort2 />
         )}
       </ScrollView>
     </Layout>

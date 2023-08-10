@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {View} from 'react-native';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
@@ -45,7 +44,14 @@ export default function ClaimReward() {
     if (data) {
       setSelectedBounty(selectedBounty?.id);
       fetchMyProfile(walletAddress);
-      navigation.navigate('MyWallet');
+
+      navigation.reset({
+        index: 0,
+        routes: [
+          {name: 'HomeNavigation'}, // Add the appropriate name for the HomeNavigation stack
+          {name: 'MyWallet'}, // The name of the MyWallet screen
+        ],
+      });
     }
   }
   return (

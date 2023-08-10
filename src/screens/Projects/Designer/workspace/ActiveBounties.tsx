@@ -29,12 +29,7 @@ export default function ActiveBounties() {
       <ScrollView>
         {shown && (
           <>
-            <BountyList
-              refreshing={refreshing}
-              bounties={shown}
-              onRefresh={onRefresh}
-              designerView
-            />
+            <BountyList bounties={shown} designerView noSort2 />
             {shown?.length === 0 && (
               <StyledText
                 style={{

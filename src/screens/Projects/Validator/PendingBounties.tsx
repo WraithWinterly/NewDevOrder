@@ -23,7 +23,7 @@ export default function PendingBounties() {
     <Layout>
       <ScrollView>
         {!!pendingBounties && (
-          <BountyList bounties={pendingBounties} validatorView />
+          <BountyList bounties={pendingBounties} validatorView noSort2 />
         )}
       </ScrollView>
     </Layout>

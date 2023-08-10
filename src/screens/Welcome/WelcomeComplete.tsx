@@ -10,6 +10,7 @@ import asyncStorage from '@react-native-async-storage/async-storage';
 
 export default function WelcomeComplete() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
   function onPress() {
     asyncStorage.setItem('hasCompletedWelcome', 'true').then(() => {
       navigation.reset({

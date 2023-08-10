@@ -1,5 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {RoleType} from 'prisma/generated';
+import {BountyType} from 'prisma/generated';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import LongLinkNavigation from 'src/components/ui/LongLinkNavigation';
@@ -15,7 +17,7 @@ export default function MintNFTs() {
   return (
     <Layout>
       <ScrollView>
-        {playingRole?.title != 'Bounty Hunter' && (
+        {playingRole != RoleType.BountyHunter && (
           <LongLinkNavigation
             name="Mint Role NFT"
             description="Mint the following roles: Bounty Hunter, Founder, Bounty Manager, Bounty Designer, Bounty Validator, and Catalyst. Each role provides access to different functionalities."
@@ -29,7 +31,7 @@ export default function MintNFTs() {
           name="Mint Bounty NFT"
           description="Allows Founders to create and post a bounty on NDO. This will be rewarded to the winners and the bounty reward is tied to this NFT."
           onPress={() => {
-            setNftToMint('Bounty Hunter');
+            setNftToMint(RoleType.BountyHunter);
             navigation.navigate('MintVarNFT');
           }}
         />

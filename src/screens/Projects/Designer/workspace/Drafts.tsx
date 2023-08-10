@@ -40,6 +40,7 @@ export default function Drafts() {
         <ScrollView>
           {shown && (
             <>
+              <BountyList bounties={shown} designerView noSort2 />
               {shown?.length === 0 && (
                 <StyledText
                   style={{
@@ -51,12 +52,6 @@ export default function Drafts() {
                   There are no drafts currently.
                 </StyledText>
               )}
-              <BountyList
-                refreshing={refreshing}
-                bounties={shown}
-                onRefresh={onRefresh}
-                designerView
-              />
             </>
           )}
         </ScrollView>

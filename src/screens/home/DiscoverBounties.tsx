@@ -8,12 +8,11 @@ import useBountyStore from 'src/stores/bountyStore';
 import useTeamsStore from 'src/stores/teamsStore';
 
 export default function DiscoverBounties() {
-  const [searchText, setSearchBounties] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
   const bounties = useBountyStore(state => state.bounties);
-  const fetchBounties = useBountyStore(state => state.fetchBounties);
 
   const teams = useTeamsStore(state => state.teams);
+
+  const [searchText, setSearchBounties] = useState('');
 
   const bountiesWithSearch = !!bounties
     ? bounties?.filter(bounty => {
@@ -30,13 +29,6 @@ export default function DiscoverBounties() {
       })
     : undefined;
 
-  function onRefresh() {
-    setRefreshing(true);
-    fetchBounties().then(() => {
-      setRefreshing(false);
-    });
-  }
-
   return (
     <Layout>
       <ScrollView>
@@ -46,13 +38,7 @@ export default function DiscoverBounties() {
           placeholder="Search Bounties"
           icon={<SearchIcon />}
         />
-        {!!bountiesWithSearch && (
-          <BountyList
-            refreshing={refreshing}
-            bounties={bountiesWithSearch}
-            onRefresh={onRefresh}
-          />
-        )}
+        {!!bountiesWithSearch && <BountyList bounties={bountiesWithSearch} />}
       </ScrollView>
     </Layout>
   );

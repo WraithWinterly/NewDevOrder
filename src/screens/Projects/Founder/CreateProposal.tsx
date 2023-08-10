@@ -11,7 +11,8 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
-import {CreateProposalPOSTData} from 'src/sharedTypes';
+import {CreateProjectPOSTData} from 'src/sharedTypes';
+
 import useMemberStore from 'src/stores/membersStore';
 
 import useProjectsStore from 'src/stores/projectsStore';
@@ -19,24 +20,37 @@ import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function CreateProposal() {
-  const myProfile = useMemberStore(state => state.myProfile);
-  const [projectName, setProjectName] = useState('');
-  const [description, setDescription] = useState('');
-  const [email, setEmail] = useState(myProfile?.email ?? '');
-  const [phone, setPhone] = useState('');
-  const [countryCode, setCountryCode] = useState('1');
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
 
+  const myProfile = useMemberStore(state => state.myProfile);
   const [createProposalData, setCreateProposalData] =
-    useState<CreateProposalPOSTData>();
+    useState<CreateProjectPOSTData>();
+
+  const fetchProjects = useProjectsStore(state => state.fetchProjects);
 
   const {data, loading, error, mutate} = useMutation(
     getServerEndpoint(Endpoints.CREATE_PROPOSAL),
   );
+
+  const [projectName, setProjectName] = useState('');
+  const [description, setDescription] = useState('');
+  const [email, setEmail] = useState(myProfile?.email ?? '');
+  const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState('1');
+
+  useEffect(() => {
+    setCreateProposalData({
+      title: projectName,
+      description,
+      email,
+      phone: countryCode + phone,
+      walletAddress: walletAddress || '',
+    });
+  }, [projectName, description, email, phone]);
 
   function canProceedCreateProposal() {
     if (!createProposalData) return false;
@@ -50,8 +64,6 @@ export default function CreateProposal() {
     return true;
   }
 
-  const fetchProjects = useProjectsStore(state => state.fetchProjects);
-
   async function onSubmit() {
     if (!canProceedCreateProposal()) return;
 
@@ -64,16 +76,6 @@ export default function CreateProposal() {
       navigation.navigate('HomeNavigation');
     }
   }
-
-  useEffect(() => {
-    setCreateProposalData({
-      title: projectName,
-      description,
-      email,
-      phone: countryCode + phone,
-      walletAddress: walletAddress || '',
-    });
-  }, [projectName, description, email, phone]);
 
   return (
     <Layout>

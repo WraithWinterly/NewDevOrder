@@ -18,22 +18,31 @@ import {Colors} from 'src/styles/styles';
 
 export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
   const fetchTopMembers = useLeaderboardStore(state => state.fetchTopMembers);
   const fetchTopFounders = useLeaderboardStore(state => state.fetchTopFounders);
   const topMembers = useLeaderboardStore(state => state.topMembers);
   const topFounders = useLeaderboardStore(state => state.topFounders);
 
-  const [refreshing, setRefreshing] = useState(false);
+  const setMemberAddrViewing = useMemberStore(state => state.fetchProfile);
 
+  const [refreshing, setRefreshing] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
+  const id = useId();
+
   const isFounder = type === 'founders';
+  const loading = !topMembers && !topFounders;
 
   useNavigationState(state => {
     if (state.index != tabIndex) {
       setTabIndex(state.index);
     }
   });
+
+  useEffect(() => {
+    refetch();
+  }, [tabIndex]);
 
   async function refetch() {
     if (!isFounder) fetchTopMembers(0);
@@ -42,20 +51,12 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
     }
   }
 
-  useEffect(() => {
-    refetch();
-  }, [tabIndex]);
-
-  const id = useId();
-
   function onRefresh() {
     setRefreshing(true);
 
     refetch().finally(() => setRefreshing(false));
   }
-  const loading = !topMembers && !topFounders;
 
-  const setMemberAddrViewing = useMemberStore(state => state.fetchProfile);
   return (
     <View
       style={{
