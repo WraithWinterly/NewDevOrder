@@ -73,6 +73,9 @@ export type SetApproveBountyPostData = {
   walletAddress: string;
   approve: boolean;
 };
+export type UpdateRolesPostData = {
+  walletAddress: string;
+};
 export type SubmitDeliverablesPostData = {
   bountyID: string;
   teamID: string;

@@ -15,6 +15,7 @@ export enum Endpoints {
   CHANGE_ROLE = '/change-role',
   GET_MY_BOUNTY_WINS = '/get-my-bounty-wins',
   CONFIRM_REWARD = '/confirm-reward',
+  UPDATE_MY_ROLES = '/update-my-roles',
   // LEADERBOARD
   GET_LEADERBOARD_MEMBERS = '/get-leaderboard-members',
   GET_LEADERBOARD_FOUNDERS = '/get-leaderboard-founders',

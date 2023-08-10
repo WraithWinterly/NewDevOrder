@@ -9,11 +9,13 @@ import useSolanaContext from 'src/web3/SolanaProvider';
 import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Member} from 'prisma/generated';
-import {ChangeRolePOSTData} from 'src/sharedTypes';
+import {ChangeRolePOSTData, UpdateRolesPostData} from 'src/sharedTypes';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
 import useMutation from 'src/hooks/usePost';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {RoleType} from 'prisma/generated';
+import StyledButton from 'src/components/ui/styled/StyledButton';
+import addSpaceCase from 'src/utils/utils';
 
 type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
 
@@ -96,6 +98,31 @@ function ProfileCard({
     error: errorRole,
     mutate: mutateRole,
   } = useMutation(getServerEndpoint(Endpoints.CHANGE_ROLE));
+
+  const {
+    loading: loadingUpdateRoles,
+    error: errorUpdateRoles,
+    mutate: mutateUpdateRoles,
+  } = useMutation(getServerEndpoint(Endpoints.UPDATE_MY_ROLES));
+
+  const AvailableRoleDict = RoleDict.filter(({title}) =>
+    myProfile?.roles?.includes(title.replace(' ', '') as RoleType),
+  );
+
+  async function onSubmit() {
+    if (!walletAddress) {
+      console.error('No walletAddress');
+      return;
+    }
+    const body: UpdateRolesPostData = {
+      walletAddress,
+    };
+    const data = await mutateUpdateRoles(body);
+    if (data) {
+      fetchMyProfile(walletAddress);
+    }
+  }
+
   return (
     <View style={{gap: 12, alignItems: 'flex-start'}}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 12}}>
@@ -108,7 +135,7 @@ function ProfileCard({
       <StyledText>@{profile.username}</StyledText>
       <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 14}}>
         {profile.roles.map((role, i) => (
-          <Bubble key={`${i}-${id}-${role}`} text={role} />
+          <Bubble key={`${i}-${id}-${role}`} text={addSpaceCase(role) || ''} />
         ))}
       </View>
 
@@ -117,7 +144,7 @@ function ProfileCard({
         joined • {profile.membersInvited} members invited
       </Text>
       {isMyProfile && (
-        <>
+        <View style={{width: '100%'}}>
           <StyledText
             style={{
               paddingVertical: 8,
@@ -130,9 +157,9 @@ function ProfileCard({
           </StyledText>
           <DropdownMenu
             name="role"
-            data={RoleDict || []}
+            data={AvailableRoleDict || []}
             onSelect={async (itemID, itemIndex) => {
-              const role = RoleDict?.find(role => role.id == itemID);
+              const role = AvailableRoleDict?.find(role => role.id == itemID);
 
               if (!walletAddress) {
                 console.error('No wallet address');
@@ -155,16 +182,25 @@ function ProfileCard({
             }}
             // Add space between capital letters
             // Eg. Change BountyType.BountyHunter to Bounty Hunter
-            displayText={
-              myProfile?.playingRole.replace(/([a-z])([A-Z])/g, '$1 $2') || ''
-            }
+            displayText={addSpaceCase(myProfile?.playingRole) || ''}
             selectedValue={
               RoleDict.find(role => role.title == myProfile?.playingRole)?.id ||
               ''
             }
             loading={loadingRole}
           />
-        </>
+          <View style={{height: 12}} />
+          <StyledText>
+            If you recently minted a role NFT, you may need to update roles.
+          </StyledText>
+          <View style={{height: 12}} />
+          <StyledButton
+            loading={loadingUpdateRoles}
+            error={!!errorUpdateRoles}
+            onPress={onSubmit}>
+            Update roles
+          </StyledButton>
+        </View>
       )}
     </View>
   );

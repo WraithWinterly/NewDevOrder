@@ -69,3 +69,9 @@ export function didIApprove(bounty: Bounty, playingRole: RoleType) {
   }
   return didIApprove;
 }
+
+export default function addSpaceCase(str: string | undefined) {
+  if (!str) return undefined;
+  str = str.replace(/([a-z])([A-Z])/g, '$1 $2') || '';
+  return str;
+}

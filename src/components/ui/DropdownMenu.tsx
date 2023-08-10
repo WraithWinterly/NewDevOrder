@@ -85,7 +85,14 @@ export default function DropdownMenu({
           left: 0,
           right: 0,
         }}
-        onValueChange={disabled ? () => {} : onSelect}>
+        onValueChange={
+          disabled
+            ? () => {}
+            : (itemValue: string, itemIndex: any) => {
+                if (itemIndex === 0) return;
+                onSelect(itemValue, itemIndex);
+              }
+        }>
         <Picker.Item
           label={`Select ${name}...`}
           value={''}
