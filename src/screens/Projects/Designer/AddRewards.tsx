@@ -37,9 +37,14 @@ export default function AddRewards() {
 
   function calc() {
     let leftOver = project?.quotePrice || 0;
-    bountiesForProject?.forEach(bounty => {
+    const withoutMe = bountiesForProject?.filter(
+      b => b.id !== createBountyData?.id,
+    );
+    withoutMe?.forEach(bounty => {
       leftOver -= bounty.reward;
     });
+    console.log(withoutMe);
+    console.log(bountiesForProject);
     return leftOver;
   }
 
@@ -55,6 +60,9 @@ export default function AddRewards() {
       localErrors.push(
         'Insufficient funds for this action. Reduce your bounty reward.',
       );
+    }
+    if ((bountyRewardAmount || 0) <= 0) {
+      localErrors.push('Please enter a valid bounty reward amount.');
     }
     if (localErrors.length > 0) {
       setErrors(localErrors);
@@ -102,7 +110,13 @@ export default function AddRewards() {
               {errors[0]}
             </StyledText>
           ))}
-        <StyledButton onPress={onNextStep}>Next Step</StyledButton>
+        <StyledButton
+          onPress={onNextStep}
+          enabled={
+            (bountyRewardAmount || 0) <= calc() && (bountyRewardAmount || 0) > 0
+          }>
+          Next Step
+        </StyledButton>
       </View>
     </Layout>
   );

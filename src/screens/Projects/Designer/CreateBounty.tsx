@@ -74,6 +74,9 @@ export default function CreateBounty({route, navigation}: Props) {
     if (!postDate || !deadline) {
       localErrors.push('Please select a valid start and end date');
     }
+    if (postDate.getTime() > deadline.getTime()) {
+      localErrors.push('Start date must be before end date');
+    }
     if (localErrors.length > 0) {
       return localErrors;
     }
