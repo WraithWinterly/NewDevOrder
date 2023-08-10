@@ -74,12 +74,6 @@ export default function AddTags() {
           {project?.title} / {create?.title}
         </StyledText>
         <StyledText>Add tags to this project (optional)</StyledText>
-        {/* <StyledTextInput
-          placeholder="Enter bounty reward amount"
-          numberInput
-          value={bountyRewardAmount}
-          onChangeText={e => setBountyRewardAmount(e)}></StyledTextInput> */}
-
         <StyledCheckbox
           title="Frontend"
           value={typeFrontEnd}

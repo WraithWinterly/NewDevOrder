@@ -82,7 +82,8 @@ export default function AddSections() {
           {sections.map((section, index) => (
             <View key={`section-${index}-${id}`} style={{gap: 12}}>
               <StyledTextInput
-                placeholder="Header"
+                placeholder="Enter header content"
+                label="Header"
                 onChangeText={e =>
                   setSections(prev => {
                     const sections = [...prev];
@@ -93,7 +94,8 @@ export default function AddSections() {
                 value={section.header}
               />
               <StyledTextInput
-                placeholder="Content"
+                placeholder="Enter content"
+                label="Content"
                 onChangeText={e =>
                   setSections(prev => {
                     const sections = [...prev];

@@ -1,8 +1,5 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, ScrollView} from 'react-native';
-// import StyledText from '../ui/styled/StyledText';
-// import StyledTextInput from '../ui/styled/StyledTextInput';
-// import StyledButton from '../ui/styled/StyledButton';
+import {View, ScrollView} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
 import StyledText from 'src/components/ui/styled/StyledText';
@@ -13,8 +10,6 @@ import useProjectsStore from 'src/stores/projectsStore';
 import Layout from 'src/layout/Layout';
 import {Colors} from 'src/styles/styles';
 import useBountyStore from 'src/stores/bountyStore';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -107,7 +102,7 @@ export default function CreateBounty({route, navigation}: Props) {
         setCreateBountyData({
           ...body,
           postDate: new Date(),
-          id: undefined,
+          id: existingID,
           reward: 0,
           types: [],
           headerSections: {},
@@ -153,7 +148,7 @@ export default function CreateBounty({route, navigation}: Props) {
           <StyledTextInput
             value={bountyDescription}
             onChangeText={text => setBountyDescription(text)}
-            placeholder="Enter Bounty Overview"
+            placeholder="Enter Bounty Description"
             multiLine
           />
 

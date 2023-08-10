@@ -106,22 +106,26 @@ export default function WelcomeSetupProfile() {
               <StyledTextInput
                 onChangeText={t => setUsername(t)}
                 value={username}
-                placeholder="Username"
+                placeholder="Enter your username"
+                label="Username"
               />
               <StyledTextInput
                 onChangeText={t => setFirstName(t)}
                 value={firstName}
-                placeholder="First Name"
+                placeholder="Enter your first name"
+                label="First Name"
               />
               <StyledTextInput
                 onChangeText={t => setLastName(t)}
                 value={lastName}
-                placeholder="Last Name"
+                placeholder="Enter your last name"
+                label="Last Name"
               />
               <StyledTextInput
                 onChangeText={t => setEmail(t)}
                 value={email}
-                placeholder="Email"
+                placeholder="Enter your email"
+                label="Email"
               />
             </View>
 

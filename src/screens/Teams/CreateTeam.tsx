@@ -80,7 +80,7 @@ export default function CreateTeam() {
       <View style={{gap: 24}}>
         <StyledTextInput
           value={name}
-          label="Team name"
+          label="Team Name"
           onChangeText={e => setName(e)}
           placeholder="Enter team name"
         />

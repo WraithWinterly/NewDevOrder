@@ -94,6 +94,7 @@ export default function CreateProposal() {
             value={email}
             onChangeText={e => setEmail(e)}
             placeholder="Your email address"
+            label="Email Address"
             isLinkInput
           />
 
@@ -107,12 +108,14 @@ export default function CreateProposal() {
           <StyledTextInput
             value={projectName}
             onChangeText={e => setProjectName(e)}
-            placeholder="Project name"
+            placeholder="Enter project name"
+            label="Project Name"
           />
           <StyledTextInput
             value={description}
             onChangeText={e => setDescription(e)}
-            placeholder="Description of your project"
+            placeholder="Enter description of your project"
+            label="Project Description"
             multiLine
           />
           <View style={{gap: 4, paddingLeft: 4}}>
