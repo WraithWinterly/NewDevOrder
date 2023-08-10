@@ -23,11 +23,7 @@ import {Bounty, Member, Project} from 'prisma/generated';
 import useQuery from 'src/hooks/useQuery';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useMutation from 'src/hooks/usePost';
-import {
-  CreateBountyPostData,
-  SetApproveBountyPostData,
-  SubmitDraftBountyPostData,
-} from 'src/sharedTypes';
+import {CreateBountyPostData, SetApproveBountyPostData} from 'src/sharedTypes';
 import useSolanaContext from 'src/web3/SolanaProvider';
 import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
@@ -62,9 +58,7 @@ export default function ViewBounty({route, navigation}: Props) {
   );
 
   const createBounty = useMutation(getServerEndpoint(Endpoints.CREATE_BOUNTY));
-  const submitBountyDraft = useMutation(
-    getServerEndpoint(Endpoints.SUBMIT_BOUNTY_DRAFT),
-  );
+
   const setBountyApproval = useMutation(
     getServerEndpoint(Endpoints.SET_BOUNTY_APPROVAL),
   );
@@ -139,33 +133,9 @@ export default function ViewBounty({route, navigation}: Props) {
     }
   }
 
-  async function onSubmitSendBounty() {
-    if (!walletAddress) {
-      console.error('No wallet address');
-      return;
-    }
-    if (!bounty?.id) {
-      console.error('No bounty id');
-      return;
-    }
-    if (!bounty?.projectId) {
-      console.error('No projectId');
-      return;
-    }
-    const body: SubmitDraftBountyPostData = {
-      bountyID: bounty?.id,
-      walletAddress: walletAddress,
-    };
-    const data = await submitBountyDraft.mutate(body);
-    if (data) {
-      setSelectedProject(bounty.projectId);
-      navigation.navigate('DesignerWorkspaceNavigator');
-    }
-  }
-
   function coerceIntoBounty() {
-    if (!createBountyData?.amount) {
-      console.error("Error: Missing 'amount' in create bounty data!");
+    if (!createBountyData?.reward) {
+      console.error("Error: Missing 'reward' in create bounty data!");
       return;
     }
 
@@ -184,7 +154,7 @@ export default function ViewBounty({route, navigation}: Props) {
       return;
     }
 
-    if (!createBountyData.startDate) {
+    if (!createBountyData.postDate) {
       console.error("Error: Missing 'startDate' in create bounty data!");
       return;
     }
@@ -198,7 +168,7 @@ export default function ViewBounty({route, navigation}: Props) {
       id: '0',
       participantsTeamIDs: [],
       postDate: new Date(),
-      reward: createBountyData.amount,
+      reward: createBountyData.reward,
       stage: 'Draft', // Assuming 'BountyStage' is an enum type for stage
       title: createBountyData.title,
       types: createBountyData.types, // Assuming 'BountyType' is an enum type for type
@@ -210,7 +180,7 @@ export default function ViewBounty({route, navigation}: Props) {
       approvedByValidator: false,
       winningSubmissionId: '',
       testCases: [],
-      aboutProject: createBountyData.description,
+      aboutProject: createBountyData.aboutProject,
       submissions: [], // Assuming it's an empty array for now
       headerSections: createBountyData.headerSections,
       projectId: null, // Assuming it's null for now
@@ -272,37 +242,28 @@ export default function ViewBounty({route, navigation}: Props) {
             backgroundColor: Colors.AppBar,
             zIndex: 1,
           }}>
-          {isDesigner &&
-            (isDesignerCreation ? (
-              // Create bounty buttons
-              <View style={{gap: 12}}>
-                <StyledButton
-                  type="normal2"
-                  onPress={() => onSubmitCreateBounty(true)}
-                  loading={createBounty.loading}
-                  error={!!createBounty.error}>
-                  Create and save as Draft
-                </StyledButton>
-                <StyledButton
-                  onPress={() => onSubmitCreateBounty(false)}
-                  loading={createBounty.loading}
-                  error={!!createBounty.error}>
-                  Create and send for approval
-                </StyledButton>
-              </View>
-            ) : (
-              // Send draft for approval button
-              <View>
-                {bounty?.stage === 'Draft' && (
-                  <StyledButton
-                    onPress={() => onSubmitSendBounty()}
-                    loading={submitBountyDraft.loading}
-                    error={!!submitBountyDraft.error}>
-                    Send for approval
-                  </StyledButton>
-                )}
-              </View>
-            ))}
+          {isDesigner && isDesignerCreation && (
+            // Create bounty buttons
+            <View style={{gap: 12}}>
+              <StyledButton
+                type="normal2"
+                onPress={() => onSubmitCreateBounty(true)}
+                loading={createBounty.loading}
+                error={!!createBounty.error}>
+                {!!createBountyData?.id
+                  ? 'Save Draft'
+                  : 'Create and save as draft'}
+              </StyledButton>
+              <StyledButton
+                onPress={() => onSubmitCreateBounty(false)}
+                loading={createBounty.loading}
+                error={!!createBounty.error}>
+                {!!createBountyData?.id
+                  ? 'Send for approval'
+                  : 'Create and send for approval'}
+              </StyledButton>
+            </View>
+          )}
           {(playingRole === RoleType.BountyManager ||
             playingRole === RoleType.Founder) &&
             isWinner &&

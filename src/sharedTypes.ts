@@ -51,12 +51,13 @@ export type JoinTeamPOSTData = {
 };
 
 export type CreateBountyData = {
+  id: string | undefined;
   title: string;
   description: string;
-  about: string;
-  amount: number;
+  aboutProject: string;
+  reward: number;
   projectID: string;
-  startDate: Date;
+  postDate: Date;
   deadline: Date;
   types: BountyType[];
   headerSections: {[x: string]: string[]};
@@ -65,10 +66,6 @@ export type CreateBountyData = {
 export type CreateBountyPostData = {
   bounty: CreateBountyData;
   draft: boolean;
-  walletAddress: string;
-};
-export type SubmitDraftBountyPostData = {
-  bountyID: string;
   walletAddress: string;
 };
 export type SetApproveBountyPostData = {

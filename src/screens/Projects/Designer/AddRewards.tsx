@@ -31,7 +31,7 @@ export default function AddRewards() {
   const id = useId();
 
   const [bountyRewardAmount, setBountyRewardAmount] = useState(
-    create?.amount || undefined,
+    create?.reward || undefined,
   );
   const [errors, setErrors] = useState<string[]>([]);
 
@@ -63,7 +63,7 @@ export default function AddRewards() {
 
     setCreateBountyData({
       ...createBountyData,
-      amount: Number(bountyRewardAmount) || 0,
+      reward: Number(bountyRewardAmount) || 0,
     });
 
     navigation.navigate('AddSections');

@@ -98,7 +98,9 @@ export type WalletParamList = {
 export type ProjectParamList = {
   // Designer
   DesignerWorkspaceNavigator: undefined;
-  CreateBounty: undefined;
+  CreateBounty: {
+    existingID?: string;
+  };
   AddTags: undefined;
   AddRewards: undefined;
   AddSections: undefined;

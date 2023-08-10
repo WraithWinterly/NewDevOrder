@@ -25,6 +25,7 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import DropdownIcon from '../icons/DropdownIcon';
+import useProjectsStore from 'src/stores/projectsStore';
 
 enum SortBy {
   Newest = 'Newest',
@@ -58,6 +59,11 @@ export default function BountyList({
   const setSelectedFullBounty = useBountyStore(
     state => state.setSelectedBounty,
   );
+  const setCreateBountyData = useBountyStore(
+    state => state.setCreateBountyData,
+  );
+
+  const selectedProject = useProjectsStore(state => state.selectedProject);
 
   const [sorting, setSorting] = useState(SortBy.Newest);
 
@@ -407,15 +413,25 @@ export default function BountyList({
           )}
 
           {designerView &&
-            (bounty.stage === 'Draft' || bounty.stage === 'Completed' ? (
+            (bounty.stage === 'Draft' ? (
               <RoundArrowButton
-                title={
-                  bounty.stage === 'Draft' ? 'Continue Editing' : 'View Details'
-                }
+                title="Continue Editing"
                 onPress={() => {
-                  setSelectedFullBounty(bounty.id);
-                  navigation.navigate('ViewBounty', {
-                    isDesigner: true,
+                  setCreateBountyData({
+                    aboutProject: bounty.aboutProject || '',
+                    deadline: bounty.deadline,
+                    description: bounty.description,
+                    // @ts-expect-error headerSection is JSON value
+                    headerSections: bounty.headerSections,
+                    id: bounty.id,
+                    postDate: bounty.postDate,
+                    projectID: bounty.projectId || selectedProject?.id || '',
+                    reward: bounty.reward,
+                    title: bounty.title,
+                    types: bounty.types,
+                  });
+                  navigation.navigate('CreateBounty', {
+                    existingID: bounty.id,
                   });
                 }}
               />

@@ -16,31 +16,45 @@ import useBountyStore from 'src/stores/bountyStore';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-export default function CreateBounty() {
-  const [bountyName, setBountyName] = useState('');
-  const [bountyDescription, setBountyDescription] = useState('');
-  const [bountyAbout, setBountyAbout] = useState('');
-  const [submissionStartDate, setSubmissionStartDate] = useState(new Date());
-  const [submissionEndDate, setSubmissionEndDate] = useState(() => {
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + 7);
-    return currentDate;
-  });
+type Props = NativeStackScreenProps<StackParamList, 'CreateBounty'>;
 
+export default function CreateBounty({route, navigation}: Props) {
   const projects = useProjectsStore(state => state.projects);
   const setSelectedProject = useProjectsStore(
     state => state.setSelectedProject,
   );
   const selectedProject = useProjectsStore(state => state.selectedProject);
-  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  const [errors, setErrors] = useState<Array<string>>([]);
 
   const createBountyData = useBountyStore(state => state.createBountyData);
   const setCreateBountyData = useBountyStore(
     state => state.setCreateBountyData,
   );
+
+  const [errors, setErrors] = useState<Array<string>>([]);
+  const [bountyName, setBountyName] = useState(createBountyData?.title || '');
+  const [bountyDescription, setBountyDescription] = useState(
+    createBountyData?.description || '',
+  );
+  const [bountyAbout, setBountyAbout] = useState(
+    createBountyData?.aboutProject || '',
+  );
+  const [postDate, setPostDate] = useState(
+    !!createBountyData?.postDate
+      ? new Date(createBountyData.postDate)
+      : new Date(),
+  );
+  const [deadline, setDeadline] = useState(() => {
+    if (createBountyData?.deadline) {
+      return new Date(createBountyData?.deadline);
+    }
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 7);
+    return currentDate;
+  });
+
+  const existingID = route.params?.existingID ?? undefined;
 
   function validateData(): string[] {
     const localErrors: Array<string> = [];
@@ -57,7 +71,7 @@ export default function CreateBounty() {
         'Please enter a valid about bounty section with at least 10 characters.',
       );
     }
-    if (!submissionStartDate || !submissionEndDate) {
+    if (!postDate || !deadline) {
       localErrors.push('Please select a valid start and end date');
     }
     if (localErrors.length > 0) {
@@ -76,9 +90,9 @@ export default function CreateBounty() {
       const body = {
         title: bountyName,
         description: bountyDescription,
-        about: bountyAbout,
-        startDate: submissionStartDate,
-        deadline: submissionEndDate,
+        aboutProject: bountyAbout,
+        startDate: postDate,
+        deadline: deadline,
         projectID: selectedProject.id,
       };
       if (!!createBountyData) {
@@ -89,7 +103,9 @@ export default function CreateBounty() {
       } else {
         setCreateBountyData({
           ...body,
-          amount: 0,
+          postDate: new Date(),
+          id: undefined,
+          reward: 0,
           types: [],
           headerSections: {},
         });
@@ -149,16 +165,16 @@ export default function CreateBounty() {
           {/* Date inputs for submission start and end dates */}
           <StyledText>Submission Start Date:</StyledText>
           <DatePicker
-            date={submissionStartDate}
+            date={postDate}
             fadeToColor={Colors.Background}
-            onDateChange={date => setSubmissionStartDate(date)}
+            onDateChange={date => setPostDate(date)}
             mode="date"
           />
 
           <StyledText>Submission End Date:</StyledText>
           <DatePicker
-            date={submissionEndDate}
-            onDateChange={date => setSubmissionEndDate(date)}
+            date={deadline}
+            onDateChange={date => setDeadline(date)}
             fadeToColor={Colors.Background}
             mode="date"
             style={{gap: 10}}
