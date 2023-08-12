@@ -1863,6 +1863,7 @@ export namespace Prisma {
     id: string | null;
     name: string | null;
     description: string | null;
+    createdAt: Date | null;
     link: string | null;
     creatorAddress: string | null;
   };
@@ -1871,6 +1872,7 @@ export namespace Prisma {
     id: string | null;
     name: string | null;
     description: string | null;
+    createdAt: Date | null;
     link: string | null;
     creatorAddress: string | null;
   };
@@ -1879,6 +1881,7 @@ export namespace Prisma {
     id: number;
     name: number;
     description: number;
+    createdAt: number;
     link: number;
     creatorAddress: number;
     _all: number;
@@ -1888,6 +1891,7 @@ export namespace Prisma {
     id?: true;
     name?: true;
     description?: true;
+    createdAt?: true;
     link?: true;
     creatorAddress?: true;
   };
@@ -1896,6 +1900,7 @@ export namespace Prisma {
     id?: true;
     name?: true;
     description?: true;
+    createdAt?: true;
     link?: true;
     creatorAddress?: true;
   };
@@ -1904,6 +1909,7 @@ export namespace Prisma {
     id?: true;
     name?: true;
     description?: true;
+    createdAt?: true;
     link?: true;
     creatorAddress?: true;
     _all?: true;
@@ -1988,6 +1994,7 @@ export namespace Prisma {
     id: string;
     name: string;
     description: string;
+    createdAt: Date;
     link: string;
     creatorAddress: string;
     _count: TeamCountAggregateOutputType | null;
@@ -2014,6 +2021,7 @@ export namespace Prisma {
       id?: boolean;
       name?: boolean;
       description?: boolean;
+      createdAt?: boolean;
       link?: boolean;
       creatorAddress?: boolean;
       members?: boolean | Team$membersArgs<ExtArgs>;
@@ -2028,6 +2036,7 @@ export namespace Prisma {
     id?: boolean;
     name?: boolean;
     description?: boolean;
+    createdAt?: boolean;
     link?: boolean;
     creatorAddress?: boolean;
   };
@@ -2055,6 +2064,7 @@ export namespace Prisma {
         id: string;
         name: string;
         description: string;
+        createdAt: Date;
         link: string;
         creatorAddress: string;
       },
@@ -2545,6 +2555,7 @@ export namespace Prisma {
     readonly id: FieldRef<'Team', 'String'>;
     readonly name: FieldRef<'Team', 'String'>;
     readonly description: FieldRef<'Team', 'String'>;
+    readonly createdAt: FieldRef<'Team', 'DateTime'>;
     readonly link: FieldRef<'Team', 'String'>;
     readonly creatorAddress: FieldRef<'Team', 'String'>;
   }
@@ -2955,6 +2966,7 @@ export namespace Prisma {
     id: string | null;
     title: string | null;
     description: string | null;
+    createdAt: Date | null;
     email: string | null;
     phone: string | null;
     quotePrice: number | null;
@@ -2966,6 +2978,7 @@ export namespace Prisma {
     id: string | null;
     title: string | null;
     description: string | null;
+    createdAt: Date | null;
     email: string | null;
     phone: string | null;
     quotePrice: number | null;
@@ -2977,6 +2990,7 @@ export namespace Prisma {
     id: number;
     title: number;
     description: number;
+    createdAt: number;
     email: number;
     phone: number;
     bountyIDs: number;
@@ -2998,6 +3012,7 @@ export namespace Prisma {
     id?: true;
     title?: true;
     description?: true;
+    createdAt?: true;
     email?: true;
     phone?: true;
     quotePrice?: true;
@@ -3009,6 +3024,7 @@ export namespace Prisma {
     id?: true;
     title?: true;
     description?: true;
+    createdAt?: true;
     email?: true;
     phone?: true;
     quotePrice?: true;
@@ -3020,6 +3036,7 @@ export namespace Prisma {
     id?: true;
     title?: true;
     description?: true;
+    createdAt?: true;
     email?: true;
     phone?: true;
     bountyIDs?: true;
@@ -3124,6 +3141,7 @@ export namespace Prisma {
     id: string;
     title: string;
     description: string;
+    createdAt: Date;
     email: string;
     phone: string;
     bountyIDs: string[];
@@ -3157,6 +3175,7 @@ export namespace Prisma {
       id?: boolean;
       title?: boolean;
       description?: boolean;
+      createdAt?: boolean;
       email?: boolean;
       phone?: boolean;
       bountyIDs?: boolean;
@@ -3174,6 +3193,7 @@ export namespace Prisma {
     id?: boolean;
     title?: boolean;
     description?: boolean;
+    createdAt?: boolean;
     email?: boolean;
     phone?: boolean;
     bountyIDs?: boolean;
@@ -3203,6 +3223,7 @@ export namespace Prisma {
         id: string;
         title: string;
         description: string;
+        createdAt: Date;
         email: string;
         phone: string;
         bountyIDs: string[];
@@ -3699,6 +3720,7 @@ export namespace Prisma {
     readonly id: FieldRef<'Project', 'String'>;
     readonly title: FieldRef<'Project', 'String'>;
     readonly description: FieldRef<'Project', 'String'>;
+    readonly createdAt: FieldRef<'Project', 'DateTime'>;
     readonly email: FieldRef<'Project', 'String'>;
     readonly phone: FieldRef<'Project', 'String'>;
     readonly bountyIDs: FieldRef<'Project', 'String[]'>;
@@ -5581,6 +5603,7 @@ export namespace Prisma {
       bounty?: boolean | BountyDefaultArgs<ExtArgs>;
       team?: boolean | TeamDefaultArgs<ExtArgs>;
       winningSubmission?: boolean | Submission$winningSubmissionArgs<ExtArgs>;
+      BountyWinner?: boolean | Submission$BountyWinnerArgs<ExtArgs>;
       _count?: boolean | SubmissionCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['submission']
@@ -5602,6 +5625,7 @@ export namespace Prisma {
     bounty?: boolean | BountyDefaultArgs<ExtArgs>;
     team?: boolean | TeamDefaultArgs<ExtArgs>;
     winningSubmission?: boolean | Submission$winningSubmissionArgs<ExtArgs>;
+    BountyWinner?: boolean | Submission$BountyWinnerArgs<ExtArgs>;
     _count?: boolean | SubmissionCountOutputTypeDefaultArgs<ExtArgs>;
   };
 
@@ -5614,6 +5638,7 @@ export namespace Prisma {
       bounty: Prisma.$BountyPayload<ExtArgs>;
       team: Prisma.$TeamPayload<ExtArgs>;
       winningSubmission: Prisma.$BountyPayload<ExtArgs> | null;
+      BountyWinner: Prisma.$BountyWinnerPayload<ExtArgs> | null;
     };
     scalars: $Extensions.GetResult<
       {
@@ -6100,6 +6125,18 @@ export namespace Prisma {
       ExtArgs
     >;
 
+    BountyWinner<T extends Submission$BountyWinnerArgs<ExtArgs> = {}>(
+      args?: Subset<T, Submission$BountyWinnerArgs<ExtArgs>>,
+    ): Prisma__BountyWinnerClient<
+      $Result.GetResult<
+        Prisma.$BountyWinnerPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow'
+      > | null,
+      null,
+      ExtArgs
+    >;
+
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6516,6 +6553,23 @@ export namespace Prisma {
      */
     include?: BountyInclude<ExtArgs> | null;
     where?: BountyWhereInput;
+  };
+
+  /**
+   * Submission.BountyWinner
+   */
+  export type Submission$BountyWinnerArgs<
+    ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the BountyWinner
+     */
+    select?: BountyWinnerSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: BountyWinnerInclude<ExtArgs> | null;
+    where?: BountyWinnerWhereInput;
   };
 
   /**
@@ -7599,12 +7653,14 @@ export namespace Prisma {
   export type MemberAvgAggregateOutputType = {
     level: number | null;
     bountiesWon: number | null;
+    teamsJoined: number | null;
     membersInvited: number | null;
   };
 
   export type MemberSumAggregateOutputType = {
     level: number | null;
     bountiesWon: number | null;
+    teamsJoined: number | null;
     membersInvited: number | null;
   };
 
@@ -7617,7 +7673,9 @@ export namespace Prisma {
     bio: string | null;
     level: number | null;
     playingRole: $Enums.RoleType | null;
+    isFounder: boolean | null;
     bountiesWon: number | null;
+    teamsJoined: number | null;
     membersInvited: number | null;
     completedWelcome: boolean | null;
   };
@@ -7631,7 +7689,9 @@ export namespace Prisma {
     bio: string | null;
     level: number | null;
     playingRole: $Enums.RoleType | null;
+    isFounder: boolean | null;
     bountiesWon: number | null;
+    teamsJoined: number | null;
     membersInvited: number | null;
     completedWelcome: boolean | null;
   };
@@ -7646,6 +7706,7 @@ export namespace Prisma {
     level: number;
     roles: number;
     playingRole: number;
+    isFounder: number;
     bountiesWon: number;
     teamsJoined: number;
     membersInvited: number;
@@ -7656,12 +7717,14 @@ export namespace Prisma {
   export type MemberAvgAggregateInputType = {
     level?: true;
     bountiesWon?: true;
+    teamsJoined?: true;
     membersInvited?: true;
   };
 
   export type MemberSumAggregateInputType = {
     level?: true;
     bountiesWon?: true;
+    teamsJoined?: true;
     membersInvited?: true;
   };
 
@@ -7674,7 +7737,9 @@ export namespace Prisma {
     bio?: true;
     level?: true;
     playingRole?: true;
+    isFounder?: true;
     bountiesWon?: true;
+    teamsJoined?: true;
     membersInvited?: true;
     completedWelcome?: true;
   };
@@ -7688,7 +7753,9 @@ export namespace Prisma {
     bio?: true;
     level?: true;
     playingRole?: true;
+    isFounder?: true;
     bountiesWon?: true;
+    teamsJoined?: true;
     membersInvited?: true;
     completedWelcome?: true;
   };
@@ -7703,6 +7770,7 @@ export namespace Prisma {
     level?: true;
     roles?: true;
     playingRole?: true;
+    isFounder?: true;
     bountiesWon?: true;
     teamsJoined?: true;
     membersInvited?: true;
@@ -7809,8 +7877,9 @@ export namespace Prisma {
     level: number;
     roles: $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder: boolean;
     bountiesWon: number;
-    teamsJoined: string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     _count: MemberCountAggregateOutputType | null;
@@ -7846,6 +7915,7 @@ export namespace Prisma {
       level?: boolean;
       roles?: boolean;
       playingRole?: boolean;
+      isFounder?: boolean;
       bountiesWon?: boolean;
       teamsJoined?: boolean;
       membersInvited?: boolean;
@@ -7871,6 +7941,7 @@ export namespace Prisma {
     level?: boolean;
     roles?: boolean;
     playingRole?: boolean;
+    isFounder?: boolean;
     bountiesWon?: boolean;
     teamsJoined?: boolean;
     membersInvited?: boolean;
@@ -7912,8 +7983,9 @@ export namespace Prisma {
         level: number;
         roles: $Enums.RoleType[];
         playingRole: $Enums.RoleType;
+        isFounder: boolean;
         bountiesWon: number;
-        teamsJoined: string[];
+        teamsJoined: number;
         membersInvited: number;
         completedWelcome: boolean;
       },
@@ -8423,8 +8495,9 @@ export namespace Prisma {
     readonly level: FieldRef<'Member', 'Int'>;
     readonly roles: FieldRef<'Member', 'RoleType[]'>;
     readonly playingRole: FieldRef<'Member', 'RoleType'>;
+    readonly isFounder: FieldRef<'Member', 'Boolean'>;
     readonly bountiesWon: FieldRef<'Member', 'Int'>;
-    readonly teamsJoined: FieldRef<'Member', 'String[]'>;
+    readonly teamsJoined: FieldRef<'Member', 'Int'>;
     readonly membersInvited: FieldRef<'Member', 'Int'>;
     readonly completedWelcome: FieldRef<'Member', 'Boolean'>;
   }
@@ -9093,6 +9166,7 @@ export namespace Prisma {
       approvedByFounder?: boolean;
       approvedByManager?: boolean;
       bounty?: boolean | BountyDefaultArgs<ExtArgs>;
+      submission?: boolean | BountyWinner$submissionArgs<ExtArgs>;
       member?: boolean | MemberDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['bountyWinner']
@@ -9112,6 +9186,7 @@ export namespace Prisma {
     ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs,
   > = {
     bounty?: boolean | BountyDefaultArgs<ExtArgs>;
+    submission?: boolean | BountyWinner$submissionArgs<ExtArgs>;
     member?: boolean | MemberDefaultArgs<ExtArgs>;
   };
 
@@ -9121,6 +9196,7 @@ export namespace Prisma {
     name: 'BountyWinner';
     objects: {
       bounty: Prisma.$BountyPayload<ExtArgs>;
+      submission: Prisma.$SubmissionPayload<ExtArgs> | null;
       member: Prisma.$MemberPayload<ExtArgs>;
     };
     scalars: $Extensions.GetResult<
@@ -9582,6 +9658,18 @@ export namespace Prisma {
       ExtArgs
     >;
 
+    submission<T extends BountyWinner$submissionArgs<ExtArgs> = {}>(
+      args?: Subset<T, BountyWinner$submissionArgs<ExtArgs>>,
+    ): Prisma__SubmissionClient<
+      $Result.GetResult<
+        Prisma.$SubmissionPayload<ExtArgs>,
+        T,
+        'findUniqueOrThrow'
+      > | null,
+      null,
+      ExtArgs
+    >;
+
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, MemberDefaultArgs<ExtArgs>>,
     ): Prisma__MemberClient<
@@ -9971,6 +10059,23 @@ export namespace Prisma {
      * Filter which BountyWinners to delete
      */
     where?: BountyWinnerWhereInput;
+  };
+
+  /**
+   * BountyWinner.submission
+   */
+  export type BountyWinner$submissionArgs<
+    ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Submission
+     */
+    select?: SubmissionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: SubmissionInclude<ExtArgs> | null;
+    where?: SubmissionWhereInput;
   };
 
   /**
@@ -11079,6 +11184,7 @@ export namespace Prisma {
     id: 'id';
     name: 'name';
     description: 'description';
+    createdAt: 'createdAt';
     link: 'link';
     creatorAddress: 'creatorAddress';
   };
@@ -11090,6 +11196,7 @@ export namespace Prisma {
     id: 'id';
     title: 'title';
     description: 'description';
+    createdAt: 'createdAt';
     email: 'email';
     phone: 'phone';
     bountyIDs: 'bountyIDs';
@@ -11157,6 +11264,7 @@ export namespace Prisma {
     level: 'level';
     roles: 'roles';
     playingRole: 'playingRole';
+    isFounder: 'isFounder';
     bountiesWon: 'bountiesWon';
     teamsJoined: 'teamsJoined';
     membersInvited: 'membersInvited';
@@ -11250,6 +11358,22 @@ export namespace Prisma {
   >;
 
   /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'DateTime'
+  >;
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'DateTime[]'
+  >;
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<
@@ -11278,22 +11402,6 @@ export namespace Prisma {
    */
   export type ListEnumProjectStageFieldRefInput<$PrismaModel> =
     FieldRefInputType<$PrismaModel, 'ProjectStage[]'>;
-
-  /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    'DateTime'
-  >;
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    'DateTime[]'
-  >;
 
   /**
    * Reference to a field of type 'BountyType[]'
@@ -11384,6 +11492,7 @@ export namespace Prisma {
     id?: StringFilter<'Team'> | string;
     name?: StringFilter<'Team'> | string;
     description?: StringFilter<'Team'> | string;
+    createdAt?: DateTimeFilter<'Team'> | Date | string;
     link?: StringFilter<'Team'> | string;
     creatorAddress?: StringFilter<'Team'> | string;
     members?: MemberListRelationFilter;
@@ -11395,6 +11504,7 @@ export namespace Prisma {
     id?: SortOrder;
     name?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     link?: SortOrder;
     creatorAddress?: SortOrder;
     members?: MemberOrderByRelationAggregateInput;
@@ -11410,6 +11520,7 @@ export namespace Prisma {
       NOT?: TeamWhereInput | TeamWhereInput[];
       name?: StringFilter<'Team'> | string;
       description?: StringFilter<'Team'> | string;
+      createdAt?: DateTimeFilter<'Team'> | Date | string;
       link?: StringFilter<'Team'> | string;
       creatorAddress?: StringFilter<'Team'> | string;
       members?: MemberListRelationFilter;
@@ -11423,6 +11534,7 @@ export namespace Prisma {
     id?: SortOrder;
     name?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     link?: SortOrder;
     creatorAddress?: SortOrder;
     _count?: TeamCountOrderByAggregateInput;
@@ -11441,6 +11553,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<'Team'> | string;
     name?: StringWithAggregatesFilter<'Team'> | string;
     description?: StringWithAggregatesFilter<'Team'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'Team'> | Date | string;
     link?: StringWithAggregatesFilter<'Team'> | string;
     creatorAddress?: StringWithAggregatesFilter<'Team'> | string;
   };
@@ -11452,6 +11565,7 @@ export namespace Prisma {
     id?: StringFilter<'Project'> | string;
     title?: StringFilter<'Project'> | string;
     description?: StringFilter<'Project'> | string;
+    createdAt?: DateTimeFilter<'Project'> | Date | string;
     email?: StringFilter<'Project'> | string;
     phone?: StringFilter<'Project'> | string;
     bountyIDs?: StringNullableListFilter<'Project'>;
@@ -11466,6 +11580,7 @@ export namespace Prisma {
     id?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     email?: SortOrder;
     phone?: SortOrder;
     bountyIDs?: SortOrder;
@@ -11484,6 +11599,7 @@ export namespace Prisma {
       NOT?: ProjectWhereInput | ProjectWhereInput[];
       title?: StringFilter<'Project'> | string;
       description?: StringFilter<'Project'> | string;
+      createdAt?: DateTimeFilter<'Project'> | Date | string;
       email?: StringFilter<'Project'> | string;
       phone?: StringFilter<'Project'> | string;
       bountyIDs?: StringNullableListFilter<'Project'>;
@@ -11500,6 +11616,7 @@ export namespace Prisma {
     id?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     email?: SortOrder;
     phone?: SortOrder;
     bountyIDs?: SortOrder;
@@ -11524,6 +11641,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<'Project'> | string;
     title?: StringWithAggregatesFilter<'Project'> | string;
     description?: StringWithAggregatesFilter<'Project'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'Project'> | Date | string;
     email?: StringWithAggregatesFilter<'Project'> | string;
     phone?: StringWithAggregatesFilter<'Project'> | string;
     bountyIDs?: StringNullableListFilter<'Project'>;
@@ -11704,6 +11822,10 @@ export namespace Prisma {
       BountyNullableRelationFilter,
       BountyWhereInput
     > | null;
+    BountyWinner?: XOR<
+      BountyWinnerNullableRelationFilter,
+      BountyWinnerWhereInput
+    > | null;
   };
 
   export type SubmissionOrderByWithRelationInput = {
@@ -11717,6 +11839,7 @@ export namespace Prisma {
     bounty?: BountyOrderByWithRelationInput;
     team?: TeamOrderByWithRelationInput;
     winningSubmission?: BountyOrderByWithRelationInput;
+    BountyWinner?: BountyWinnerOrderByWithRelationInput;
   };
 
   export type SubmissionWhereUniqueInput = Prisma.AtLeast<
@@ -11736,6 +11859,10 @@ export namespace Prisma {
       winningSubmission?: XOR<
         BountyNullableRelationFilter,
         BountyWhereInput
+      > | null;
+      BountyWinner?: XOR<
+        BountyWinnerNullableRelationFilter,
+        BountyWinnerWhereInput
       > | null;
     },
     'id'
@@ -11848,8 +11975,9 @@ export namespace Prisma {
     level?: IntFilter<'Member'> | number;
     roles?: EnumRoleTypeNullableListFilter<'Member'>;
     playingRole?: EnumRoleTypeFilter<'Member'> | $Enums.RoleType;
+    isFounder?: BoolFilter<'Member'> | boolean;
     bountiesWon?: IntFilter<'Member'> | number;
-    teamsJoined?: StringNullableListFilter<'Member'>;
+    teamsJoined?: IntFilter<'Member'> | number;
     membersInvited?: IntFilter<'Member'> | number;
     completedWelcome?: BoolFilter<'Member'> | boolean;
     teamInvites?: TeamInviteListRelationFilter;
@@ -11870,6 +11998,7 @@ export namespace Prisma {
     level?: SortOrder;
     roles?: SortOrder;
     playingRole?: SortOrder;
+    isFounder?: SortOrder;
     bountiesWon?: SortOrder;
     teamsJoined?: SortOrder;
     membersInvited?: SortOrder;
@@ -11896,8 +12025,9 @@ export namespace Prisma {
       level?: IntFilter<'Member'> | number;
       roles?: EnumRoleTypeNullableListFilter<'Member'>;
       playingRole?: EnumRoleTypeFilter<'Member'> | $Enums.RoleType;
+      isFounder?: BoolFilter<'Member'> | boolean;
       bountiesWon?: IntFilter<'Member'> | number;
-      teamsJoined?: StringNullableListFilter<'Member'>;
+      teamsJoined?: IntFilter<'Member'> | number;
       membersInvited?: IntFilter<'Member'> | number;
       completedWelcome?: BoolFilter<'Member'> | boolean;
       teamInvites?: TeamInviteListRelationFilter;
@@ -11920,6 +12050,7 @@ export namespace Prisma {
     level?: SortOrder;
     roles?: SortOrder;
     playingRole?: SortOrder;
+    isFounder?: SortOrder;
     bountiesWon?: SortOrder;
     teamsJoined?: SortOrder;
     membersInvited?: SortOrder;
@@ -11948,8 +12079,9 @@ export namespace Prisma {
     level?: IntWithAggregatesFilter<'Member'> | number;
     roles?: EnumRoleTypeNullableListFilter<'Member'>;
     playingRole?: EnumRoleTypeWithAggregatesFilter<'Member'> | $Enums.RoleType;
+    isFounder?: BoolWithAggregatesFilter<'Member'> | boolean;
     bountiesWon?: IntWithAggregatesFilter<'Member'> | number;
-    teamsJoined?: StringNullableListFilter<'Member'>;
+    teamsJoined?: IntWithAggregatesFilter<'Member'> | number;
     membersInvited?: IntWithAggregatesFilter<'Member'> | number;
     completedWelcome?: BoolWithAggregatesFilter<'Member'> | boolean;
   };
@@ -11966,6 +12098,10 @@ export namespace Prisma {
     approvedByFounder?: BoolFilter<'BountyWinner'> | boolean;
     approvedByManager?: BoolFilter<'BountyWinner'> | boolean;
     bounty?: XOR<BountyRelationFilter, BountyWhereInput>;
+    submission?: XOR<
+      SubmissionNullableRelationFilter,
+      SubmissionWhereInput
+    > | null;
     member?: XOR<MemberRelationFilter, MemberWhereInput>;
   };
 
@@ -11978,6 +12114,7 @@ export namespace Prisma {
     approvedByFounder?: SortOrder;
     approvedByManager?: SortOrder;
     bounty?: BountyOrderByWithRelationInput;
+    submission?: SubmissionOrderByWithRelationInput;
     member?: MemberOrderByWithRelationInput;
   };
 
@@ -11994,6 +12131,10 @@ export namespace Prisma {
       approvedByFounder?: BoolFilter<'BountyWinner'> | boolean;
       approvedByManager?: BoolFilter<'BountyWinner'> | boolean;
       bounty?: XOR<BountyRelationFilter, BountyWhereInput>;
+      submission?: XOR<
+        SubmissionNullableRelationFilter,
+        SubmissionWhereInput
+      > | null;
       member?: XOR<MemberRelationFilter, MemberWhereInput>;
     },
     'id' | 'bountyId' | 'submissionId'
@@ -12103,6 +12244,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     members?: MemberCreateNestedManyWithoutTeamsInput;
     creator: MemberCreateNestedOneWithoutCreatedTeamsInput;
@@ -12113,6 +12255,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     creatorAddress: string;
     members?: MemberUncheckedCreateNestedManyWithoutTeamsInput;
@@ -12123,6 +12266,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     members?: MemberUpdateManyWithoutTeamsNestedInput;
     creator?: MemberUpdateOneRequiredWithoutCreatedTeamsNestedInput;
@@ -12133,6 +12277,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     creatorAddress?: StringFieldUpdateOperationsInput | string;
     members?: MemberUncheckedUpdateManyWithoutTeamsNestedInput;
@@ -12143,6 +12288,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     creatorAddress: string;
   };
@@ -12151,6 +12297,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -12158,6 +12305,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     creatorAddress?: StringFieldUpdateOperationsInput | string;
   };
@@ -12166,6 +12314,7 @@ export namespace Prisma {
     id?: string;
     title: string;
     description: string;
+    createdAt?: Date | string;
     email: string;
     phone: string;
     bountyIDs?: ProjectCreatebountyIDsInput | string[];
@@ -12179,6 +12328,7 @@ export namespace Prisma {
     id?: string;
     title: string;
     description: string;
+    createdAt?: Date | string;
     email: string;
     phone: string;
     bountyIDs?: ProjectCreatebountyIDsInput | string[];
@@ -12192,6 +12342,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -12205,6 +12356,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -12218,6 +12370,7 @@ export namespace Prisma {
     id?: string;
     title: string;
     description: string;
+    createdAt?: Date | string;
     email: string;
     phone: string;
     bountyIDs?: ProjectCreatebountyIDsInput | string[];
@@ -12230,6 +12383,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -12241,6 +12395,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -12416,6 +12571,7 @@ export namespace Prisma {
     bounty: BountyCreateNestedOneWithoutSubmissionsInput;
     team: TeamCreateNestedOneWithoutSubmissionInput;
     winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
+    BountyWinner?: BountyWinnerCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateInput = {
@@ -12427,6 +12583,7 @@ export namespace Prisma {
     teamId: string;
     testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
     winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
+    BountyWinner?: BountyWinnerUncheckedCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionUpdateInput = {
@@ -12438,6 +12595,7 @@ export namespace Prisma {
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
     winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateInput = {
@@ -12449,6 +12607,7 @@ export namespace Prisma {
     teamId?: StringFieldUpdateOperationsInput | string;
     testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
     winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUncheckedUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type SubmissionCreateManyInput = {
@@ -12534,8 +12693,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteCreateNestedManyWithoutMemberInput;
@@ -12556,8 +12716,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteUncheckedCreateNestedManyWithoutMemberInput;
@@ -12578,8 +12739,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUpdateManyWithoutMemberNestedInput;
@@ -12600,8 +12762,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUncheckedUpdateManyWithoutMemberNestedInput;
@@ -12622,8 +12785,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
   };
@@ -12638,8 +12802,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
   };
@@ -12654,8 +12819,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
   };
@@ -12663,10 +12829,10 @@ export namespace Prisma {
   export type BountyWinnerCreateInput = {
     id?: string;
     confirmed?: boolean;
-    submissionId: string;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     bounty: BountyCreateNestedOneWithoutBountyWinnerInput;
+    submission?: SubmissionCreateNestedOneWithoutBountyWinnerInput;
     member: MemberCreateNestedOneWithoutBountyWinnerInput;
   };
 
@@ -12683,10 +12849,10 @@ export namespace Prisma {
   export type BountyWinnerUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     confirmed?: BoolFieldUpdateOperationsInput | boolean;
-    submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     bounty?: BountyUpdateOneRequiredWithoutBountyWinnerNestedInput;
+    submission?: SubmissionUpdateOneWithoutBountyWinnerNestedInput;
     member?: MemberUpdateOneRequiredWithoutBountyWinnerNestedInput;
   };
 
@@ -12713,7 +12879,6 @@ export namespace Prisma {
   export type BountyWinnerUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
     confirmed?: BoolFieldUpdateOperationsInput | boolean;
-    submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
   };
@@ -12805,6 +12970,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string;
   };
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string;
+  };
+
   export type MemberListRelationFilter = {
     every?: MemberWhereInput;
     some?: MemberWhereInput;
@@ -12834,6 +13010,7 @@ export namespace Prisma {
     id?: SortOrder;
     name?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     link?: SortOrder;
     creatorAddress?: SortOrder;
   };
@@ -12842,6 +13019,7 @@ export namespace Prisma {
     id?: SortOrder;
     name?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     link?: SortOrder;
     creatorAddress?: SortOrder;
   };
@@ -12850,6 +13028,7 @@ export namespace Prisma {
     id?: SortOrder;
     name?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     link?: SortOrder;
     creatorAddress?: SortOrder;
   };
@@ -12870,6 +13049,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedStringFilter<$PrismaModel>;
     _max?: NestedStringFilter<$PrismaModel>;
+  };
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedDateTimeFilter<$PrismaModel>;
+    _max?: NestedDateTimeFilter<$PrismaModel>;
   };
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -12916,6 +13109,7 @@ export namespace Prisma {
     id?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     email?: SortOrder;
     phone?: SortOrder;
     bountyIDs?: SortOrder;
@@ -12932,6 +13126,7 @@ export namespace Prisma {
     id?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     email?: SortOrder;
     phone?: SortOrder;
     quotePrice?: SortOrder;
@@ -12943,6 +13138,7 @@ export namespace Prisma {
     id?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
+    createdAt?: SortOrder;
     email?: SortOrder;
     phone?: SortOrder;
     quotePrice?: SortOrder;
@@ -12984,17 +13180,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumProjectStageFilter<$PrismaModel>;
     _max?: NestedEnumProjectStageFilter<$PrismaModel>;
-  };
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string;
   };
 
   export type EnumBountyTypeNullableListFilter<$PrismaModel = never> = {
@@ -13167,20 +13352,6 @@ export namespace Prisma {
     reward?: SortOrder;
   };
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedDateTimeFilter<$PrismaModel>;
-    _max?: NestedDateTimeFilter<$PrismaModel>;
-  };
-
   export type EnumBountyStageWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.BountyStage | EnumBountyStageFieldRefInput<$PrismaModel>;
     in?: $Enums.BountyStage[] | ListEnumBountyStageFieldRefInput<$PrismaModel>;
@@ -13285,6 +13456,11 @@ export namespace Prisma {
   export type BountyNullableRelationFilter = {
     is?: BountyWhereInput | null;
     isNot?: BountyWhereInput | null;
+  };
+
+  export type BountyWinnerNullableRelationFilter = {
+    is?: BountyWinnerWhereInput | null;
+    isNot?: BountyWinnerWhereInput | null;
   };
 
   export type TestCaseOrderByRelationAggregateInput = {
@@ -13397,6 +13573,7 @@ export namespace Prisma {
     level?: SortOrder;
     roles?: SortOrder;
     playingRole?: SortOrder;
+    isFounder?: SortOrder;
     bountiesWon?: SortOrder;
     teamsJoined?: SortOrder;
     membersInvited?: SortOrder;
@@ -13406,6 +13583,7 @@ export namespace Prisma {
   export type MemberAvgOrderByAggregateInput = {
     level?: SortOrder;
     bountiesWon?: SortOrder;
+    teamsJoined?: SortOrder;
     membersInvited?: SortOrder;
   };
 
@@ -13418,7 +13596,9 @@ export namespace Prisma {
     bio?: SortOrder;
     level?: SortOrder;
     playingRole?: SortOrder;
+    isFounder?: SortOrder;
     bountiesWon?: SortOrder;
+    teamsJoined?: SortOrder;
     membersInvited?: SortOrder;
     completedWelcome?: SortOrder;
   };
@@ -13432,7 +13612,9 @@ export namespace Prisma {
     bio?: SortOrder;
     level?: SortOrder;
     playingRole?: SortOrder;
+    isFounder?: SortOrder;
     bountiesWon?: SortOrder;
+    teamsJoined?: SortOrder;
     membersInvited?: SortOrder;
     completedWelcome?: SortOrder;
   };
@@ -13440,6 +13622,7 @@ export namespace Prisma {
   export type MemberSumOrderByAggregateInput = {
     level?: SortOrder;
     bountiesWon?: SortOrder;
+    teamsJoined?: SortOrder;
     membersInvited?: SortOrder;
   };
 
@@ -13581,6 +13764,10 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string;
+  };
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string;
   };
 
   export type MemberUpdateManyWithoutTeamsNestedInput = {
@@ -13942,10 +14129,6 @@ export namespace Prisma {
     connect?: BountyWinnerWhereUniqueInput | BountyWinnerWhereUniqueInput[];
   };
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string;
-  };
-
   export type BountyUpdatetypesInput = {
     set?: $Enums.BountyType[];
     push?: $Enums.BountyType | $Enums.BountyType[];
@@ -14184,6 +14367,15 @@ export namespace Prisma {
     connect?: BountyWhereUniqueInput;
   };
 
+  export type BountyWinnerCreateNestedOneWithoutSubmissionInput = {
+    create?: XOR<
+      BountyWinnerCreateWithoutSubmissionInput,
+      BountyWinnerUncheckedCreateWithoutSubmissionInput
+    >;
+    connectOrCreate?: BountyWinnerCreateOrConnectWithoutSubmissionInput;
+    connect?: BountyWinnerWhereUniqueInput;
+  };
+
   export type TestCaseUncheckedCreateNestedManyWithoutSubmissionInput = {
     create?:
       | XOR<
@@ -14206,6 +14398,15 @@ export namespace Prisma {
     >;
     connectOrCreate?: BountyCreateOrConnectWithoutWinningSubmissionInput;
     connect?: BountyWhereUniqueInput;
+  };
+
+  export type BountyWinnerUncheckedCreateNestedOneWithoutSubmissionInput = {
+    create?: XOR<
+      BountyWinnerCreateWithoutSubmissionInput,
+      BountyWinnerUncheckedCreateWithoutSubmissionInput
+    >;
+    connectOrCreate?: BountyWinnerCreateOrConnectWithoutSubmissionInput;
+    connect?: BountyWinnerWhereUniqueInput;
   };
 
   export type TestCaseUpdateManyWithoutSubmissionNestedInput = {
@@ -14289,6 +14490,25 @@ export namespace Prisma {
     >;
   };
 
+  export type BountyWinnerUpdateOneWithoutSubmissionNestedInput = {
+    create?: XOR<
+      BountyWinnerCreateWithoutSubmissionInput,
+      BountyWinnerUncheckedCreateWithoutSubmissionInput
+    >;
+    connectOrCreate?: BountyWinnerCreateOrConnectWithoutSubmissionInput;
+    upsert?: BountyWinnerUpsertWithoutSubmissionInput;
+    disconnect?: BountyWinnerWhereInput | boolean;
+    delete?: BountyWinnerWhereInput | boolean;
+    connect?: BountyWinnerWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        BountyWinnerUpdateToOneWithWhereWithoutSubmissionInput,
+        BountyWinnerUpdateWithoutSubmissionInput
+      >,
+      BountyWinnerUncheckedUpdateWithoutSubmissionInput
+    >;
+  };
+
   export type TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput = {
     create?:
       | XOR<
@@ -14336,6 +14556,25 @@ export namespace Prisma {
     >;
   };
 
+  export type BountyWinnerUncheckedUpdateOneWithoutSubmissionNestedInput = {
+    create?: XOR<
+      BountyWinnerCreateWithoutSubmissionInput,
+      BountyWinnerUncheckedCreateWithoutSubmissionInput
+    >;
+    connectOrCreate?: BountyWinnerCreateOrConnectWithoutSubmissionInput;
+    upsert?: BountyWinnerUpsertWithoutSubmissionInput;
+    disconnect?: BountyWinnerWhereInput | boolean;
+    delete?: BountyWinnerWhereInput | boolean;
+    connect?: BountyWinnerWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        BountyWinnerUpdateToOneWithWhereWithoutSubmissionInput,
+        BountyWinnerUpdateWithoutSubmissionInput
+      >,
+      BountyWinnerUncheckedUpdateWithoutSubmissionInput
+    >;
+  };
+
   export type SubmissionCreateNestedOneWithoutTestCasesInput = {
     create?: XOR<
       SubmissionCreateWithoutTestCasesInput,
@@ -14366,10 +14605,6 @@ export namespace Prisma {
 
   export type MemberCreaterolesInput = {
     set: $Enums.RoleType[];
-  };
-
-  export type MemberCreateteamsJoinedInput = {
-    set: string[];
   };
 
   export type TeamInviteCreateNestedManyWithoutMemberInput = {
@@ -14557,11 +14792,6 @@ export namespace Prisma {
 
   export type EnumRoleTypeFieldUpdateOperationsInput = {
     set?: $Enums.RoleType;
-  };
-
-  export type MemberUpdateteamsJoinedInput = {
-    set?: string[];
-    push?: string | string[];
   };
 
   export type TeamInviteUpdateManyWithoutMemberNestedInput = {
@@ -14907,6 +15137,15 @@ export namespace Prisma {
     connect?: BountyWhereUniqueInput;
   };
 
+  export type SubmissionCreateNestedOneWithoutBountyWinnerInput = {
+    create?: XOR<
+      SubmissionCreateWithoutBountyWinnerInput,
+      SubmissionUncheckedCreateWithoutBountyWinnerInput
+    >;
+    connectOrCreate?: SubmissionCreateOrConnectWithoutBountyWinnerInput;
+    connect?: SubmissionWhereUniqueInput;
+  };
+
   export type MemberCreateNestedOneWithoutBountyWinnerInput = {
     create?: XOR<
       MemberCreateWithoutBountyWinnerInput,
@@ -14930,6 +15169,25 @@ export namespace Prisma {
         BountyUpdateWithoutBountyWinnerInput
       >,
       BountyUncheckedUpdateWithoutBountyWinnerInput
+    >;
+  };
+
+  export type SubmissionUpdateOneWithoutBountyWinnerNestedInput = {
+    create?: XOR<
+      SubmissionCreateWithoutBountyWinnerInput,
+      SubmissionUncheckedCreateWithoutBountyWinnerInput
+    >;
+    connectOrCreate?: SubmissionCreateOrConnectWithoutBountyWinnerInput;
+    upsert?: SubmissionUpsertWithoutBountyWinnerInput;
+    disconnect?: SubmissionWhereInput | boolean;
+    delete?: SubmissionWhereInput | boolean;
+    connect?: SubmissionWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        SubmissionUpdateToOneWithWhereWithoutBountyWinnerInput,
+        SubmissionUpdateWithoutBountyWinnerInput
+      >,
+      SubmissionUncheckedUpdateWithoutBountyWinnerInput
     >;
   };
 
@@ -14992,6 +15250,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string;
   };
 
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string;
+  };
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>;
     in?: string[] | ListStringFieldRefInput<$PrismaModel>;
@@ -15018,6 +15287,20 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>;
     gte?: number | IntFieldRefInput<$PrismaModel>;
     not?: NestedIntFilter<$PrismaModel> | number;
+  };
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedDateTimeFilter<$PrismaModel>;
+    _max?: NestedDateTimeFilter<$PrismaModel>;
   };
 
   export type NestedEnumProjectStageFilter<$PrismaModel = never> = {
@@ -15077,17 +15360,6 @@ export namespace Prisma {
       _max?: NestedEnumProjectStageFilter<$PrismaModel>;
     };
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string;
-  };
-
   export type NestedEnumBountyStageFilter<$PrismaModel = never> = {
     equals?: $Enums.BountyStage | EnumBountyStageFieldRefInput<$PrismaModel>;
     in?: $Enums.BountyStage[] | ListEnumBountyStageFieldRefInput<$PrismaModel>;
@@ -15114,20 +15386,6 @@ export namespace Prisma {
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
     not?: NestedBoolFilter<$PrismaModel> | boolean;
-  };
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedDateTimeFilter<$PrismaModel>;
-    _max?: NestedDateTimeFilter<$PrismaModel>;
   };
 
   export type NestedEnumBountyStageWithAggregatesFilter<$PrismaModel = never> =
@@ -15251,8 +15509,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteCreateNestedManyWithoutMemberInput;
@@ -15272,8 +15531,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteUncheckedCreateNestedManyWithoutMemberInput;
@@ -15301,8 +15561,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteCreateNestedManyWithoutMemberInput;
@@ -15322,8 +15583,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteUncheckedCreateNestedManyWithoutMemberInput;
@@ -15349,6 +15611,7 @@ export namespace Prisma {
     testCases?: TestCaseCreateNestedManyWithoutSubmissionInput;
     bounty: BountyCreateNestedOneWithoutSubmissionsInput;
     winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
+    BountyWinner?: BountyWinnerCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateWithoutTeamInput = {
@@ -15359,6 +15622,7 @@ export namespace Prisma {
     bountyId: string;
     testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
     winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
+    BountyWinner?: BountyWinnerUncheckedCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionCreateOrConnectWithoutTeamInput = {
@@ -15415,8 +15679,9 @@ export namespace Prisma {
     level?: IntFilter<'Member'> | number;
     roles?: EnumRoleTypeNullableListFilter<'Member'>;
     playingRole?: EnumRoleTypeFilter<'Member'> | $Enums.RoleType;
+    isFounder?: BoolFilter<'Member'> | boolean;
     bountiesWon?: IntFilter<'Member'> | number;
-    teamsJoined?: StringNullableListFilter<'Member'>;
+    teamsJoined?: IntFilter<'Member'> | number;
     membersInvited?: IntFilter<'Member'> | number;
     completedWelcome?: BoolFilter<'Member'> | boolean;
   };
@@ -15451,8 +15716,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUpdateManyWithoutMemberNestedInput;
@@ -15472,8 +15738,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUncheckedUpdateManyWithoutMemberNestedInput;
@@ -15590,8 +15857,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteCreateNestedManyWithoutMemberInput;
@@ -15611,8 +15879,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteUncheckedCreateNestedManyWithoutMemberInput;
@@ -15712,8 +15981,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUpdateManyWithoutMemberNestedInput;
@@ -15733,8 +16003,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUncheckedUpdateManyWithoutMemberNestedInput;
@@ -15752,6 +16023,7 @@ export namespace Prisma {
     testCases?: TestCaseCreateNestedManyWithoutSubmissionInput;
     team: TeamCreateNestedOneWithoutSubmissionInput;
     winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
+    BountyWinner?: BountyWinnerCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateWithoutBountyInput = {
@@ -15762,6 +16034,7 @@ export namespace Prisma {
     teamId: string;
     testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
     winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
+    BountyWinner?: BountyWinnerUncheckedCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionCreateOrConnectWithoutBountyInput = {
@@ -15785,6 +16058,7 @@ export namespace Prisma {
     testCases?: TestCaseCreateNestedManyWithoutSubmissionInput;
     bounty: BountyCreateNestedOneWithoutSubmissionsInput;
     team: TeamCreateNestedOneWithoutSubmissionInput;
+    BountyWinner?: BountyWinnerCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateWithoutWinningSubmissionInput = {
@@ -15795,6 +16069,7 @@ export namespace Prisma {
     bountyId: string;
     teamId: string;
     testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
+    BountyWinner?: BountyWinnerUncheckedCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionCreateOrConnectWithoutWinningSubmissionInput = {
@@ -15815,8 +16090,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteCreateNestedManyWithoutMemberInput;
@@ -15836,8 +16112,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteUncheckedCreateNestedManyWithoutMemberInput;
@@ -15859,6 +16136,7 @@ export namespace Prisma {
     id?: string;
     title: string;
     description: string;
+    createdAt?: Date | string;
     email: string;
     phone: string;
     bountyIDs?: ProjectCreatebountyIDsInput | string[];
@@ -15871,6 +16149,7 @@ export namespace Prisma {
     id?: string;
     title: string;
     description: string;
+    createdAt?: Date | string;
     email: string;
     phone: string;
     bountyIDs?: ProjectCreatebountyIDsInput | string[];
@@ -15890,9 +16169,9 @@ export namespace Prisma {
   export type BountyWinnerCreateWithoutBountyInput = {
     id?: string;
     confirmed?: boolean;
-    submissionId: string;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
+    submission?: SubmissionCreateNestedOneWithoutBountyWinnerInput;
     member: MemberCreateNestedOneWithoutBountyWinnerInput;
   };
 
@@ -15976,6 +16255,7 @@ export namespace Prisma {
     testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput;
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateWithoutWinningSubmissionInput = {
@@ -15986,6 +16266,7 @@ export namespace Prisma {
     bountyId?: StringFieldUpdateOperationsInput | string;
     teamId?: StringFieldUpdateOperationsInput | string;
     testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUncheckedUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type MemberUpsertWithoutBountiesInput = {
@@ -16018,8 +16299,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUpdateManyWithoutMemberNestedInput;
@@ -16039,8 +16321,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUncheckedUpdateManyWithoutMemberNestedInput;
@@ -16074,6 +16357,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -16086,6 +16370,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -16218,6 +16503,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     members?: MemberCreateNestedManyWithoutTeamsInput;
     creator: MemberCreateNestedOneWithoutCreatedTeamsInput;
@@ -16227,6 +16513,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     creatorAddress: string;
     members?: MemberUncheckedCreateNestedManyWithoutTeamsInput;
@@ -16289,6 +16576,32 @@ export namespace Prisma {
     create: XOR<
       BountyCreateWithoutWinningSubmissionInput,
       BountyUncheckedCreateWithoutWinningSubmissionInput
+    >;
+  };
+
+  export type BountyWinnerCreateWithoutSubmissionInput = {
+    id?: string;
+    confirmed?: boolean;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+    bounty: BountyCreateNestedOneWithoutBountyWinnerInput;
+    member: MemberCreateNestedOneWithoutBountyWinnerInput;
+  };
+
+  export type BountyWinnerUncheckedCreateWithoutSubmissionInput = {
+    id?: string;
+    bountyId: string;
+    confirmed?: boolean;
+    memberAddress: string;
+    approvedByFounder?: boolean;
+    approvedByManager?: boolean;
+  };
+
+  export type BountyWinnerCreateOrConnectWithoutSubmissionInput = {
+    where: BountyWinnerWhereUniqueInput;
+    create: XOR<
+      BountyWinnerCreateWithoutSubmissionInput,
+      BountyWinnerUncheckedCreateWithoutSubmissionInput
     >;
   };
 
@@ -16421,6 +16734,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     members?: MemberUpdateManyWithoutTeamsNestedInput;
     creator?: MemberUpdateOneRequiredWithoutCreatedTeamsNestedInput;
@@ -16430,6 +16744,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     creatorAddress?: StringFieldUpdateOperationsInput | string;
     members?: MemberUncheckedUpdateManyWithoutTeamsNestedInput;
@@ -16499,6 +16814,44 @@ export namespace Prisma {
     BountyWinner?: BountyWinnerUncheckedUpdateManyWithoutBountyNestedInput;
   };
 
+  export type BountyWinnerUpsertWithoutSubmissionInput = {
+    update: XOR<
+      BountyWinnerUpdateWithoutSubmissionInput,
+      BountyWinnerUncheckedUpdateWithoutSubmissionInput
+    >;
+    create: XOR<
+      BountyWinnerCreateWithoutSubmissionInput,
+      BountyWinnerUncheckedCreateWithoutSubmissionInput
+    >;
+    where?: BountyWinnerWhereInput;
+  };
+
+  export type BountyWinnerUpdateToOneWithWhereWithoutSubmissionInput = {
+    where?: BountyWinnerWhereInput;
+    data: XOR<
+      BountyWinnerUpdateWithoutSubmissionInput,
+      BountyWinnerUncheckedUpdateWithoutSubmissionInput
+    >;
+  };
+
+  export type BountyWinnerUpdateWithoutSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    bounty?: BountyUpdateOneRequiredWithoutBountyWinnerNestedInput;
+    member?: MemberUpdateOneRequiredWithoutBountyWinnerNestedInput;
+  };
+
+  export type BountyWinnerUncheckedUpdateWithoutSubmissionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    bountyId?: StringFieldUpdateOperationsInput | string;
+    confirmed?: BoolFieldUpdateOperationsInput | boolean;
+    memberAddress?: StringFieldUpdateOperationsInput | string;
+    approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
+    approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+  };
+
   export type SubmissionCreateWithoutTestCasesInput = {
     id?: string;
     videoDemo: string;
@@ -16507,6 +16860,7 @@ export namespace Prisma {
     bounty: BountyCreateNestedOneWithoutSubmissionsInput;
     team: TeamCreateNestedOneWithoutSubmissionInput;
     winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
+    BountyWinner?: BountyWinnerCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionUncheckedCreateWithoutTestCasesInput = {
@@ -16517,6 +16871,7 @@ export namespace Prisma {
     bountyId: string;
     teamId: string;
     winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
+    BountyWinner?: BountyWinnerUncheckedCreateNestedOneWithoutSubmissionInput;
   };
 
   export type SubmissionCreateOrConnectWithoutTestCasesInput = {
@@ -16555,6 +16910,7 @@ export namespace Prisma {
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
     winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateWithoutTestCasesInput = {
@@ -16565,6 +16921,7 @@ export namespace Prisma {
     bountyId?: StringFieldUpdateOperationsInput | string;
     teamId?: StringFieldUpdateOperationsInput | string;
     winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUncheckedUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type TeamInviteCreateWithoutMemberInput = {
@@ -16657,6 +17014,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     members?: MemberCreateNestedManyWithoutTeamsInput;
     Submission?: SubmissionCreateNestedManyWithoutTeamInput;
@@ -16666,6 +17024,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     members?: MemberUncheckedCreateNestedManyWithoutTeamsInput;
     Submission?: SubmissionUncheckedCreateNestedManyWithoutTeamInput;
@@ -16688,6 +17047,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     creator: MemberCreateNestedOneWithoutCreatedTeamsInput;
     Submission?: SubmissionCreateNestedManyWithoutTeamInput;
@@ -16697,6 +17057,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
     creatorAddress: string;
     Submission?: SubmissionUncheckedCreateNestedManyWithoutTeamInput;
@@ -16714,6 +17075,7 @@ export namespace Prisma {
     id?: string;
     title: string;
     description: string;
+    createdAt?: Date | string;
     email: string;
     phone: string;
     bountyIDs?: ProjectCreatebountyIDsInput | string[];
@@ -16726,6 +17088,7 @@ export namespace Prisma {
     id?: string;
     title: string;
     description: string;
+    createdAt?: Date | string;
     email: string;
     phone: string;
     bountyIDs?: ProjectCreatebountyIDsInput | string[];
@@ -16750,10 +17113,10 @@ export namespace Prisma {
   export type BountyWinnerCreateWithoutMemberInput = {
     id?: string;
     confirmed?: boolean;
-    submissionId: string;
     approvedByFounder?: boolean;
     approvedByManager?: boolean;
     bounty: BountyCreateNestedOneWithoutBountyWinnerInput;
+    submission?: SubmissionCreateNestedOneWithoutBountyWinnerInput;
   };
 
   export type BountyWinnerUncheckedCreateWithoutMemberInput = {
@@ -16883,6 +17246,7 @@ export namespace Prisma {
     id?: StringFilter<'Team'> | string;
     name?: StringFilter<'Team'> | string;
     description?: StringFilter<'Team'> | string;
+    createdAt?: DateTimeFilter<'Team'> | Date | string;
     link?: StringFilter<'Team'> | string;
     creatorAddress?: StringFilter<'Team'> | string;
   };
@@ -16950,6 +17314,7 @@ export namespace Prisma {
     id?: StringFilter<'Project'> | string;
     title?: StringFilter<'Project'> | string;
     description?: StringFilter<'Project'> | string;
+    createdAt?: DateTimeFilter<'Project'> | Date | string;
     email?: StringFilter<'Project'> | string;
     phone?: StringFilter<'Project'> | string;
     bountyIDs?: StringNullableListFilter<'Project'>;
@@ -17038,6 +17403,36 @@ export namespace Prisma {
     >;
   };
 
+  export type SubmissionCreateWithoutBountyWinnerInput = {
+    id?: string;
+    videoDemo: string;
+    repo: string;
+    createdAt?: Date | string;
+    testCases?: TestCaseCreateNestedManyWithoutSubmissionInput;
+    bounty: BountyCreateNestedOneWithoutSubmissionsInput;
+    team: TeamCreateNestedOneWithoutSubmissionInput;
+    winningSubmission?: BountyCreateNestedOneWithoutWinningSubmissionInput;
+  };
+
+  export type SubmissionUncheckedCreateWithoutBountyWinnerInput = {
+    id?: string;
+    videoDemo: string;
+    repo: string;
+    createdAt?: Date | string;
+    bountyId: string;
+    teamId: string;
+    testCases?: TestCaseUncheckedCreateNestedManyWithoutSubmissionInput;
+    winningSubmission?: BountyUncheckedCreateNestedOneWithoutWinningSubmissionInput;
+  };
+
+  export type SubmissionCreateOrConnectWithoutBountyWinnerInput = {
+    where: SubmissionWhereUniqueInput;
+    create: XOR<
+      SubmissionCreateWithoutBountyWinnerInput,
+      SubmissionUncheckedCreateWithoutBountyWinnerInput
+    >;
+  };
+
   export type MemberCreateWithoutBountyWinnerInput = {
     username: string;
     firstName: string;
@@ -17048,8 +17443,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteCreateNestedManyWithoutMemberInput;
@@ -17069,8 +17465,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     teamInvites?: TeamInviteUncheckedCreateNestedManyWithoutMemberInput;
@@ -17155,6 +17552,48 @@ export namespace Prisma {
     submissions?: SubmissionUncheckedUpdateManyWithoutBountyNestedInput;
   };
 
+  export type SubmissionUpsertWithoutBountyWinnerInput = {
+    update: XOR<
+      SubmissionUpdateWithoutBountyWinnerInput,
+      SubmissionUncheckedUpdateWithoutBountyWinnerInput
+    >;
+    create: XOR<
+      SubmissionCreateWithoutBountyWinnerInput,
+      SubmissionUncheckedCreateWithoutBountyWinnerInput
+    >;
+    where?: SubmissionWhereInput;
+  };
+
+  export type SubmissionUpdateToOneWithWhereWithoutBountyWinnerInput = {
+    where?: SubmissionWhereInput;
+    data: XOR<
+      SubmissionUpdateWithoutBountyWinnerInput,
+      SubmissionUncheckedUpdateWithoutBountyWinnerInput
+    >;
+  };
+
+  export type SubmissionUpdateWithoutBountyWinnerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    videoDemo?: StringFieldUpdateOperationsInput | string;
+    repo?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput;
+    bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
+    team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
+    winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
+  };
+
+  export type SubmissionUncheckedUpdateWithoutBountyWinnerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    videoDemo?: StringFieldUpdateOperationsInput | string;
+    repo?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    bountyId?: StringFieldUpdateOperationsInput | string;
+    teamId?: StringFieldUpdateOperationsInput | string;
+    testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
+    winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
+  };
+
   export type MemberUpsertWithoutBountyWinnerInput = {
     update: XOR<
       MemberUpdateWithoutBountyWinnerInput,
@@ -17185,8 +17624,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUpdateManyWithoutMemberNestedInput;
@@ -17206,8 +17646,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUncheckedUpdateManyWithoutMemberNestedInput;
@@ -17227,8 +17668,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     bounties?: BountyCreateNestedManyWithoutFounderInput;
@@ -17248,8 +17690,9 @@ export namespace Prisma {
     level?: number;
     roles?: MemberCreaterolesInput | $Enums.RoleType[];
     playingRole: $Enums.RoleType;
+    isFounder?: boolean;
     bountiesWon: number;
-    teamsJoined?: MemberCreateteamsJoinedInput | string[];
+    teamsJoined: number;
     membersInvited: number;
     completedWelcome: boolean;
     bounties?: BountyUncheckedCreateNestedManyWithoutFounderInput;
@@ -17297,8 +17740,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     bounties?: BountyUpdateManyWithoutFounderNestedInput;
@@ -17318,8 +17762,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     bounties?: BountyUncheckedUpdateManyWithoutFounderNestedInput;
@@ -17347,8 +17792,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUpdateManyWithoutMemberNestedInput;
@@ -17368,8 +17814,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
     teamInvites?: TeamInviteUncheckedUpdateManyWithoutMemberNestedInput;
@@ -17389,8 +17836,9 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number;
     roles?: MemberUpdaterolesInput | $Enums.RoleType[];
     playingRole?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType;
+    isFounder?: BoolFieldUpdateOperationsInput | boolean;
     bountiesWon?: IntFieldUpdateOperationsInput | number;
-    teamsJoined?: MemberUpdateteamsJoinedInput | string[];
+    teamsJoined?: IntFieldUpdateOperationsInput | number;
     membersInvited?: IntFieldUpdateOperationsInput | number;
     completedWelcome?: BoolFieldUpdateOperationsInput | boolean;
   };
@@ -17403,6 +17851,7 @@ export namespace Prisma {
     testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput;
     bounty?: BountyUpdateOneRequiredWithoutSubmissionsNestedInput;
     winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateWithoutTeamInput = {
@@ -17413,6 +17862,7 @@ export namespace Prisma {
     bountyId?: StringFieldUpdateOperationsInput | string;
     testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
     winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUncheckedUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateManyWithoutTeamInput = {
@@ -17538,6 +17988,7 @@ export namespace Prisma {
     testCases?: TestCaseUpdateManyWithoutSubmissionNestedInput;
     team?: TeamUpdateOneRequiredWithoutSubmissionNestedInput;
     winningSubmission?: BountyUpdateOneWithoutWinningSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateWithoutBountyInput = {
@@ -17548,6 +17999,7 @@ export namespace Prisma {
     teamId?: StringFieldUpdateOperationsInput | string;
     testCases?: TestCaseUncheckedUpdateManyWithoutSubmissionNestedInput;
     winningSubmission?: BountyUncheckedUpdateOneWithoutWinningSubmissionNestedInput;
+    BountyWinner?: BountyWinnerUncheckedUpdateOneWithoutSubmissionNestedInput;
   };
 
   export type SubmissionUncheckedUpdateManyWithoutBountyInput = {
@@ -17561,9 +18013,9 @@ export namespace Prisma {
   export type BountyWinnerUpdateWithoutBountyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     confirmed?: BoolFieldUpdateOperationsInput | boolean;
-    submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
+    submission?: SubmissionUpdateOneWithoutBountyWinnerNestedInput;
     member?: MemberUpdateOneRequiredWithoutBountyWinnerNestedInput;
   };
 
@@ -17641,6 +18093,7 @@ export namespace Prisma {
     id?: string;
     name: string;
     description: string;
+    createdAt?: Date | string;
     link: string;
   };
 
@@ -17648,6 +18101,7 @@ export namespace Prisma {
     id?: string;
     title: string;
     description: string;
+    createdAt?: Date | string;
     email: string;
     phone: string;
     bountyIDs?: ProjectCreatebountyIDsInput | string[];
@@ -17762,6 +18216,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     members?: MemberUpdateManyWithoutTeamsNestedInput;
     Submission?: SubmissionUpdateManyWithoutTeamNestedInput;
@@ -17771,6 +18226,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     members?: MemberUncheckedUpdateManyWithoutTeamsNestedInput;
     Submission?: SubmissionUncheckedUpdateManyWithoutTeamNestedInput;
@@ -17780,6 +18236,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -17787,6 +18244,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     creator?: MemberUpdateOneRequiredWithoutCreatedTeamsNestedInput;
     Submission?: SubmissionUpdateManyWithoutTeamNestedInput;
@@ -17796,6 +18254,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     creatorAddress?: StringFieldUpdateOperationsInput | string;
     Submission?: SubmissionUncheckedUpdateManyWithoutTeamNestedInput;
@@ -17805,6 +18264,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     link?: StringFieldUpdateOperationsInput | string;
     creatorAddress?: StringFieldUpdateOperationsInput | string;
   };
@@ -17813,6 +18273,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -17825,6 +18286,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -17837,6 +18299,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: StringFieldUpdateOperationsInput | string;
     bountyIDs?: ProjectUpdatebountyIDsInput | string[];
@@ -17847,10 +18310,10 @@ export namespace Prisma {
   export type BountyWinnerUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string;
     confirmed?: BoolFieldUpdateOperationsInput | boolean;
-    submissionId?: StringFieldUpdateOperationsInput | string;
     approvedByFounder?: BoolFieldUpdateOperationsInput | boolean;
     approvedByManager?: BoolFieldUpdateOperationsInput | boolean;
     bounty?: BountyUpdateOneRequiredWithoutBountyWinnerNestedInput;
+    submission?: SubmissionUpdateOneWithoutBountyWinnerNestedInput;
   };
 
   export type BountyWinnerUncheckedUpdateWithoutMemberInput = {
