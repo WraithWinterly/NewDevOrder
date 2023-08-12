@@ -140,8 +140,8 @@ function ProfileCard({
       </View>
 
       <Text>
-        {profile.bountiesWon} bounties won • {profile.teamsJoined.length} teams
-        joined • {profile.membersInvited} members invited
+        {profile.bountiesWon} bounties won • {profile.teamsJoined} teams joined
+        • {profile.membersInvited} members invited
       </Text>
       {isMyProfile && (
         <View style={{width: '100%'}}>
