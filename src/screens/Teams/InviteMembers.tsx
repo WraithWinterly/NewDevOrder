@@ -58,6 +58,13 @@ export default function InviteMembers() {
     mutate: mutateInviteToTeam,
   } = useMutation(getServerEndpoint(Endpoints.INVITE_TO_TEAM));
 
+  const canInviteUser =
+    !!currentUser &&
+    !newInvitesMembers.includes(currentUser) &&
+    selectedTeam?.members?.filter(
+      member => member.walletAddress === currentUser.walletAddress,
+    ).length === 0;
+  console.log(canInviteUser);
   useEffect(() => {
     fetchInvitedMembers();
   }, []);
@@ -154,11 +161,11 @@ export default function InviteMembers() {
       )}
       <View style={{height: 12}} />
       <StyledButton
-        enabled={currentUser != null}
+        enabled={currentUser != null && canInviteUser}
         onPress={inviteUser}
         loading={loadingInviteToTeam}
         error={!!errorInviteToTeam}>
-        Invite User
+        Invite Member
       </StyledButton>
       <StyledText style={{marginTop: 12}}>Pending Invites</StyledText>
       <View style={{height: 12}} />
