@@ -64,7 +64,7 @@ export default function Profile({route, navigation}: Props) {
     } else {
       fetchMyProfile(wallet?.wallet?.publicKey.toBase58().toString());
     }
-  }, []);
+  }, [isMyProfile]);
 
   return (
     <Layout>

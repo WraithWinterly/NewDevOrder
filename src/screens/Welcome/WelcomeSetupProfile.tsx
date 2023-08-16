@@ -23,7 +23,6 @@ export default function WelcomeSetupProfile() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
-  const [noUserAccount, setNoUserAccount] = useState(false);
 
   const {data, loading, error, query} = useQuery(
     getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
@@ -36,15 +35,15 @@ export default function WelcomeSetupProfile() {
     mutate: mutateCreateTeam,
   } = useMutation(getServerEndpoint(Endpoints.CREATE_PROFILE));
 
-  useEffect(() => {
-    query().then(data => {
-      if (data) {
-        setNoUserAccount(false);
-      } else {
-        setNoUserAccount(true);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   query().then(data => {
+  //     if (data) {
+  //       setNoUserAccount(false);
+  //     } else {
+  //       setNoUserAccount(true);
+  //     }
+  //   });
+  // }, []);
 
   async function onSubmit() {
     setErrors([]);
@@ -88,7 +87,7 @@ export default function WelcomeSetupProfile() {
   return (
     <Layout>
       <ScrollView>
-        {noUserAccount && (
+        {true && (
           <View
             style={{
               flexDirection: 'column',

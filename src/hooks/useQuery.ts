@@ -2,6 +2,7 @@
 
 import {useState, useEffect} from 'react';
 import {LogBox} from 'react-native';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function useQuery(url?: string | null) {
   const [data, setData] = useState<any>(null);
@@ -21,6 +22,7 @@ export default function useQuery(url?: string | null) {
       const response = await fetch(overrideUrl ? overrideUrl : url!, {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${globalThis.authToken}`,
         },
         method: 'GET',
       });

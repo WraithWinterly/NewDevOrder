@@ -90,9 +90,7 @@ export default function StartTestCases({route, navigation}: Props) {
   useEffect(() => {
     if (!!submissionID && !!walletAddress) {
       queryTestCases(
-        `${getServerEndpoint(
-          Endpoints.GET_TEST_CASES,
-        )}/${submissionID},${walletAddress}`,
+        `${getServerEndpoint(Endpoints.GET_TEST_CASES)}/${submissionID}`,
       );
     } else {
     }

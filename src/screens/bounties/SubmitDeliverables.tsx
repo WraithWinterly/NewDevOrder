@@ -54,7 +54,7 @@ export default function SubmitDeliverables() {
       query(
         `${getServerEndpoint(Endpoints.GET_SUBMISSION)}/${selectedTeam.id},${
           selectedFullBounty.id
-        },${walletAddress}`,
+        }`,
       ).then(data => {
         if (data) {
           setLinkToCode(data?.repo);

@@ -5,8 +5,13 @@ import React, {
   useContext,
   ReactNode,
   useCallback,
+  Dispatch,
+  SetStateAction,
 } from 'react';
-import {transact} from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
+import {
+  Web3MobileWallet,
+  transact,
+} from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
 import {
   AuthorizationResult,
   AuthorizeAPI,
@@ -20,6 +25,8 @@ import {
 } from '@solana/web3.js';
 import {useConnection} from './ConnectionProvider';
 import {Account, useAuthorization} from './SolAuthorizationProvider';
+import useMutation from 'src/hooks/usePost';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 interface AppIdentity {
   name: string;
@@ -32,17 +39,19 @@ interface SolanaContextType {
   balance: string | null;
   isConnected: boolean;
   initializeWallet: () => Promise<PublicKey | null>;
+  signMessage: (nonce: string) => Promise<Uint8Array[] | null>;
 }
 
 const SolanaContext = createContext<SolanaContextType | undefined>(undefined);
 
 export function SolanaProvider({children}: {children: ReactNode}) {
-  const [isConnected, setIsConnected] = useState(false);
   const {authorizeSession, selectedAccount: wallet} = useAuthorization();
-  const [authorizationInProgress, setAuthorizationInProgress] = useState(false);
 
   const {connection} = useConnection();
   const {selectedAccount} = useAuthorization();
+
+  const [isConnected, setIsConnected] = useState(false);
+  const [authorizationInProgress, setAuthorizationInProgress] = useState(false);
   const [balance, setBalance] = useState<string | null>(null);
 
   function convertLamportsToSOL(lamports: number) {
@@ -61,6 +70,31 @@ export function SolanaProvider({children}: {children: ReactNode}) {
     },
     [connection],
   );
+
+  async function signMessage(nonce: string): Promise<Uint8Array[] | null> {
+    const message = `Signing this message will prove your identity. Nonce: ${nonce}`;
+    console.log(message);
+    const messageBuffer = new Uint8Array(
+      message.split('').map(c => c.charCodeAt(0)),
+    );
+    let signedMessages: Uint8Array | null = null;
+    try {
+      await transact(async (ins_wallet: Web3MobileWallet) => {
+        // First, request for authorization from the wallet.
+        const authorizeData = await authorizeSession(ins_wallet);
+
+        // @ts-expect-error
+        signedMessages = await ins_wallet.signMessages({
+          addresses: [authorizeData.address],
+          payloads: [messageBuffer],
+        });
+      });
+      return signedMessages;
+    } catch (error) {
+      console.error('Error:', error);
+      return null;
+    }
+  }
 
   useEffect(() => {
     if (!selectedAccount) {
@@ -90,6 +124,7 @@ export function SolanaProvider({children}: {children: ReactNode}) {
   const contextValue: SolanaContextType = {
     wallet,
     balance,
+    signMessage,
     isConnected,
     initializeWallet,
   };

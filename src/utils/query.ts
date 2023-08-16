@@ -8,6 +8,7 @@ export default async function query(url: string) {
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
       },
       method: 'GET',
     });

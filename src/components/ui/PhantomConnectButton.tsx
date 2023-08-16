@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View, Text, Linking} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import PhantomIcon from '../icons/PhantomIcon';
@@ -9,38 +9,89 @@ import {useNavigation} from '@react-navigation/native';
 import useWalletStore from 'src/stores/walletStore';
 import useMemberStore from 'src/stores/membersStore';
 import {PublicKey} from '@solana/web3.js';
+import useMutation from 'src/hooks/usePost';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 export default function PhantomConnectButton({
   onSuccess,
 }: {
   onSuccess: (wallet: string) => void;
 }) {
-  const solana = useSolanaContext();
   const navigator = useNavigation<StackNavigationProp<StackParamList>>();
+  const solana = useSolanaContext();
 
   const setWalletConnectError = useWalletStore(
     state => state.setWalletConnectError,
   );
-
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
+  // const {setAuthToken, setRefreshToken} = solana;
+  const walletAddress = solana.wallet?.publicKey.toBase58().toString();
 
-  function onWalletConnectComplete(publicKey: PublicKey | null) {
+  const {data, loading, error, mutate} = useMutation(
+    getServerEndpoint(Endpoints.AUTHORIZE),
+  );
+  const {
+    data: dataRequestNonce,
+    loading: loadingRequestNonce,
+    error: errorRequestNonce,
+    mutate: mutateRequestNonce,
+  } = useMutation(getServerEndpoint(Endpoints.REQUEST_NONCE));
+
+  const [message, setMessage] = useState<Uint8Array[] | null>();
+
+  useEffect(() => {
+    async function run() {
+      if (!!message && !!walletAddress) {
+        console.log(walletAddress);
+        const msg = new Array<number>();
+        message[0].forEach(byte => {
+          msg.push(Number(byte));
+        });
+
+        const data = await mutate({
+          walletAddress: walletAddress,
+          signedMessage: msg,
+        });
+        if (data && data.accessToken && data.refreshToken) {
+          // setAuthToken(data.accessToken);
+          globalThis.authToken = data.accessToken;
+          // setRefreshToken(data.refreshToken);
+          onSuccess(walletAddress);
+        } else {
+          console.log(`No Data result: ${data}`);
+        }
+      } else {
+        console.log(`Missing address message, ${walletAddress} ${message}`);
+      }
+    }
+    run();
+  }, [message, walletAddress]);
+
+  async function onWalletConnectComplete(publicKey: PublicKey | null) {
     if (!publicKey) {
       navigator.navigate('WelcomeWalletFailed');
       setWalletConnectError('Wallet address not found');
       return;
     }
-    // Check Solana Token
-    const hasMemberShipToken = true;
-    if (hasMemberShipToken) {
-      onSuccess(publicKey.toBase58().toString());
-    } else {
-      navigator.navigate('WelcomeNoMembershipToken');
+    const data = await mutateRequestNonce({
+      walletAddress: publicKey.toBase58().toString(),
+    });
+
+    if (data) {
+      const message = await solana.signMessage(data.nonce);
+      setMessage(message);
     }
-    // Fetch user profile
-    try {
-      fetchMyProfile(publicKey.toBase58().toString());
-    } catch {}
+    // // Check Solana Token
+    // const hasMemberShipToken = true;
+    // if (hasMemberShipToken) {
+    //   onSuccess(publicKey.toBase58().toString());
+    // } else {
+    //   navigator.navigate('WelcomeNoMembershipToken');
+    // }
+    // // Fetch user profile
+    // try {
+    //   fetchMyProfile(publicKey.toBase58().toString());
+    // } catch {}
   }
 
   return (

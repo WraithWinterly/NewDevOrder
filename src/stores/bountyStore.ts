@@ -6,7 +6,7 @@ import {
   Submission,
   Team,
 } from 'prisma/generated';
-import {CreateBountyData, CreateBountyPostData} from 'src/sharedTypes';
+import {CreateBountyData} from 'src/sharedTypes';
 import query from 'src/utils/query';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';

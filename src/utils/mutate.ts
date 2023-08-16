@@ -8,6 +8,7 @@ export default async function mutate(url: string, body: any) {
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
       },
       method: 'POST',
       body: JSON.stringify(body),

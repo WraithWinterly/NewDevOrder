@@ -16,6 +16,7 @@ export default function useMutation(url: string) {
       const response = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${globalThis.authToken}`,
         },
         method: 'POST',
         body: JSON.stringify(body),
