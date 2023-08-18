@@ -20,7 +20,7 @@ import HeaderRight from './HeaderRight';
 
 import useMemberStore from 'src/stores/membersStore';
 import useBountyStore from 'src/stores/bountyStore';
-import {RoleType} from 'prisma/generated';
+import {RoleType} from 'src/sharedTypes';
 
 export type MainTabsParams = {
   Home: undefined;

@@ -1,6 +1,6 @@
-import {Bounty, Project} from 'prisma/generated';
 import StyledText from './styled/StyledText';
 import {Text} from 'react-native';
+import {Bounty, Project} from 'src/sharedTypes';
 import {Colors} from 'src/styles/styles';
 
 export default function ProjBountyBreadcrumb({

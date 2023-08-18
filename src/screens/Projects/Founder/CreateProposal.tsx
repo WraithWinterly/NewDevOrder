@@ -48,7 +48,6 @@ export default function CreateProposal() {
       description,
       email,
       phone: countryCode + phone,
-      walletAddress: walletAddress || '',
     });
   }, [projectName, description, email, phone]);
 

@@ -2,8 +2,6 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Text, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
-import MemberBox from 'src/components/MemberBox';
-import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import useMutation from 'src/hooks/usePost';
@@ -36,7 +34,6 @@ export default function ConfirmAndPay() {
     }
     const body = {
       projectID: proj.id,
-      walletAddress: walletAddress,
     } as FounderConfirmPayPostData;
 
     const data = await mutate(body);

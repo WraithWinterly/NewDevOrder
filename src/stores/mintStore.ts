@@ -1,4 +1,4 @@
-import {RoleType} from 'prisma/generated';
+import {RoleType} from 'src/sharedTypes';
 import {create} from 'zustand';
 
 type MintStore = {

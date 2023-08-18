@@ -1,5 +1,4 @@
-import {Member, Team} from 'prisma/generated';
-import {CreateTeamPOSTData} from 'src/sharedTypes';
+import {CreateTeamPOSTData, Member, Team} from 'src/sharedTypes';
 import query from 'src/utils/query';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';

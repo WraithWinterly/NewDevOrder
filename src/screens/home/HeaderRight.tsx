@@ -57,7 +57,7 @@ export default function HeaderRight() {
         fetchBounties(),
         fetchTeams(),
         fetchProjects(),
-        fetchMyProfile(walletAddress),
+        fetchMyProfile(),
       ]);
       setSelectedTeam(undefined);
       setSelectedProject(undefined);

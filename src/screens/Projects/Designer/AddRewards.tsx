@@ -1,7 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {ProjectStage} from 'prisma/generated';
-import {Bounty} from 'prisma/generated';
 import React, {useId, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';

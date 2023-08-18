@@ -16,7 +16,7 @@ export default function WelcomeComplete() {
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 
   function onPress() {
-    fetchMyProfile(walletAddress);
+    fetchMyProfile();
     asyncStorage.setItem('hasCompletedWelcome', 'true').then(() => {
       navigation.reset({
         index: 0,

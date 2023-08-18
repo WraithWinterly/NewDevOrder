@@ -61,6 +61,7 @@ export default function Drafts() {
         <TouchableOpacity
           onPress={() => {
             setCreateBountyData(undefined);
+            //@ts-ignore ???
             navigation.navigate('CreateBounty');
           }}>
           <AddButtonIcon />

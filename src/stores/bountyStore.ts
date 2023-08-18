@@ -1,12 +1,13 @@
 import {
   Bounty,
   BountyWinner,
+  CreateBountyData,
   Member,
   Project,
   Submission,
   Team,
-} from 'prisma/generated';
-import {CreateBountyData} from 'src/sharedTypes';
+  TestCase,
+} from 'src/sharedTypes';
 import query from 'src/utils/query';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';

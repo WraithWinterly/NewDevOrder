@@ -19,17 +19,23 @@ import Bubble from 'src/components/ui/Bubble';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import useTeamsStore from 'src/stores/teamsStore';
 import useProjectsStore from 'src/stores/projectsStore';
-import {Bounty, Member, Project} from 'prisma/generated';
 import useQuery from 'src/hooks/useQuery';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useMutation from 'src/hooks/usePost';
-import {CreateBountyPostData, SetApproveBountyPostData} from 'src/sharedTypes';
+import {
+  Bounty,
+  BountyStage,
+  CreateBountyPostData,
+  Member,
+  Project,
+  RoleType,
+  SetApproveBountyPostData,
+  TestCase,
+} from 'src/sharedTypes';
 import useSolanaContext from 'src/web3/SolanaProvider';
 import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
-import {RoleType} from 'prisma/generated';
 import {DropdownSection} from 'src/components/ui/styled/StyledDropdown';
-import {BountyStage} from 'prisma/generated';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
@@ -72,9 +78,9 @@ export default function ViewBounty({route, navigation}: Props) {
     (Bounty & {project: Project; founder: Member}) | undefined
   >(undefined);
 
-  const isWinner = selectedBountyWinner?.bountyId === selectedBounty?.id;
+  const isWinner = selectedBountyWinner?.bountyID === selectedBounty?.id;
   const thisBountyWin = myBountyWins?.find(
-    win => win.bountyId === selectedBounty?.id,
+    win => win.bountyID === selectedBounty?.id,
   );
   const isValidator = route.params?.isValidator ?? false;
   const isDesignerCreation = route.params?.isDesignerCreation ?? false;
@@ -123,7 +129,6 @@ export default function ViewBounty({route, navigation}: Props) {
     const body: CreateBountyPostData = {
       bounty: createBountyData,
       draft: draft === true ? true : false,
-      walletAddress: walletAddress,
     };
     const data = await createBounty.mutate(body);
     if (data) {
@@ -166,10 +171,9 @@ export default function ViewBounty({route, navigation}: Props) {
 
     return {
       id: '0',
-      participantsTeamIDs: [],
       postDate: new Date(),
       reward: createBountyData.reward,
-      stage: 'Draft', // Assuming 'BountyStage' is an enum type for stage
+      stage: BountyStage.Draft,
       title: createBountyData.title,
       types: createBountyData.types, // Assuming 'BountyType' is an enum type for type
       founderAddress: project.founder.walletAddress,
@@ -178,21 +182,26 @@ export default function ViewBounty({route, navigation}: Props) {
       approvedByFounder: false,
       approvedByManager: false,
       approvedByValidator: false,
-      winningSubmissionId: '',
-      testCases: [],
       aboutProject: createBountyData.aboutProject,
-      submissions: [], // Assuming it's an empty array for now
       headerSections: createBountyData.headerSections,
       projectId: null, // Assuming it's null for now
+      participantsTeamIDs: [],
+      bountyWinnerIDs: [],
+      submissionIDs: [],
+      testCaseIDs: [],
+      projectID: '',
+      winningSubmissionID: '',
       project: {
         ...project,
       },
       founder: {
         ...project.founder,
       },
+      testCases: [],
     } as Bounty & {
       project: Project;
       founder: Member;
+      testCases: TestCase[];
     };
   }
 
@@ -209,7 +218,7 @@ export default function ViewBounty({route, navigation}: Props) {
       console.error('No playingRole');
       return;
     }
-    if (!bounty?.projectId) {
+    if (!bounty?.projectID) {
       console.error('No projectId');
       return;
     }
@@ -217,12 +226,11 @@ export default function ViewBounty({route, navigation}: Props) {
     const body: SetApproveBountyPostData = {
       approve: !didIApprove(bounty, playingRole),
       bountyID: bounty.id,
-      walletAddress: walletAddress,
     };
     const data = await setBountyApproval.mutate(body);
     if (data) {
       fetchBounties();
-      setSelectedProject(bounty.projectId);
+      setSelectedProject(bounty.projectID);
       setSelectedBounty(bounty.id);
     }
   }
@@ -274,7 +282,7 @@ export default function ViewBounty({route, navigation}: Props) {
                   navigation.navigate('StartTestCases', {
                     submissionID: selectedBounty?.submissions?.find(
                       submission =>
-                        submission.id === selectedBountyWinner?.submissionId,
+                        submission.id === selectedBountyWinner?.submissionID,
                     )!.id!,
                   });
                 }}>
@@ -291,7 +299,7 @@ export default function ViewBounty({route, navigation}: Props) {
           )}
           {isValidator || playingRole === RoleType.BountyValidator
             ? bounty?.stage === 'Active' &&
-              (bounty?.testCases.length === 0 ? (
+              (bounty?.testCaseIDs.length === 0 ? (
                 <StyledButton
                   type="normal2"
                   onPress={() => navigation.navigate('AddTestCases')}>

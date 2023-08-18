@@ -6,8 +6,8 @@ import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
-import {Member} from 'prisma/generated';
 import useSolanaContext from 'src/web3/SolanaProvider';
+import {Member} from 'src/sharedTypes';
 
 export default function MemberBox({
   member,

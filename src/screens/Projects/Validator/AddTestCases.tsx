@@ -64,7 +64,6 @@ export default function AddTestCases() {
     const body: SetTestCasesPostData = {
       bountyID: selectedBounty.id,
       testCases,
-      walletAddress,
     };
     const data = await addTestCases.mutate(body);
     if (data) {

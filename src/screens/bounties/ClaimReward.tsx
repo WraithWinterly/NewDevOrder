@@ -38,12 +38,11 @@ export default function ClaimReward() {
     }
     const body: ConfirmRewardPostData = {
       submissionWinnerID: selectedBountyWinner?.id,
-      walletAddress,
     };
     const data = await mutate(body);
     if (data) {
       setSelectedBounty(selectedBounty?.id);
-      fetchMyProfile(walletAddress);
+      fetchMyProfile();
 
       navigation.reset({
         index: 0,

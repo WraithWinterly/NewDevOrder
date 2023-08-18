@@ -1,4 +1,4 @@
-import {Bounty, RoleType} from 'prisma/generated';
+import {Bounty, RoleType} from 'src/sharedTypes';
 
 export function formatTimeAgo(date: Date) {
   const ensuredDate = new Date(date);
@@ -72,6 +72,7 @@ export function didIApprove(bounty: Bounty, playingRole: RoleType) {
 
 export default function addSpaceCase(str: string | undefined) {
   if (!str) return undefined;
+  if (typeof str != 'string') return undefined;
   str = str.replace(/([a-z])([A-Z])/g, '$1 $2') || '';
   return str;
 }

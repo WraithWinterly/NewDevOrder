@@ -1,8 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {ProjectStage} from 'prisma/generated';
-import {BountyType} from 'prisma/generated';
-import {Bounty} from 'prisma/generated';
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
@@ -13,6 +10,7 @@ import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
+import {BountyType} from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';

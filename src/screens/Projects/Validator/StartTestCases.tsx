@@ -1,6 +1,4 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RoleType} from 'prisma/generated';
-import {TestCase} from 'prisma/generated';
 import {useEffect, useId, useState} from 'react';
 import {Text, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
@@ -17,7 +15,9 @@ import Layout from 'src/layout/Layout';
 import {
   ApproveDisapproveBountyWinnerPostData,
   ApproveTestCasePostData,
+  RoleType,
   SelectWinningSubmissionPostData,
+  TestCase,
 } from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';
 import useMemberStore from 'src/stores/membersStore';
@@ -77,7 +77,7 @@ export default function StartTestCases({route, navigation}: Props) {
 
   const isWinner =
     !!selectedBountyWinner &&
-    selectedBountyWinner.submissionId === submissionID;
+    selectedBountyWinner.submissionID === submissionID;
 
   const isBountyValidator = playingRole === RoleType.BountyValidator;
 
@@ -116,7 +116,6 @@ export default function StartTestCases({route, navigation}: Props) {
     const body: ApproveTestCasePostData = {
       submissionID,
       testCases: optimisticTestCases,
-      walletAddress,
     };
 
     const data = await mutateSubmit(body);
@@ -146,7 +145,6 @@ export default function StartTestCases({route, navigation}: Props) {
     }
     const body: SelectWinningSubmissionPostData = {
       submissionID,
-      walletAddress,
     };
 
     const data = await mutateSelectWinner(body);
@@ -172,7 +170,6 @@ export default function StartTestCases({route, navigation}: Props) {
     const body: ApproveDisapproveBountyWinnerPostData = {
       submissionID,
       approve,
-      walletAddress,
     };
     const data = await mutateApproveDisapproveBountyWinner(body);
     if (data) {

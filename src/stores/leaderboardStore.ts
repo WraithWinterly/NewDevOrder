@@ -1,4 +1,4 @@
-import {Member} from 'prisma/generated';
+import {Member} from 'src/sharedTypes';
 import query from 'src/utils/query';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';

@@ -2,8 +2,7 @@ import {create} from 'zustand';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
-import {Bounty, Member, Project} from 'prisma/generated';
-import {CreateProjectPOSTData} from 'src/sharedTypes';
+import {Bounty, CreateProjectPOSTData, Member, Project} from 'src/sharedTypes';
 import query from 'src/utils/query';
 
 type ProjectsStore = {

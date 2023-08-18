@@ -1,10 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useId, useState} from 'react';
-import {ActivityIndicator, RefreshControl, Text, View} from 'react-native';
-import {FlatList} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
-import CheckIcon from 'src/components/icons/CheckIcon';
 import CheckIconAccent from 'src/components/icons/CheckIconAccent';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
@@ -56,7 +54,6 @@ export default function Inbox() {
     if (performingAction) return;
 
     const body: JoinTeamPOSTData = {
-      fromAddress: myProfile?.walletAddress,
       toTeamID: teamID,
     };
 
@@ -65,7 +62,7 @@ export default function Inbox() {
       navigation.navigate('TeamVar');
       // Refresh my profile (which will also refresh inbox)
       if (wallet.wallet?.publicKey.toBase58.toString()) {
-        fetchMyProfile(wallet.wallet?.publicKey.toBase58().toString());
+        fetchMyProfile();
         // refresh teams as well
         await fetchTeams();
       }
@@ -82,14 +79,13 @@ export default function Inbox() {
     }
 
     const body: JoinTeamPOSTData = {
-      fromAddress: myProfile?.walletAddress,
       toTeamID: teamID,
     };
 
     const data = await mutateDeny(body);
     if (data) {
       if (wallet.wallet?.publicKey.toBase58.toString()) {
-        fetchMyProfile(wallet.wallet?.publicKey.toBase58().toString());
+        fetchMyProfile();
         // refresh teams as well
         fetchTeams();
       }
@@ -153,7 +149,7 @@ export default function Inbox() {
                 <StyledText
                   style={{color: Colors.Primary}}
                   onPress={() => {
-                    setSelectedBounty(bountyWin.bountyId);
+                    setSelectedBounty(bountyWin.bountyID);
                     navigation.navigate('ViewBounty');
                   }}>
                   {bountyWin.submission.bounty.title}
@@ -168,7 +164,7 @@ export default function Inbox() {
                 <StyledButton
                   type="borderNoFill"
                   onPress={() => {
-                    setSelectedBounty(bountyWin.bountyId);
+                    setSelectedBounty(bountyWin.bountyID);
                     navigation.navigate('ViewBounty');
                   }}>
                   Claim reward
@@ -292,7 +288,7 @@ export default function Inbox() {
                   <Text> invited you to join their team, </Text>
                   <Text
                     onPress={() => {
-                      setTeam(item.toTeamId);
+                      setTeam(item.toTeamID);
                       navigation.navigate('TeamVar');
                     }}
                     style={{color: Colors.Primary}}>
@@ -314,7 +310,7 @@ export default function Inbox() {
                   loading={loadingJoin}
                   enabled={!performingAction}
                   error={!!errorJoin}
-                  onPress={() => joinInvite(item.toTeamId)}>
+                  onPress={() => joinInvite(item.toTeamID)}>
                   <Text>Join Team</Text>
                 </StyledButton>
                 <StyledButton
@@ -322,7 +318,7 @@ export default function Inbox() {
                   loading={loadingDeny}
                   enabled={!performingAction}
                   error={!!errorDeny}
-                  onPress={() => denyInvite(item.toTeamId)}>
+                  onPress={() => denyInvite(item.toTeamID)}>
                   <Text style={{color: Colors.Red[300], fontWeight: '500'}}>
                     Deny Invite
                   </Text>

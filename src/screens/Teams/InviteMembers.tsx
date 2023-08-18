@@ -1,4 +1,3 @@
-import {Member, TeamInvite} from 'prisma/generated';
 import {useEffect, useId, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native';
@@ -10,7 +9,7 @@ import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import useMutation from 'src/hooks/usePost';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
-import {InviteToTeamPOSTData} from 'src/sharedTypes';
+import {InviteToTeamPOSTData, Member, TeamInvite} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
 
 import useTeamsStore from 'src/stores/teamsStore';
@@ -124,7 +123,6 @@ export default function InviteMembers() {
       return;
     }
     const body: InviteToTeamPOSTData = {
-      fromAddress: myProfile!.walletAddress,
       toAddress: currentUser!.walletAddress,
       toTeam: selectedTeam!.id,
     };

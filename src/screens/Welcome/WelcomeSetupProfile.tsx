@@ -75,7 +75,6 @@ export default function WelcomeSetupProfile() {
       firstName,
       lastName,
       email,
-      walletAddress: wallet!.publicKey!.toBase58().toString(),
     } as CreateProfilePOSTData;
 
     const data = await mutateCreateTeam(body);

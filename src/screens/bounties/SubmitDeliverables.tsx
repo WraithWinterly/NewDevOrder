@@ -89,7 +89,6 @@ export default function SubmitDeliverables() {
       repo: linkToCode,
       videoDemo: linkToVideoDemo,
       teamID: selectedTeam.id,
-      walletAddress,
     };
     const data = await mutateSubmit(body);
     if (data) {

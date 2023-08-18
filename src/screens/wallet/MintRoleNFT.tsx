@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RoleType} from 'prisma/generated';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import LongLinkNavigation from 'src/components/ui/LongLinkNavigation';
 
 import Layout from 'src/layout/Layout';
+import {RoleType} from 'src/sharedTypes';
 import useMintStore from 'src/stores/mintStore';
 
 export default function MintRoleNFT() {

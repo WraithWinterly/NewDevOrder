@@ -8,12 +8,10 @@ import useMemberStore from 'src/stores/membersStore';
 import useSolanaContext from 'src/web3/SolanaProvider';
 import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Member} from 'prisma/generated';
-import {ChangeRolePOSTData, UpdateRolesPostData} from 'src/sharedTypes';
+import {ChangeRolePOSTData, Member, RoleType} from 'src/sharedTypes';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
 import useMutation from 'src/hooks/usePost';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import {RoleType} from 'prisma/generated';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import addSpaceCase from 'src/utils/utils';
 
@@ -51,7 +49,11 @@ export default function Profile({route, navigation}: Props) {
 
   const viewProfileAddress = route.params?.viewProfileAddress ?? undefined;
 
-  const displayProfile = !!viewProfileAddress ? memberViewing : myProfile;
+  const displayProfile = !!viewProfileAddress
+    ? memberViewing
+    : !!myProfile
+    ? myProfile
+    : undefined;
 
   const isMyProfile =
     !viewProfileAddress ||
@@ -62,18 +64,14 @@ export default function Profile({route, navigation}: Props) {
       fetchProfile(viewProfileAddress.toString());
       return;
     } else {
-      fetchMyProfile(wallet?.wallet?.publicKey.toBase58().toString());
+      fetchMyProfile();
     }
   }, [isMyProfile]);
-
+  console.log(displayProfile);
   return (
     <Layout>
-      {!!displayProfile ? (
+      {!!displayProfile && (
         <ProfileCard profile={displayProfile} isMyProfile={isMyProfile} />
-      ) : (
-        displayProfile && (
-          <ProfileCard profile={displayProfile} isMyProfile={isMyProfile} />
-        )
       )}
     </Layout>
   );
@@ -114,12 +112,10 @@ function ProfileCard({
       console.error('No walletAddress');
       return;
     }
-    const body: UpdateRolesPostData = {
-      walletAddress,
-    };
-    const data = await mutateUpdateRoles(body);
+
+    const data = await mutateUpdateRoles({});
     if (data) {
-      fetchMyProfile(walletAddress);
+      fetchMyProfile();
     }
   }
 
@@ -173,11 +169,10 @@ function ProfileCard({
 
               const body = {
                 role: title,
-                walletAddress: walletAddress,
-              } as ChangeRolePOSTData;
+              } as unknown as ChangeRolePOSTData;
               const data = await mutateRole(body);
               if (data) {
-                fetchMyProfile(walletAddress);
+                fetchMyProfile();
               }
             }}
             // Add space between capital letters

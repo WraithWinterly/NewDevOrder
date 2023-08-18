@@ -44,7 +44,6 @@ export default function CreateTeam() {
       description,
       link: webLink,
       memberAddressesToInvite: [],
-      creatorAddress: '',
     });
   }, [name, description, webLink]);
 
@@ -63,7 +62,6 @@ export default function CreateTeam() {
     const walletAddress = wallet.wallet?.publicKey.toBase58().toString();
     const createData: CreateTeamPOSTData = {
       ...createTeamData!,
-      creatorAddress: walletAddress!,
     };
     const data = await mutate(createData);
 

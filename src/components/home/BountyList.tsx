@@ -16,8 +16,6 @@ import Bubble from '../ui/Bubble';
 import CheckIcon from '../icons/CheckIcon';
 import WarningIcon from '../icons/WarningIcon';
 
-import {Bounty, Project} from 'prisma/generated';
-import {BountyStage} from 'prisma/generated';
 import {
   Menu,
   MenuOption,
@@ -26,6 +24,7 @@ import {
 } from 'react-native-popup-menu';
 import DropdownIcon from '../icons/DropdownIcon';
 import useProjectsStore from 'src/stores/projectsStore';
+import {Bounty, BountyStage, Project} from 'src/sharedTypes';
 
 enum SortBy {
   Newest = 'Newest',
@@ -421,11 +420,11 @@ export default function BountyList({
                     aboutProject: bounty.aboutProject || '',
                     deadline: bounty.deadline,
                     description: bounty.description,
-                    // @ts-expect-error headerSection is JSON value
+
                     headerSections: bounty.headerSections,
                     id: bounty.id,
                     postDate: bounty.postDate,
-                    projectID: bounty.projectId || selectedProject?.id || '',
+                    projectID: bounty.projectID || selectedProject?.id || '',
                     reward: bounty.reward,
                     title: bounty.title,
                     types: bounty.types,

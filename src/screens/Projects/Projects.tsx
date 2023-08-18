@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Project, ProjectStage, RoleType} from 'prisma/generated';
+
 import {useEffect, useId} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native';
@@ -11,6 +11,7 @@ import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
+import {Project, ProjectStage, RoleType} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';

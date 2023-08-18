@@ -1,20 +1,20 @@
 import {Endpoints, getServerEndpoint} from '../utils/server';
 import {create} from 'zustand';
+
+import query from 'src/utils/query';
 import {
   Bounty,
   BountyWinner,
   Member,
-  RoleType,
   Submission,
   Team,
   TeamInvite,
-} from 'prisma/generated';
-import query from 'src/utils/query';
+} from 'src/sharedTypes';
 
 type MemberStore = {
   memberViewing: Member | undefined;
   fetchProfile: (walletAddress: string | undefined) => Promise<void>;
-  fetchMyProfile: (walletAddress: string | undefined) => Promise<void>;
+  fetchMyProfile: () => Promise<void>;
   myProfile:
     | (Member & {
         teamInvites: TeamInvite[] | undefined;
@@ -40,13 +40,11 @@ const useMemberStore = create<MemberStore>((set, get) => ({
       set(() => ({memberViewing: data}));
     }
   },
-  fetchMyProfile: async id => {
+  fetchMyProfile: async () => {
     set(() => ({myProfile: undefined}));
 
-    if (typeof id === 'undefined') return;
-
     const {result, error} = await query(
-      getServerEndpoint(Endpoints.GET_MY_PROFILE) + `/${id}`,
+      getServerEndpoint(Endpoints.GET_MY_PROFILE),
     );
 
     if (result) {
@@ -56,7 +54,7 @@ const useMemberStore = create<MemberStore>((set, get) => ({
       set(() => ({myProfile: data}));
 
       const {result: resultMyBountyWins, error: errorMyBountyWins} =
-        await query(getServerEndpoint(Endpoints.GET_MY_BOUNTY_WINS) + `/${id}`);
+        await query(getServerEndpoint(Endpoints.GET_MY_BOUNTY_WINS));
 
       if (!!resultMyBountyWins) {
         set(() => ({myBountyWins: resultMyBountyWins}));
