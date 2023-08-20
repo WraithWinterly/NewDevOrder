@@ -191,7 +191,7 @@ export interface Bounty {
   reward: number;
   founderAddress?: string;
   projectID?: string;
-  bountyWinnerIDs: string[];
+  bountyWinnerID: string[];
 }
 
 export interface Submission {
@@ -202,7 +202,7 @@ export interface Submission {
   testCaseIds: string[];
   bountyID: string;
   teamID: string;
-  winningSubmissionID?: Bounty;
+  winningSubmissionID?: string;
   bountyWinnerID?: string;
 }
 

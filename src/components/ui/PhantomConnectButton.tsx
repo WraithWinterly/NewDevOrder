@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View, Text, Linking} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  Linking,
+  ActivityIndicator,
+} from 'react-native';
 import {Colors} from 'src/styles/styles';
 import PhantomIcon from '../icons/PhantomIcon';
 import useSolanaContext from 'src/web3/SolanaProvider';
@@ -27,9 +33,13 @@ export default function PhantomConnectButton({
   // const {setAuthToken, setRefreshToken} = solana;
   const walletAddress = solana.wallet?.publicKey.toBase58().toString();
 
-  const {data, loading, error, mutate} = useMutation(
-    getServerEndpoint(Endpoints.AUTHORIZE),
-  );
+  const {
+    data: dataAuthorize,
+    loading: loadingAuthorize,
+    error: errorAuthorize,
+    mutate: mutateAuthorize,
+  } = useMutation(getServerEndpoint(Endpoints.AUTHORIZE));
+
   const {
     data: dataRequestNonce,
     loading: loadingRequestNonce,
@@ -39,33 +49,39 @@ export default function PhantomConnectButton({
 
   const [message, setMessage] = useState<Uint8Array[] | null>();
 
+  // Once you have a wallet address and signed message, this will request a JWT token and save it in the global variable for future query / mutation use.
   useEffect(() => {
-    async function run() {
-      if (!!message && !!walletAddress) {
-        console.log(walletAddress);
-        const msg = new Array<number>();
-        message[0].forEach(byte => {
-          msg.push(Number(byte));
-        });
+    async function receiveJWT() {
+      if (!message || !walletAddress) return;
 
-        const data = await mutate({
-          walletAddress: walletAddress,
-          signedMessage: msg,
-        });
-        if (data && data.accessToken && data.refreshToken) {
-          // setAuthToken(data.accessToken);
-          globalThis.authToken = data.accessToken;
-          // setRefreshToken(data.refreshToken);
-          onSuccess(walletAddress);
-        } else {
-          console.log(`No Data result: ${data}`);
-        }
+      console.log(walletAddress);
+      const msg = new Array<number>();
+      message[0].forEach(byte => {
+        msg.push(Number(byte));
+      });
+
+      const data = await mutateAuthorize({
+        walletAddress: walletAddress,
+        signedMessage: msg,
+      });
+
+      if (data && data.accessToken && data.refreshToken) {
+        globalThis.authToken = data.accessToken;
+        // setRefreshToken(data.refreshToken);
+        onSuccess(walletAddress);
       } else {
-        console.log(`Missing address message, ${walletAddress} ${message}`);
+        console.log(`No Data result: ${data}`);
       }
     }
-    run();
+    receiveJWT();
   }, [message, walletAddress]);
+
+  // Triggers the sign message prompt when appropriate. If this wasn't here, the part 2 sign message wallet prompt would not show up. This cannot be thrown into a function because the authorize token states need to be updated first.
+  useEffect(() => {
+    if (!!walletAddress && !message) {
+      walletStep2Sign();
+    }
+  }, [walletAddress, message]);
 
   async function onWalletConnectComplete(publicKey: PublicKey | null) {
     if (!publicKey) {
@@ -73,14 +89,7 @@ export default function PhantomConnectButton({
       setWalletConnectError('Wallet address not found');
       return;
     }
-    const data = await mutateRequestNonce({
-      walletAddress: publicKey.toBase58().toString(),
-    });
 
-    if (data) {
-      const message = await solana.signMessage(data.nonce);
-      setMessage(message);
-    }
     // // Check Solana Token
     // const hasMemberShipToken = true;
     // if (hasMemberShipToken) {
@@ -93,7 +102,27 @@ export default function PhantomConnectButton({
     //   fetchMyProfile(publicKey.toBase58().toString());
     // } catch {}
   }
+  async function walletStep2Sign() {
+    if (!walletAddress) return;
+    const data = await mutateRequestNonce({
+      walletAddress,
+    });
 
+    if (data) {
+      const message = await solana.signMessage(data.nonce);
+      if (!message) {
+        globalThis.authToken = '';
+        throw new Error('Did not authenticate with server.');
+      }
+      setMessage(message);
+      Promise.resolve();
+    }
+    globalThis.authToken = '';
+    throw new Error('Did not authenticate with server.');
+  }
+
+  const connecting =
+    loadingAuthorize || loadingRequestNonce || !!walletAddress || !!message;
   return (
     <TouchableOpacity
       style={{
@@ -102,10 +131,15 @@ export default function PhantomConnectButton({
         backgroundColor: Colors.Phantom,
       }}
       onPress={() => {
+        // if (connecting) return;
+        if (!!walletAddress) return;
         solana
           .initializeWallet()
           .then(publicKey => {
-            onWalletConnectComplete(publicKey);
+            onWalletConnectComplete(publicKey).catch(e => {
+              setWalletConnectError('Did not authenticate with server.');
+              navigator.navigate('WelcomeWalletFailed');
+            });
           })
           .catch(e => {
             const error = e as Error;
@@ -128,7 +162,12 @@ export default function PhantomConnectButton({
           alignItems: 'center',
           alignSelf: 'center',
         }}>
-        <PhantomIcon />
+        {connecting ? (
+          <ActivityIndicator color={Colors.Primary} />
+        ) : (
+          <PhantomIcon />
+        )}
+
         <Text
           style={{
             color: Colors.White,

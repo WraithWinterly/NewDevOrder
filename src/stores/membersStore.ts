@@ -42,6 +42,7 @@ const useMemberStore = create<MemberStore>((set, get) => ({
   },
   fetchMyProfile: async () => {
     set(() => ({myProfile: undefined}));
+    set(() => ({myBountyWins: undefined}));
 
     const {result, error} = await query(
       getServerEndpoint(Endpoints.GET_MY_PROFILE),
@@ -56,7 +57,7 @@ const useMemberStore = create<MemberStore>((set, get) => ({
       const {result: resultMyBountyWins, error: errorMyBountyWins} =
         await query(getServerEndpoint(Endpoints.GET_MY_BOUNTY_WINS));
 
-      if (!!resultMyBountyWins) {
+      if (!!resultMyBountyWins && typeof resultMyBountyWins === 'object') {
         set(() => ({myBountyWins: resultMyBountyWins}));
       }
     }

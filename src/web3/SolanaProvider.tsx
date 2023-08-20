@@ -104,9 +104,9 @@ export function SolanaProvider({children}: {children: ReactNode}) {
   }, [fetchAndUpdateBalance, selectedAccount]);
 
   async function initializeWallet(): Promise<PublicKey | null> {
-    if (authorizationInProgress) {
-      return Promise.resolve(null);
-    }
+    // if (authorizationInProgress) {
+    //   return Promise.resolve(null);
+    // }
     setAuthorizationInProgress(true);
     let publicKey: PublicKey | null = null;
     await transact(async wallet => {

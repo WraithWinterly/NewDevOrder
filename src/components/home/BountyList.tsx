@@ -343,7 +343,7 @@ export default function BountyList({
               flexWrap: 'wrap',
               gap: 8,
             }}>
-            <Bubble type="purple" text={bounty.project.title} />
+            <Bubble type="purple" text={bounty.project?.title} />
             {bounty.stage === 'Active' && (
               <Bubble type="green" text="Accepting Submissions" />
             )}

@@ -42,15 +42,14 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
     }
   },
   setSelectedProject: async (fetchId: string | undefined) => {
-    if (!fetchId) {
-      set(() => ({selectedProject: undefined}));
-      set(() => ({bountiesForProject: undefined}));
-      return;
-    }
     set(() => ({selectedProject: undefined}));
     set(() => ({
       bountiesForProject: undefined,
     }));
+
+    if (!fetchId) {
+      return;
+    }
 
     const {result, error} = await query(
       getServerEndpoint(Endpoints.GET_PROJECT_BY_ID) + `/${fetchId}`,
@@ -65,6 +64,7 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
       );
 
       const dataID = resultBounties as Bounty[];
+
       if (dataID) {
         set(() => ({selectedProject: data}));
         set(() => ({

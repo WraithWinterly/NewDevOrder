@@ -11,9 +11,12 @@ import asyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect, useState} from 'react';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useQuery from 'src/hooks/useQuery';
+import useMemberStore from 'src/stores/membersStore';
 
 export default function Welcome() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+
+  const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 
   const [hasCompletedWelcome, setHasCompletedWelcome] = useState<
     boolean | undefined
@@ -90,6 +93,7 @@ export default function Welcome() {
               );
 
               if (!!data) {
+                fetchMyProfile();
                 navigation.reset({
                   index: 0,
                   routes: [{name: 'HomeNavigation'}],

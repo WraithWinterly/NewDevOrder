@@ -25,11 +25,13 @@ import useMutation from 'src/hooks/usePost';
 import {
   Bounty,
   BountyStage,
+  BountyWinner,
   CreateBountyPostData,
   Member,
   Project,
   RoleType,
   SetApproveBountyPostData,
+  Submission,
   TestCase,
 } from 'src/sharedTypes';
 import useSolanaContext from 'src/web3/SolanaProvider';
@@ -82,6 +84,8 @@ export default function ViewBounty({route, navigation}: Props) {
   const thisBountyWin = myBountyWins?.find(
     win => win.bountyID === selectedBounty?.id,
   );
+  // console.log('mybountywins ', myBountyWins);
+
   const isValidator = route.params?.isValidator ?? false;
   const isDesignerCreation = route.params?.isDesignerCreation ?? false;
   const isDesigner = route.params?.isDesigner ?? false;
@@ -186,7 +190,7 @@ export default function ViewBounty({route, navigation}: Props) {
       headerSections: createBountyData.headerSections,
       projectId: null, // Assuming it's null for now
       participantsTeamIDs: [],
-      bountyWinnerIDs: [],
+      bountyWinnerID: [],
       submissionIDs: [],
       testCaseIDs: [],
       projectID: '',
@@ -438,7 +442,7 @@ export default function ViewBounty({route, navigation}: Props) {
                   <StyledText>
                     🎉 Your team,{' '}
                     <StyledText style={{color: Colors.Primary}}>
-                      {thisBountyWin.submission.team.name},{' '}
+                      {thisBountyWin?.submission?.team?.name},{' '}
                     </StyledText>
                     won this bounty!
                   </StyledText>
