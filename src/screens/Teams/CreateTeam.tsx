@@ -43,7 +43,6 @@ export default function CreateTeam() {
       name: name,
       description,
       link: webLink,
-      memberAddressesToInvite: [],
     });
   }, [name, description, webLink]);
 
