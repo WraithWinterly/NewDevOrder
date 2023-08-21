@@ -80,7 +80,7 @@ export default function InviteMembers() {
         const pendingInvites = data as TeamInvite[];
 
         const newMembersArr = pendingInvites.map(invite => {
-          return invite.memberAddress;
+          return invite.toMemberAddress;
         });
         const members = await queryMembersByIDs(newMembersArr);
         if (members) {
@@ -160,6 +160,7 @@ export default function InviteMembers() {
       <View style={{height: 12}} />
       <StyledButton
         enabled={currentUser != null && canInviteUser}
+        // enabled={currentUser != null && true}
         onPress={inviteUser}
         loading={loadingInviteToTeam}
         error={!!errorInviteToTeam}>

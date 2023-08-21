@@ -20,8 +20,8 @@ export default function YourBounties() {
           bounty.title.includes(searchText || '') &&
           bounty.stage === 'Active'
         ) {
-          const myTeamIds = teams?.map(team => team.id);
-          return myTeamIds?.some(teamId => {
+          const myTeamIDs = teams?.map(team => team.id);
+          return myTeamIDs?.some(teamId => {
             return bounty.participantsTeamIDs.includes(teamId);
           });
         }

@@ -20,8 +20,8 @@ export default function DiscoverBounties() {
           bounty.title.includes(searchText || '') &&
           bounty.stage === 'Active'
         ) {
-          const myTeamIds = teams?.map(team => team.id);
-          const doesNotInclude = myTeamIds?.every(teamId => {
+          const myTeamIDs = teams?.map(team => team.id);
+          const doesNotInclude = myTeamIDs?.every(teamId => {
             return !bounty.participantsTeamIDs.includes(teamId);
           });
           return doesNotInclude;
