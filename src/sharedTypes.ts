@@ -183,13 +183,13 @@ export interface Bounty {
   submissionIDs: string[];
   aboutProject?: string;
   headerSections?: any;
-  winningSubmissionID?: string;
+  winningSubmissionID: string;
   approvedByFounder: boolean;
   approvedByManager: boolean;
   approvedByValidator: boolean;
   reward: number;
-  founderAddress?: string;
-  projectID?: string;
+  founderAddress: string;
+  projectID: string;
   bountyWinnerID: string[];
 }
 
@@ -250,6 +250,5 @@ export interface TeamInvite {
   fromName: string;
   toTeamID: string;
   toTeamName: string;
-  member?: Member;
-  memberAddress?: string;
+  memberAddress: string;
 }

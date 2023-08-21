@@ -40,7 +40,7 @@ export default function Teams() {
     const userTeams = teams.filter(team => {
       if (team.creatorAddress === walletAddress) return true;
       return (
-        team.members?.some(member => member.walletAddress === walletAddress) &&
+        team.memberIDs?.some(member => member === walletAddress) &&
         team.creatorAddress !== walletAddress
       );
     });
@@ -55,7 +55,7 @@ export default function Teams() {
       teams.filter(
         team =>
           team.creatorAddress !== walletAddress &&
-          !team.members?.some(member => member.walletAddress === walletAddress),
+          !team.memberIDs?.some(member => member === walletAddress),
       ),
     );
   }, [teams, walletAddress]);
@@ -76,7 +76,7 @@ export default function Teams() {
                 <TeamCard
                   id={item.id}
                   title={item.name}
-                  members={item.members?.length || 0}
+                  members={item.memberIDs?.length || 0}
                   description={item.description}
                 />
                 <View style={{height: 12}} />
@@ -94,7 +94,7 @@ export default function Teams() {
                 <TeamCard
                   id={item.id}
                   title={item.name}
-                  members={item.members?.length || 0}
+                  members={item.memberIDs?.length || 0}
                   description={item.description}
                 />
                 <View style={{height: 12}} />
@@ -111,7 +111,7 @@ export default function Teams() {
                 <TeamCard
                   id={item.id}
                   title={item.name}
-                  members={item.members?.length || 0}
+                  members={item.memberIDs?.length || 0}
                   description={item.description}
                 />
                 <View style={{height: 12}} />

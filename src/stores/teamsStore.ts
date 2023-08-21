@@ -5,11 +5,7 @@ import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {create} from 'zustand';
 
 type TeamsStore = {
-  teams:
-    | (Team & {
-        members: Member[] | undefined;
-      })[]
-    | undefined;
+  teams: Team[] | undefined;
   fetchTeams: () => Promise<void>;
   selectedTeam?: Team & {
     members: Member[] | undefined;
