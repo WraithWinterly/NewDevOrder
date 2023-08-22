@@ -10,12 +10,13 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useBountyStore from 'src/stores/bountyStore';
 import {Colors} from 'src/styles/styles';
-import {formatTimeAgo} from 'src/utils/utils';
+import {fireDate, formatTimeAgo} from 'src/utils/utils';
 
 export default function ViewSubmissions() {
   const selectedBounty = useBountyStore(state => state.selectedBounty);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
+
   return (
     <Layout>
       <StyledText style={{fontSize: 28}}>Submissions</StyledText>
@@ -30,7 +31,7 @@ export default function ViewSubmissions() {
               {submission.team.name}
             </StyledText>
             <StyledText style={{fontSize: 14, color: Colors.Gray[400]}}>
-              Submitted {formatTimeAgo(submission.createdAt)}
+              Submitted {formatTimeAgo(fireDate(submission.createdAt))}
             </StyledText>
             <StyledText>
               Link to video demo:{' '}

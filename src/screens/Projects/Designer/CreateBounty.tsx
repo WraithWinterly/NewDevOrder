@@ -12,6 +12,7 @@ import {Colors} from 'src/styles/styles';
 import useBountyStore from 'src/stores/bountyStore';
 import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {fireDate} from 'src/utils/utils';
 
 type Props = NativeStackScreenProps<StackParamList, 'CreateBounty'>;
 
@@ -42,7 +43,7 @@ export default function CreateBounty({route, navigation}: Props) {
   );
   const [deadline, setDeadline] = useState(() => {
     if (createBountyData?.deadline) {
-      return new Date(createBountyData?.deadline);
+      return fireDate(createBountyData?.deadline);
     }
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() + 7);

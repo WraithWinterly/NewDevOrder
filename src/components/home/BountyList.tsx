@@ -1,6 +1,6 @@
 import {TouchableOpacity, View} from 'react-native';
 import {Colors} from 'src/styles/styles';
-import {formatTimeAgo} from 'src/utils/utils';
+import {fireDate, formatTimeAgo} from 'src/utils/utils';
 import StyledText from '../ui/styled/StyledText';
 import {useEffect, useId, useState} from 'react';
 import CashIcon from '../icons/CashIcon';
@@ -77,12 +77,12 @@ export default function BountyList({
     if (sorting === 'Newest') {
       sorted.sort(
         (a, b) =>
-          new Date(b.postDate).getTime() - new Date(a.postDate).getTime(),
+          fireDate(b.postDate).getTime() - fireDate(a.postDate).getTime(),
       );
     } else if (sorting === 'Oldest') {
       sorted.sort(
         (a, b) =>
-          new Date(a.postDate).getTime() - new Date(b.postDate).getTime(),
+          fireDate(a.postDate).getTime() - fireDate(b.postDate).getTime(),
       );
     } else if (sorting === '$ High to Low') {
       sorted.sort((a, b) => b.reward - a.reward);
@@ -309,7 +309,7 @@ export default function BountyList({
                 fontSize: 14,
                 paddingVertical: 2,
               }}>
-              Posted {formatTimeAgo(bounty.postDate)}
+              Posted {formatTimeAgo(fireDate(bounty.postDate))}
             </StyledText>
           )}
           {validatorView &&
@@ -384,7 +384,7 @@ export default function BountyList({
             }}>
             <CalendarIcon />
             <StyledText>
-              Deadline: {new Date(bounty.deadline).toDateString()}
+              Deadline: {fireDate(bounty.deadline).toDateString()}
             </StyledText>
           </View>
           <View
@@ -564,7 +564,9 @@ function YouPostedThisBounty({date}: {date: Date}) {
         paddingVertical: 8,
       }}>
       <CheckIcon />
-      <StyledText>You posted this bounty {formatTimeAgo(date)}.</StyledText>
+      <StyledText>
+        You posted this bounty {formatTimeAgo(fireDate(date))}.
+      </StyledText>
     </View>
   );
 }

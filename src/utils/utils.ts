@@ -76,3 +76,21 @@ export default function addSpaceCase(str: string | undefined) {
   str = str.replace(/([a-z])([A-Z])/g, '$1 $2') || '';
   return str;
 }
+
+export function fireDate(timestamp: any) {
+  const jsTimestamp = new Date(
+    timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000,
+  );
+  return jsTimestamp;
+}
+
+// const firestoreTime = {
+//   seconds: 1613748319,
+//   nanoseconds: 47688698687,
+// };
+
+// const jsDate = fireDate(firestoreTime);
+// const date = jsDate.toDateString();
+// const atTime = jsDate.toLocaleTimeString();
+
+// console.log(date, atTime);

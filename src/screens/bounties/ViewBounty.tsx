@@ -8,7 +8,7 @@ import TeamsIcon from 'src/components/icons/TeamsIcon';
 import CalendarIcon from 'src/components/icons/CalendarIcon';
 import CashIcon from 'src/components/icons/CashIcon';
 import {Colors} from 'src/styles/styles';
-import {didIApprove, formatTimeAgo} from 'src/utils/utils';
+import {didIApprove, fireDate, formatTimeAgo} from 'src/utils/utils';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 
 import {StackParamList} from 'src/StackNavigator';
@@ -192,7 +192,7 @@ export default function ViewBounty({route, navigation}: Props) {
       participantsTeamIDs: [],
       bountyWinnerID: [],
       submissionIDs: [],
-      testCaseIDs: [],
+      testCases: [],
       projectID: '',
       winningSubmissionID: '',
       project: {
@@ -201,7 +201,6 @@ export default function ViewBounty({route, navigation}: Props) {
       founder: {
         ...project.founder,
       },
-      testCases: [],
     } as Bounty & {
       project: Project;
       founder: Member;
@@ -303,7 +302,7 @@ export default function ViewBounty({route, navigation}: Props) {
           )}
           {isValidator || playingRole === RoleType.BountyValidator
             ? bounty?.stage === 'Active' &&
-              (bounty?.testCaseIDs.length === 0 ? (
+              (bounty?.testCases.length === 0 ? (
                 <StyledButton
                   type="normal2"
                   onPress={() => navigation.navigate('AddTestCases')}>
@@ -415,7 +414,7 @@ export default function ViewBounty({route, navigation}: Props) {
               </StyledText>
               <StyledText
                 style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>
-                {formatTimeAgo(bounty.postDate)}
+                {formatTimeAgo(fireDate(bounty.postDate))}
               </StyledText>
               <View
                 style={{
@@ -477,7 +476,7 @@ export default function ViewBounty({route, navigation}: Props) {
                     }}>
                     <CalendarIcon />
                     <StyledText>
-                      Deadline: {new Date(bounty.deadline).toDateString()}
+                      Deadline: {fireDate(bounty.deadline).toDateString()}
                     </StyledText>
                   </View>
                   <View

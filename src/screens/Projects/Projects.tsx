@@ -123,7 +123,11 @@ function ProjectCard({project}: {project: Project}) {
     } else if (role === RoleType.Founder || role === RoleType.BountyManager) {
       navigation.navigate('PendingProposal');
     } else if (role === RoleType.BountyValidator) {
-      navigation.navigate('ValidatorNavigator');
+      if (project.stage === ProjectStage.Ready) {
+        navigation.navigate('ValidatorNavigator');
+      } else {
+        navigation.navigate('PendingProposal');
+      }
     }
   }
 
