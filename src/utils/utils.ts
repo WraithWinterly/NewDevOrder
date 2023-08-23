@@ -77,11 +77,24 @@ export default function addSpaceCase(str: string | undefined) {
   return str;
 }
 
-export function fireDate(timestamp: any) {
+export function isFireDate(obj: Object) {
+  // console.log(obj);
+  // console.log(!!obj.seconds);
+  console.log(obj);
+  //@ts-expect-error
+  const is = obj['_nanoseconds'] != null;
+  console.log(is);
+  return true;
+}
+
+export function fromFireDate(timestamp: any) {
+  console.log('timestamp: ', timestamp);
   const jsTimestamp = new Date(
-    timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000,
+    timestamp['_seconds'] * 1000 + timestamp['_nanoseconds'] / 1000000,
   );
+  console.log('js time stamp ', jsTimestamp.getTime());
   return jsTimestamp;
+  // return new Date();
 }
 
 // const firestoreTime = {

@@ -66,7 +66,7 @@ export default function DropdownMenu({
           {!loading && displayText}
           {loading && <ActivityIndicator color={Colors.Primary} />}
         </StyledText>
-        <DropdownIcon />
+        {!disabled && <DropdownIcon />}
       </TouchableOpacity>
 
       <Picker

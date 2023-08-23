@@ -1,6 +1,6 @@
 import {TouchableOpacity, View} from 'react-native';
 import {Colors} from 'src/styles/styles';
-import {fireDate, formatTimeAgo} from 'src/utils/utils';
+import {fromFireDate, formatTimeAgo} from 'src/utils/utils';
 import StyledText from '../ui/styled/StyledText';
 import {useEffect, useId, useState} from 'react';
 import CashIcon from '../icons/CashIcon';
@@ -77,12 +77,14 @@ export default function BountyList({
     if (sorting === 'Newest') {
       sorted.sort(
         (a, b) =>
-          fireDate(b.postDate).getTime() - fireDate(a.postDate).getTime(),
+          fromFireDate(b.startDate).getTime() -
+          fromFireDate(a.startDate).getTime(),
       );
     } else if (sorting === 'Oldest') {
       sorted.sort(
         (a, b) =>
-          fireDate(a.postDate).getTime() - fireDate(b.postDate).getTime(),
+          fromFireDate(a.startDate).getTime() -
+          fromFireDate(b.startDate).getTime(),
       );
     } else if (sorting === '$ High to Low') {
       sorted.sort((a, b) => b.reward - a.reward);
@@ -300,7 +302,7 @@ export default function BountyList({
             {bounty.title}
           </StyledText>
           {designerView && bounty.stage === 'Active' && (
-            <YouPostedThisBounty date={bounty.postDate} />
+            <YouPostedThisBounty date={bounty.startDate} />
           )}
           {bounty.stage === 'Active' && (
             <StyledText
@@ -309,7 +311,7 @@ export default function BountyList({
                 fontSize: 14,
                 paddingVertical: 2,
               }}>
-              Posted {formatTimeAgo(fireDate(bounty.postDate))}
+              Posted {formatTimeAgo(fromFireDate(bounty.startDate))}
             </StyledText>
           )}
           {validatorView &&
@@ -384,7 +386,7 @@ export default function BountyList({
             }}>
             <CalendarIcon />
             <StyledText>
-              Deadline: {fireDate(bounty.deadline).toDateString()}
+              Deadline: {fromFireDate(bounty.deadline).toDateString()}
             </StyledText>
           </View>
           <View
@@ -423,7 +425,7 @@ export default function BountyList({
 
                     headerSections: bounty.headerSections,
                     id: bounty.id,
-                    postDate: bounty.postDate,
+                    startDate: bounty.startDate,
                     projectID: bounty.projectID || selectedProject?.id || '',
                     reward: bounty.reward,
                     title: bounty.title,
@@ -565,7 +567,7 @@ function YouPostedThisBounty({date}: {date: Date}) {
       }}>
       <CheckIcon />
       <StyledText>
-        You posted this bounty {formatTimeAgo(fireDate(date))}.
+        You posted this bounty {formatTimeAgo(fromFireDate(date))}.
       </StyledText>
     </View>
   );

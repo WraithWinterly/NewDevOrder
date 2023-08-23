@@ -4,7 +4,7 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useBountyStore from 'src/stores/bountyStore';
 import {Colors} from 'src/styles/styles';
-import {fireDate, formatTimeAgo} from 'src/utils/utils';
+import {fromFireDate, formatTimeAgo} from 'src/utils/utils';
 
 export default function ViewSolution() {
   const selectedBounty = useBountyStore(state => state.selectedBounty);
@@ -25,7 +25,7 @@ export default function ViewSolution() {
               {submission.team.name}
             </StyledText>
             <StyledText style={{fontSize: 14, color: Colors.Gray[400]}}>
-              Submitted {formatTimeAgo(fireDate(submission.createdAt))}
+              Submitted {formatTimeAgo(fromFireDate(submission.createdAt))}
             </StyledText>
             <StyledText>
               Link to video demo:{' '}

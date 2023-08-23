@@ -66,7 +66,7 @@ const useBountyStore = create<BountyStore>((set, get) => ({
         winningSubmission: (Submission & {team: Team}) | undefined;
       };
       set(() => ({selectedBounty: data}));
-      const {result: resWinner, error: errorWInner} = await query(
+      const {result: resWinner, error: errorWinner} = await query(
         getServerEndpoint(Endpoints.GET_WINNER_BY_BOUNTY_ID) + `/${fetchId}`,
       );
       if (resWinner) {

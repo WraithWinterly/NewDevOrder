@@ -7,6 +7,7 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import useMutation from 'src/hooks/usePost';
 import Layout from 'src/layout/Layout';
+import {BountyMgrDeclineProjectPOSTData} from 'src/sharedTypes';
 
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
@@ -22,7 +23,14 @@ export default function ConfirmDecline() {
   );
 
   async function onDecline() {
-    const data = await mutate(proj);
+    if (!proj?.id) {
+      console.error('No project');
+      return;
+    }
+    const body: BountyMgrDeclineProjectPOSTData = {
+      projectID: proj.id,
+    };
+    const data = await mutate(body);
     if (data) {
       fetchProjects();
       navigation.navigate('HomeNavigation');

@@ -8,7 +8,7 @@ import TeamsIcon from 'src/components/icons/TeamsIcon';
 import CalendarIcon from 'src/components/icons/CalendarIcon';
 import CashIcon from 'src/components/icons/CashIcon';
 import {Colors} from 'src/styles/styles';
-import {didIApprove, fireDate, formatTimeAgo} from 'src/utils/utils';
+import {didIApprove, fromFireDate, formatTimeAgo} from 'src/utils/utils';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 
 import {StackParamList} from 'src/StackNavigator';
@@ -163,7 +163,7 @@ export default function ViewBounty({route, navigation}: Props) {
       return;
     }
 
-    if (!createBountyData.postDate) {
+    if (!createBountyData.startDate) {
       console.error("Error: Missing 'startDate' in create bounty data!");
       return;
     }
@@ -175,7 +175,7 @@ export default function ViewBounty({route, navigation}: Props) {
 
     return {
       id: '0',
-      postDate: new Date(),
+      startDate: createBountyData.startDate,
       reward: createBountyData.reward,
       stage: BountyStage.Draft,
       title: createBountyData.title,
@@ -414,7 +414,7 @@ export default function ViewBounty({route, navigation}: Props) {
               </StyledText>
               <StyledText
                 style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>
-                {formatTimeAgo(fireDate(bounty.postDate))}
+                {formatTimeAgo(fromFireDate(bounty.startDate))}
               </StyledText>
               <View
                 style={{
@@ -476,7 +476,7 @@ export default function ViewBounty({route, navigation}: Props) {
                     }}>
                     <CalendarIcon />
                     <StyledText>
-                      Deadline: {fireDate(bounty.deadline).toDateString()}
+                      Deadline: {fromFireDate(bounty.deadline).toDateString()}
                     </StyledText>
                   </View>
                   <View

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
@@ -12,7 +12,7 @@ import {Colors} from 'src/styles/styles';
 import useBountyStore from 'src/stores/bountyStore';
 import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {fireDate} from 'src/utils/utils';
+import {fromFireDate, isFireDate} from 'src/utils/utils';
 
 type Props = NativeStackScreenProps<StackParamList, 'CreateBounty'>;
 
@@ -36,14 +36,21 @@ export default function CreateBounty({route, navigation}: Props) {
   const [bountyAbout, setBountyAbout] = useState(
     createBountyData?.aboutProject || '',
   );
-  const [postDate, setPostDate] = useState(
-    !!createBountyData?.postDate
-      ? new Date(createBountyData.postDate)
-      : new Date(),
-  );
+  const [startDate, setstartDate] = useState(() => {
+    if (createBountyData?.startDate) {
+      console.log('here', isFireDate(createBountyData.startDate));
+      return isFireDate(createBountyData.startDate)
+        ? fromFireDate(createBountyData.startDate)
+        : new Date(createBountyData.startDate);
+    } else {
+      return new Date();
+    }
+  });
   const [deadline, setDeadline] = useState(() => {
     if (createBountyData?.deadline) {
-      return fireDate(createBountyData?.deadline);
+      return isFireDate(createBountyData.deadline)
+        ? fromFireDate(createBountyData.deadline)
+        : new Date(createBountyData.deadline);
     }
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() + 7);
@@ -67,10 +74,10 @@ export default function CreateBounty({route, navigation}: Props) {
         'Please enter a valid about bounty section with at least 10 characters.',
       );
     }
-    if (!postDate || !deadline) {
+    if (!startDate || !deadline) {
       localErrors.push('Please select a valid start and end date');
     }
-    if (postDate.getTime() > deadline.getTime()) {
+    if (startDate.getTime() > deadline.getTime()) {
       localErrors.push('Start date must be before end date');
     }
     if (localErrors.length > 0) {
@@ -90,7 +97,7 @@ export default function CreateBounty({route, navigation}: Props) {
         title: bountyName,
         description: bountyDescription,
         aboutProject: bountyAbout,
-        startDate: postDate,
+        startDate,
         deadline: deadline,
         projectID: selectedProject.id,
       };
@@ -102,7 +109,7 @@ export default function CreateBounty({route, navigation}: Props) {
       } else {
         setCreateBountyData({
           ...body,
-          postDate: new Date(),
+          startDate: new Date(),
           id: existingID,
           reward: 0,
           types: [],
@@ -134,6 +141,7 @@ export default function CreateBounty({route, navigation}: Props) {
             }}
             displayText={selectedProject?.title || ''}
             selectedValue={selectedProject?.id || ''}
+            disabled
           />
 
           {/* Styled input for bounty name */}
@@ -164,9 +172,9 @@ export default function CreateBounty({route, navigation}: Props) {
           {/* Date inputs for submission start and end dates */}
           <StyledText>Submission Start Date:</StyledText>
           <DatePicker
-            date={postDate}
+            date={startDate}
             fadeToColor={Colors.Background}
-            onDateChange={date => setPostDate(date)}
+            onDateChange={date => setstartDate(date)}
             mode="date"
           />
 

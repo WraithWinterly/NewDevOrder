@@ -78,7 +78,7 @@ export default function InviteMembers() {
 
       if (data) {
         const pendingInvites = data as TeamInvite[];
-
+        console.log(data);
         const newMembersArr = pendingInvites.map(invite => {
           return invite.toMemberAddress;
         });
@@ -132,7 +132,7 @@ export default function InviteMembers() {
       fetchInvitedMembers();
     }
   }
-
+  console.log('new ', newInvitesMembers);
   return (
     <Layout>
       <StyledTextInput
