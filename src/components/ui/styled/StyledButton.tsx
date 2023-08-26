@@ -16,6 +16,8 @@ interface StyledButtonProps {
   loading?: boolean;
   enabled?: boolean;
   error?: boolean;
+  left?: boolean;
+  right?: boolean;
 }
 
 export function StyledButton({
@@ -25,6 +27,8 @@ export function StyledButton({
   loading = false,
   enabled = true,
   error = false,
+  left = false,
+  right = false,
 }: StyledButtonProps) {
   let style: StyleProp<TextStyle> = {};
 
@@ -89,6 +93,14 @@ export function StyledButton({
       };
       break;
   }
+
+  style = {
+    ...style,
+    borderTopRightRadius: left ? 0 : style.borderTopRightRadius,
+    borderBottomRightRadius: left ? 0 : style.borderBottomRightRadius,
+    borderTopLeftRadius: right ? 0 : style.borderTopLeftRadius,
+    borderBottomLeftRadius: right ? 0 : style.borderBottomLeftRadius,
+  };
 
   let textStyle: StyleProp<TextStyle> = {
     color:

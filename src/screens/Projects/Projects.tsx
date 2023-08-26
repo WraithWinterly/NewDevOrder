@@ -124,7 +124,7 @@ function ProjectCard({project}: {project: Project}) {
       navigation.navigate('PendingProposal');
     } else if (role === RoleType.BountyValidator) {
       if (project.stage === ProjectStage.Ready) {
-        navigation.navigate('ValidatorNavigator');
+        navigation.navigate('PendingSubmissions');
       } else {
         navigation.navigate('PendingProposal');
       }

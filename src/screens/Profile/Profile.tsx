@@ -67,7 +67,7 @@ export default function Profile({route, navigation}: Props) {
       fetchMyProfile();
     }
   }, [isMyProfile]);
-  console.log(displayProfile);
+
   return (
     <Layout>
       {!!displayProfile && (

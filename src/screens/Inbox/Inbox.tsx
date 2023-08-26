@@ -33,7 +33,7 @@ export default function Inbox() {
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
   const myBountyWins = useMemberStore(state => state.myBountyWins);
-  console.log('myBountyWins', myBountyWins);
+
   const {
     data: dataJoin,
     loading: loadingJoin,
@@ -140,31 +140,29 @@ export default function Inbox() {
                 <StyledText
                   style={{color: Colors.Primary}}
                   onPress={() => {
-                    setTeam(bountyWin.submission.team.id);
+                    setTeam(bountyWin?.team?.id);
                     navigation.navigate('TeamVar');
                   }}>
-                  {bountyWin.submission.team.name},{' '}
+                  {bountyWin?.team?.name},{' '}
                 </StyledText>
                 won the bounty:{' '}
                 <StyledText
                   style={{color: Colors.Primary}}
                   onPress={() => {
-                    setSelectedBounty(bountyWin.bountyID);
+                    setSelectedBounty(bountyWin.bounty.id);
                     navigation.navigate('ViewBounty');
                   }}>
-                  {bountyWin.submission.bounty.title}
+                  {bountyWin?.bounty.title}
                 </StyledText>
                 .
-                {bountyWin.submission.team.creatorAddress !==
-                  myProfile?.walletAddress &&
+                {bountyWin?.team.creatorAddress !== myProfile?.walletAddress &&
                   'Consult with your Team Owner to claim the reward.'}
               </StyledText>
-              {bountyWin.submission.team.creatorAddress ===
-                myProfile?.walletAddress && (
+              {bountyWin?.team.creatorAddress === myProfile?.walletAddress && (
                 <StyledButton
                   type="borderNoFill"
                   onPress={() => {
-                    setSelectedBounty(bountyWin.bountyID);
+                    setSelectedBounty(bountyWin.bounty.id);
                     navigation.navigate('ViewBounty');
                   }}>
                   Claim reward

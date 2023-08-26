@@ -25,19 +25,18 @@ import useMutation from 'src/hooks/usePost';
 import {
   Bounty,
   BountyStage,
-  BountyWinner,
   CreateBountyPostData,
   Member,
   Project,
   RoleType,
   SetApproveBountyPostData,
   Submission,
-  TestCase,
 } from 'src/sharedTypes';
 import useSolanaContext from 'src/web3/SolanaProvider';
 import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
 import {DropdownSection} from 'src/components/ui/styled/StyledDropdown';
+import BottomBar from 'src/components/ui/styled/BottomBar';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
@@ -51,8 +50,9 @@ export default function ViewBounty({route, navigation}: Props) {
   const fetchBounties = useBountyStore(state => state.fetchBounties);
   const selectedBounty = useBountyStore(state => state.selectedBounty);
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
-  const selectedBountyWinner = useBountyStore(
-    state => state.selectedBountyWinner,
+  const selectedSubmission = useBountyStore(state => state.selectedSubmission);
+  const setSelectedSubmission = useBountyStore(
+    state => state.setSelectedSubmission,
   );
 
   const teams = useTeamsStore(state => state.teams);
@@ -80,9 +80,11 @@ export default function ViewBounty({route, navigation}: Props) {
     (Bounty & {project: Project; founder: Member}) | undefined
   >(undefined);
 
-  const isWinner = selectedBountyWinner?.bountyID === selectedBounty?.id;
+  const existWinner =
+    !!selectedBounty?.winningSubmissionID &&
+    selectedBounty?.winningSubmissionID.length > 0;
   const thisBountyWin = myBountyWins?.find(
-    win => win.bountyID === selectedBounty?.id,
+    win => win.bounty.id === selectedBounty?.id,
   );
   // console.log('mybountywins ', myBountyWins);
 
@@ -190,7 +192,7 @@ export default function ViewBounty({route, navigation}: Props) {
       headerSections: createBountyData.headerSections,
       projectId: null, // Assuming it's null for now
       participantsTeamIDs: [],
-      bountyWinnerID: [],
+      bountyWinnerID: '',
       submissionIDs: [],
       testCases: [],
       projectID: '',
@@ -204,7 +206,6 @@ export default function ViewBounty({route, navigation}: Props) {
     } as Bounty & {
       project: Project;
       founder: Member;
-      testCases: TestCase[];
     };
   }
 
@@ -241,18 +242,7 @@ export default function ViewBounty({route, navigation}: Props) {
   return (
     <Layout>
       <View style={{height: '100%'}}>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: -28,
-            width: '110%',
-            paddingHorizontal: 24,
-            marginLeft: -18,
-            paddingVertical: 14,
-            // height: 42,
-            backgroundColor: Colors.AppBar,
-            zIndex: 1,
-          }}>
+        <BottomBar>
           {isDesigner && isDesignerCreation && (
             // Create bounty buttons
             <View style={{gap: 12}}>
@@ -277,17 +267,13 @@ export default function ViewBounty({route, navigation}: Props) {
           )}
           {(playingRole === RoleType.BountyManager ||
             playingRole === RoleType.Founder) &&
-            isWinner &&
+            existWinner &&
             bounty?.stage === 'Active' && (
               <StyledButton
                 type="normal2"
                 onPress={() => {
-                  navigation.navigate('StartTestCases', {
-                    submissionID: selectedBounty?.submissions?.find(
-                      submission =>
-                        submission.id === selectedBountyWinner?.submissionID,
-                    )!.id!,
-                  });
+                  setSelectedSubmission(selectedBounty?.winningSubmissionID);
+                  navigation.navigate('StartTestCases');
                 }}>
                 View and approve winner
               </StyledButton>
@@ -301,20 +287,13 @@ export default function ViewBounty({route, navigation}: Props) {
             </StyledButton>
           )}
           {isValidator || playingRole === RoleType.BountyValidator
-            ? bounty?.stage === 'Active' &&
-              (bounty?.testCases.length === 0 ? (
-                <StyledButton
-                  type="normal2"
-                  onPress={() => navigation.navigate('AddTestCases')}>
-                  Add test cases
-                </StyledButton>
-              ) : (
+            ? bounty?.stage === 'Active' && (
                 <StyledButton
                   type="normal2"
                   onPress={() => navigation.navigate('ViewSubmissions')}>
                   View submissions
                 </StyledButton>
-              ))
+              )
             : playingRole === RoleType.BountyHunter && (
                 <View style={{gap: 12}}>
                   <StyledButton
@@ -350,7 +329,7 @@ export default function ViewBounty({route, navigation}: Props) {
                   )}
                 </View>
               )}
-        </View>
+        </BottomBar>
         <ScrollView>
           {!!bounty && (
             <View style={{flexDirection: 'column', gap: 10}}>
@@ -441,9 +420,9 @@ export default function ViewBounty({route, navigation}: Props) {
                   <StyledText>
                     🎉 Your team,{' '}
                     <StyledText style={{color: Colors.Primary}}>
-                      {thisBountyWin?.submission?.team?.name},{' '}
+                      {thisBountyWin?.team?.name}
                     </StyledText>
-                    won this bounty!
+                    , won this bounty!
                   </StyledText>
                   <StyledButton
                     onPress={() => navigation.navigate('ClaimReward')}>

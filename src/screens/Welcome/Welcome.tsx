@@ -86,7 +86,6 @@ export default function Welcome() {
           }}>
           <PhantomConnectButton
             onSuccess={async walletAddress => {
-              console.log('auth ', globalThis.authToken);
               const data = await query(
                 getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
                   `/${walletAddress}`,

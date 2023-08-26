@@ -38,7 +38,6 @@ export default function CreateBounty({route, navigation}: Props) {
   );
   const [startDate, setstartDate] = useState(() => {
     if (createBountyData?.startDate) {
-      console.log('here', isFireDate(createBountyData.startDate));
       return isFireDate(createBountyData.startDate)
         ? fromFireDate(createBountyData.startDate)
         : new Date(createBountyData.startDate);

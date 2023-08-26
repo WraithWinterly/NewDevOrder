@@ -10,10 +10,13 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 import useBountyStore from 'src/stores/bountyStore';
 import {Colors} from 'src/styles/styles';
-import {fromFireDate, formatTimeAgo} from 'src/utils/utils';
+import addSpaceCase, {fromFireDate, formatTimeAgo} from 'src/utils/utils';
 
 export default function ViewSubmissions() {
   const selectedBounty = useBountyStore(state => state.selectedBounty);
+  const setSelectedSubmission = useBountyStore(
+    state => state.setSelectedSubmission,
+  );
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const id = useId();
 
@@ -28,10 +31,14 @@ export default function ViewSubmissions() {
             <StyledText
               key={index}
               style={{fontSize: 28, color: Colors.Primary}}>
-              {submission.team.name}
+              {submission.team?.name}
             </StyledText>
             <StyledText style={{fontSize: 14, color: Colors.Gray[400]}}>
               Submitted {formatTimeAgo(fromFireDate(submission.createdAt))}
+            </StyledText>
+
+            <StyledText style={{fontSize: 14, color: Colors.Gray[400]}}>
+              Status: {addSpaceCase(submission?.state)}
             </StyledText>
             <StyledText>
               Link to video demo:{' '}
@@ -52,11 +59,11 @@ export default function ViewSubmissions() {
             <View style={{height: 12}} />
             <StyledButton
               type="borderNoFill"
-              onPress={() =>
-                navigation.navigate('StartTestCases', {
-                  submissionID: submission.id,
-                })
-              }>
+              onPress={() => {
+                console.log(submission.id);
+                setSelectedSubmission(submission.id);
+                navigation.navigate('StartTestCases');
+              }}>
               Start Test Cases
             </StyledButton>
 

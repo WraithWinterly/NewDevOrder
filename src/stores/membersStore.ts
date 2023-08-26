@@ -2,14 +2,7 @@ import {Endpoints, getServerEndpoint} from '../utils/server';
 import {create} from 'zustand';
 
 import query from 'src/utils/query';
-import {
-  Bounty,
-  BountyWinner,
-  Member,
-  Submission,
-  Team,
-  TeamInvite,
-} from 'src/sharedTypes';
+import {Bounty, Member, Submission, Team, TeamInvite} from 'src/sharedTypes';
 
 type MemberStore = {
   memberViewing: Member | undefined;
@@ -20,9 +13,7 @@ type MemberStore = {
         teamInvites: TeamInvite[] | undefined;
       })
     | undefined;
-  myBountyWins:
-    | (BountyWinner & {submission: Submission & {bounty: Bounty; team: Team}})[]
-    | undefined;
+  myBountyWins: (Submission & {bounty: Bounty; team: Team}[]) | undefined;
 };
 
 const useMemberStore = create<MemberStore>((set, get) => ({

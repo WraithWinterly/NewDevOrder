@@ -63,7 +63,7 @@ export default function InviteMembers() {
     selectedTeam?.members?.filter(
       member => member.walletAddress === currentUser.walletAddress,
     ).length === 0;
-  console.log(canInviteUser);
+
   useEffect(() => {
     fetchInvitedMembers();
   }, []);
@@ -78,7 +78,7 @@ export default function InviteMembers() {
 
       if (data) {
         const pendingInvites = data as TeamInvite[];
-        console.log(data);
+
         const newMembersArr = pendingInvites.map(invite => {
           return invite.toMemberAddress;
         });

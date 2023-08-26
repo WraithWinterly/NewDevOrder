@@ -22,7 +22,7 @@ export default function ViewSolution() {
           <Separator />
           <View style={{gap: 12}}>
             <StyledText style={{fontSize: 28, color: Colors.Primary}}>
-              {submission.team.name}
+              {submission.team?.name}
             </StyledText>
             <StyledText style={{fontSize: 14, color: Colors.Gray[400]}}>
               Submitted {formatTimeAgo(fromFireDate(submission.createdAt))}

@@ -1,12 +1,10 @@
 import {
   Bounty,
-  BountyWinner,
   CreateBountyData,
   Member,
   Project,
   Submission,
   Team,
-  TestCase,
 } from 'src/sharedTypes';
 import query from 'src/utils/query';
 
@@ -24,8 +22,9 @@ type BountyStore = {
     submissions: (Submission & {team: Team})[] | undefined;
     winningSubmission: (Submission & {team: Team}) | undefined;
   };
-  selectedBountyWinner: BountyWinner | undefined;
   setSelectedBounty: (fetchId: string | undefined) => void;
+  selectedSubmission: (Submission & {team: {name: string}}) | undefined;
+  setSelectedSubmission: (fetchId: string | undefined) => void;
 };
 
 const useBountyStore = create<BountyStore>((set, get) => ({
@@ -49,7 +48,7 @@ const useBountyStore = create<BountyStore>((set, get) => ({
   },
   setSelectedBounty: async (fetchId: string | undefined) => {
     set(() => ({selectedBounty: undefined}));
-    set(() => ({selectedBountyWinner: undefined}));
+    set(() => ({selectedSubmission: undefined}));
     if (!fetchId) {
       return;
     }
@@ -70,8 +69,23 @@ const useBountyStore = create<BountyStore>((set, get) => ({
         getServerEndpoint(Endpoints.GET_WINNER_BY_BOUNTY_ID) + `/${fetchId}`,
       );
       if (resWinner) {
-        set(() => ({selectedBountyWinner: resWinner}));
+        set(() => ({selectedSubmission: resWinner}));
       }
+    }
+  },
+  selectedSubmission: undefined,
+  setSelectedSubmission: async (fetchId: string | undefined) => {
+    set(() => ({selectedSubmission: undefined}));
+    if (!fetchId) {
+      return;
+    }
+
+    const {result, error} = await query(
+      getServerEndpoint(Endpoints.GET_SUBMISSION_BY_ID) + `/${fetchId}`,
+    );
+
+    if (result) {
+      set(() => ({selectedSubmission: result}));
     }
   },
 }));

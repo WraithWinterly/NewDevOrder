@@ -53,8 +53,8 @@ export default function PhantomConnectButton({
   useEffect(() => {
     async function receiveJWT() {
       if (!message || !walletAddress) return;
+      if ((globalThis.authToken?.length || 0) > 0) return;
 
-      console.log(walletAddress);
       const msg = new Array<number>();
       message[0].forEach(byte => {
         msg.push(Number(byte));
@@ -70,7 +70,6 @@ export default function PhantomConnectButton({
         // setRefreshToken(data.refreshToken);
         onSuccess(walletAddress);
       } else {
-        console.log(`No Data result: ${data}`);
       }
     }
     receiveJWT();
@@ -78,10 +77,14 @@ export default function PhantomConnectButton({
 
   // Triggers the sign message prompt when appropriate. If this wasn't here, the part 2 sign message wallet prompt would not show up. This cannot be thrown into a function because the authorize token states need to be updated first.
   useEffect(() => {
-    if (!!walletAddress && !message) {
+    if (
+      (globalThis.authToken?.length || 0) === 0 &&
+      !message
+      // !walletAddress
+    ) {
       walletStep2Sign();
     }
-  }, [walletAddress, message]);
+  }, [walletAddress, message, globalThis.authToken]);
 
   async function onWalletConnectComplete(publicKey: PublicKey | null) {
     if (!publicKey) {
@@ -112,17 +115,18 @@ export default function PhantomConnectButton({
       const message = await solana.signMessage(data.nonce);
       if (!message) {
         globalThis.authToken = '';
-        throw new Error('Did not authenticate with server.');
+        // throw new Error('Did not authenticate with server.');
       }
       setMessage(message);
       Promise.resolve();
     }
     globalThis.authToken = '';
-    throw new Error('Did not authenticate with server.');
+    // throw new Error('Did not authenticate with server.');
   }
 
   const connecting =
-    loadingAuthorize || loadingRequestNonce || !!walletAddress || !!message;
+    (loadingAuthorize || loadingRequestNonce || !!walletAddress || !!message) &&
+    !globalThis.authToken;
   return (
     <TouchableOpacity
       style={{
@@ -132,7 +136,9 @@ export default function PhantomConnectButton({
       }}
       onPress={() => {
         // if (connecting) return;
-        if (!!walletAddress) return;
+        // if (!!walletAddress) return;
+        globalThis.authToken = '';
+        setMessage(null);
         solana
           .initializeWallet()
           .then(publicKey => {

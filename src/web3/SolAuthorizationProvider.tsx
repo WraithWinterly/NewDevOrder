@@ -112,7 +112,7 @@ function AuthorizationProvider(props: {children: ReactNode}) {
   );
   const authorizeSession = useCallback(
     async (wallet: AuthorizeAPI & ReauthorizeAPI) => {
-      console.log('TOKEN ', authorization?.authToken);
+      // console.log('TOKEN ', authorization?.authToken);
       const authorizationResult = await (!!authorization?.authToken
         ? wallet.reauthorize({
             auth_token: authorization.authToken,

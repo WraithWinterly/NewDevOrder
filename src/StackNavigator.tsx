@@ -32,11 +32,9 @@ import CreateProposal from './screens/projects/founder/CreateProposal';
 import ConfirmAndPay from './screens/projects/founder/ConfirmAndPay';
 import AcceptAndSendQuote from './screens/projects/manager/AcceptAndSendQuote';
 import ConfirmDecline from './screens/projects/manager/ConfirmDecline';
-import AddTestCases from './screens/projects/validator/AddTestCases';
 import SubmitDeliverables from './screens/bounties/SubmitDeliverables';
 import PendingProposal from './screens/projects/shared/PendingProposal';
 import useProjectsStore from './stores/projectsStore';
-import ValidatorNavigator from './screens/projects/validator/ValidatorNavigator';
 import CreateBounty from './screens/projects/designer/CreateBounty';
 import AddRewards from './screens/projects/designer/AddRewards';
 import AddSections from './screens/projects/designer/AddSections';
@@ -45,6 +43,7 @@ import ViewSubmissions from './screens/projects/validator/ViewSubmissions';
 import StartTestCases from './screens/projects/validator/StartTestCases';
 import ViewSolution from './screens/bounties/ViewSolution';
 import ClaimReward from './screens/bounties/ClaimReward';
+import PendingSubmissions from './screens/projects/validator/PendingSubmissions';
 
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
@@ -109,12 +108,9 @@ export type ProjectParamList = {
   AcceptAndSendQuote: undefined;
   ConfirmDecline: undefined;
   // Validator
-  ValidatorNavigator: undefined;
-  AddTestCases: undefined;
+  PendingSubmissions: undefined;
   ViewSubmissions: undefined;
-  StartTestCases: {
-    submissionID: string;
-  };
+  StartTestCases: undefined;
   // Shared
   PendingProposal: undefined;
 };
@@ -310,19 +306,13 @@ export default function StackNavigator() {
           }}
         />
         <Stack.Screen
-          name="ValidatorNavigator"
-          component={ValidatorNavigator}
+          name="PendingSubmissions"
+          component={PendingSubmissions}
           options={{
             title: 'Your Projects',
           }}
         />
-        <Stack.Screen
-          name="AddTestCases"
-          component={AddTestCases}
-          options={{
-            title: '',
-          }}
-        />
+
         <Stack.Screen
           name="ViewSubmissions"
           component={ViewSubmissions}

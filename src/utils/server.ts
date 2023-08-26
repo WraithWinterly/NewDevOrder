@@ -27,12 +27,10 @@ export enum Endpoints {
   START_BOUNTY = '/start-bounty',
   CREATE_BOUNTY = '/create-bounty',
   SET_BOUNTY_APPROVAL = '/set-bounty-approval',
-  GET_TEST_CASES = '/get-test-cases',
-  ADD_TEST_CASES = '/add-test-cases',
   GET_SUBMISSION = '/get-submission',
+  GET_SUBMISSION_BY_ID = '/get-submission-by-id',
   SUBMIT_DELIVERABLES = '/submit-deliverables',
   APPROVE_TEST_CASES = '/approve-test-cases',
-  VALIDATOR_SELECT_WINNING_SUBMISSION = '/validator-select-winning-submission',
   GET_WINNER_BY_BOUNTY_ID = '/get-winner-by-bounty',
   APPROVE_DISAPPROVE_BOUNTY_WINNER = '/approve-disapprove-bounty-winner',
 
