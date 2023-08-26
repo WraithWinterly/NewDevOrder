@@ -23,6 +23,7 @@ import Layout from 'src/layout/Layout';
 import {
   ApproveDisapproveBountyWinnerPostData,
   ApproveTestCasePostData,
+  BountyStage,
   RoleType,
   SelectWinningSubmissionPostData,
   SubmissionState,
@@ -392,7 +393,7 @@ export default function StartTestCases() {
               )}
             </>
           )}
-          {selectedBounty?.stage === 'Completed' && (
+          {selectedBounty?.stage === BountyStage.Completed && (
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
               <CheckIcon />
               <StyledText>
