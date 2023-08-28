@@ -286,49 +286,49 @@ export default function ViewBounty({route, navigation}: Props) {
               View Solution
             </StyledButton>
           )}
-          {isValidator
-            ? bounty?.stage === 'Active' && (
+          {isValidator || isDesigner ? (
+            <StyledButton
+              type="normal2"
+              onPress={() => navigation.navigate('ViewSubmissions')}>
+              View submissions
+            </StyledButton>
+          ) : (
+            playingRole === RoleType.BountyHunter && (
+              <View style={{gap: 12}}>
                 <StyledButton
                   type="normal2"
-                  onPress={() => navigation.navigate('ViewSubmissions')}>
-                  View submissions
+                  onPress={() => navigation.navigate('StartBounty')}>
+                  {startedByTeams.length === 0
+                    ? 'Start Bounty'
+                    : 'Start bounty for another team'}
                 </StyledButton>
-              )
-            : playingRole === RoleType.BountyHunter && (
-                <View style={{gap: 12}}>
+                {startedByTeams.length > 0 && (
                   <StyledButton
                     type="normal2"
-                    onPress={() => navigation.navigate('StartBounty')}>
-                    {startedByTeams.length === 0
-                      ? 'Start Bounty'
-                      : 'Start bounty for another team'}
+                    onPress={() => navigation.navigate('SubmitDeliverables')}>
+                    Submit Deliverables
                   </StyledButton>
-                  {startedByTeams.length > 0 && (
-                    <StyledButton
-                      type="normal2"
-                      onPress={() => navigation.navigate('SubmitDeliverables')}>
-                      Submit Deliverables
-                    </StyledButton>
-                  )}
+                )}
 
-                  {startedByTeams.length > 0 && (
-                    <View style={{paddingLeft: 8}}>
-                      <View style={{height: 4}}></View>
+                {startedByTeams.length > 0 && (
+                  <View style={{paddingLeft: 8}}>
+                    <View style={{height: 4}}></View>
 
-                      {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
-                      <StyledText key={`${0}-${id2}`}>
-                        Started by:{' '}
-                        {startedByTeams.map(
-                          (team, i) =>
-                            `${team}${
-                              i === startedByTeams.length - 1 ? '' : ', '
-                            }`,
-                        )}
-                      </StyledText>
-                    </View>
-                  )}
-                </View>
-              )}
+                    {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
+                    <StyledText key={`${0}-${id2}`}>
+                      Started by:{' '}
+                      {startedByTeams.map(
+                        (team, i) =>
+                          `${team}${
+                            i === startedByTeams.length - 1 ? '' : ', '
+                          }`,
+                      )}
+                    </StyledText>
+                  </View>
+                )}
+              </View>
+            )
+          )}
         </BottomBar>
         <ScrollView>
           <View style={{flexDirection: 'column', gap: 10}}>

@@ -242,9 +242,11 @@ export default function StackNavigator() {
           name="DesignerWorkspaceNavigator"
           component={DesignerWorkspaceNavigator}
           options={{
-            title: `${project?.title.slice(0, 28)}${
-              (project?.title?.length || 0) > 28 ? '...' : ''
-            }`,
+            title: !!project?.title
+              ? `${project?.title.slice(0, 28)}${
+                  (project?.title?.length || 0) > 28 ? '...' : ''
+                }`
+              : 'Project ...',
           }}
         />
         <Stack.Screen

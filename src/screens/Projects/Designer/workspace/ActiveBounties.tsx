@@ -27,21 +27,17 @@ export default function ActiveBounties() {
   return (
     <Layout>
       <ScrollView>
-        {shown && (
-          <>
-            <BountyList bounties={shown} designerView noSort2 />
-            {shown?.length === 0 && (
-              <StyledText
-                style={{
-                  textAlign: 'center',
-                  marginTop: 32,
-                  fontWeight: '500',
-                  fontSize: 18,
-                }}>
-                There are no drafts currently.
-              </StyledText>
-            )}
-          </>
+        <BountyList bounties={shown} designerView noSort2 />
+        {shown?.length === 0 && (
+          <StyledText
+            style={{
+              textAlign: 'center',
+              marginTop: 32,
+              fontWeight: '500',
+              fontSize: 18,
+            }}>
+            There are no drafts currently.
+          </StyledText>
         )}
       </ScrollView>
     </Layout>

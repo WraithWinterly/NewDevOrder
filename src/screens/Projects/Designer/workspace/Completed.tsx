@@ -36,21 +36,17 @@ export default function Completed() {
   return (
     <Layout>
       <ScrollView>
-        {shownBounties && (
-          <>
-            <BountyList bounties={shownBounties} designerView noSort2 />
-            {shownBounties?.length === 0 && (
-              <StyledText
-                style={{
-                  textAlign: 'center',
-                  marginTop: 32,
-                  fontWeight: '500',
-                  fontSize: 18,
-                }}>
-                There are no completed bounties currently.
-              </StyledText>
-            )}
-          </>
+        <BountyList bounties={shownBounties} designerView noSort2 />
+        {shownBounties?.length === 0 && (
+          <StyledText
+            style={{
+              textAlign: 'center',
+              marginTop: 32,
+              fontWeight: '500',
+              fontSize: 18,
+            }}>
+            There are no completed bounties currently.
+          </StyledText>
         )}
       </ScrollView>
     </Layout>

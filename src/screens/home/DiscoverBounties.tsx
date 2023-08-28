@@ -38,7 +38,7 @@ export default function DiscoverBounties() {
           placeholder="Search Bounties"
           icon={<SearchIcon />}
         />
-        {!!bountiesWithSearch && <BountyList bounties={bountiesWithSearch} />}
+        <BountyList bounties={bountiesWithSearch} />
       </ScrollView>
     </Layout>
   );

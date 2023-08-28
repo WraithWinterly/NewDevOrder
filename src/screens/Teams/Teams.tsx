@@ -68,10 +68,36 @@ export default function Teams() {
           Create new team
         </StyledButton>
         <Separator />
-        {!!teamsCreated && teamsCreated.length > 0 && (
+        {!teams && (
+          <>
+            <StyledText suspense trigger={null} shimmerWidth={120}>
+              Loading Teams
+            </StyledText>
+            {/* <Separator /> */}
+            <View style={{height: 12}} />
+            <TeamCard
+              description=""
+              id=""
+              members={0}
+              title=""
+              key={1234}
+              suspense
+            />
+            <View style={{height: 12}} />
+            <TeamCard
+              description=""
+              id=""
+              members={0}
+              title=""
+              key={1234567}
+              suspense
+            />
+          </>
+        )}
+        {!!teams && !!teamsCreated && teamsCreated.length > 0 && (
           <>
             <StyledText style={{marginBottom: 16}}>Teams Created</StyledText>
-            {teamsCreated.map(item => (
+            {teamsCreated?.map(item => (
               <View key={`${item.id}-${id}`}>
                 <TeamCard
                   id={item.id}
@@ -130,11 +156,13 @@ function TeamCard({
   title,
   members,
   description,
+  suspense,
 }: {
   id: string;
   title: string;
   members: number;
   description: string;
+  suspense?: boolean;
 }) {
   const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -150,13 +178,24 @@ function TeamCard({
         borderRadius: 16,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-        <StyledText style={{fontSize: 16, fontWeight: '500'}}>
+        <StyledText
+          style={{fontSize: 16, fontWeight: '500'}}
+          suspense={suspense}>
           {title}
         </StyledText>
-        <Bubble lowHeight={true} text={`${members} Members`} />
+        <Bubble
+          lowHeight={true}
+          text={`${members} Members`}
+          suspense={suspense}
+        />
       </View>
 
-      <StyledText style={{paddingTop: 8}}>{description}</StyledText>
+      <StyledText
+        style={{marginTop: 12}}
+        suspense={suspense}
+        shimmerWidth={240}>
+        {description}
+      </StyledText>
     </TouchableOpacity>
   );
 }

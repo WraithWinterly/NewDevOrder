@@ -71,7 +71,22 @@ export default function Projects() {
             <Separator />
           </>
         )}
-        {!projects && <ActivityIndicator color={Colors.Primary} />}
+        {!projects && (
+          <>
+            <StyledText
+              style={{marginBottom: 16}}
+              suspense
+              trigger={null}
+              shimmerWidth={80}>
+              Loading
+            </StyledText>
+            <ProjectCard project={undefined} suspense />
+            <View style={{height: 12}}></View>
+            <ProjectCard project={undefined} suspense />
+            <View style={{height: 12}}></View>
+            <ProjectCard project={undefined} suspense />
+          </>
+        )}
 
         {!!projectsPending && projectsPending.length > 0 && (
           <>
@@ -101,7 +116,13 @@ export default function Projects() {
   );
 }
 
-function ProjectCard({project}: {project: Project}) {
+function ProjectCard({
+  project,
+  suspense,
+}: {
+  project: Project | undefined;
+  suspense?: boolean;
+}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
   const setSelectedProject = useProjectsStore(
@@ -110,11 +131,11 @@ function ProjectCard({project}: {project: Project}) {
   const role = useMemberStore(state => state.myProfile?.playingRole);
 
   async function onClick() {
-    setSelectedProject(project.id);
+    setSelectedProject(project?.id);
     if (role === RoleType.BountyDesigner) {
       if (
-        project.stage === ProjectStage.PendingBountyDesign ||
-        project.stage === ProjectStage.Ready
+        project?.stage === ProjectStage.PendingBountyDesign ||
+        project?.stage === ProjectStage.Ready
       ) {
         navigation.navigate('DesignerWorkspaceNavigator');
       } else {
@@ -123,7 +144,7 @@ function ProjectCard({project}: {project: Project}) {
     } else if (role === RoleType.Founder || role === RoleType.BountyManager) {
       navigation.navigate('PendingProposal');
     } else if (role === RoleType.BountyValidator) {
-      if (project.stage === ProjectStage.Ready) {
+      if (project?.stage === ProjectStage.Ready) {
         navigation.navigate('PendingSubmissions');
       } else {
         navigation.navigate('PendingProposal');
@@ -140,8 +161,11 @@ function ProjectCard({project}: {project: Project}) {
         borderRadius: 16,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-        <StyledText style={{fontSize: 16, fontWeight: '500'}}>
-          {project.title}
+        <StyledText
+          style={{fontSize: 16, fontWeight: '500'}}
+          suspense={suspense}
+          shimmerWidth={120}>
+          {project?.title}
         </StyledText>
       </View>
       <StyledText
@@ -149,19 +173,26 @@ function ProjectCard({project}: {project: Project}) {
           fontSize: 15,
           fontWeight: '400',
           fontStyle: 'italic',
-        }}>
-        {project.stage === 'Ready' ? 'Ready' : ''}
-        {project.stage === 'PendingBountyMgrQuote' ? 'Pending Review' : ''}
-        {project.stage === 'PendingFounderPay' ? 'Pending founder payment' : ''}
-        {project.stage === 'Declined' ? 'Declined' : ''}
-        {project.stage === 'PendingBountyDesign'
+        }}
+        suspense={suspense}
+        shimmerWidth={80}>
+        {project?.stage === 'Ready' ? 'Ready' : ''}
+        {project?.stage === 'PendingBountyMgrQuote' ? 'Pending Review' : ''}
+        {project?.stage === 'PendingFounderPay'
+          ? 'Pending founder payment'
+          : ''}
+        {project?.stage === 'Declined' ? 'Declined' : ''}
+        {project?.stage === 'PendingBountyDesign'
           ? 'Pending design from bounty designer'
           : ''}
       </StyledText>
 
-      <StyledText style={{paddingTop: 8}}>
-        {project.description.substring(0, 80).trim()}
-        {project.description.length > 80 ? '...' : ''}
+      <StyledText
+        style={{paddingTop: 8}}
+        suspense={suspense}
+        shimmerWidth={240}>
+        {project?.description.substring(0, 80).trim()}
+        {(project?.description.length || 0) > 80 ? '...' : ''}
       </StyledText>
     </TouchableOpacity>
   );

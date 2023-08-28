@@ -30,7 +30,7 @@ const useProjectsStore = create<ProjectsStore>((set, get) => ({
   projects: [],
   selectedProject: undefined,
   fetchProjects: async () => {
-    set(() => ({projects: []}));
+    set(() => ({projects: undefined}));
 
     const {result, error} = await query(
       getServerEndpoint(Endpoints.GET_PROJECTS),

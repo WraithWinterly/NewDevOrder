@@ -160,7 +160,9 @@ function ProfileCard({
               marginLeft: 4,
               fontSize: 18,
               fontWeight: 'bold',
-            }}>
+            }}
+            suspense
+            trigger={myProfile}>
             I am...
           </StyledText>
           <DropdownMenu

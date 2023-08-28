@@ -72,7 +72,7 @@ export default function StyledText({
     if (!suspense) return;
     translateX.value = withRepeat(
       withSequence(
-        withTiming(textWidth + actualShimmerWidth, {duration: 1300}),
+        withTiming(textWidth + actualShimmerWidth - 34, {duration: 1200}),
         withTiming(-actualShimmerWidth, {duration: 0}),
       ),
       -1,
@@ -90,13 +90,16 @@ export default function StyledText({
     return (
       <View
         style={[
+          style,
           {
             overflow: 'hidden',
             borderRadius: 12,
             backgroundColor: Colors.Gray[500],
             width: textWidth,
             height: shimmerHeight,
-            marginTop: 6,
+            justifyContent: 'center',
+            marginVertical: 3,
+            // marginTop: 6,
           },
         ]}>
         <Animated.View style={[styles.shimmer, animatedStyles]}>
