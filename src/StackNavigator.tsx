@@ -52,8 +52,6 @@ export type StackParamList = WelcomeStackParamList &
     HomeNavigation: undefined;
     ViewBounty:
       | {
-          isValidator?: boolean;
-          isDesigner?: boolean;
           isDesignerCreation?: boolean;
         }
       | undefined;
@@ -341,7 +339,7 @@ export default function StackNavigator() {
           name="TeamVar"
           component={TeamVar}
           options={{
-            title: teamTitle?.name || '',
+            title: teamTitle?.name || 'Team ...',
           }}
         />
         <Stack.Screen

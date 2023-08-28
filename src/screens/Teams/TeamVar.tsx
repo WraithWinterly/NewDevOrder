@@ -17,52 +17,69 @@ export default function TeamVar() {
 
   return (
     <Layout>
-      {!!selectedTeam && (
-        <View>
-          <StyledText>{selectedTeam.description}</StyledText>
-          <View style={{flexDirection: 'row', gap: 12, marginTop: 12}}>
-            <Bubble
-              lowHeight
-              text={`${selectedTeam.members?.length} Members`}
-            />
-            <TouchableOpacity
-              style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}
-              onPress={() => Linking.openURL(selectedTeam.link)}>
-              <LinkIcon />
-              <StyledText>Website</StyledText>
-            </TouchableOpacity>
-          </View>
-
-          <Separator />
-
-          <View>
-            <StyledText
-              style={{fontSize: 18, marginBottom: 8, fontWeight: '500'}}>
-              Members
-            </StyledText>
-            <FlatList
-              data={selectedTeam.members}
-              keyExtractor={(item, index) =>
-                `${item.walletAddress}-${index}-${id}`
-              }
-              ItemSeparatorComponent={() => <View style={{height: 12}}></View>}
-              renderItem={({item: member}) => (
-                <MemberBox
-                  member={member}
-                  rightChildren={
-                    <Bubble
-                      type="transparent"
-                      text={
-                        member.walletAddress === selectedTeam.creatorAddress
-                          ? 'Creator'
-                          : 'Member'
-                      }
-                    />
-                  }></MemberBox>
-              )}></FlatList>
-          </View>
+      <View>
+        <StyledText suspense trigger={selectedTeam} shimmerWidth={240}>
+          {selectedTeam?.description}
+        </StyledText>
+        <View style={{flexDirection: 'row', gap: 12, marginTop: 12}}>
+          <Bubble
+            lowHeight
+            text={`${selectedTeam?.members?.length || '...'} Members`}
+            suspense
+            trigger={selectedTeam}
+          />
+          <TouchableOpacity
+            style={{flexDirection: 'row', gap: 14, alignItems: 'center'}}
+            onPress={() =>
+              selectedTeam?.link && Linking.openURL(selectedTeam.link)
+            }>
+            <LinkIcon />
+            <StyledText>Website</StyledText>
+          </TouchableOpacity>
         </View>
-      )}
+
+        <Separator />
+
+        <View>
+          <StyledText
+            style={{fontSize: 18, marginBottom: 8, fontWeight: '500'}}>
+            Members
+          </StyledText>
+          {/* Suspense Skeleton */}
+          {!selectedTeam && (
+            <View style={{gap: 12}}>
+              <MemberBox
+                member={undefined}
+                rightChildren={<Bubble suspense trigger={undefined} />}
+              />
+              <MemberBox
+                member={undefined}
+                rightChildren={<Bubble suspense trigger={undefined} />}
+              />
+            </View>
+          )}
+          <FlatList
+            data={selectedTeam?.members}
+            keyExtractor={(item, index) =>
+              `${item.walletAddress}-${index}-${id}`
+            }
+            ItemSeparatorComponent={() => <View style={{height: 12}}></View>}
+            renderItem={({item: member}) => (
+              <MemberBox
+                member={member}
+                rightChildren={
+                  <Bubble
+                    type="transparent"
+                    text={
+                      member.walletAddress === selectedTeam?.creatorAddress
+                        ? 'Creator'
+                        : 'Member'
+                    }
+                  />
+                }></MemberBox>
+            )}></FlatList>
+        </View>
+      </View>
     </Layout>
   );
 }

@@ -37,6 +37,7 @@ import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
 import {DropdownSection} from 'src/components/ui/styled/StyledDropdown';
 import BottomBar from 'src/components/ui/styled/BottomBar';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
@@ -50,7 +51,6 @@ export default function ViewBounty({route, navigation}: Props) {
   const fetchBounties = useBountyStore(state => state.fetchBounties);
   const selectedBounty = useBountyStore(state => state.selectedBounty);
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
-  const selectedSubmission = useBountyStore(state => state.selectedSubmission);
   const setSelectedSubmission = useBountyStore(
     state => state.setSelectedSubmission,
   );
@@ -88,9 +88,9 @@ export default function ViewBounty({route, navigation}: Props) {
   );
   // console.log('mybountywins ', myBountyWins);
 
-  const isValidator = route.params?.isValidator ?? false;
+  const isValidator = playingRole === RoleType.BountyValidator ?? false;
   const isDesignerCreation = route.params?.isDesignerCreation ?? false;
-  const isDesigner = route.params?.isDesigner ?? false;
+  const isDesigner = playingRole === RoleType.BountyDesigner ?? false;
 
   const headerSections =
     (bounty?.headerSections as {[x: string]: string[]}) || {};
@@ -286,7 +286,7 @@ export default function ViewBounty({route, navigation}: Props) {
               View Solution
             </StyledButton>
           )}
-          {isValidator || playingRole === RoleType.BountyValidator
+          {isValidator
             ? bounty?.stage === 'Active' && (
                 <StyledButton
                   type="normal2"
@@ -331,185 +331,213 @@ export default function ViewBounty({route, navigation}: Props) {
               )}
         </BottomBar>
         <ScrollView>
-          {!!bounty && (
-            <View style={{flexDirection: 'column', gap: 10}}>
-              {isDesigner && bounty?.stage === 'Draft' && (
-                <View>
-                  <StyledText style={{fontSize: 24}}>
-                    Review your bounty
-                  </StyledText>
-                  <StyledText>
-                    This will be posted on the bounty feed when submitted and
-                    reviewed
-                  </StyledText>
-                  <Separator />
-                </View>
-              )}
-              {bounty?.stage === 'PendingApproval' && (
-                <View>
-                  <StyledText style={{fontSize: 24}}>
-                    Pending Approval
-                  </StyledText>
-                  <StyledText>
-                    Still waiting approval from the following members:
-                  </StyledText>
-                  <View style={{height: 24}} />
-                  <StyledCheckbox
-                    value={bounty.approvedByFounder}
-                    onValueChange={() => {}}
-                    title="Founder"
-                  />
-                  <StyledCheckbox
-                    value={bounty.approvedByManager}
-                    onValueChange={() => {}}
-                    title="Bounty Manager"
-                  />
-                  <StyledCheckbox
-                    value={bounty.approvedByValidator}
-                    onValueChange={() => {}}
-                    title="Bounty Validator"
-                  />
-                  <View style={{height: 24}} />
-                  {(playingRole === RoleType.Founder ||
-                    playingRole === RoleType.BountyManager ||
-                    playingRole === RoleType.BountyValidator) && (
-                    <StyledButton
-                      loading={setBountyApproval.loading}
-                      error={!!setBountyApproval.error}
-                      onPress={() => {
-                        onSubmitToggleApproval();
-                      }}
-                      type="normal2">
-                      {didIApprove(bounty, playingRole)
-                        ? 'Unapprove'
-                        : 'Approve'}
-                    </StyledButton>
-                  )}
-                  <Separator />
-                </View>
-              )}
-              <StyledText style={{fontWeight: 'bold', fontSize: 28}}>
-                {bounty.title}
-              </StyledText>
-              <StyledText
-                style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}>
-                {formatTimeAgo(fromFireDate(bounty.startDate))}
-              </StyledText>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  gap: 8,
-                }}>
-                <Bubble type="purple" text={bounty.project?.title} />
-
-                {bounty.stage === 'Active' && (
-                  <Bubble type="green" text="Accepting Submissions" />
-                )}
-
-                {bounty.types.map((type, index) => (
-                  <Bubble
-                    type="normal"
-                    text={type}
-                    key={`type-${index}-${id3}`}
-                  />
-                ))}
+          <View style={{flexDirection: 'column', gap: 10}}>
+            {isDesigner && bounty?.stage === 'Draft' && (
+              <View>
+                <StyledText style={{fontSize: 24}}>
+                  Review your bounty
+                </StyledText>
+                <StyledText>
+                  This will be posted on the bounty feed when submitted and
+                  reviewed
+                </StyledText>
+                <Separator />
               </View>
-              {!!thisBountyWin && (
-                <View style={{marginTop: 24, gap: 12}}>
-                  <StyledText>
-                    🎉 Your team,{' '}
-                    <StyledText style={{color: Colors.Primary}}>
-                      {thisBountyWin?.team?.name}
-                    </StyledText>
-                    , won this bounty!
-                  </StyledText>
+            )}
+            {bounty?.stage === 'PendingApproval' && (
+              <View>
+                <StyledText style={{fontSize: 24}}>Pending Approval</StyledText>
+                <StyledText>
+                  Still waiting approval from the following members:
+                </StyledText>
+                <View style={{height: 24}} />
+                <StyledCheckbox
+                  value={bounty.approvedByFounder}
+                  onValueChange={() => {}}
+                  title="Founder"
+                />
+                <StyledCheckbox
+                  value={bounty.approvedByManager}
+                  onValueChange={() => {}}
+                  title="Bounty Manager"
+                />
+                <StyledCheckbox
+                  value={bounty.approvedByValidator}
+                  onValueChange={() => {}}
+                  title="Bounty Validator"
+                />
+                <View style={{height: 24}} />
+                {(playingRole === RoleType.Founder ||
+                  playingRole === RoleType.BountyManager ||
+                  isValidator) && (
                   <StyledButton
-                    onPress={() => navigation.navigate('ClaimReward')}>
-                    Claim reward now
+                    loading={setBountyApproval.loading}
+                    error={!!setBountyApproval.error}
+                    onPress={() => {
+                      onSubmitToggleApproval();
+                    }}
+                    type="normal2">
+                    {didIApprove(bounty, playingRole) ? 'Unapprove' : 'Approve'}
                   </StyledButton>
-                </View>
+                )}
+                <Separator />
+              </View>
+            )}
+
+            <StyledText
+              style={{fontWeight: 'bold', fontSize: 28}}
+              suspense
+              trigger={bounty}
+              shimmerWidth={160}>
+              {bounty?.title}
+            </StyledText>
+
+            <StyledText
+              style={{color: Colors.Text2, fontSize: 14, paddingVertical: 2}}
+              suspense
+              trigger={bounty}>
+              {formatTimeAgo(fromFireDate(bounty?.startDate))}
+            </StyledText>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                gap: 8,
+              }}>
+              <Bubble
+                type="purple"
+                text={bounty?.project?.title}
+                suspense
+                trigger={bounty}
+              />
+
+              {bounty?.stage === 'Active' && (
+                <Bubble type="green" text="Accepting Submissions" />
               )}
 
-              <View style={{height: 12}}></View>
-              <DropdownSection title="Bounty Overview">
-                <View style={{flexDirection: 'column', gap: 10}}>
-                  <StyledText>{bounty.description}</StyledText>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      gap: 6,
-                      alignItems: 'center',
-                    }}>
-                    <CashIcon />
-                    <StyledText style={{fontWeight: '500'}}>
-                      Bounty Reward: {bounty.reward} USD
-                    </StyledText>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      gap: 6,
-                      alignItems: 'center',
-                      paddingTop: 2,
-                    }}>
-                    <CalendarIcon />
-                    <StyledText>
-                      Deadline: {fromFireDate(bounty.deadline).toDateString()}
-                    </StyledText>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      gap: 6,
-                      alignItems: 'center',
-                    }}>
-                    <TeamsIcon small />
-                    <StyledText>
-                      Teams Currently Hacking:{' '}
-                      {bounty.participantsTeamIDs?.length}
-                    </StyledText>
-                  </View>
-                </View>
-              </DropdownSection>
-              <DropdownSection title={`About ${bounty.title}`}>
-                <StyledText>{bounty.aboutProject}</StyledText>
-              </DropdownSection>
+              {bounty?.types.map((type, index) => (
+                <Bubble
+                  type="normal"
+                  text={type}
+                  key={`type-${index}-${id3}`}
+                />
+              ))}
+            </View>
+            {!!thisBountyWin && (
+              <View style={{marginTop: 24, gap: 12}}>
+                <StyledText>
+                  🎉 Your team,{' '}
+                  <StyledText style={{color: Colors.Primary}}>
+                    {thisBountyWin?.team?.name}
+                  </StyledText>
+                  , won this bounty!
+                </StyledText>
+                <StyledButton
+                  onPress={() => navigation.navigate('ClaimReward')}>
+                  Claim reward now
+                </StyledButton>
+              </View>
+            )}
 
-              {!!bounty.headerSections &&
-                Object.keys(bounty.headerSections).map((section, i) => (
-                  <DropdownSection title={section} key={`${id}-${i}`}>
-                    {!!headerSections &&
-                      headerSections &&
-                      !!headerSections[section] &&
-                      headerSections[section].map((text, index) => (
-                        <StyledText key={index}>- {text}</StyledText>
-                      ))}
-                  </DropdownSection>
-                ))}
-
-              {/* Founder */}
-              {!!bounty.founder && (
+            <View style={{height: 12}}></View>
+            <DropdownSection title="Bounty Overview">
+              <View style={{flexDirection: 'column', gap: 10}}>
+                <StyledText suspense trigger={bounty}>
+                  {bounty?.description}
+                </StyledText>
                 <View
                   style={{
-                    padding: 16,
-                    backgroundColor: Colors.BackgroundLighter,
-                    borderRadius: 20,
-                    marginBottom: 38,
+                    flexDirection: 'row',
+                    gap: 6,
+                    alignItems: 'center',
                   }}>
-                  <StyledText style={{fontSize: 20, fontWeight: 'bold'}}>
-                    Meet the founder - {bounty.founder?.firstName}
+                  <CashIcon />
+                  <StyledText style={{fontWeight: '500'}}>
+                    Bounty Reward:
                   </StyledText>
-                  <StyledText style={{color: Colors.Gray[400]}}>
-                    {bounty.founder?.username}
-                  </StyledText>
-                  <StyledText style={{paddingTop: 4}}>
-                    {bounty.founder?.bio}
+                  <StyledText
+                    style={{fontWeight: '500'}}
+                    suspense
+                    trigger={bounty}>
+                    {bounty?.reward} USD
                   </StyledText>
                 </View>
-              )}
-            </View>
-          )}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 6,
+                    alignItems: 'center',
+                    paddingTop: 2,
+                  }}>
+                  <CalendarIcon />
+                  <StyledText>Deadline:</StyledText>
+                  <StyledText suspense trigger={bounty}>
+                    {fromFireDate(bounty?.deadline)?.toDateString()}
+                  </StyledText>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 6,
+                    alignItems: 'center',
+                  }}>
+                  <TeamsIcon small />
+                  <StyledText>
+                    Teams Currently Hacking:{' '}
+                    {bounty?.participantsTeamIDs?.length}
+                  </StyledText>
+                </View>
+              </View>
+            </DropdownSection>
+            <DropdownSection title={`About ${bounty?.title}`}>
+              <StyledText>{bounty?.aboutProject}</StyledText>
+            </DropdownSection>
+
+            {!!bounty?.headerSections &&
+              Object.keys(bounty.headerSections).map((section, i) => (
+                <DropdownSection title={section} key={`${id}-${i}`}>
+                  {!!headerSections &&
+                    headerSections &&
+                    !!headerSections[section] &&
+                    headerSections[section].map((text, index) => (
+                      <StyledText key={index}>- {text}</StyledText>
+                    ))}
+                </DropdownSection>
+              ))}
+
+            {/* Founder */}
+
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Profile', {
+                  viewProfileAddress: bounty?.founder?.walletAddress,
+                })
+              }
+              style={{
+                padding: 16,
+                backgroundColor: Colors.BackgroundLighter,
+                borderRadius: 20,
+                marginBottom: 38,
+              }}>
+              <StyledText
+                style={{fontSize: 20, fontWeight: 'bold'}}
+                suspense
+                trigger={bounty}
+                shimmerWidth={240}>
+                Meet the founder - {bounty?.founder?.firstName}
+              </StyledText>
+              <StyledText
+                style={{color: Colors.Gray[400]}}
+                suspense
+                trigger={bounty}>
+                {bounty?.founder?.username}
+              </StyledText>
+              <StyledText style={{paddingTop: 4}} suspense trigger={bounty}>
+                {bounty?.founder?.bio}
+              </StyledText>
+            </TouchableOpacity>
+          </View>
+
           <View style={{paddingVertical: 52}}></View>
         </ScrollView>
       </View>

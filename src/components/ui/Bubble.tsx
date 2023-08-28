@@ -6,10 +6,14 @@ export default function Bubble({
   text,
   type = 'normal',
   lowHeight = false,
+  suspense = false,
+  trigger,
 }: {
-  text: string;
+  text?: string;
   type?: 'purple' | 'green' | 'normal' | 'transparent';
   lowHeight?: boolean;
+  suspense?: boolean;
+  trigger?: any;
 }) {
   function getBg() {
     switch (type) {
@@ -34,7 +38,10 @@ export default function Bubble({
         borderWidth: type === 'transparent' ? 1 : 0,
         borderColor: Colors.BorderColor,
       }}>
-      <StyledText style={{fontSize: lowHeight ? 14 : 16, marginVertical: 0}}>
+      <StyledText
+        style={{fontSize: lowHeight ? 14 : 16, marginVertical: 0}}
+        suspense={suspense}
+        trigger={trigger}>
         {text}
       </StyledText>
     </View>

@@ -13,7 +13,7 @@ export default function MemberBox({
   member,
   rightChildren,
 }: {
-  member: Member;
+  member?: Member;
   rightChildren?: ReactNode;
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -32,21 +32,26 @@ export default function MemberBox({
         paddingHorizontal: 12,
         paddingVertical: 8,
         backgroundColor:
-          walletAddress === member.walletAddress
+          walletAddress === member?.walletAddress
             ? Colors.Purple[900]
             : Colors.BackgroundLighter,
         borderRadius: 12,
       }}
       onPress={() => {
-        // setMemberIdViewing(member.walletAddress);
-        navigation.navigate('Profile', {
-          viewProfileAddress: member.walletAddress,
-        });
+        if (!!member?.walletAddress)
+          navigation.navigate('Profile', {
+            viewProfileAddress: member?.walletAddress,
+          });
       }}>
       <View style={{padding: 8, borderRadius: 8}}>
-        <StyledText>{member.firstName}</StyledText>
-        <StyledText style={{color: Colors.Gray[400], fontSize: 15}}>
-          @{member.username}
+        <StyledText suspense trigger={member}>
+          {member?.firstName}
+        </StyledText>
+        <StyledText
+          style={{color: Colors.Gray[400], fontSize: 15}}
+          suspense
+          trigger={member}>
+          @{member?.username}
         </StyledText>
       </View>
       {rightChildren}

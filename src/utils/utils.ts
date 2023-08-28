@@ -1,6 +1,7 @@
 import {Bounty, RoleType} from 'src/sharedTypes';
 
-export function formatTimeAgo(date: Date) {
+export function formatTimeAgo(date: Date | undefined) {
+  if (!date) return '';
   const ensuredDate = new Date(date);
 
   const currentDate = new Date();
@@ -49,7 +50,7 @@ export function formatTimeAgo(date: Date) {
   }
 }
 
-export function didIApprove(bounty: Bounty, playingRole: RoleType) {
+export function didIApprove(bounty: Bounty, playingRole: RoleType | undefined) {
   if (!bounty?.id) {
     return;
   }
@@ -87,8 +88,11 @@ export function isFireDate(obj: Object) {
   return true;
 }
 
-export function fromFireDate(timestamp: any) {
+export function fromFireDate(timestamp: any | undefined) {
   // console.log('timestamp: ', timestamp);
+  if (timestamp == null) {
+    return undefined;
+  }
   const jsTimestamp = new Date(
     timestamp['_seconds'] * 1000 + timestamp['_nanoseconds'] / 1000000,
   );

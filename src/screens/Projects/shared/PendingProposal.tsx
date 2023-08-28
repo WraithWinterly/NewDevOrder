@@ -103,12 +103,16 @@ export default function PendingProposal() {
         {role != RoleType.Founder &&
           proj?.stage !== 'PendingBountyMgrQuote' && (
             <View>
-              <StyledText style={{fontSize: 18}}>
-                Quoted for ${proj?.quotePrice}
-                {proj?.stage === 'PendingBountyDesign' && (
-                  <Text style={{fontWeight: 'bold'}}> Already Paid.</Text>
-                )}
-              </StyledText>
+              <Text>
+                <StyledText style={{fontSize: 18}}>Quoted for </StyledText>
+                <StyledText suspense trigger={proj}>
+                  ${proj?.quotePrice}{' '}
+                  {proj?.stage === 'PendingBountyDesign' && (
+                    <Text style={{fontWeight: 'bold'}}> Already Paid.</Text>
+                  )}
+                </StyledText>
+              </Text>
+
               {proj?.stage === 'PendingFounderPay' && (
                 <StyledText>Pending Founder Payment</StyledText>
               )}
@@ -121,31 +125,45 @@ export default function PendingProposal() {
         </StyledText>
 
         <View style={{height: 8}}></View>
-        <StyledText>
-          <Text style={{fontWeight: 'bold'}}>Email: </Text>
-          {proj?.email}{' '}
-        </StyledText>
-        <StyledText>Phone: {proj?.phone} </StyledText>
+        <Text>
+          <StyledText style={{fontWeight: 'bold'}}>
+            Email:&nbsp;&nbsp;
+          </StyledText>
+          <StyledText suspense trigger={proj}>
+            {proj?.email}
+          </StyledText>
+        </Text>
+        <Text>
+          <StyledText style={{fontWeight: 'bold'}}>Phone: </StyledText>
+          <StyledText suspense trigger={proj}>
+            {proj?.phone}
+          </StyledText>
+        </Text>
 
-        {proj?.founder && (
-          <>
-            <View style={{height: 14}} />
-            <StyledText style={{paddingBottom: 4}}>Founder:</StyledText>
-            <MemberBox member={proj.founder} />
-          </>
-        )}
+        <>
+          <View style={{height: 14}} />
+          <StyledText style={{paddingBottom: 4}}>Founder:</StyledText>
+          <MemberBox member={proj?.founder} />
+        </>
 
         <Separator />
         <StyledText style={{fontSize: 18, marginBottom: 12}}>
           Project information
         </StyledText>
-        <StyledText>
-          <Text style={{fontWeight: 'bold'}}>Name: </Text> {proj?.title}
-        </StyledText>
-        <StyledText>
-          <Text style={{fontWeight: 'bold'}}>Details: </Text>
-          {proj?.description}
-        </StyledText>
+        <Text>
+          <StyledText style={{fontWeight: 'bold'}}>
+            Name:&nbsp;&nbsp;&nbsp;&nbsp;
+          </StyledText>
+          <StyledText suspense trigger={proj}>
+            {proj?.title}
+          </StyledText>
+        </Text>
+        <Text>
+          <StyledText style={{fontWeight: 'bold'}}>Details: </StyledText>
+          <StyledText suspense trigger={proj}>
+            {proj?.description}
+          </StyledText>
+        </Text>
         <Separator />
         {role === RoleType.BountyManager &&
           proj?.stage === 'PendingBountyMgrQuote' && (

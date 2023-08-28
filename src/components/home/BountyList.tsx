@@ -77,14 +77,14 @@ export default function BountyList({
     if (sorting === 'Newest') {
       sorted.sort(
         (a, b) =>
-          fromFireDate(b.startDate).getTime() -
-          fromFireDate(a.startDate).getTime(),
+          (fromFireDate(b.startDate)?.getTime() || 0) -
+          (fromFireDate(a.startDate)?.getTime() || 0),
       );
     } else if (sorting === 'Oldest') {
       sorted.sort(
         (a, b) =>
-          fromFireDate(a.startDate).getTime() -
-          fromFireDate(b.startDate).getTime(),
+          (fromFireDate(a.startDate)?.getTime() || 0) -
+          (fromFireDate(b.startDate)?.getTime() || 0),
       );
     } else if (sorting === '$ High to Low') {
       sorted.sort((a, b) => b.reward - a.reward);
@@ -316,11 +316,9 @@ export default function BountyList({
           )}
           {validatorView &&
             bounty.stage === 'Active' &&
-            (bounty.testCases.length === 0 ? (
-              <BountyWarning text="Required action: Add test cases" />
-            ) : (
+            bounty.submissionIDs.length > 0 && (
               <BountyWarning text="Required action: Review Submissions" />
-            ))}
+            )}
           {bounty.stage === 'PendingApproval' && (
             <BountyWarning text="Pending Approval" />
           )}
@@ -386,7 +384,7 @@ export default function BountyList({
             }}>
             <CalendarIcon />
             <StyledText>
-              Deadline: {fromFireDate(bounty.deadline).toDateString()}
+              Deadline: {fromFireDate(bounty.deadline)?.toDateString()}
             </StyledText>
           </View>
           <View
@@ -449,14 +447,12 @@ export default function BountyList({
             ))}
           {validatorView &&
             bounty.stage === 'Active' &&
-            (bounty.testCases.length === 0 ? (
+            (bounty.submissionIDs.length === 0 ? (
               <RoundArrowButton
                 title="View Bounty"
                 onPress={() => {
                   setSelectedFullBounty(bounty.id);
-                  navigation.navigate('ViewBounty', {
-                    isValidator: true,
-                  });
+                  navigation.navigate('ViewBounty');
                 }}
               />
             ) : (
@@ -464,9 +460,7 @@ export default function BountyList({
                 title="View Submissions"
                 onPress={() => {
                   setSelectedFullBounty(bounty.id);
-                  navigation.navigate('ViewBounty', {
-                    isValidator: true,
-                  });
+                  navigation.navigate('ViewBounty');
                 }}
               />
             ))}

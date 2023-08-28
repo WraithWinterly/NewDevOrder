@@ -1,4 +1,4 @@
-import {useEffect, useId} from 'react';
+import {useEffect, useId, useState} from 'react';
 import {Text, View} from 'react-native';
 import Bubble from 'src/components/ui/Bubble';
 import StyledText from 'src/components/ui/styled/StyledText';
@@ -49,15 +49,19 @@ export default function Profile({route, navigation}: Props) {
 
   const viewProfileAddress = route.params?.viewProfileAddress ?? undefined;
 
-  const displayProfile = !!viewProfileAddress
-    ? memberViewing
-    : !!myProfile
-    ? myProfile
-    : undefined;
+  const [displayProfile, setDisplayProfile] = useState<Member | undefined>();
 
   const isMyProfile =
     !viewProfileAddress ||
     viewProfileAddress === wallet?.wallet?.publicKey.toBase58().toString();
+
+  useEffect(() => {
+    if (memberViewing) {
+      setDisplayProfile(memberViewing);
+    } else if (myProfile) {
+      setDisplayProfile(myProfile);
+    }
+  }, [memberViewing, myProfile, isMyProfile]);
 
   useEffect(() => {
     if (!isMyProfile) {
@@ -66,8 +70,8 @@ export default function Profile({route, navigation}: Props) {
     } else {
       fetchMyProfile();
     }
-  }, [isMyProfile]);
-
+  }, [isMyProfile, viewProfileAddress]);
+  console.log(isMyProfile);
   return (
     <Layout>
       {!!displayProfile && (
@@ -81,7 +85,7 @@ function ProfileCard({
   profile,
   isMyProfile,
 }: {
-  profile: Member;
+  profile: Member | undefined;
   isMyProfile: boolean;
 }) {
   const id = useId();
@@ -122,23 +126,31 @@ function ProfileCard({
   return (
     <View style={{gap: 12, alignItems: 'flex-start'}}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 12}}>
-        <StyledText style={{fontSize: 24, fontWeight: '500'}}>
-          {profile.firstName}
+        <StyledText
+          style={{fontSize: 24, fontWeight: '500'}}
+          suspense
+          trigger={profile}>
+          {profile?.firstName}
         </StyledText>
-        <Bubble lowHeight text={`Level ${profile.level}`} />
+        <Bubble
+          lowHeight
+          text={`Level ${profile?.level}`}
+          suspense
+          trigger={profile}
+        />
       </View>
 
-      <StyledText>@{profile.username}</StyledText>
+      <StyledText>@{profile?.username}</StyledText>
       <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 14}}>
-        {profile.roles.map((role, i) => (
+        {profile?.roles.map((role, i) => (
           <Bubble key={`${i}-${id}-${role}`} text={addSpaceCase(role) || ''} />
         ))}
       </View>
 
-      <Text>
-        {profile.bountiesWon} bounties won • {profile.teamsJoined} teams joined
-        • {profile.membersInvited} members invited
-      </Text>
+      <StyledText suspense trigger={profile}>
+        {profile?.bountiesWon} bounties won • {profile?.teamsJoined} teams
+        joined • {profile?.membersInvited} members invited
+      </StyledText>
       {isMyProfile && (
         <View style={{width: '100%'}}>
           <StyledText
