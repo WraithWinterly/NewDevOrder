@@ -129,7 +129,8 @@ export default function InviteMembers() {
 
     const data = await mutateInviteToTeam(body);
     if (data) {
-      fetchInvitedMembers();
+      setNewInvitesMembers([...newInvitesMembers, currentUser!]);
+      // fetchInvitedMembers();
     }
   }
 
