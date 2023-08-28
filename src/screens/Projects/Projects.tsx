@@ -142,11 +142,19 @@ function ProjectCard({
         navigation.navigate('PendingProposal');
       }
     } else if (role === RoleType.Founder || role === RoleType.BountyManager) {
+      if ((project?.bountyIDs?.length || 0) > 0) {
+        navigation.navigate('ViewProjectBounties');
+        return;
+      }
       navigation.navigate('PendingProposal');
     } else if (role === RoleType.BountyValidator) {
       if (project?.stage === ProjectStage.Ready) {
-        navigation.navigate('PendingSubmissions');
+        navigation.navigate('ViewProjectBounties');
       } else {
+        if ((project?.bountyIDs?.length || 0) > 0) {
+          navigation.navigate('ViewProjectBounties');
+          return;
+        }
         navigation.navigate('PendingProposal');
       }
     }

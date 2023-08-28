@@ -33,7 +33,8 @@ export default function StackHeaderRight({route}: {route: string}) {
           style={{color: Colors.Primary}}>
           Done
         </StyledText>
-      ) : route === 'DesignerWorkspaceNavigator' ? (
+      ) : route === 'DesignerWorkspaceNavigator' ||
+        route === 'ViewProjectBounties' ? (
         <StyledText
           style={{color: Colors.Primary, width: 110, textAlign: 'right'}}
           onPress={() => navigation.navigate('PendingProposal')}>

@@ -60,7 +60,6 @@ export default function ViewSubmissions() {
             <StyledButton
               type="borderNoFill"
               onPress={() => {
-                console.log(submission.id);
                 setSelectedSubmission(submission.id);
                 navigation.navigate('StartTestCases');
               }}>

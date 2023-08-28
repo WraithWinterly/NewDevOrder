@@ -73,7 +73,7 @@ export function SolanaProvider({children}: {children: ReactNode}) {
 
   async function signMessage(nonce: string): Promise<Uint8Array[] | null> {
     const message = `Signing this message will prove your identity. Nonce: ${nonce}`;
-    console.log(message);
+
     const messageBuffer = new Uint8Array(
       message.split('').map(c => c.charCodeAt(0)),
     );

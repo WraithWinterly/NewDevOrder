@@ -24,7 +24,14 @@ import {
 } from 'react-native-popup-menu';
 import DropdownIcon from '../icons/DropdownIcon';
 import useProjectsStore from 'src/stores/projectsStore';
-import {Bounty, BountyStage, CreateBountyData, Project} from 'src/sharedTypes';
+import {
+  Bounty,
+  BountyStage,
+  CreateBountyData,
+  Project,
+  RoleType,
+} from 'src/sharedTypes';
+import useMemberStore from 'src/stores/membersStore';
 
 enum SortBy {
   Newest = 'Newest',
@@ -40,8 +47,6 @@ enum SortBy2 {
 
 export default function BountyList({
   bounties,
-  designerView,
-  validatorView,
   noSort2,
 }: {
   bounties:
@@ -64,6 +69,8 @@ export default function BountyList({
 
   const selectedProject = useProjectsStore(state => state.selectedProject);
 
+  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
+
   const [sorting, setSorting] = useState(SortBy.Newest);
 
   const [sorting2, setSorting2] = useState(
@@ -71,6 +78,9 @@ export default function BountyList({
   );
 
   const [sortedBounties, setSortedBounties] = useState(bounties);
+
+  const designerView = playingRole === RoleType.BountyDesigner;
+  const validatorView = playingRole === RoleType.BountyValidator;
 
   useEffect(() => {
     if (!bounties) return;
@@ -141,7 +151,7 @@ export default function BountyList({
         {validatorView &&
           bounty?.stage === 'Active' &&
           bounty.submissionIDs.length > 0 && (
-            <BountyWarning text="Required action: Review Submissions" />
+            <BountyWarning text="Review Submissions" />
           )}
         {bounty?.stage === 'PendingApproval' && (
           <BountyWarning text="Pending Approval" />
@@ -336,7 +346,11 @@ export default function BountyList({
                   gap: 8,
                   alignItems: 'center',
                 }}>
-                <StyledText style={{flex: 1}} truncate>
+                <StyledText
+                  style={{flex: 1}}
+                  truncate
+                  suspense
+                  trigger={bounties}>
                   Sort by {sorting}
                 </StyledText>
                 <View style={{paddingTop: 4}}>
@@ -428,7 +442,11 @@ export default function BountyList({
                     gap: 8,
                     alignItems: 'center',
                   }}>
-                  <StyledText style={{flex: 1}} truncate>
+                  <StyledText
+                    style={{flex: 1}}
+                    truncate
+                    suspense
+                    trigger={bounties}>
                     {sorting2}
                   </StyledText>
                   <View style={{paddingTop: 4}}>

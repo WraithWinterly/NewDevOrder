@@ -43,7 +43,7 @@ import ViewSubmissions from './screens/projects/validator/ViewSubmissions';
 import StartTestCases from './screens/projects/validator/StartTestCases';
 import ViewSolution from './screens/bounties/ViewSolution';
 import ClaimReward from './screens/bounties/ClaimReward';
-import PendingSubmissions from './screens/projects/validator/PendingSubmissions';
+import ViewProjectBounties from './screens/projects/shared/ViewProjectBounties';
 
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
@@ -106,11 +106,11 @@ export type ProjectParamList = {
   AcceptAndSendQuote: undefined;
   ConfirmDecline: undefined;
   // Validator
-  PendingSubmissions: undefined;
   ViewSubmissions: undefined;
   StartTestCases: undefined;
   // Shared
   PendingProposal: undefined;
+  ViewProjectBounties: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -121,6 +121,22 @@ export default function StackNavigator() {
   const nftToMint = useMintStore(state => state.nftToMint);
   const teamTitle = useTeamsStore(state => state.selectedTeam);
   const project = useProjectsStore(state => state.selectedProject);
+
+  function getProjectTitle() {
+    // Check if project or project's title is undefined or null
+    if (!project?.title) {
+      return 'Project ...';
+    }
+
+    // If title is longer than charCount characters, truncate and add '...'
+    const charCount = 28;
+    if (project.title.length > charCount) {
+      return `${project.title.slice(0, charCount)}...`;
+    }
+
+    // Return the entire title if it's 28 characters or shorter
+    return project.title;
+  }
 
   return (
     <NavigationContainer
@@ -242,11 +258,7 @@ export default function StackNavigator() {
           name="DesignerWorkspaceNavigator"
           component={DesignerWorkspaceNavigator}
           options={{
-            title: !!project?.title
-              ? `${project?.title.slice(0, 28)}${
-                  (project?.title?.length || 0) > 28 ? '...' : ''
-                }`
-              : 'Project ...',
+            title: getProjectTitle(),
           }}
         />
         <Stack.Screen
@@ -305,13 +317,6 @@ export default function StackNavigator() {
             title: '',
           }}
         />
-        <Stack.Screen
-          name="PendingSubmissions"
-          component={PendingSubmissions}
-          options={{
-            title: 'Your Projects',
-          }}
-        />
 
         <Stack.Screen
           name="ViewSubmissions"
@@ -331,7 +336,14 @@ export default function StackNavigator() {
           name="PendingProposal"
           component={PendingProposal}
           options={{
-            title: '',
+            title: getProjectTitle(),
+          }}
+        />
+        <Stack.Screen
+          name="ViewProjectBounties"
+          component={ViewProjectBounties}
+          options={{
+            title: getProjectTitle(),
           }}
         />
         {/* End Projects */}

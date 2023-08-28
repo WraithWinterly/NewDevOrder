@@ -1,22 +1,11 @@
 import {ReactNode, useEffect, useState} from 'react';
 import {Keyboard, View} from 'react-native';
+import useKeyboardVisible from 'src/hooks/useKeyboardVisible';
 import {Colors} from 'src/styles/styles';
 
 export default function BottomBar({children}: {children: ReactNode}) {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const l1 = Keyboard.addListener('keyboardDidShow', () => {
-      setVisible(true);
-    });
-    const l2 = Keyboard.addListener('keyboardDidHide', () => {
-      setVisible(false);
-    });
-    return () => {
-      l1.remove();
-      l2.remove();
-    };
-  }, [Keyboard]);
-  return visible ? null : (
+  const kbVisible = useKeyboardVisible();
+  return kbVisible ? null : (
     <View
       style={{
         position: 'absolute',

@@ -6,7 +6,7 @@ import {TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import MemberBox from 'src/components/MemberBox';
-import BountyList from 'src/components/home/BountyList';
+
 import RightArrowIcon from 'src/components/icons/RightArrowIcon';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
@@ -16,44 +16,11 @@ import {RoleType} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
-import {didIApprove} from 'src/utils/utils';
 
 export default function PendingProposal() {
   const proj = useProjectsStore(state => state.selectedProject);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const role = useMemberStore(state => state.myProfile?.playingRole);
-  const bounties = useProjectsStore(state => state.bountiesForProject);
-  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
-
-  const [pendingBounties, setPendingBounties] = useState<typeof bounties>([]);
-  const [approvedBounties, setApprovedBounties] = useState<typeof bounties>([]);
-  const [activeBounties, setActiveBounties] = useState<typeof bounties>([]);
-  const [completedBounties, setCompletedBounties] = useState<typeof bounties>(
-    [],
-  );
-
-  useEffect(() => {
-    if (playingRole) {
-      setPendingBounties(
-        bounties?.filter(
-          bounty =>
-            bounty.stage === 'PendingApproval' &&
-            !didIApprove(bounty, playingRole),
-        ),
-      );
-      setApprovedBounties(
-        bounties?.filter(
-          bounty =>
-            bounty.stage === 'PendingApproval' &&
-            didIApprove(bounty, playingRole),
-        ),
-      );
-      setActiveBounties(bounties?.filter(bounty => bounty.stage === 'Active'));
-      setCompletedBounties(
-        bounties?.filter(bounty => bounty.stage === 'Completed'),
-      );
-    }
-  }, [playingRole, bounties]);
 
   return (
     <Layout>
@@ -202,51 +169,6 @@ export default function PendingProposal() {
               <Separator customH={8} />
             </View>
           )}
-        {playingRole != RoleType.BountyDesigner && (
-          <View>
-            {pendingBounties && pendingBounties.length > 0 && (
-              <>
-                <StyledText
-                  style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
-                  Your todo: Pending Approvals
-                </StyledText>
-                <BountyList bounties={pendingBounties} noSort2></BountyList>
-                <Separator />
-              </>
-            )}
-
-            {!!approvedBounties && approvedBounties.length > 0 && (
-              <>
-                <StyledText
-                  style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
-                  Approved Bounties
-                </StyledText>
-                <BountyList bounties={approvedBounties} noSort2></BountyList>
-                <Separator />
-              </>
-            )}
-            {!!activeBounties && activeBounties.length > 0 && (
-              <>
-                <StyledText
-                  style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
-                  Active Bounties
-                </StyledText>
-                <BountyList bounties={activeBounties} noSort2></BountyList>
-                <Separator />
-              </>
-            )}
-            {!!completedBounties && completedBounties.length > 0 && (
-              <>
-                <StyledText
-                  style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}>
-                  Completed Bounties
-                </StyledText>
-                <BountyList bounties={completedBounties} noSort2></BountyList>
-                <Separator />
-              </>
-            )}
-          </View>
-        )}
       </ScrollView>
     </Layout>
   );

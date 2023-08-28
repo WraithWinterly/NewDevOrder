@@ -286,7 +286,7 @@ export default function ViewBounty({route, navigation}: Props) {
               View Solution
             </StyledButton>
           )}
-          {isValidator || isDesigner ? (
+          {isValidator ? (
             <StyledButton
               type="normal2"
               onPress={() => navigation.navigate('ViewSubmissions')}>

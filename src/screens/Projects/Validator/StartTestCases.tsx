@@ -17,6 +17,7 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
+import useKeyboardVisible from 'src/hooks/useKeyboardVisible';
 import useMutation from 'src/hooks/usePost';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
@@ -71,11 +72,12 @@ export default function StartTestCases() {
   );
 
   const id = useId();
+  const kbVisible = useKeyboardVisible();
 
   const [testCases, setTestCases] = useState<string[]>(
     selectedSubmission?.testCases || [],
   );
-  console.log(selectedSubmission);
+
   const [addingTestCase, setAddingTestCase] = useState(false);
 
   const [newTestCase, setNewTestCase] = useState('');
@@ -126,12 +128,11 @@ export default function StartTestCases() {
     };
 
     const data = await mutateSubmit(body);
-    console.log('data ', data);
+
     if (!!data) {
       setSelectedBounty(selectedBounty.id);
       setSelectedSubmission(selectedBounty.id);
       navigation.navigate('ViewSubmissions');
-      // navigation.navigate('PendingSubmissions');
     }
   }
 
@@ -183,14 +184,15 @@ export default function StartTestCases() {
     const data = await mutateApproveDisapproveBountyWinner(body);
     if (data) {
       setSelectedBounty(selectedBounty.id);
-      navigation.navigate('ViewSubmissions');
+      navigation.navigate('ViewBounty');
     }
   }
 
   return (
     <Layout>
       <View style={{height: '100%'}}>
-        <ScrollView style={{marginBottom: isBountyValidator ? 120 : 0}}>
+        <ScrollView
+          style={{marginBottom: isBountyValidator && !kbVisible ? 120 : 0}}>
           <StyledText style={{fontSize: 24}}>
             Test Cases for{' '}
             <Text style={{color: Colors.Primary}}>

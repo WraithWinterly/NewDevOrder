@@ -132,7 +132,7 @@ export default function InviteMembers() {
       fetchInvitedMembers();
     }
   }
-  console.log('new ', newInvitesMembers);
+
   return (
     <Layout>
       <StyledTextInput

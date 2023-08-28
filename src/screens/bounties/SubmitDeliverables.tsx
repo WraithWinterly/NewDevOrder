@@ -56,9 +56,19 @@ export default function SubmitDeliverables() {
           selectedFullBounty.id
         }`,
       ).then(data => {
-        if (data) {
-          setLinkToCode(data?.repo);
-          setLinkToVideoDemo(data?.videoDemo);
+        if (!!data) {
+          if (!!data && data.length > 0) {
+            const latestSubmission = data[data.length - 1];
+            if (latestSubmission?.repo != '') {
+              setLinkToCode(latestSubmission?.repo);
+            } else setLinkToCode('https://');
+            if (latestSubmission?.videoDemo != '') {
+              setLinkToVideoDemo(latestSubmission?.videoDemo);
+            } else setLinkToVideoDemo('https://');
+          } else {
+            setLinkToCode('https://');
+            setLinkToVideoDemo('https://');
+          }
         }
       });
     } else {
