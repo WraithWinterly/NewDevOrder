@@ -23,6 +23,8 @@ import useProjectsStore from 'src/stores/projectsStore';
 import RefreshIcon from 'src/components/icons/RefreshIcon';
 import {useState} from 'react';
 import useSolanaContext from 'src/web3/SolanaProvider';
+import StyledText from 'src/components/ui/styled/StyledText';
+import {RoleType} from 'src/sharedTypes';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
@@ -91,8 +93,26 @@ export default function HeaderRight() {
 
       <Menu>
         <MenuTrigger>
-          <View style={{padding: 12}}>
+          <View
+            style={{
+              padding: 12,
+              flexDirection: 'row',
+              gap: 8,
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
             <ProfileIcon size={24} />
+            <StyledText style={{fontFamily: 'RussoOne-Regular'}}>
+              {myProfile?.playingRole === RoleType.Founder
+                ? 'F'
+                : myProfile?.playingRole === RoleType.BountyDesigner
+                ? 'BD'
+                : myProfile?.playingRole === RoleType.BountyManager
+                ? 'BM'
+                : myProfile?.playingRole === RoleType.BountyValidator
+                ? 'BV'
+                : 'BH'}
+            </StyledText>
           </View>
         </MenuTrigger>
         <MenuOptions
@@ -129,14 +149,14 @@ export default function HeaderRight() {
                   style={{
                     height: 38,
                     width: 38,
-                    backgroundColor: Colors.Purple[400],
+                    // backgroundColor: Colors.Purple[400],
                     borderRadius: 100,
                   }}></View>
                 <View style={{flexDirection: 'column'}}>
                   <Text style={{color: Colors.White, fontSize: 18}}>
                     {myProfile.firstName}
                   </Text>
-                  <Text>{myProfile.username}</Text>
+                  <Text>@{myProfile.username}</Text>
                 </View>
                 <View
                   style={{
@@ -144,7 +164,7 @@ export default function HeaderRight() {
                     borderRadius: 12,
                     justifyContent: 'center',
                     paddingHorizontal: 18,
-                    paddingVertical: 12,
+                    paddingVertical: 6,
                   }}>
                   <Text>Level {myProfile.level}</Text>
                 </View>

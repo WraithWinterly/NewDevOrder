@@ -37,7 +37,7 @@ import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
 import {DropdownSection} from 'src/components/ui/styled/StyledDropdown';
 import BottomBar from 'src/components/ui/styled/BottomBar';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 

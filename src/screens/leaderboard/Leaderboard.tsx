@@ -8,12 +8,9 @@ import {useEffect, useId, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native';
 import {RefreshControl} from 'react-native';
-import {Text} from 'react-native-svg';
 import {StackParamList} from 'src/StackNavigator';
 import StyledText from 'src/components/ui/styled/StyledText';
 import useLeaderboardStore from 'src/stores/leaderboardStore';
-import useMemberStore from 'src/stores/membersStore';
-import useAppStore from 'src/stores/store';
 import {Colors} from 'src/styles/styles';
 
 export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
@@ -23,8 +20,6 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
   const fetchTopFounders = useLeaderboardStore(state => state.fetchTopFounders);
   const topMembers = useLeaderboardStore(state => state.topMembers);
   const topFounders = useLeaderboardStore(state => state.topFounders);
-
-  const setMemberAddrViewing = useMemberStore(state => state.fetchProfile);
 
   const [refreshing, setRefreshing] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
@@ -76,7 +71,6 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
           renderItem={({item, index}) => (
             <TouchableOpacity
               onPress={() => {
-                setMemberAddrViewing(item.walletAddress);
                 navigation.navigate('Profile', {
                   viewProfileAddress: item.walletAddress,
                 });
