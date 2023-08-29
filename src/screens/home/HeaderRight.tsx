@@ -31,7 +31,6 @@ export default function HeaderRight() {
     .wallet?.publicKey.toBase58()
     .toString();
 
-  const setMemberIdViewing = useMemberStore(state => state.fetchProfile);
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 
@@ -155,8 +154,9 @@ export default function HeaderRight() {
 
           <MenuOption
             onSelect={() => {
-              setMemberIdViewing(undefined);
-              navigation.navigate('Profile');
+              navigation.navigate('Profile', {
+                viewProfileAddress: walletAddress,
+              });
             }}>
             <View style={{flexDirection: 'row', gap: 10, alignItems: 'center'}}>
               <ProfileIcon />

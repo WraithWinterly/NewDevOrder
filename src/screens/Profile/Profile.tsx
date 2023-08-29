@@ -14,69 +14,56 @@ import useMutation from 'src/hooks/usePost';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import addSpaceCase from 'src/utils/utils';
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuTrigger,
+} from 'react-native-popup-menu';
+import {Colors} from 'src/styles/styles';
+import DropdownIcon from 'src/components/icons/DropdownIcon';
+import useQuery from 'src/hooks/useQuery';
 
 type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
-
-const RoleDict = [
-  {
-    id: '5',
-    title: 'Bounty Designer',
-  },
-  {
-    id: '1',
-    title: 'Bounty Hunter',
-  },
-  {
-    id: '2',
-    title: 'Bounty Manager',
-  },
-  {
-    id: '3',
-    title: 'Bounty Validator',
-  },
-  {
-    id: '4',
-    title: 'Founder',
-  },
-];
 
 export default function Profile({route, navigation}: Props) {
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
-  const memberViewing = useMemberStore(state => state.memberViewing);
-  const fetchProfile = useMemberStore(state => state.fetchProfile);
+
   const wallet = useSolanaContext();
 
   const viewProfileAddress = route.params?.viewProfileAddress ?? undefined;
 
+  const {data, loading, error, query} = useQuery(
+    getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS),
+  );
+
   const [displayProfile, setDisplayProfile] = useState<Member | undefined>();
 
   const isMyProfile =
-    !viewProfileAddress ||
     viewProfileAddress === wallet?.wallet?.publicKey.toBase58().toString();
 
   useEffect(() => {
-    if (memberViewing) {
-      setDisplayProfile(memberViewing);
-    } else if (myProfile) {
-      setDisplayProfile(myProfile);
-    }
-  }, [memberViewing, myProfile, isMyProfile]);
-
-  useEffect(() => {
-    if (!isMyProfile) {
-      fetchProfile(viewProfileAddress.toString());
-      return;
+    if (!isMyProfile && !!viewProfileAddress) {
+      query(
+        `${getServerEndpoint(
+          Endpoints.GET_MEMBER_BY_WALLET_ADDRESS,
+        )}/${viewProfileAddress}`,
+      ).then(data => {
+        if (data) {
+          const member = data as Member;
+          setDisplayProfile(member);
+        }
+      });
     } else {
       fetchMyProfile();
+      setDisplayProfile(myProfile);
     }
-  }, [isMyProfile, viewProfileAddress]);
+  }, [viewProfileAddress]);
 
   return (
     <Layout>
-      {!!displayProfile && (
-        <ProfileCard profile={displayProfile} isMyProfile={isMyProfile} />
-      )}
+      <ProfileCard profile={displayProfile} isMyProfile={isMyProfile} />
     </Layout>
   );
 }
@@ -91,6 +78,7 @@ function ProfileCard({
   const id = useId();
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
+  const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
@@ -107,10 +95,6 @@ function ProfileCard({
     mutate: mutateUpdateRoles,
   } = useMutation(getServerEndpoint(Endpoints.UPDATE_MY_ROLES));
 
-  const AvailableRoleDict = RoleDict.filter(({title}) =>
-    myProfile?.roles?.includes(title.replace(' ', '') as RoleType),
-  );
-
   async function onSubmit() {
     if (!walletAddress) {
       console.error('No walletAddress');
@@ -123,13 +107,103 @@ function ProfileCard({
     }
   }
 
+  async function onSubmitRole(role: RoleType) {
+    if (!walletAddress) {
+      console.error('No walletAddress');
+      return;
+    }
+    const data = await mutateRole({role} as ChangeRolePOSTData);
+    if (!!data) {
+      fetchMyProfile();
+    }
+  }
+
   return (
     <View style={{gap: 12, alignItems: 'flex-start'}}>
+      {isMyProfile && (
+        <View style={{width: '100%'}}>
+          <Menu style={{marginTop: 12}}>
+            <MenuTrigger>
+              <View
+                style={{
+                  borderColor: Colors.BorderColor,
+                  borderWidth: 2,
+                  paddingVertical: 14,
+                  paddingHorizontal: 16,
+                  borderRadius: 12,
+                  flexDirection: 'row',
+                  gap: 8,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <StyledText
+                  truncate
+                  suspense
+                  trigger={playingRole}
+                  shimmerWidth={120}>
+                  {addSpaceCase(playingRole)}
+                </StyledText>
+                <View style={{paddingTop: 4}}>
+                  <DropdownIcon />
+                </View>
+              </View>
+            </MenuTrigger>
+            <MenuOptions
+              customStyles={{
+                optionsContainer: {
+                  backgroundColor: Colors.BackgroundLighter,
+                  marginTop: 60,
+
+                  borderRadius: 12,
+                },
+                optionsWrapper: {
+                  backgroundColor: Colors.BackgroundDarker,
+                  padding: 10,
+                  borderRadius: 12,
+                  width: 280,
+                  gap: 10,
+                },
+              }}>
+              <RoleMenuOption
+                targetRole={RoleType.Founder}
+                availableRoles={myProfile?.roles ?? []}
+                currentRole={playingRole}
+                onSelect={() => onSubmitRole(RoleType.Founder)}
+              />
+              <RoleMenuOption
+                targetRole={RoleType.BountyHunter}
+                availableRoles={myProfile?.roles ?? []}
+                currentRole={playingRole}
+                onSelect={() => onSubmitRole(RoleType.BountyHunter)}
+              />
+              <RoleMenuOption
+                targetRole={RoleType.BountyManager}
+                availableRoles={myProfile?.roles ?? []}
+                currentRole={playingRole}
+                onSelect={() => onSubmitRole(RoleType.BountyManager)}
+              />
+              <RoleMenuOption
+                targetRole={RoleType.BountyDesigner}
+                availableRoles={myProfile?.roles ?? []}
+                currentRole={playingRole}
+                onSelect={() => onSubmitRole(RoleType.BountyDesigner)}
+              />
+              <RoleMenuOption
+                targetRole={RoleType.BountyValidator}
+                availableRoles={myProfile?.roles ?? []}
+                currentRole={playingRole}
+                onSelect={() => onSubmitRole(RoleType.BountyValidator)}
+              />
+            </MenuOptions>
+          </Menu>
+        </View>
+      )}
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 12}}>
         <StyledText
           style={{fontSize: 24, fontWeight: '500'}}
           suspense
-          trigger={profile}>
+          trigger={profile?.firstName}
+          shimmerWidth={120}>
           {profile?.firstName}
         </StyledText>
         <Bubble
@@ -140,64 +214,27 @@ function ProfileCard({
         />
       </View>
 
-      <StyledText>@{profile?.username}</StyledText>
+      <StyledText suspense trigger={profile}>
+        @{profile?.username}
+      </StyledText>
       <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 14}}>
+        {!profile && (
+          <>
+            <Bubble text="" suspense />
+            <Bubble text="" suspense />
+          </>
+        )}
         {profile?.roles.map((role, i) => (
           <Bubble key={`${i}-${id}-${role}`} text={addSpaceCase(role) || ''} />
         ))}
       </View>
 
-      <StyledText suspense trigger={profile}>
+      <StyledText suspense trigger={profile} shimmerWidth={240}>
         {profile?.bountiesWon} bounties won • {profile?.teamsJoined} teams
         joined • {profile?.membersInvited} members invited
       </StyledText>
       {isMyProfile && (
         <View style={{width: '100%'}}>
-          <StyledText
-            style={{
-              paddingVertical: 8,
-              marginBottom: -10,
-              marginLeft: 4,
-              fontSize: 18,
-              fontWeight: 'bold',
-            }}
-            suspense
-            trigger={myProfile}>
-            I am...
-          </StyledText>
-          <DropdownMenu
-            name="role"
-            data={AvailableRoleDict || []}
-            onSelect={async (itemID, itemIndex) => {
-              const role = AvailableRoleDict?.find(role => role.id == itemID);
-
-              if (!walletAddress) {
-                console.error('No wallet address');
-                return;
-              }
-              if (!role) {
-                console.error('Selected role not found');
-                return;
-              }
-              const title = role.title.replace(' ', '');
-
-              const body = {
-                role: title,
-              } as unknown as ChangeRolePOSTData;
-              const data = await mutateRole(body);
-              if (data) {
-                fetchMyProfile();
-              }
-            }}
-            // Add space between capital letters
-            // Eg. Change BountyType.BountyHunter to Bounty Hunter
-            displayText={addSpaceCase(myProfile?.playingRole) || ''}
-            selectedValue={
-              RoleDict.find(role => role.title == myProfile?.playingRole)?.id ||
-              ''
-            }
-            loading={loadingRole}
-          />
           <View style={{height: 12}} />
           <StyledText>
             If you recently minted a role NFT, you may need to update roles.
@@ -213,4 +250,31 @@ function ProfileCard({
       )}
     </View>
   );
+}
+
+function RoleMenuOption({
+  availableRoles,
+  targetRole,
+  currentRole,
+  onSelect,
+}: {
+  availableRoles: RoleType[];
+  targetRole: RoleType;
+  currentRole?: RoleType;
+  onSelect: () => void;
+}) {
+  if (availableRoles.includes(targetRole))
+    return (
+      <MenuOption onSelect={onSelect}>
+        <View>
+          <StyledText
+            style={{
+              color: currentRole === targetRole ? Colors.Primary : Colors.Text,
+            }}>
+            {addSpaceCase(targetRole)}
+          </StyledText>
+        </View>
+      </MenuOption>
+    );
+  else return null;
 }

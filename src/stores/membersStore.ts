@@ -5,8 +5,6 @@ import query from 'src/utils/query';
 import {Bounty, Member, Submission, Team, TeamInvite} from 'src/sharedTypes';
 
 type MemberStore = {
-  memberViewing: Member | undefined;
-  fetchProfile: (walletAddress: string | undefined) => Promise<void>;
   fetchMyProfile: () => Promise<void>;
   myProfile:
     | (Member & {
@@ -17,20 +15,6 @@ type MemberStore = {
 };
 
 const useMemberStore = create<MemberStore>((set, get) => ({
-  memberViewing: undefined,
-  fetchProfile: async id => {
-    set(() => ({memberViewing: undefined}));
-
-    if (typeof id === 'undefined') return;
-
-    const {result, error} = await query(
-      getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) + `/${id}`,
-    );
-    if (result) {
-      const data = result as Member;
-      set(() => ({memberViewing: data}));
-    }
-  },
   fetchMyProfile: async () => {
     set(() => ({myProfile: undefined}));
     set(() => ({myBountyWins: undefined}));
