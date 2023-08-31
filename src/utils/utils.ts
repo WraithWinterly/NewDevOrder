@@ -79,9 +79,6 @@ export default function addSpaceCase(str: string | undefined) {
 }
 
 export function isFireDate(obj: Object) {
-  // console.log(obj);
-  // console.log(!!obj.seconds);
-
   //@ts-expect-error
   const is = obj['_nanoseconds'] != null;
 
@@ -89,25 +86,11 @@ export function isFireDate(obj: Object) {
 }
 
 export function fromFireDate(timestamp: any | undefined) {
-  // console.log('timestamp: ', timestamp);
   if (timestamp == null) {
     return undefined;
   }
   const jsTimestamp = new Date(
     timestamp['_seconds'] * 1000 + timestamp['_nanoseconds'] / 1000000,
   );
-  // console.log('js time stamp ', jsTimestamp.getTime());
   return jsTimestamp;
-  // return new Date();
 }
-
-// const firestoreTime = {
-//   seconds: 1613748319,
-//   nanoseconds: 47688698687,
-// };
-
-// const jsDate = fireDate(firestoreTime);
-// const date = jsDate.toDateString();
-// const atTime = jsDate.toLocaleTimeString();
-
-// console.log(date, atTime);

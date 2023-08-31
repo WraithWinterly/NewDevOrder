@@ -30,14 +30,7 @@ export default function Welcome() {
         setHasCompletedWelcome(false);
         return;
       }
-      // const completed = JSON.parse(hasCompletedWelcome);
-      // if (completed) {
-      //   navigation.reset({
-      //     index: 0,
-      //     routes: [{name: 'ReconnectWallet'}],
-      //   });
-      //   return;
-      // }
+
       setHasCompletedWelcome(true);
     });
   }, []);

@@ -112,7 +112,7 @@ export default function Teams() {
           </>
         )}
 
-        {!!teamsJoined && teamsJoined.length > 0 && (
+        {!!teams && !!teamsJoined && teamsJoined.length > 0 && (
           <>
             <StyledText style={{marginBottom: 16}}>Teams Joined</StyledText>
             {teamsJoined.map(item => (
@@ -129,7 +129,7 @@ export default function Teams() {
             <Separator />
           </>
         )}
-        {!!otherTeams && otherTeams.length > 0 && (
+        {!!teams && !!otherTeams && otherTeams.length > 0 && (
           <>
             <StyledText style={{marginBottom: 16}}>Other Teams</StyledText>
             {otherTeams.map(item => (

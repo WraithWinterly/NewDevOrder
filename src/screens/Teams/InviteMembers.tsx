@@ -131,7 +131,6 @@ export default function InviteMembers() {
     const data = await mutateInviteToTeam(body);
     if (data) {
       setNewInvitesMembers([...newInvitesMembers, currentUser!]);
-      // fetchInvitedMembers();
     }
   }
 
@@ -176,7 +175,6 @@ export default function InviteMembers() {
       <View style={{height: 12}} />
       <StyledButton
         enabled={currentUser != null && canInviteUser}
-        // enabled={currentUser != null && true}
         onPress={inviteUser}
         loading={loadingInviteToTeam}
         error={!!errorInviteToTeam}>

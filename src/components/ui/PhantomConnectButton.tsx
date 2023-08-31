@@ -92,18 +92,6 @@ export default function PhantomConnectButton({
       setWalletConnectError('Wallet address not found');
       return;
     }
-
-    // // Check Solana Token
-    // const hasMemberShipToken = true;
-    // if (hasMemberShipToken) {
-    //   onSuccess(publicKey.toBase58().toString());
-    // } else {
-    //   navigator.navigate('WelcomeNoMembershipToken');
-    // }
-    // // Fetch user profile
-    // try {
-    //   fetchMyProfile(publicKey.toBase58().toString());
-    // } catch {}
   }
   async function walletStep2Sign() {
     if (!walletAddress) return;
