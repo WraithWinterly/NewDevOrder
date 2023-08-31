@@ -13,6 +13,8 @@ import useBountyStore from 'src/stores/bountyStore';
 import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {fromFireDate, isFireDate} from 'src/utils/utils';
+import WarningIcon from 'src/components/icons/WarningIcon';
+import CloseIcon from 'src/components/icons/CloseIcon';
 
 type Props = NativeStackScreenProps<StackParamList, 'CreateBounty'>;
 
@@ -22,6 +24,9 @@ export default function CreateBounty({route, navigation}: Props) {
     state => state.setSelectedProject,
   );
   const selectedProject = useProjectsStore(state => state.selectedProject);
+  const bountiesForProject = useProjectsStore(
+    state => state.bountiesForProject,
+  );
 
   const createBountyData = useBountyStore(state => state.createBountyData);
   const setCreateBountyData = useBountyStore(
@@ -36,7 +41,7 @@ export default function CreateBounty({route, navigation}: Props) {
   const [bountyAbout, setBountyAbout] = useState(
     createBountyData?.aboutProject || '',
   );
-  const [startDate, setstartDate] = useState(() => {
+  const [startDate, setStartDate] = useState(() => {
     if (createBountyData?.startDate) {
       return isFireDate(createBountyData.startDate)
         ? fromFireDate(createBountyData.startDate)
@@ -76,7 +81,7 @@ export default function CreateBounty({route, navigation}: Props) {
     if (!startDate || !deadline) {
       localErrors.push('Please select a valid start and end date');
     }
-    if (startDate.getTime() > deadline.getTime()) {
+    if (startDate!.getTime() > deadline!.getTime()) {
       localErrors.push('Start date must be before end date');
     }
     if (localErrors.length > 0) {
@@ -96,8 +101,8 @@ export default function CreateBounty({route, navigation}: Props) {
         title: bountyName,
         description: bountyDescription,
         aboutProject: bountyAbout,
-        startDate,
-        deadline: deadline,
+        startDate: startDate!,
+        deadline: deadline!,
         projectID: selectedProject.id,
       };
       if (!!createBountyData) {
@@ -122,11 +127,51 @@ export default function CreateBounty({route, navigation}: Props) {
     }
   };
 
+  function calcReward() {
+    let leftOver = selectedProject?.quotePrice || 0;
+    const withoutMe = bountiesForProject?.filter(
+      b => b.id !== createBountyData?.id,
+    );
+    withoutMe?.forEach(bounty => {
+      leftOver -= bounty.reward;
+    });
+
+    return leftOver;
+  }
+
   return (
     <Layout>
       <ScrollView>
         <View style={{gap: 12}}>
           {/* Dropdown for selecting the project */}
+          <View
+            style={{
+              flexDirection: 'row',
+              marginHorizontal: 4,
+              gap: 8,
+              alignItems: 'center',
+            }}>
+            <WarningIcon />
+            <StyledText style={{width: '90%'}}>
+              You will lose your progress by backing out of this screen.
+            </StyledText>
+          </View>
+          {calcReward() === 0 && (
+            <View
+              style={{
+                flexDirection: 'row',
+                marginHorizontal: 4,
+                gap: 8,
+                alignItems: 'center',
+              }}>
+              <CloseIcon />
+              <StyledText style={{width: '90%', color: Colors.Red[500]}}>
+                You do not have any funds left and will not be able to proceed
+                with this bounty!
+              </StyledText>
+            </View>
+          )}
+
           <StyledText>Creating bounty for Project</StyledText>
           <DropdownMenu
             name="project"
@@ -169,17 +214,17 @@ export default function CreateBounty({route, navigation}: Props) {
           />
 
           {/* Date inputs for submission start and end dates */}
-          <StyledText>Submission Start Date:</StyledText>
+          <StyledText>Bounty Open Date:</StyledText>
           <DatePicker
-            date={startDate}
+            date={startDate!}
             fadeToColor={Colors.Background}
-            onDateChange={date => setstartDate(date)}
+            onDateChange={date => setStartDate(date)}
             mode="date"
           />
 
-          <StyledText>Submission End Date:</StyledText>
+          <StyledText>Bounty Deadline:</StyledText>
           <DatePicker
-            date={deadline}
+            date={deadline!}
             onDateChange={date => setDeadline(date)}
             fadeToColor={Colors.Background}
             mode="date"

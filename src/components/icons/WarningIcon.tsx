@@ -6,6 +6,6 @@ const xml = `
 </svg>
 `;
 
-export default function WarningIcon() {
-  return <BaseIcon width={32} height={32} xml={xml} />;
+export default function WarningIcon({wh}: {wh?: number}) {
+  return <BaseIcon width={wh ?? 32} height={wh ?? 32} xml={xml} />;
 }

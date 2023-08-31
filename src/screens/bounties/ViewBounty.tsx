@@ -176,15 +176,15 @@ export default function ViewBounty({route, navigation}: Props) {
     }
 
     return {
-      id: '0',
-      startDate: createBountyData.startDate,
+      id: '-1',
+      startDate: new Date(createBountyData.startDate),
       reward: createBountyData.reward,
       stage: BountyStage.Draft,
       title: createBountyData.title,
       types: createBountyData.types, // Assuming 'BountyType' is an enum type for type
       founderAddress: project.founder.walletAddress,
       description: createBountyData.description,
-      deadline: createBountyData.deadline,
+      deadline: new Date(createBountyData.deadline),
       approvedByFounder: false,
       approvedByManager: false,
       approvedByValidator: false,
@@ -192,6 +192,7 @@ export default function ViewBounty({route, navigation}: Props) {
       headerSections: createBountyData.headerSections,
       projectId: null, // Assuming it's null for now
       participantsTeamIDs: [],
+      createdAt: new Date(),
       bountyWinnerID: '',
       submissionIDs: [],
       testCases: [],
@@ -293,7 +294,10 @@ export default function ViewBounty({route, navigation}: Props) {
               View submissions
             </StyledButton>
           ) : (
-            playingRole === RoleType.BountyHunter && (
+            playingRole === RoleType.BountyHunter &&
+            bounty?.stage === BountyStage.Active &&
+            (fromFireDate(bounty?.startDate)?.getTime() || 0) <=
+              new Date().getTime() && (
               <View style={{gap: 12}}>
                 <StyledButton
                   type="normal2"
@@ -411,9 +415,11 @@ export default function ViewBounty({route, navigation}: Props) {
                 trigger={bounty}
               />
 
-              {bounty?.stage === 'Active' && (
-                <Bubble type="green" text="Accepting Submissions" />
-              )}
+              {bounty?.stage === 'Active' &&
+                (fromFireDate(bounty?.startDate)?.getTime() || 0) <=
+                  new Date().getTime() && (
+                  <Bubble type="green" text="Accepting Submissions" />
+                )}
 
               {bounty?.types.map((type, index) => (
                 <Bubble
@@ -460,6 +466,19 @@ export default function ViewBounty({route, navigation}: Props) {
                     suspense
                     trigger={bounty}>
                     {bounty?.reward} USD
+                  </StyledText>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 6,
+                    alignItems: 'center',
+                    paddingTop: 2,
+                  }}>
+                  <CalendarIcon />
+                  <StyledText>Opens:</StyledText>
+                  <StyledText suspense trigger={bounty}>
+                    {fromFireDate(bounty?.startDate)?.toDateString()}
                   </StyledText>
                 </View>
                 <View

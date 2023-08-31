@@ -21,7 +21,6 @@ export default function Inbox() {
   const id = useId();
   const id2 = useId();
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const setMemberAddrViewing = useMemberStore(state => state.fetchProfile);
   const setTeam = useTeamsStore(state => state.setSelectedTeam);
   const myProfile = useMemberStore(state => state.myProfile);
   const [refreshing, setRefreshing] = useState(false);
@@ -275,7 +274,6 @@ export default function Inbox() {
                 <Text style={{fontSize: 16, lineHeight: 28}}>
                   <Text
                     onPress={() => {
-                      setMemberAddrViewing(item.fromAddress);
                       navigation.navigate('Profile', {
                         viewProfileAddress: item.fromAddress,
                       });

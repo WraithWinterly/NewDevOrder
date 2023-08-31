@@ -3,6 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useId} from 'react';
 import {Linking, ScrollView, Text, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
+import WarningIcon from 'src/components/icons/WarningIcon';
 import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
@@ -40,6 +41,23 @@ export default function ViewSubmissions() {
             <StyledText style={{fontSize: 14, color: Colors.Gray[400]}}>
               Status: {addSpaceCase(submission?.state)}
             </StyledText>
+            {submission &&
+              (fromFireDate(submission?.createdAt)?.getTime() || 0) >
+                (fromFireDate(selectedBounty.deadline)?.getTime() || 0) && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginHorizontal: 4,
+                    gap: 8,
+                    alignItems: 'center',
+                  }}>
+                  <WarningIcon wh={18} />
+                  <StyledText style={{width: '90%', color: Colors.Red[300]}}>
+                    Late submission
+                  </StyledText>
+                </View>
+              )}
+
             <StyledText>
               Link to video demo:{' '}
               <Text

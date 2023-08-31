@@ -14,22 +14,11 @@ import useProjectsStore from 'src/stores/projectsStore';
 export default function Drafts() {
   const bounties = useProjectsStore(state => state.bountiesForProject);
   // Used to force refresh project info, which will refetch bounties
-  const selectedProject = useProjectsStore(state => state.selectedProject);
-  const setSelectedProject = useProjectsStore(
-    state => state.setSelectedProject,
-  );
-  const [refreshing, setRefreshing] = useState(false);
+
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const setCreateBountyData = useBountyStore(
     state => state.setCreateBountyData,
   );
-  function onRefresh() {
-    setRefreshing(true);
-    if (!selectedProject) return;
-    setSelectedProject(selectedProject.id).then(() => {
-      setRefreshing(false);
-    });
-  }
 
   const shown = bounties?.filter(bounty => bounty.stage === 'Draft');
 
@@ -56,8 +45,9 @@ export default function Drafts() {
         <TouchableOpacity
           onPress={() => {
             setCreateBountyData(undefined);
-            //@ts-ignore ???
-            navigation.navigate('CreateBounty');
+            navigation.navigate('CreateBounty', {
+              existingID: undefined,
+            });
           }}>
           <AddButtonIcon />
         </TouchableOpacity>

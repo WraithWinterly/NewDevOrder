@@ -33,7 +33,7 @@ export default function AddRewards() {
   );
   const [errors, setErrors] = useState<string[]>([]);
 
-  function calc() {
+  function calcReward() {
     let leftOver = project?.quotePrice || 0;
     const withoutMe = bountiesForProject?.filter(
       b => b.id !== createBountyData?.id,
@@ -53,7 +53,7 @@ export default function AddRewards() {
       console.error('Missing create bounty data!');
       return;
     }
-    if ((bountyRewardAmount || 0) > calc()) {
+    if ((bountyRewardAmount || 0) > calcReward()) {
       localErrors.push(
         'Insufficient funds for this action. Reduce your bounty reward.',
       );
@@ -84,8 +84,8 @@ export default function AddRewards() {
           The Founder has committed {project?.quotePrice} to this project.
         </StyledText>
         <StyledText>
-          You have <Text style={{fontWeight: '500'}}>${calc()}</Text> remaining
-          in funds.
+          You have <Text style={{fontWeight: '500'}}>${calcReward()}</Text>{' '}
+          remaining in funds.
         </StyledText>
         <StyledText>Enter bounty reward amount:</StyledText>
         <StyledTextInput
@@ -110,7 +110,8 @@ export default function AddRewards() {
         <StyledButton
           onPress={onNextStep}
           enabled={
-            (bountyRewardAmount || 0) <= calc() && (bountyRewardAmount || 0) > 0
+            (bountyRewardAmount || 0) <= calcReward() &&
+            (bountyRewardAmount || 0) > 0
           }>
           Next Step
         </StyledButton>

@@ -17,11 +17,13 @@ import DropdownMenu from 'src/components/ui/DropdownMenu';
 import useMutation from 'src/hooks/usePost';
 import {StartBountyPOSTData} from 'src/sharedTypes';
 import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
+import {fromFireDate} from 'src/utils/utils';
+import WarningIcon from 'src/components/icons/WarningIcon';
 
 export default function StartBounty() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
-  const selectedFullBounty = useBountyStore(state => state.selectedBounty);
+  const selectedBounty = useBountyStore(state => state.selectedBounty);
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
@@ -39,9 +41,7 @@ export default function StartBounty() {
 
   const viewTeams = teams
     ?.filter(t => t.creatorAddress == walletAddress)
-    .filter(
-      team => !selectedFullBounty?.participantsTeamIDs?.includes(team.id),
-    );
+    .filter(team => !selectedBounty?.participantsTeamIDs?.includes(team.id));
 
   useEffect(() => {
     // setSelectedTeam(undefined);
@@ -50,12 +50,12 @@ export default function StartBounty() {
 
   async function startBounty() {
     // start bounty
-    if (!selectedTeam?.id || !walletAddress || !selectedFullBounty?.id) {
+    if (!selectedTeam?.id || !walletAddress || !selectedBounty?.id) {
       console.error(
         'missing data',
         selectedTeam?.id,
         walletAddress,
-        selectedFullBounty?.id,
+        selectedBounty?.id,
       );
       return;
     }
@@ -63,11 +63,11 @@ export default function StartBounty() {
     const data = await mutate({
       address: walletAddress,
       forTeam: selectedTeam.id,
-      bountyID: selectedFullBounty.id,
+      bountyID: selectedBounty.id,
     } as StartBountyPOSTData);
     if (data) {
       // Force refetch bounty
-      setSelectedBounty(selectedFullBounty.id);
+      setSelectedBounty(selectedBounty.id);
       fetchBounties();
       navigation.navigate('ViewBounty');
     }
@@ -78,8 +78,25 @@ export default function StartBounty() {
       <View style={{justifyContent: 'space-between', height: '98%'}}>
         <View style={{gap: 10}}>
           <StyledText style={{fontSize: 24}}>Start Bounty</StyledText>
-          <ProjBountyBreadcrumb bounty={selectedFullBounty} />
+
+          <ProjBountyBreadcrumb bounty={selectedBounty} />
           <Separator />
+          {selectedBounty?.stage === 'Active' &&
+            (fromFireDate(selectedBounty?.deadline)?.getTime() || 0) <
+              new Date().getTime() && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginHorizontal: 4,
+                  gap: 8,
+                  alignItems: 'center',
+                }}>
+                <WarningIcon />
+                <StyledText style={{width: '90%'}}>
+                  Warning: The bounty is past it's deadline!
+                </StyledText>
+              </View>
+            )}
           <View style={{height: 24}}></View>
           <StyledText>
             Choose a team to start this bounty on behalf of:

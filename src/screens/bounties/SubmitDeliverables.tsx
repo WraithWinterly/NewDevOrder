@@ -3,6 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
+import WarningIcon from 'src/components/icons/WarningIcon';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
 import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
 import Separator from 'src/components/ui/Separator';
@@ -17,11 +18,12 @@ import useBountyStore from 'src/stores/bountyStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import {fromFireDate} from 'src/utils/utils';
 import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function SubmitDeliverables() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-  const selectedFullBounty = useBountyStore(state => state.selectedBounty);
+  const selectedBounty = useBountyStore(state => state.selectedBounty);
   const teams = useTeamsStore(state => state.teams);
   const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
@@ -30,7 +32,7 @@ export default function SubmitDeliverables() {
     .toString();
   const viewTeams = teams
     ?.filter(t => t.creatorAddress == walletAddress)
-    .filter(team => selectedFullBounty?.participantsTeamIDs?.includes(team.id));
+    .filter(team => selectedBounty?.participantsTeamIDs?.includes(team.id));
 
   const [linkToVideoDemo, setLinkToVideoDemo] = useState('https://');
   const [linkToCode, setLinkToCode] = useState('https://');
@@ -50,10 +52,10 @@ export default function SubmitDeliverables() {
   }, []);
 
   useEffect(() => {
-    if (walletAddress && selectedFullBounty?.id && selectedTeam?.id) {
+    if (walletAddress && selectedBounty?.id && selectedTeam?.id) {
       query(
         `${getServerEndpoint(Endpoints.GET_SUBMISSION)}/${selectedTeam.id},${
-          selectedFullBounty.id
+          selectedBounty.id
         }`,
       ).then(data => {
         if (!!data) {
@@ -75,14 +77,14 @@ export default function SubmitDeliverables() {
       setLinkToCode('https://');
       setLinkToVideoDemo('https://');
     }
-  }, [selectedTeam, walletAddress, selectedFullBounty]);
+  }, [selectedTeam, walletAddress, selectedBounty]);
 
   async function onSubmit() {
     if (!validate()) {
       console.error('Not validated');
       return;
     }
-    if (!selectedFullBounty?.id) {
+    if (!selectedBounty?.id) {
       console.error('No bounty selected');
       return;
     }
@@ -95,7 +97,7 @@ export default function SubmitDeliverables() {
       return;
     }
     const body: SubmitDeliverablesPostData = {
-      bountyID: selectedFullBounty.id,
+      bountyID: selectedBounty.id,
       repo: linkToCode,
       videoDemo: linkToVideoDemo,
       teamID: selectedTeam.id,
@@ -122,7 +124,25 @@ export default function SubmitDeliverables() {
     <Layout>
       <ScrollView>
         <StyledText style={{fontSize: 24}}>Submit Deliverables</StyledText>
-        <ProjBountyBreadcrumb bounty={selectedFullBounty} />
+        <ProjBountyBreadcrumb bounty={selectedBounty} />
+        {selectedBounty?.stage === 'Active' &&
+          (fromFireDate(selectedBounty?.deadline)?.getTime() || 0) <
+            new Date().getTime() && (
+            <View
+              style={{
+                flexDirection: 'row',
+                marginHorizontal: 4,
+                gap: 8,
+                paddingTop: 8,
+                alignItems: 'center',
+              }}>
+              <WarningIcon />
+              <StyledText style={{width: '90%'}}>
+                Warning: The bounty is past it's deadline, submissions will be
+                marked late!
+              </StyledText>
+            </View>
+          )}
         <StyledText style={{marginBottom: 8, marginTop: 24}}>
           Choose a team to submit deliverables on behalf of:
         </StyledText>

@@ -136,16 +136,16 @@ export default function BountyList({
           {bounty?.title}
         </StyledText>
         {designerView && bounty?.stage === 'Active' && (
-          <YouPostedThisBounty date={bounty.startDate} />
+          <YouPostedThisBounty date={bounty.createdAt} />
         )}
-        {bounty?.stage === 'Active' && (
+        {bounty?.stage === 'Active' && !designerView && (
           <StyledText
             style={{
               color: Colors.Text2,
               fontSize: 14,
               paddingVertical: 2,
             }}>
-            Posted {formatTimeAgo(fromFireDate(bounty.startDate))}
+            Posted {formatTimeAgo(fromFireDate(bounty.createdAt))}
           </StyledText>
         )}
         {validatorView &&
@@ -176,9 +176,11 @@ export default function BountyList({
             </>
           )}
 
-          {bounty?.stage === 'Active' && (
-            <Bubble type="green" text="Accepting Submissions" />
-          )}
+          {bounty?.stage === 'Active' &&
+            (fromFireDate(bounty?.startDate)?.getTime() || 0) <=
+              new Date().getTime() && (
+              <Bubble type="green" text="Accepting Submissions" />
+            )}
           {bounty?.stage === 'Completed' && (
             <Bubble type="green" text="Completed" />
           )}
@@ -211,6 +213,18 @@ export default function BountyList({
             trigger={bounty}
             shimmerWidth={112}>
             Bounty Reward: {bounty?.reward} USD
+          </StyledText>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 6,
+            alignItems: 'center',
+            paddingTop: 2,
+          }}>
+          <CalendarIcon />
+          <StyledText suspense trigger={bounty} shimmerWidth={112}>
+            Opens: {fromFireDate(bounty?.startDate)?.toDateString()}
           </StyledText>
         </View>
         <View
@@ -275,7 +289,11 @@ export default function BountyList({
           ) : (
             bounty?.stage === 'Active' && (
               <RoundArrowButton
-                title="View Submissions"
+                title={
+                  bounty.submissionIDs.length === 0
+                    ? 'View Bounty'
+                    : 'View Submissions'
+                }
                 onPress={() => {
                   setSelectedBounty(bounty.id);
                   navigation.navigate('ViewBounty');

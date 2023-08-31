@@ -44,6 +44,8 @@ import StartTestCases from './screens/projects/validator/StartTestCases';
 import ViewSolution from './screens/bounties/ViewSolution';
 import ClaimReward from './screens/bounties/ClaimReward';
 import ViewProjectBounties from './screens/projects/shared/ViewProjectBounties';
+import BackArrow from './components/icons/BackArrow';
+import {View} from 'react-native';
 
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
@@ -166,6 +168,11 @@ export default function StackNavigator() {
           headerRightContainerStyle: {
             paddingTop: 8,
           },
+          headerLeft: () => (
+            <View style={{paddingLeft: 20}}>
+              <BackArrow />
+            </View>
+          ),
           headerRight: () => <StackHeaderRight route={route.name} />,
           headerShadowVisible: false,
           headerShown: !HideStackHeader.includes(route.name),

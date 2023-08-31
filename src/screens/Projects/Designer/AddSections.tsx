@@ -44,7 +44,6 @@ export default function AddSections() {
       headerSections: convertToHeaderSections(),
     });
     navigation.navigate('ViewBounty', {
-      isDesigner: true,
       isDesignerCreation: true,
     });
   }
