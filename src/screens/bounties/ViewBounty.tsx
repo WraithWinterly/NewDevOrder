@@ -86,7 +86,6 @@ export default function ViewBounty({route, navigation}: Props) {
   const thisBountyWin = myBountyWins?.find(
     win => win.bounty.id === selectedBounty?.id,
   );
-  // console.log('mybountywins ', myBountyWins);
 
   const isValidator = playingRole === RoleType.BountyValidator ?? false;
   const isDesignerCreation = route.params?.isDesignerCreation ?? false;

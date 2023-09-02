@@ -70,7 +70,6 @@ export default function InviteMembers() {
     !newInvitesMembers
       ?.map((member: Member) => member.walletAddress)
       .includes(currentUser.walletAddress);
-  // console.log(dataPendingInvites);
 
   useEffect(() => {
     fetchInvitedMembers();
@@ -78,7 +77,6 @@ export default function InviteMembers() {
 
   async function fetchInvitedMembers() {
     if (!!selectedTeam) {
-      console.log('here');
       const url =
         getServerEndpoint(Endpoints.GET_TEAM_PENDING_INVITES) +
         `/${selectedTeam.id}`;
@@ -86,15 +84,12 @@ export default function InviteMembers() {
       const data = await queryPendingInvites(url);
 
       if (data) {
-        console.log(data);
         const pendingInvites = data as TeamInvite[];
 
         const newMembersArr = pendingInvites.map(invite => {
           return invite.toMemberAddress;
         });
-        console.log(newMembersArr);
         const members = await queryMembersByIDs(newMembersArr);
-        console.log(members);
         if (members) {
           setNewInvitesMembers(members);
         }
