@@ -142,7 +142,7 @@ export default function Inbox() {
                     setTeam(bountyWin?.team?.id);
                     navigation.navigate('TeamVar');
                   }}>
-                  {bountyWin?.team?.name},{' '}
+                  {bountyWin?.team?.name.trim()},{' '}
                 </StyledText>
                 won the bounty:{' '}
                 <StyledText
@@ -151,9 +151,9 @@ export default function Inbox() {
                     setSelectedBounty(bountyWin.bounty.id);
                     navigation.navigate('ViewBounty');
                   }}>
-                  {bountyWin?.bounty.title}
+                  {bountyWin?.bounty.title.trim()}
+                  {'. '}
                 </StyledText>
-                .
                 {bountyWin?.team.creatorAddress !== myProfile?.walletAddress &&
                   'Consult with your Team Owner to claim the reward.'}
               </StyledText>

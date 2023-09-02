@@ -63,7 +63,14 @@ export default function InviteMembers() {
     !newInvitesMembers.includes(currentUser) &&
     selectedTeam?.members?.filter(
       member => member.walletAddress === currentUser.walletAddress,
-    ).length === 0;
+    ).length === 0 &&
+    !dataPendingInvites
+      ?.map((invite: TeamInvite) => invite.toMemberAddress)
+      .includes(currentUser.walletAddress) &&
+    !newInvitesMembers
+      ?.map((member: Member) => member.walletAddress)
+      .includes(currentUser.walletAddress);
+  // console.log(dataPendingInvites);
 
   useEffect(() => {
     fetchInvitedMembers();
@@ -71,6 +78,7 @@ export default function InviteMembers() {
 
   async function fetchInvitedMembers() {
     if (!!selectedTeam) {
+      console.log('here');
       const url =
         getServerEndpoint(Endpoints.GET_TEAM_PENDING_INVITES) +
         `/${selectedTeam.id}`;
@@ -78,12 +86,15 @@ export default function InviteMembers() {
       const data = await queryPendingInvites(url);
 
       if (data) {
+        console.log(data);
         const pendingInvites = data as TeamInvite[];
 
         const newMembersArr = pendingInvites.map(invite => {
           return invite.toMemberAddress;
         });
+        console.log(newMembersArr);
         const members = await queryMembersByIDs(newMembersArr);
+        console.log(members);
         if (members) {
           setNewInvitesMembers(members);
         }
@@ -131,6 +142,7 @@ export default function InviteMembers() {
     const data = await mutateInviteToTeam(body);
     if (data) {
       setNewInvitesMembers([...newInvitesMembers, currentUser!]);
+      setCurrentUser(undefined);
     }
   }
 
@@ -158,7 +170,13 @@ export default function InviteMembers() {
       {!!currentUser &&
         !loadingMemberByID &&
         (currentUser == null || !canInviteUser) && (
-          <View style={{flexDirection: 'row', gap: 4, marginTop: 10}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 4,
+              marginTop: 10,
+              alignItems: 'center',
+            }}>
             <WarningIcon />
             <StyledText>
               This user can not be invited because they are already part of the
@@ -166,6 +184,18 @@ export default function InviteMembers() {
             </StyledText>
           </View>
         )}
+      {!!errorInviteToTeam && (
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 4,
+            marginTop: 10,
+            alignItems: 'center',
+          }}>
+          <WarningIcon />
+          <StyledText>{errorInviteToTeam}</StyledText>
+        </View>
+      )}
       {loadingMemberByID && <MemberBox member={undefined} />}
       {errorMemberByID && (
         <StyledText style={{color: Colors.Red[300]}}>
@@ -185,8 +215,8 @@ export default function InviteMembers() {
         <View style={{gap: 12}}>
           {!!newInvitesMembers && newInvitesMembers.length > 0 && (
             <>
-              <StyledText style={{marginTop: 12}}>Pending Invites</StyledText>
-              <View style={{height: 12}} />
+              <StyledText style={{marginTop: 24}}>Pending Invites</StyledText>
+              <View style={{marginTop: -14}} />
               {newInvitesMembers.map((member, i) => (
                 <MemberBox member={member} key={`${id2}-${i}`} />
               ))}

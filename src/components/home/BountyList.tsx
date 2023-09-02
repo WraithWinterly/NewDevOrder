@@ -289,11 +289,7 @@ export default function BountyList({
           ) : (
             bounty?.stage === 'Active' && (
               <RoundArrowButton
-                title={
-                  bounty.submissionIDs.length === 0
-                    ? 'View Bounty'
-                    : 'View Submissions'
-                }
+                title={'View Bounty'}
                 onPress={() => {
                   setSelectedBounty(bounty.id);
                   navigation.navigate('ViewBounty');
@@ -322,7 +318,11 @@ export default function BountyList({
           ))}
         {bounty?.stage === 'PendingApproval' && (
           <RoundArrowButton
-            title="View Approvals"
+            title={
+              playingRole === RoleType.BountyDesigner
+                ? 'View Approvals'
+                : 'Approve'
+            }
             onPress={() => {
               setSelectedBounty(bounty.id);
               navigation.navigate('ViewBounty');

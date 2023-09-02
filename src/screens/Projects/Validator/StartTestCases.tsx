@@ -193,38 +193,49 @@ export default function StartTestCases() {
       <View style={{height: '100%'}}>
         <ScrollView
           style={{marginBottom: isBountyValidator && !kbVisible ? 120 : 0}}>
-          <StyledText style={{fontSize: 24}}>
+          <StyledText
+            style={{fontSize: 24}}
+            suspense
+            trigger={selectedSubmission}
+            shimmerWidth={240}>
             Test Cases for{' '}
             <Text style={{color: Colors.Primary}}>
               {selectedSubmission?.team.name}
             </Text>
           </StyledText>
-          {!!selectedSubmission && (
-            <>
-              <ProjBountyBreadcrumb bounty={selectedBounty} />
-              <StyledText style={{fontSize: 14, color: Colors.Gray[400]}}>
-                Status: {addSpaceCase(selectedSubmission?.state)}
-              </StyledText>
-              <View style={{height: 12}} />
-              <StyledText>
-                Link to video demo:{' '}
-                <Text
-                  style={{textDecorationLine: 'underline'}}
-                  onPress={() => Linking.openURL(selectedSubmission.videoDemo)}>
-                  {selectedSubmission.videoDemo}
-                </Text>
-              </StyledText>
-              {playingRole !== RoleType.Founder && (
-                <StyledText>
-                  Submission Link:{' '}
-                  <Text
-                    style={{textDecorationLine: 'underline'}}
-                    onPress={() => Linking.openURL(selectedSubmission.repo)}>
-                    {selectedSubmission.repo}
-                  </Text>
-                </StyledText>
-              )}
-            </>
+
+          <ProjBountyBreadcrumb bounty={selectedBounty} />
+          <StyledText
+            style={{fontSize: 14, color: Colors.Gray[400]}}
+            suspense
+            trigger={selectedSubmission}
+            shimmerWidth={120}>
+            Status: {addSpaceCase(selectedSubmission?.state)}
+          </StyledText>
+          <View style={{height: 12}} />
+          <StyledText suspense trigger={selectedSubmission} shimmerWidth={90}>
+            Link to video demo:{' '}
+            <Text
+              style={{textDecorationLine: 'underline'}}
+              onPress={() =>
+                selectedSubmission?.videoDemo &&
+                Linking.openURL(selectedSubmission.videoDemo)
+              }>
+              {selectedSubmission?.videoDemo}
+            </Text>
+          </StyledText>
+          {playingRole !== RoleType.Founder && (
+            <StyledText suspense trigger={selectedSubmission}>
+              Submission Link:{' '}
+              <Text
+                style={{textDecorationLine: 'underline'}}
+                onPress={() =>
+                  selectedSubmission?.repo &&
+                  Linking.openURL(selectedSubmission.repo)
+                }>
+                {selectedSubmission?.repo}
+              </Text>
+            </StyledText>
           )}
 
           <Separator />

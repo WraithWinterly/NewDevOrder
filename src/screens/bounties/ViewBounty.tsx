@@ -287,7 +287,7 @@ export default function ViewBounty({route, navigation}: Props) {
               View Solution
             </StyledButton>
           )}
-          {isValidator ? (
+          {isValidator && bounty?.stage === 'Active' ? (
             <StyledButton
               type="normal2"
               onPress={() => navigation.navigate('ViewSubmissions')}>
@@ -312,23 +312,6 @@ export default function ViewBounty({route, navigation}: Props) {
                     onPress={() => navigation.navigate('SubmitDeliverables')}>
                     Submit Deliverables
                   </StyledButton>
-                )}
-
-                {startedByTeams.length > 0 && (
-                  <View style={{paddingLeft: 8}}>
-                    <View style={{height: 4}}></View>
-
-                    {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
-                    <StyledText key={`${0}-${id2}`}>
-                      Started by:{' '}
-                      {startedByTeams.map(
-                        (team, i) =>
-                          `${team}${
-                            i === startedByTeams.length - 1 ? '' : ', '
-                          }`,
-                      )}
-                    </StyledText>
-                  </View>
                 )}
               </View>
             )
@@ -508,7 +491,10 @@ export default function ViewBounty({route, navigation}: Props) {
                 </View>
               </View>
             </DropdownSection>
-            <DropdownSection title={`About ${bounty?.title}`}>
+            <DropdownSection
+              title={`About ${bounty?.title}`}
+              suspense
+              trigger={bounty?.title}>
               <StyledText>{bounty?.aboutProject}</StyledText>
             </DropdownSection>
 
@@ -557,7 +543,21 @@ export default function ViewBounty({route, navigation}: Props) {
             </TouchableOpacity>
           </View>
 
-          <View style={{paddingVertical: 52}}></View>
+          {startedByTeams.length > 0 && (
+            <View style={{paddingLeft: 8}}>
+              <View style={{height: 4}}></View>
+
+              {/* Creates a comma seperated list (ex: Started by: My Team, Team2, Team3) etc */}
+              <StyledText key={`${0}-${id2}`}>
+                Started by:{' '}
+                {startedByTeams.map(
+                  (team, i) =>
+                    `${team}${i === startedByTeams.length - 1 ? '' : ', '}`,
+                )}
+              </StyledText>
+            </View>
+          )}
+          <View style={{paddingVertical: 72}}></View>
         </ScrollView>
       </View>
     </Layout>

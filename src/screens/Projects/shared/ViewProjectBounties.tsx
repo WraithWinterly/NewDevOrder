@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import BountyList from 'src/components/home/BountyList';
+import WarningIcon from 'src/components/icons/WarningIcon';
 import Separator from 'src/components/ui/Separator';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
@@ -62,6 +63,29 @@ export default function ViewProjectBounties() {
             <Separator />
           </>
         )}
+        {!!bounties &&
+          bounties?.length !=
+            (pendingBounties?.length || 0) +
+              (approvedBounties?.length || 0) +
+              (activeBounties?.length || 0) +
+              (completedBounties?.length || 0) && (
+            <View>
+              <View
+                style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                <WarningIcon />
+                <StyledText style={{width: '90%'}}>
+                  There are{' '}
+                  {bounties?.length -
+                    ((pendingBounties?.length || 0) +
+                      (approvedBounties?.length || 0) +
+                      (activeBounties?.length || 0) +
+                      (completedBounties?.length || 0))}{' '}
+                  draft bounties currently not shown.
+                </StyledText>
+              </View>
+              <Separator />
+            </View>
+          )}
         {pendingBounties && pendingBounties.length > 0 && (
           <>
             <StyledText

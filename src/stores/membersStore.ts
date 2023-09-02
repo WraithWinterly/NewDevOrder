@@ -31,7 +31,7 @@ const useMemberStore = create<MemberStore>((set, get) => ({
 
       const {result: resultMyBountyWins, error: errorMyBountyWins} =
         await query(getServerEndpoint(Endpoints.GET_MY_BOUNTY_WINS));
-
+      console.log(resultMyBountyWins);
       if (!!resultMyBountyWins && typeof resultMyBountyWins === 'object') {
         set(() => ({myBountyWins: resultMyBountyWins}));
       }

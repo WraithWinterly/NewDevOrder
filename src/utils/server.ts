@@ -60,5 +60,6 @@ function getServerURL() {
   if (USE_LOCAL_SERVER === 'true') {
     return TEST_SERVER_URL;
   }
+  return TEST_SERVER_URL;
   return SERVER_URL;
 }

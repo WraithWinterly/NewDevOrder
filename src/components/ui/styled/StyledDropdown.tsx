@@ -8,10 +8,13 @@ import Separator from '../Separator';
 
 export function DropdownSection({
   title,
-
+  suspense = false,
+  trigger,
   children,
 }: {
   title: string;
+  suspense?: boolean;
+  trigger?: any;
   children: ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -24,7 +27,11 @@ export function DropdownSection({
             justifyContent: 'space-between',
             width: '100%',
           }}>
-          <StyledText style={{fontSize: 20, fontWeight: '500'}}>
+          <StyledText
+            style={{fontSize: 20, fontWeight: '500'}}
+            suspense={suspense}
+            trigger={trigger}
+            shimmerWidth={180}>
             {title}
           </StyledText>
           <CollapsibleArrow faceDown={!collapsed} />
