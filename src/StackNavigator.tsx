@@ -168,11 +168,11 @@ export default function StackNavigator() {
           headerRightContainerStyle: {
             paddingTop: 8,
           },
-          headerLeft: () => (
-            <View style={{paddingLeft: 20}}>
-              <BackArrow />
-            </View>
-          ),
+          // headerLeft: () => (
+          //   <View style={{paddingLeft: 20}}>
+          //     <BackArrow />
+          //   </View>
+          // ),
           headerRight: () => <StackHeaderRight route={route.name} />,
           headerShadowVisible: false,
           headerShown: !HideStackHeader.includes(route.name),
