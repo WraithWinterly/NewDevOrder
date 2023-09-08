@@ -77,7 +77,7 @@ export default function ViewBounty({route, navigation}: Props) {
 
   const [startedByTeams, setStartedByTeams] = useState<string[]>([]);
   const [bounty, setBounty] = useState<
-    (Bounty & {project: Project; founder: Member}) | undefined
+    (Bounty & {project: Project & {founder: Member}}) | undefined
   >(undefined);
 
   const existWinner =
@@ -199,13 +199,14 @@ export default function ViewBounty({route, navigation}: Props) {
       winningSubmissionID: '',
       project: {
         ...project,
-      },
-      founder: {
-        ...project.founder,
+        founder: {
+          ...project.founder,
+        },
       },
     } as Bounty & {
-      project: Project;
-      founder: Member;
+      project: Project & {
+        founder: Member;
+      };
     };
   }
 
@@ -411,7 +412,7 @@ export default function ViewBounty({route, navigation}: Props) {
                 />
               ))}
             </View>
-            {!!thisBountyWin && (
+            {!!thisBountyWin && playingRole === RoleType.BountyHunter && (
               <View style={{marginTop: 24, gap: 12}}>
                 <StyledText>
                   🎉 Your team,{' '}
@@ -514,7 +515,7 @@ export default function ViewBounty({route, navigation}: Props) {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('Profile', {
-                  viewProfileAddress: bounty?.founder?.walletAddress,
+                  viewProfileAddress: project?.founderWalletAddress,
                 })
               }
               style={{
@@ -528,16 +529,16 @@ export default function ViewBounty({route, navigation}: Props) {
                 suspense
                 trigger={bounty}
                 shimmerWidth={240}>
-                Meet the founder - {bounty?.founder?.firstName}
+                Meet the founder - {bounty?.project.founder?.firstName}
               </StyledText>
               <StyledText
                 style={{color: Colors.Gray[400]}}
                 suspense
                 trigger={bounty}>
-                {bounty?.founder?.username}
+                {bounty?.project.founder?.username}
               </StyledText>
               <StyledText style={{paddingTop: 4}} suspense trigger={bounty}>
-                {bounty?.founder?.bio}
+                {bounty?.project.founder?.bio}
               </StyledText>
             </TouchableOpacity>
           </View>

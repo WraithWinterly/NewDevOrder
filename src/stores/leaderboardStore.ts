@@ -13,6 +13,9 @@ type LeaderboardStore = {
 const useLeaderboardStore = create<LeaderboardStore>(set => ({
   topMembers: undefined,
   fetchTopMembers: async startId => {
+    set({
+      topMembers: undefined,
+    });
     const {result, error} = await query(
       getServerEndpoint(Endpoints.GET_LEADERBOARD_MEMBERS),
     );
@@ -24,6 +27,9 @@ const useLeaderboardStore = create<LeaderboardStore>(set => ({
   },
   topFounders: undefined,
   fetchTopFounders: async startId => {
+    set({
+      topFounders: undefined,
+    });
     const {result, error} = await query(
       getServerEndpoint(Endpoints.GET_LEADERBOARD_FOUNDERS),
     );

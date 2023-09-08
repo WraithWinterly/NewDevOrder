@@ -38,7 +38,7 @@ export default function Projects() {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [playingRole]);
 
   function getFirstFilter(): ProjectStage[] | null {
     const role = playingRole ?? RoleType.BountyHunter;

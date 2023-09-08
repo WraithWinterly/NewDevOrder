@@ -23,6 +23,9 @@ import {
 import {Colors} from 'src/styles/styles';
 import DropdownIcon from 'src/components/icons/DropdownIcon';
 import useQuery from 'src/hooks/useQuery';
+import useProjectsStore from 'src/stores/projectsStore';
+import useTeamsStore from 'src/stores/teamsStore';
+import useBountyStore from 'src/stores/bountyStore';
 
 type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
 
@@ -82,6 +85,10 @@ function ProfileCard({
   const walletAddress = useSolanaContext()
     .wallet?.publicKey.toBase58()
     .toString();
+
+  const fetchProjects = useProjectsStore(state => state.fetchProjects);
+  const fetchTeams = useTeamsStore(state => state.fetchTeams);
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
 
   const {
     loading: loadingRole,
