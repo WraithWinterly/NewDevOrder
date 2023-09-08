@@ -219,6 +219,15 @@ function ProfileCard({
           suspense
           trigger={profile}
         />
+        {profile?.admin && profile.adminec && (
+          <Bubble
+            lowHeight
+            text={`Admin`}
+            type="red"
+            suspense
+            trigger={profile}
+          />
+        )}
       </View>
 
       <StyledText suspense trigger={profile}>

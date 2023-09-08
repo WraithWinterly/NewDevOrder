@@ -21,6 +21,8 @@ import HeaderRight from './HeaderRight';
 import useMemberStore from 'src/stores/membersStore';
 import useBountyStore from 'src/stores/bountyStore';
 import {RoleType} from 'src/sharedTypes';
+import Admin from '../admin/Admin';
+import AdminIcon from 'src/components/icons/AdminIcon';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -28,6 +30,7 @@ export type MainTabsParams = {
   Bounties: undefined;
   Inbox: undefined;
   Projects: undefined;
+  Admin: undefined;
   Dev: undefined;
 };
 
@@ -37,6 +40,7 @@ const tabToHeaderText = {
   Bounties: 'Bounties',
   Inbox: 'Inbox',
   Projects: 'Your Projects',
+  Admin: 'Admin',
   Dev: '__DEVELOPER__',
 };
 
@@ -46,7 +50,7 @@ export default function HomeTabNavigator() {
   const playingRole = useMemberStore(state => state.myProfile?.playingRole);
 
   const fetchBounties = useBountyStore(state => state.fetchBounties);
-
+  const myProfile = useMemberStore(state => state.myProfile);
   useEffect(() => {
     fetchBounties();
   }, []);
@@ -140,6 +144,17 @@ export default function HomeTabNavigator() {
           options={{
             tabBarIcon: ({focused}) => (
               <TabBarIcon focused={focused} icon={<ProjectsIcon />} />
+            ),
+          }}
+        />
+      )}
+      {myProfile?.admin && myProfile.adminec && (
+        <Tab.Screen
+          name="Admin"
+          component={Admin}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon focused={focused} icon={<AdminIcon />} />
             ),
           }}
         />

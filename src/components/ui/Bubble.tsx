@@ -10,7 +10,7 @@ export default function Bubble({
   trigger,
 }: {
   text?: string;
-  type?: 'purple' | 'green' | 'normal' | 'transparent';
+  type?: 'purple' | 'green' | 'normal' | 'red' | 'transparent';
   lowHeight?: boolean;
   suspense?: boolean;
   trigger?: any;
@@ -23,6 +23,8 @@ export default function Bubble({
         return '#485844';
       case 'normal':
         return '#4A4458';
+      case 'red':
+        return Colors.Red[700];
       case 'transparent':
         return 'transparent';
     }
