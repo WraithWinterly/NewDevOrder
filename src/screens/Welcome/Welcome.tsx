@@ -44,7 +44,7 @@ export default function Welcome() {
           gap: 10,
           height: '85%',
         }}>
-        <View style={{gap: 18, paddingTop: 60}}>
+        <View style={{gap: 18, paddingTop: 42}}>
           {hasCompletedWelcome ? (
             <>
               <StyledText type="header" style={{paddingBottom: 24}}>

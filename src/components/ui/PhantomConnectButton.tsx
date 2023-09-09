@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import useWalletStore from 'src/stores/walletStore';
 import useMemberStore from 'src/stores/membersStore';
 import {PublicKey} from '@solana/web3.js';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 export default function PhantomConnectButton({

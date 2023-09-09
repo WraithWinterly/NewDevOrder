@@ -6,7 +6,7 @@ import {StackParamList} from 'src/StackNavigator';
 import CheckIconAccent from 'src/components/icons/CheckIconAccent';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import Layout from 'src/layout/Layout';
 import {JoinTeamPOSTData} from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';

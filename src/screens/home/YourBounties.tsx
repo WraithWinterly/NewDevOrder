@@ -6,8 +6,12 @@ import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
 import useBountyStore from 'src/stores/bountyStore';
 import useTeamsStore from 'src/stores/teamsStore';
+import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function YourBounties() {
+  const walletAddress = useSolanaContext()
+    .wallet?.publicKey.toBase58()
+    .toString();
   const bounties = useBountyStore(state => state.bounties);
 
   const teams = useTeamsStore(state => state.teams);
@@ -20,7 +24,11 @@ export default function YourBounties() {
           bounty.title.includes(searchText || '') &&
           bounty.stage === 'Active'
         ) {
-          const myTeamIDs = teams?.map(team => team.id);
+          if (!walletAddress) return;
+          const myTeams = teams?.filter(team =>
+            team.memberIDs.includes(walletAddress),
+          );
+          const myTeamIDs = myTeams?.map(team => team.id);
           return myTeamIDs?.some(teamId => {
             return bounty.participantsTeamIDs.includes(teamId);
           });

@@ -40,5 +40,9 @@ export default function useMutation(url: string) {
     }
   };
 
-  return {data, loading, error, mutate};
+  const clearError = () => {
+    setError(null);
+  };
+
+  return {data, loading, error, mutate, clearError};
 }

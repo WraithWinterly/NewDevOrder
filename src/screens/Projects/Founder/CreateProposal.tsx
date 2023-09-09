@@ -9,7 +9,7 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledPhoneInput from 'src/components/ui/styled/StyledPhoneInput';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import Layout from 'src/layout/Layout';
 import {CreateProjectPOSTData} from 'src/sharedTypes';
 

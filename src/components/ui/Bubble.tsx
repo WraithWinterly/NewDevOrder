@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import StyledText from './styled/StyledText';
 import {Colors} from 'src/styles/styles';
 
@@ -8,12 +8,16 @@ export default function Bubble({
   lowHeight = false,
   suspense = false,
   trigger,
+  isButton = false,
+  onPress,
 }: {
   text?: string;
   type?: 'purple' | 'green' | 'normal' | 'red' | 'transparent';
   lowHeight?: boolean;
   suspense?: boolean;
   trigger?: any;
+  isButton?: boolean;
+  onPress?: () => void;
 }) {
   function getBg() {
     switch (type) {
@@ -29,7 +33,27 @@ export default function Bubble({
         return 'transparent';
     }
   }
-  return (
+  return isButton ? (
+    <TouchableOpacity
+      style={{
+        backgroundColor: getBg(),
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        height: lowHeight ? 30 : 44,
+        justifyContent: 'center',
+        borderWidth: type === 'transparent' ? 1 : 0,
+        borderColor: Colors.BorderColor,
+        zIndex: 9,
+      }}
+      onPress={onPress}>
+      <StyledText
+        style={{fontSize: lowHeight ? 14 : 16, marginVertical: 0}}
+        suspense={suspense}
+        trigger={trigger}>
+        {text}
+      </StyledText>
+    </TouchableOpacity>
+  ) : (
     <View
       style={{
         backgroundColor: getBg(),

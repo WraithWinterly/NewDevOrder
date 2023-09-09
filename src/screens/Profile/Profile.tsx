@@ -10,7 +10,7 @@ import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ChangeRolePOSTData, Member, RoleType} from 'src/sharedTypes';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import addSpaceCase from 'src/utils/utils';

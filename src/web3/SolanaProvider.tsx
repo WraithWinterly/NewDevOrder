@@ -25,7 +25,7 @@ import {
 } from '@solana/web3.js';
 import {useConnection} from './ConnectionProvider';
 import {Account, useAuthorization} from './SolAuthorizationProvider';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 interface AppIdentity {

@@ -21,7 +21,7 @@ import useTeamsStore from 'src/stores/teamsStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import useQuery from 'src/hooks/useQuery';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import {
   Bounty,
   BountyStage,

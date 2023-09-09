@@ -1,13 +1,15 @@
 import {useEffect, useId, useState} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native';
 import MemberBox from 'src/components/MemberBox';
+import CleanIcon from 'src/components/icons/CleanIcon';
 import SearchIcon from 'src/components/icons/SearchIcon';
 import WarningIcon from 'src/components/icons/WarningIcon';
+import Bubble from 'src/components/ui/Bubble';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import {InviteToTeamPOSTData, Member, TeamInvite} from 'src/sharedTypes';
@@ -28,13 +30,20 @@ export default function InviteMembers() {
   const myProfile = useMemberStore(state => state.myProfile);
 
   const [newInvitesMembers, setNewInvitesMembers] = useState<Member[]>([]);
-  const [currentUser, setCurrentUser] = useState<Member>();
+  const [currentUsers, setCurrentUsers] = useState<Member[]>();
 
   const {
     data: dataMemberByID,
     loading: loadingMemberByID,
     error: errorMemberByID,
     query: queryMemberByID,
+    clearError: clearErrorMemberByID,
+  } = useQuery();
+  const {
+    data: dataMembersByUsername,
+    loading: loadingMembersByUsername,
+    error: errorMembersByUsername,
+    query: queryMembersByUsername,
   } = useQuery();
 
   const {
@@ -58,18 +67,26 @@ export default function InviteMembers() {
     mutate: mutateInviteToTeam,
   } = useMutation(getServerEndpoint(Endpoints.INVITE_TO_TEAM));
 
-  const canInviteUser =
-    !!currentUser &&
-    !newInvitesMembers.includes(currentUser) &&
-    selectedTeam?.members?.filter(
-      member => member.walletAddress === currentUser.walletAddress,
-    ).length === 0 &&
-    !dataPendingInvites
-      ?.map((invite: TeamInvite) => invite.toMemberAddress)
-      .includes(currentUser.walletAddress) &&
-    !newInvitesMembers
-      ?.map((member: Member) => member.walletAddress)
-      .includes(currentUser.walletAddress);
+  const isPartOfTeam = (member: Member) => {
+    return (
+      (selectedTeam?.members?.filter(
+        m => m.walletAddress === member.walletAddress,
+      ).length || 0) > 0
+    );
+  };
+  const isPartOfInvites = (member: Member) => {
+    return (
+      dataPendingInvites
+        ?.map((invite: TeamInvite) => invite.toMemberAddress)
+        .includes(member.walletAddress) ||
+      newInvitesMembers
+        ?.map((member: Member) => member.walletAddress)
+        .includes(member.walletAddress)
+    );
+  };
+  const canInvite = (member: Member) => {
+    return !!currentUsers && !isPartOfTeam(member) && !isPartOfInvites(member);
+  };
 
   useEffect(() => {
     fetchInvitedMembers();
@@ -97,47 +114,62 @@ export default function InviteMembers() {
     }
   }
 
-  async function fetchUser() {
+  async function fetchUser(type: 'wallet' | 'username') {
+    setCurrentUsers(undefined);
+    clearErrorMemberByID();
     if (!searchUsers.trim() || searchUsers.trim().length < 3) {
       return;
     }
-    const url =
-      getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
-      `/${searchUsers.trim()}`;
+    if (type === 'wallet') {
+      const url =
+        getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
+        `/${searchUsers.trim()}`;
 
-    const data = await queryMemberByID(url);
-    if (data) {
-      const member = data as Member;
-      setCurrentUser(member);
+      const data = await queryMemberByID(url);
+      console.log(data);
+      if (data) {
+        const member = data as Member;
+        setCurrentUsers(!!member ? [member] : undefined);
+      }
+    } else if (type === 'username') {
+      const url =
+        getServerEndpoint(Endpoints.GET_MEMBERS_BY_USERNAME) +
+        `/${searchUsers.trim()}`;
+      console.log(searchUsers);
+      const data = (await queryMembersByUsername(url)) as Member[];
+
+      if (data) {
+        setCurrentUsers(data);
+      }
     }
   }
 
-  async function inviteUser() {
+  async function inviteUser(member: Member) {
     if (
-      !currentUser?.walletAddress ||
+      !member ||
+      !member.walletAddress ||
       !selectedTeam?.id ||
       !myProfile?.walletAddress
     ) {
       console.error(
         'missing data, please refresh user / connect wallet',
         'selected user wallet',
-        !!currentUser?.walletAddress,
+        !!member?.walletAddress,
         'selected team id ',
         !!selectedTeam?.id,
-        'your wallet addres ',
+        'your wallet address ',
         !!myProfile?.walletAddress,
       );
       return;
     }
     const body: InviteToTeamPOSTData = {
-      toAddress: currentUser!.walletAddress,
+      toAddress: member.walletAddress,
       toTeam: selectedTeam!.id,
     };
 
     const data = await mutateInviteToTeam(body);
     if (data) {
-      setNewInvitesMembers([...newInvitesMembers, currentUser!]);
-      setCurrentUser(undefined);
+      setNewInvitesMembers([...newInvitesMembers, member]);
     }
   }
 
@@ -150,21 +182,114 @@ export default function InviteMembers() {
         icon={<SearchIcon />}
       />
       <View style={{height: 12}} />
-      <StyledButton
-        enabled={searchUsers.length >= 3}
-        onPress={fetchUser}
-        type="normal2"
-        loading={loadingMemberByID}
-        error={!!errorMemberByID}>
-        Search user by wallet address
-      </StyledButton>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '100%',
+          alignItems: 'center',
+          gap: 0,
+        }}>
+        <View style={{flex: 1}}>
+          <StyledButton
+            enabled={searchUsers.length >= 3}
+            onPress={() => fetchUser('username')}
+            type="normal"
+            left
+            loading={loadingMembersByUsername}
+            error={!!errorMembersByUsername}>
+            By username
+          </StyledButton>
+        </View>
+        <View style={{flex: 1}}>
+          <StyledButton
+            enabled={searchUsers.length >= 3}
+            onPress={() => fetchUser('wallet')}
+            type="normal2"
+            right
+            loading={loadingMemberByID}
+            error={!!errorMemberByID}>
+            By wallet
+          </StyledButton>
+        </View>
+
+        {(!!currentUsers || errorMemberByID) && (
+          <TouchableOpacity
+            style={{marginLeft: 12}}
+            onPress={() => {
+              setCurrentUsers(undefined);
+              clearErrorMemberByID();
+              setSearchUsers('');
+            }}>
+            <CleanIcon />
+          </TouchableOpacity>
+        )}
+      </View>
+
       <View style={{height: 12}} />
-      {!!currentUser && !loadingMemberByID && (
-        <MemberBox member={currentUser} />
-      )}
-      {!!currentUser &&
+      <View>
+        {!!currentUsers && !loadingMemberByID && (
+          <View style={{gap: 14}}>
+            <StyledText style={{marginTop: 24}}>Search Results</StyledText>
+            <View
+              style={{
+                padding: 8,
+                backgroundColor: Colors.BackgroundBrown,
+                borderRadius: 12,
+                gap: 8,
+              }}>
+              {currentUsers.map(member => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 12,
+                  }}
+                  key={`${id}-${member.walletAddress}`}>
+                  <View style={{flex: 1}}>
+                    <MemberBox
+                      member={member}
+                      rightChildren={
+                        <StyledText>
+                          {myProfile?.walletAddress === member.walletAddress
+                            ? 'Me'
+                            : isPartOfInvites(member)
+                            ? 'Pending Invite'
+                            : isPartOfTeam(member)
+                            ? 'Team member'
+                            : ''}
+                        </StyledText>
+                      }
+                    />
+                  </View>
+
+                  {canInvite(member) && (
+                    <Bubble
+                      text={loadingInviteToTeam ? undefined : ' Invite '}
+                      type="transparent"
+                      suspense
+                      trigger={loadingInviteToTeam ? null : {}}
+                      isButton
+                      onPress={() => {
+                        if (loadingInviteToTeam) return;
+                        inviteUser(member);
+                      }}
+                    />
+                  )}
+                </View>
+              ))}
+              {currentUsers.length === 0 && (
+                <StyledText style={{marginVertical: 12, paddingLeft: 4}}>
+                  No results
+                </StyledText>
+              )}
+            </View>
+          </View>
+        )}
+      </View>
+
+      {/* {!!currentUsers &&
         !loadingMemberByID &&
-        (currentUser == null || !canInviteUser) && (
+        (currentUsers == null || !canInviteUser) && (
           <View
             style={{
               flexDirection: 'row',
@@ -178,7 +303,7 @@ export default function InviteMembers() {
               team.
             </StyledText>
           </View>
-        )}
+        )} */}
       {!!errorInviteToTeam && (
         <View
           style={{
@@ -191,20 +316,22 @@ export default function InviteMembers() {
           <StyledText>{errorInviteToTeam}</StyledText>
         </View>
       )}
-      {loadingMemberByID && <MemberBox member={undefined} />}
+      {(loadingMemberByID || loadingMembersByUsername) && (
+        <MemberBox member={undefined} />
+      )}
       {errorMemberByID && (
         <StyledText style={{color: Colors.Red[300]}}>
           {errorMemberByID}
         </StyledText>
       )}
       <View style={{height: 12}} />
-      <StyledButton
-        enabled={currentUser != null && canInviteUser}
+      {/* <StyledButton
+        enabled={currentUsers != null && canInviteUser}
         onPress={inviteUser}
         loading={loadingInviteToTeam}
         error={!!errorInviteToTeam}>
         Invite Member
-      </StyledButton>
+      </StyledButton> */}
 
       <ScrollView>
         <View style={{gap: 12}}>

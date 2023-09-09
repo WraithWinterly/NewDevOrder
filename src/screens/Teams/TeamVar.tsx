@@ -47,7 +47,7 @@ export default function TeamVar() {
           </StyledText>
           {/* Suspense Skeleton */}
           {!selectedTeam && (
-            <View style={{gap: 12}}>
+            <View style={{gap: 12, flexDirection: 'column'}}>
               <MemberBox
                 member={undefined}
                 rightChildren={<Bubble suspense trigger={undefined} />}

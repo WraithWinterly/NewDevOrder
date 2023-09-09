@@ -35,9 +35,9 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
     }
   });
 
-  // useEffect(() => {
-  //   refetch();
-  // }, [tabIndex]);
+  useEffect(() => {
+    refetch();
+  }, []);
 
   async function refetch() {
     if (!isFounder) fetchTopMembers(0);

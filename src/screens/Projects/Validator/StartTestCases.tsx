@@ -18,7 +18,7 @@ import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import useKeyboardVisible from 'src/hooks/useKeyboardVisible';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import {

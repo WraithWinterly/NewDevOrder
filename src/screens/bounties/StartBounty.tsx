@@ -14,7 +14,7 @@ import useTeamsStore from 'src/stores/teamsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import {useEffect} from 'react';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import {StartBountyPOSTData} from 'src/sharedTypes';
 import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
 import {fromFireDate} from 'src/utils/utils';

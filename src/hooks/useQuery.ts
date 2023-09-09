@@ -44,5 +44,9 @@ export default function useQuery(url?: string | null) {
     }
   };
 
-  return {data, loading, error, query};
+  const clearError = () => {
+    setError(null);
+  };
+
+  return {data, loading, error, query, clearError};
 }

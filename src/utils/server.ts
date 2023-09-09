@@ -12,6 +12,7 @@ export enum Endpoints {
   // PROFILE AND MEMBERS
   CREATE_PROFILE = '/create-profile',
   GET_MEMBER_BY_WALLET_ADDRESS = '/get-member-by-wallet-address',
+  GET_MEMBERS_BY_USERNAME = '/get-members-by-username',
   GET_MEMBERS_BY_WALLET_ADDRESSES = '/get-members-by-wallet-addresses',
   GET_MY_PROFILE = '/get-my-profile',
   CHANGE_ROLE = '/change-role',

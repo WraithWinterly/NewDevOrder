@@ -156,7 +156,9 @@ export default function HeaderRight() {
                   <Text style={{color: Colors.White, fontSize: 18}}>
                     {myProfile.firstName}
                   </Text>
-                  <Text>@{myProfile.username}</Text>
+                  <Text style={{color: Colors.Gray[400]}}>
+                    @{myProfile.username}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -166,7 +168,9 @@ export default function HeaderRight() {
                     paddingHorizontal: 18,
                     paddingVertical: 6,
                   }}>
-                  <Text>Level {myProfile.level}</Text>
+                  <Text style={{color: Colors.Gray[200]}}>
+                    Level {myProfile.level}
+                  </Text>
                 </View>
               </View>
             </View>
