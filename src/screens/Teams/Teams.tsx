@@ -4,6 +4,7 @@ import {useEffect, useId, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
+import AdminIcon from 'src/components/icons/AdminIcon';
 import Bubble from 'src/components/ui/Bubble';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
@@ -125,7 +126,12 @@ export default function Teams() {
         )}
         {!!teams && !!otherTeams && otherTeams.length > 0 && (
           <>
-            <StyledText style={{marginBottom: 16}}>Other Teams</StyledText>
+            <View
+              style={{flexDirection: 'row', alignContent: 'center', gap: 8}}>
+              <StyledText style={{marginBottom: 16}}>Other Teams</StyledText>
+              <AdminIcon />
+            </View>
+
             {otherTeams.map(item => (
               <View key={`${item.id + 1}-${id2}`}>
                 <TeamCard
