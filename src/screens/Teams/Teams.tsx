@@ -38,23 +38,19 @@ export default function Teams() {
     if (!teams) return;
 
     const userTeams = teams.filter(team => {
-      if (team.creatorAddress === walletAddress) return true;
+      if (team.creatorID === walletAddress) return true;
       return (
         team.memberIDs?.some(member => member === walletAddress) &&
-        team.creatorAddress !== walletAddress
+        team.creatorID !== walletAddress
       );
     });
 
-    setTeamsCreated(
-      userTeams.filter(team => team.creatorAddress === walletAddress),
-    );
-    setTeamsJoined(
-      userTeams.filter(team => team.creatorAddress !== walletAddress),
-    );
+    setTeamsCreated(userTeams.filter(team => team.creatorID === walletAddress));
+    setTeamsJoined(userTeams.filter(team => team.creatorID !== walletAddress));
     setOtherTeams(
       teams.filter(
         team =>
-          team.creatorAddress !== walletAddress &&
+          team.creatorID !== walletAddress &&
           !team.memberIDs?.some(member => member === walletAddress),
       ),
     );

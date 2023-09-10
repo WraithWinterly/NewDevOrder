@@ -69,19 +69,15 @@ export default function InviteMembers() {
 
   const isPartOfTeam = (member: Member) => {
     return (
-      (selectedTeam?.members?.filter(
-        m => m.walletAddress === member.walletAddress,
-      ).length || 0) > 0
+      (selectedTeam?.members?.filter(m => m.id === member.id).length || 0) > 0
     );
   };
   const isPartOfInvites = (member: Member) => {
     return (
       dataPendingInvites
-        ?.map((invite: TeamInvite) => invite.toMemberAddress)
-        .includes(member.walletAddress) ||
-      newInvitesMembers
-        ?.map((member: Member) => member.walletAddress)
-        .includes(member.walletAddress)
+        ?.map((invite: TeamInvite) => invite.toMemberID)
+        .includes(member.id) ||
+      newInvitesMembers?.map((member: Member) => member.id).includes(member.id)
     );
   };
   const canInvite = (member: Member) => {
@@ -104,7 +100,7 @@ export default function InviteMembers() {
         const pendingInvites = data as TeamInvite[];
 
         const newMembersArr = pendingInvites.map(invite => {
-          return invite.toMemberAddress;
+          return invite.toMemberID;
         });
         const members = await queryMembersByIDs(newMembersArr);
         if (members) {
@@ -126,7 +122,7 @@ export default function InviteMembers() {
         `/${searchUsers.trim()}`;
 
       const data = await queryMemberByID(url);
-      console.log(data);
+
       if (data) {
         const member = data as Member;
         setCurrentUsers(!!member ? [member] : undefined);
@@ -135,7 +131,7 @@ export default function InviteMembers() {
       const url =
         getServerEndpoint(Endpoints.GET_MEMBERS_BY_USERNAME) +
         `/${searchUsers.trim()}`;
-      console.log(searchUsers);
+
       const data = (await queryMembersByUsername(url)) as Member[];
 
       if (data) {
@@ -145,26 +141,21 @@ export default function InviteMembers() {
   }
 
   async function inviteUser(member: Member) {
-    if (
-      !member ||
-      !member.walletAddress ||
-      !selectedTeam?.id ||
-      !myProfile?.walletAddress
-    ) {
+    if (!member || !member.id || !selectedTeam?.id || !myProfile?.id) {
       console.error(
         'missing data, please refresh user / connect wallet',
         'selected user wallet',
-        !!member?.walletAddress,
+        !!member?.id,
         'selected team id ',
         !!selectedTeam?.id,
         'your wallet address ',
-        !!myProfile?.walletAddress,
+        !!myProfile?.id,
       );
       return;
     }
     const body: InviteToTeamPOSTData = {
-      toAddress: member.walletAddress,
-      toTeam: selectedTeam!.id,
+      toMemberID: member.id,
+      toTeamID: selectedTeam!.id,
     };
 
     const data = await mutateInviteToTeam(body);
@@ -244,13 +235,13 @@ export default function InviteMembers() {
                     alignItems: 'center',
                     gap: 12,
                   }}
-                  key={`${id}-${member.walletAddress}`}>
+                  key={`${id}-${member.id}`}>
                   <View style={{flex: 1}}>
                     <MemberBox
                       member={member}
                       rightChildren={
                         <StyledText>
-                          {myProfile?.walletAddress === member.walletAddress
+                          {myProfile?.id === member.id
                             ? 'Me'
                             : isPartOfInvites(member)
                             ? 'Pending Invite'

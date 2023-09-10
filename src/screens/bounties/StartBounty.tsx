@@ -40,8 +40,8 @@ export default function StartBounty() {
   );
 
   const viewTeams = teams
-    ?.filter(t => t.creatorAddress == walletAddress)
-    .filter(team => !selectedBounty?.participantsTeamIDs?.includes(team.id));
+    ?.filter(t => t.creatorID == walletAddress)
+    .filter(team => !selectedBounty?.participantTeamIDs?.includes(team.id));
 
   useEffect(() => {
     // setSelectedTeam(undefined);

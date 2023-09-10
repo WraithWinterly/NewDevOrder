@@ -49,7 +49,7 @@ export default function Inbox() {
   const performingAction = loadingJoin || loadingDeny;
 
   async function joinInvite(teamID: string) {
-    if (!myProfile?.walletAddress) return;
+    if (!myProfile?.id) return;
     if (performingAction) return;
 
     const body: JoinTeamPOSTData = {
@@ -70,7 +70,7 @@ export default function Inbox() {
   }
 
   async function denyInvite(teamID: string) {
-    if (!myProfile?.walletAddress || performingAction) {
+    if (!myProfile?.id || performingAction) {
       console.error(
         'Cannot deny invite because you do not have a wallet address or are performing an action',
       );
@@ -154,10 +154,10 @@ export default function Inbox() {
                   {bountyWin?.bounty.title.trim()}
                   {'. '}
                 </StyledText>
-                {bountyWin?.team.creatorAddress !== myProfile?.walletAddress &&
+                {bountyWin?.team.creatorID !== myProfile?.id &&
                   'Consult with your Team Owner to claim the reward.'}
               </StyledText>
-              {bountyWin?.team.creatorAddress === myProfile?.walletAddress && (
+              {bountyWin?.team.creatorID === myProfile?.id && (
                 <StyledButton
                   type="borderNoFill"
                   onPress={() => {
@@ -196,11 +196,11 @@ export default function Inbox() {
                   <Text
                     onPress={() => {
                       navigation.navigate('Profile', {
-                        viewProfileAddress: item.fromAddress,
+                        viewProfileAddress: item.fromMemberID,
                       });
                     }}
                     style={{color: Colors.Primary}}>
-                    {item.fromName}
+                    {item.fromMemberName}
                   </Text>
                   <Text> invited you to join their team, </Text>
                   <Text

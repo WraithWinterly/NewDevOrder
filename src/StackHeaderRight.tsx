@@ -28,7 +28,7 @@ export default function StackHeaderRight({route}: {route: string}) {
           Mint NFTs
         </StyledText>
       ) : route === 'TeamVar' ? (
-        selectedTeam?.creatorAddress === walletAddress && (
+        selectedTeam?.creatorID === walletAddress && (
           <StyledText
             onPress={() => navigation.navigate('InviteMembers')}
             style={{color: Colors.Primary}}>

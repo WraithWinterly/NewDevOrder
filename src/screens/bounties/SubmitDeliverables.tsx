@@ -31,8 +31,8 @@ export default function SubmitDeliverables() {
     .wallet?.publicKey.toBase58()
     .toString();
   const viewTeams = teams
-    ?.filter(t => t.creatorAddress == walletAddress)
-    .filter(team => selectedBounty?.participantsTeamIDs?.includes(team.id));
+    ?.filter(t => t.creatorID == walletAddress)
+    .filter(team => selectedBounty?.participantTeamIDs?.includes(team.id));
 
   const [linkToVideoDemo, setLinkToVideoDemo] = useState('https://');
   const [linkToCode, setLinkToCode] = useState('https://');

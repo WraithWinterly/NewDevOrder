@@ -113,7 +113,7 @@ export default function ViewBounty({route, navigation}: Props) {
     const localTeams: Array<string> = [];
 
     teams?.forEach(team => {
-      if (bounty?.participantsTeamIDs.includes(team.id)) {
+      if (bounty?.participantTeamIDs.includes(team.id)) {
         localTeams.push(team.name);
       }
     });
@@ -169,8 +169,8 @@ export default function ViewBounty({route, navigation}: Props) {
       return;
     }
 
-    if (!project?.founder.walletAddress) {
-      console.error('Error: Missing founder wallet address!');
+    if (!project?.founder.id) {
+      console.error('Error: Missing founder id!');
       return;
     }
 
@@ -181,7 +181,7 @@ export default function ViewBounty({route, navigation}: Props) {
       stage: BountyStage.Draft,
       title: createBountyData.title,
       types: createBountyData.types, // Assuming 'BountyType' is an enum type for type
-      founderAddress: project.founder.walletAddress,
+      founderAddress: project.founder.id,
       description: createBountyData.description,
       deadline: new Date(createBountyData.deadline),
       approvedByFounder: false,
@@ -190,7 +190,7 @@ export default function ViewBounty({route, navigation}: Props) {
       aboutProject: createBountyData.aboutProject,
       headerSections: createBountyData.headerSections,
       projectId: null, // Assuming it's null for now
-      participantsTeamIDs: [],
+      participantTeamIDs: [],
       createdAt: new Date(),
       bountyWinnerID: '',
       submissionIDs: [],
@@ -486,7 +486,7 @@ export default function ViewBounty({route, navigation}: Props) {
                   <TeamsIcon small />
                   <StyledText>
                     Teams Currently Hacking:{' '}
-                    {bounty?.participantsTeamIDs?.length}
+                    {bounty?.participantTeamIDs?.length}
                   </StyledText>
                 </View>
               </View>
@@ -515,7 +515,7 @@ export default function ViewBounty({route, navigation}: Props) {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('Profile', {
-                  viewProfileAddress: project?.founderWalletAddress,
+                  viewProfileAddress: project?.founderID,
                 })
               }
               style={{

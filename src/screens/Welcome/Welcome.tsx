@@ -1,3 +1,4 @@
+import {VERSION_STR} from '@env';
 import {View} from 'react-native';
 import StyledLink from 'src/components/ui/styled/StyledLink';
 import StyledText from 'src/components/ui/styled/StyledText';
@@ -12,6 +13,7 @@ import {useEffect, useState} from 'react';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import useQuery from 'src/hooks/useQuery';
 import useMemberStore from 'src/stores/membersStore';
+import {Colors} from 'src/styles/styles';
 
 export default function Welcome() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -37,71 +39,95 @@ export default function Welcome() {
 
   return (
     <Layout>
-      <View
-        style={{
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          gap: 10,
-          height: '85%',
-        }}>
-        <View style={{gap: 18, paddingTop: 42}}>
-          {hasCompletedWelcome ? (
-            <>
-              <StyledText type="header" style={{paddingBottom: 24}}>
-                Welcome Back to New Dev Order!
-              </StyledText>
-              <StyledText>Please reconnect your wallet to continue.</StyledText>
-            </>
-          ) : (
-            <>
-              <StyledText type="header" style={{paddingBottom: 24}}>
-                Congratulations! You've been invited to join the New Dev Order.
-              </StyledText>
-              <StyledText>
-                Let's take a couple minutes to get you set up. You'll need to
-                connect your Phantom Wallet.
-              </StyledText>
-              <StyledText>
-                Just a heads up - it'll take 1 SOL to mint your Membership
-                Token.{' '}
-                <StyledLink href="https://google.com">Learn more.</StyledLink>
-              </StyledText>
-            </>
-          )}
-        </View>
-
+      <View style={{height: '100%'}}>
         <View
           style={{
             flexDirection: 'column',
-            gap: 20,
-            width: '100%',
-            paddingTop: 80,
+            alignItems: 'center',
+            gap: 10,
+            height: '60%',
+            justifyContent: 'center',
+            paddingTop: 24,
           }}>
-          <PhantomConnectButton
-            onSuccess={async walletAddress => {
-              const data = await query(
-                getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
-                  `/${walletAddress}`,
-              );
+          <View style={{gap: 18}}>
+            {hasCompletedWelcome ? (
+              <>
+                <StyledText type="header" style={{paddingBottom: 24}}>
+                  Welcome Back to New Dev Order!
+                </StyledText>
+                <StyledText>
+                  Please reconnect your wallet to continue.
+                </StyledText>
+              </>
+            ) : (
+              <>
+                <StyledText type="header" style={{paddingBottom: 24}}>
+                  Congratulations! You've been invited to join the New Dev
+                  Order.
+                </StyledText>
+                <StyledText>
+                  Let's take a couple minutes to get you set up. You'll need to
+                  connect your Phantom Wallet.
+                </StyledText>
+                <StyledText>
+                  Just a heads up - it'll take 1 SOL to mint your Membership
+                  Token.{' '}
+                  <StyledLink href="https://google.com">Learn more.</StyledLink>
+                </StyledText>
+              </>
+            )}
+          </View>
 
-              if (!!data) {
-                fetchMyProfile();
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'HomeNavigation'}],
-                });
-                asyncStorage.setItem('hasCompletedWelcome', 'true');
-              } else {
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'WelcomeMintMembershipToken'}],
-                });
-              }
-            }}
-          />
-          {/* <NDO_Button type="noBg" onPress={() => {}}>
+          <View
+            style={{
+              flexDirection: 'column',
+              gap: 20,
+              width: '100%',
+              paddingTop: 80,
+            }}>
+            <PhantomConnectButton
+              onSuccess={async walletAddress => {
+                const data = await query(
+                  getServerEndpoint(Endpoints.GET_MEMBER_BY_WALLET_ADDRESS) +
+                    `/${walletAddress}`,
+                );
+
+                if (!!data) {
+                  fetchMyProfile();
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'HomeNavigation'}],
+                  });
+                  asyncStorage.setItem('hasCompletedWelcome', 'true');
+                } else {
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'WelcomeMintMembershipToken'}],
+                  });
+                }
+              }}
+            />
+            {/* <NDO_Button type="noBg" onPress={() => {}}>
               Create new wallet
             </NDO_Button> */}
+          </View>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            alignItems: 'flex-end',
+          }}>
+          <StyledText style={{color: Colors.Gray[400]}}>
+            New Dev Order
+          </StyledText>
+          <StyledText style={{color: Colors.Gray[400]}}>
+            CryptoVersus LLC
+          </StyledText>
+          <StyledText style={{color: Colors.Gray[400]}}>
+            {VERSION_STR}
+          </StyledText>
         </View>
       </View>
     </Layout>

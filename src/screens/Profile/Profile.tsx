@@ -26,7 +26,6 @@ import useQuery from 'src/hooks/useQuery';
 import useProjectsStore from 'src/stores/projectsStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import useBountyStore from 'src/stores/bountyStore';
-
 type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
 
 export default function Profile({route, navigation}: Props) {

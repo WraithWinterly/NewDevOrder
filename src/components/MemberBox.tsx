@@ -32,15 +32,15 @@ export default function MemberBox({
         paddingHorizontal: 12,
         paddingVertical: 8,
         backgroundColor:
-          walletAddress === member?.walletAddress
+          walletAddress === member?.id
             ? Colors.Purple[900]
             : Colors.BackgroundLighter,
         borderRadius: 12,
       }}
       onPress={() => {
-        if (!!member?.walletAddress)
+        if (!!member?.id)
           navigation.navigate('Profile', {
-            viewProfileAddress: member?.walletAddress,
+            viewProfileAddress: member?.id,
           });
       }}>
       <View style={{padding: 8, borderRadius: 8}}>

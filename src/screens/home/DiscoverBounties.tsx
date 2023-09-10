@@ -31,7 +31,7 @@ export default function DiscoverBounties() {
           const myTeamIDs = myTeams?.map(team => team.id);
 
           const doesNotInclude = myTeamIDs?.every(teamId => {
-            return !bounty.participantsTeamIDs.includes(teamId);
+            return !bounty.participantTeamIDs.includes(teamId);
           });
           return doesNotInclude;
         }

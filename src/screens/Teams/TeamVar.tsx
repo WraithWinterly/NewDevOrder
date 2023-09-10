@@ -60,9 +60,7 @@ export default function TeamVar() {
           )}
           <FlatList
             data={selectedTeam?.members}
-            keyExtractor={(item, index) =>
-              `${item.walletAddress}-${index}-${id}`
-            }
+            keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
             ItemSeparatorComponent={() => <View style={{height: 12}}></View>}
             renderItem={({item: member}) => (
               <MemberBox
@@ -71,7 +69,7 @@ export default function TeamVar() {
                   <Bubble
                     type="transparent"
                     text={
-                      member.walletAddress === selectedTeam?.creatorAddress
+                      member.id === selectedTeam?.creatorID
                         ? 'Creator'
                         : 'Member'
                     }

@@ -30,7 +30,7 @@ export default function YourBounties() {
           );
           const myTeamIDs = myTeams?.map(team => team.id);
           return myTeamIDs?.some(teamId => {
-            return bounty.participantsTeamIDs.includes(teamId);
+            return bounty.participantTeamIDs.includes(teamId);
           });
         }
       })
