@@ -9,7 +9,11 @@ export default function ProjBountyBreadcrumb({
   bounty: (Bounty & {project: Project}) | undefined;
 }) {
   return (
-    <StyledText style={{fontSize: 14, marginVertical: 8}}>
+    <StyledText
+      style={{fontSize: 14, marginVertical: 8}}
+      suspense
+      trigger={bounty}
+      shimmerWidth={140}>
       <Text style={{color: Colors.Gray[400]}}>{bounty?.project.title} / </Text>{' '}
       {bounty?.title}
     </StyledText>

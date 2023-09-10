@@ -26,13 +26,12 @@ import useQuery from 'src/hooks/useQuery';
 import useProjectsStore from 'src/stores/projectsStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import useBountyStore from 'src/stores/bountyStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
 
 export default function Profile({route, navigation}: Props) {
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
-
-  const wallet = useSolanaContext();
 
   const viewProfileAddress = route.params?.viewProfileAddress ?? undefined;
 
@@ -42,8 +41,17 @@ export default function Profile({route, navigation}: Props) {
 
   const [displayProfile, setDisplayProfile] = useState<Member | undefined>();
 
+  const [rememberedID, setRememberedID] = useState<string>();
+
   const isMyProfile =
-    viewProfileAddress === wallet?.wallet?.publicKey.toBase58().toString();
+    viewProfileAddress === rememberedID || viewProfileAddress === myProfile?.id;
+
+  // Prevent flickering from ID nullifying after refresh / role switching
+  useEffect(() => {
+    AsyncStorage.getItem('walletAddress').then(value => {
+      if (value) setRememberedID(value);
+    });
+  }, []);
 
   useEffect(() => {
     if (!isMyProfile && !!viewProfileAddress) {
