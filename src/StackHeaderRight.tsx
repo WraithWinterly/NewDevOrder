@@ -9,24 +9,24 @@ import StyledButton from './components/ui/styled/StyledButton';
 import RefreshIcon from './components/icons/RefreshIcon';
 import useTeamsStore from './stores/teamsStore';
 import useSolanaContext from './web3/SolanaProvider';
+import useMemberStore from './stores/membersStore';
 
 export default function StackHeaderRight({route}: {route: string}) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
 
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
 
   return (
     <View style={{paddingRight: 18}}>
       {route === 'MyWallet' ? (
-        <StyledText
-          onPress={() => navigation.navigate('MintNFTs')}
-          style={{color: Colors.Primary}}>
-          Mint NFTs
-        </StyledText>
+        // <StyledText
+        //   onPress={() => navigation.navigate('MintNFTs')}
+        //   style={{color: Colors.Primary}}>
+        //   Mint NFTs
+        // </StyledText>
+        <></>
       ) : route === 'TeamVar' ? (
         selectedTeam?.creatorID === walletAddress && (
           <StyledText

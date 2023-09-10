@@ -9,16 +9,14 @@ import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
+import useMemberStore from 'src/stores/membersStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
-import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function Teams() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
 
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const teams = useTeamsStore(state => state.teams);

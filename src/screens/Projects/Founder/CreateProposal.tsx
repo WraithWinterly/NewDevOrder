@@ -17,14 +17,9 @@ import useMemberStore from 'src/stores/membersStore';
 
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function CreateProposal() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
 
   const myProfile = useMemberStore(state => state.myProfile);
   const [createProposalData, setCreateProposalData] =

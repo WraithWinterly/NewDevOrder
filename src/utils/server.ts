@@ -3,6 +3,7 @@ import {SERVER_URL, TEST_SERVER_URL, USE_LOCAL_SERVER} from '@env';
 export enum Endpoints {
   AUTHORIZE = '/authorize',
   REQUEST_NONCE = '/request-nonce',
+  VERIFY_AUTH = '/verify-auth',
   // MISC
   ALIVE = '/alive',
   ALIVE_POST = '/alive-post',

@@ -19,6 +19,7 @@ import {StartBountyPOSTData} from 'src/sharedTypes';
 import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
 import {fromFireDate} from 'src/utils/utils';
 import WarningIcon from 'src/components/icons/WarningIcon';
+import useMemberStore from 'src/stores/membersStore';
 
 export default function StartBounty() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
@@ -31,9 +32,7 @@ export default function StartBounty() {
   const teams = useTeamsStore(state => state.teams);
   const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
 
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
 
   const {data, loading, error, mutate} = useMutation(
     getServerEndpoint(Endpoints.START_BOUNTY),

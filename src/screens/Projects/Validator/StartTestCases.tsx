@@ -35,15 +35,10 @@ import {Colors} from 'src/styles/styles';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import addSpaceCase from 'src/utils/utils';
-import useSolanaContext from 'src/web3/SolanaProvider';
 
 // type Props = NativeStackScreenProps<StackParamList, 'StartTestCases'>;
 export default function StartTestCases() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
 
   const selectedBounty = useBountyStore(state => state.selectedBounty);
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
@@ -108,10 +103,6 @@ export default function StartTestCases() {
       console.error('No bounty selected');
       return;
     }
-    if (!walletAddress) {
-      console.error('No wallet address');
-      return;
-    }
     if (!selectedSubmission?.id) {
       console.error('No submission ID');
       return;
@@ -141,10 +132,6 @@ export default function StartTestCases() {
       console.error('No bounty selected');
       return;
     }
-    if (!walletAddress) {
-      console.error('No wallet address');
-      return;
-    }
     if (!selectedSubmission?.id) {
       console.error('No submission ID');
       return;
@@ -167,10 +154,6 @@ export default function StartTestCases() {
   async function approveDisapproveBountyWinner(approve: boolean) {
     if (!selectedBounty?.id) {
       console.error('No bounty selected');
-      return;
-    }
-    if (!walletAddress) {
-      console.error('No wallet address');
       return;
     }
     if (!selectedSubmission?.id) {

@@ -81,9 +81,6 @@ function ProfileCard({
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
   const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
 
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
@@ -102,11 +99,6 @@ function ProfileCard({
   } = useMutation(getServerEndpoint(Endpoints.UPDATE_MY_ROLES));
 
   async function onSubmit() {
-    if (!walletAddress) {
-      console.error('No walletAddress');
-      return;
-    }
-
     const data = await mutateUpdateRoles({});
     if (data) {
       fetchMyProfile();
@@ -114,10 +106,6 @@ function ProfileCard({
   }
 
   async function onSubmitRole(role: RoleType) {
-    if (!walletAddress) {
-      console.error('No walletAddress');
-      return;
-    }
     const data = await mutateRole({role} as ChangeRolePOSTData);
     if (!!data) {
       fetchMyProfile();

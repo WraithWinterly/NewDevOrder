@@ -11,14 +11,9 @@ import {FounderConfirmPayPostData} from 'src/sharedTypes';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function ConfirmAndPay() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
 
   const proj = useProjectsStore(state => state.selectedProject);
   const fetchProjects = useProjectsStore(state => state.fetchProjects);
@@ -28,8 +23,8 @@ export default function ConfirmAndPay() {
   );
 
   async function onSubmit() {
-    if (!proj?.id || !walletAddress) {
-      console.error('No project or wallet address');
+    if (!proj?.id) {
+      console.error('No project.id');
       return;
     }
     const body = {

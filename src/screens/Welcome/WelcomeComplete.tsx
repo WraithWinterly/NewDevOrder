@@ -7,11 +7,10 @@ import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
 
 import asyncStorage from '@react-native-async-storage/async-storage';
-import useSolanaContext from 'src/web3/SolanaProvider';
+
 import useMemberStore from 'src/stores/membersStore';
 
 export default function WelcomeComplete() {
-  const walletAddress = useSolanaContext().wallet?.publicKey.toBase58();
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
 

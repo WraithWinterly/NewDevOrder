@@ -22,16 +22,14 @@ import useTeamsStore from 'src/stores/teamsStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import RefreshIcon from 'src/components/icons/RefreshIcon';
 import {useState} from 'react';
-import useSolanaContext from 'src/web3/SolanaProvider';
+
 import StyledText from 'src/components/ui/styled/StyledText';
 import {RoleType} from 'src/sharedTypes';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
 
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
 
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);

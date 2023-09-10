@@ -58,7 +58,6 @@ export default function CreateTeam() {
   async function onSubmit() {
     if (!canProceedCreateTeam) return;
 
-    const walletAddress = wallet.wallet?.publicKey.toBase58().toString();
     const createData: CreateTeamPOSTData = {
       ...createTeamData!,
     };

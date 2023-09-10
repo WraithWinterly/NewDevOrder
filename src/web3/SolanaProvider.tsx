@@ -15,6 +15,7 @@ import {
 import {
   AuthorizationResult,
   AuthorizeAPI,
+  DeauthorizeAPI,
   ReauthorizeAPI,
 } from '@solana-mobile/mobile-wallet-adapter-protocol';
 import {
@@ -39,6 +40,7 @@ interface SolanaContextType {
   balance: string | null;
   isConnected: boolean;
   initializeWallet: () => Promise<PublicKey | null>;
+  deauthorizeSession: () => Promise<void>;
   signMessage: (nonce: string) => Promise<Uint8Array[] | null>;
 }
 
@@ -48,7 +50,7 @@ export function SolanaProvider({children}: {children: ReactNode}) {
   const {authorizeSession, selectedAccount: wallet} = useAuthorization();
 
   const {connection} = useConnection();
-  const {selectedAccount} = useAuthorization();
+  const {selectedAccount, deauthorizeSession} = useAuthorization();
 
   const [isConnected, setIsConnected] = useState(false);
   const [authorizationInProgress, setAuthorizationInProgress] = useState(false);
@@ -120,13 +122,18 @@ export function SolanaProvider({children}: {children: ReactNode}) {
 
     return Promise.resolve(publicKey);
   }
-
+  async function deAuth() {
+    await transact(async wallet => {
+      deauthorizeSession(wallet);
+    });
+  }
   const contextValue: SolanaContextType = {
     wallet,
     balance,
     signMessage,
     isConnected,
     initializeWallet,
+    deauthorizeSession: deAuth,
   };
 
   return (

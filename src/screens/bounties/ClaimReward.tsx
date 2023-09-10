@@ -22,17 +22,11 @@ export default function ClaimReward() {
   const {data, loading, error, mutate} = useMutation(
     getServerEndpoint(Endpoints.CONFIRM_REWARD),
   );
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   async function onSubmit() {
     if (!selectedBounty?.winningSubmissionID) {
       console.error('No winningSubmissionID');
-      return;
-    }
-    if (!walletAddress) {
-      console.error('No walletAddress');
       return;
     }
     const body: ConfirmRewardPostData = {

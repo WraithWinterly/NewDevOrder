@@ -6,21 +6,21 @@ type NFT = {
   name: string;
 };
 const NFTs: NFT[] = [
-  {
-    id: '1',
-    project: 'Avalanche',
-    name: 'Front-End Cross-Platform NFT yup yup yup yup yup ',
-  },
-  {
-    id: '2',
-    project: 'Solana',
-    name: 'Solana NFT',
-  },
-  {
-    id: '3',
-    project: 'Solana',
-    name: 'Solana NFT',
-  },
+  // {
+  //   id: '1',
+  //   project: 'Avalanche',
+  //   name: 'Front-End Cross-Platform NFT yup yup yup yup yup ',
+  // },
+  // {
+  //   id: '2',
+  //   project: 'Solana',
+  //   name: 'Solana NFT',
+  // },
+  // {
+  //   id: '3',
+  //   project: 'Solana',
+  //   name: 'Solana NFT',
+  // },
 ];
 
 type WalletStore = {

@@ -32,7 +32,7 @@ import {
   SetApproveBountyPostData,
   Submission,
 } from 'src/sharedTypes';
-import useSolanaContext from 'src/web3/SolanaProvider';
+
 import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
 import {DropdownSection} from 'src/components/ui/styled/StyledDropdown';
@@ -42,10 +42,6 @@ import {TouchableOpacity} from 'react-native';
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
 export default function ViewBounty({route, navigation}: Props) {
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
-
   const createBountyData = useBountyStore(state => state.createBountyData);
   const bounties = useBountyStore(state => state.bounties);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
@@ -124,10 +120,6 @@ export default function ViewBounty({route, navigation}: Props) {
   async function onSubmitCreateBounty(draft: boolean) {
     if (!createBountyData) {
       console.error('No create bounty data');
-      return;
-    }
-    if (!walletAddress) {
-      console.error('No wallet address');
       return;
     }
 
@@ -211,10 +203,6 @@ export default function ViewBounty({route, navigation}: Props) {
   }
 
   async function onSubmitToggleApproval() {
-    if (!walletAddress) {
-      console.error('No walletAddress');
-      return;
-    }
     if (!bounty?.id) {
       console.error('No bounty id');
       return;

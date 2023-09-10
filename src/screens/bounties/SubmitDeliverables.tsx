@@ -15,6 +15,7 @@ import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import {SubmitDeliverablesPostData} from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';
+import useMemberStore from 'src/stores/membersStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
@@ -27,9 +28,7 @@ export default function SubmitDeliverables() {
   const teams = useTeamsStore(state => state.teams);
   const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
   const viewTeams = teams
     ?.filter(t => t.creatorID == walletAddress)
     .filter(team => selectedBounty?.participantTeamIDs?.includes(team.id));
@@ -86,10 +85,6 @@ export default function SubmitDeliverables() {
     }
     if (!selectedBounty?.id) {
       console.error('No bounty selected');
-      return;
-    }
-    if (!walletAddress) {
-      console.error('No wallet address');
       return;
     }
     if (!selectedTeam?.id) {

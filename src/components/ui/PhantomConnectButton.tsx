@@ -17,7 +17,8 @@ import useMemberStore from 'src/stores/membersStore';
 import {PublicKey} from '@solana/web3.js';
 import useMutation from 'src/hooks/useMutation';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SharedPreferences from 'react-native-shared-preferences';
 export default function PhantomConnectButton({
   onSuccess,
 }: {
@@ -67,6 +68,7 @@ export default function PhantomConnectButton({
 
       if (data && data.accessToken && data.refreshToken) {
         globalThis.authToken = data.accessToken;
+        SharedPreferences.setItem('key', data.accessToken);
         // setRefreshToken(data.refreshToken);
         onSuccess(walletAddress);
       } else {
@@ -92,6 +94,7 @@ export default function PhantomConnectButton({
       setWalletConnectError('Wallet address not found');
       return;
     }
+    AsyncStorage.setItem('walletAddress', publicKey.toBase58());
   }
   async function walletStep2Sign() {
     if (!walletAddress) return;

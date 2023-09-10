@@ -1,10 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useEffect, useId} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Linking, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import Separator from 'src/components/ui/Separator';
+import StyledButton from 'src/components/ui/styled/StyledButton';
 
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
@@ -13,9 +14,10 @@ import useWalletStore from 'src/stores/walletStore';
 import {Colors} from 'src/styles/styles';
 
 import useSolanaContext from 'src/web3/SolanaProvider';
-
+import SharedPreferences from 'react-native-shared-preferences';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function MyWallet() {
-  const {balance} = useSolanaContext();
+  const {balance, wallet, deauthorizeSession} = useSolanaContext();
 
   const nfts = useWalletStore(state => state.nfts);
   const fetchNFTs = useWalletStore(state => state.fetchNFTs);
@@ -26,6 +28,33 @@ export default function MyWallet() {
     fetchNFTs();
   }, []);
 
+  const solana = useSolanaContext();
+  const navigation = useNavigation<StackNavigationProp<StackParamList>>();
+  const setWalletConnectError = useWalletStore(
+    state => state.setWalletConnectError,
+  );
+  useEffect(() => {
+    if (!balance) {
+      solana
+        .initializeWallet()
+        .then(publicKey => {})
+
+        .catch(e => {
+          const error = e as Error;
+          setWalletConnectError(error.message);
+          if (
+            error.message.includes(
+              'Found no installed wallet that supports the mobile wallet protocol.',
+            )
+          ) {
+            Linking.openURL('market://details?id=app.phantom');
+            return;
+          }
+          navigation.navigate('WelcomeWalletFailed');
+        });
+    }
+  }, []);
+
   return (
     <Layout>
       <StyledText>Current Balance</StyledText>
@@ -33,10 +62,11 @@ export default function MyWallet() {
         style={{
           fontSize: 32,
           fontWeight: '400',
-          paddingTop: 2,
+          paddingVertical: 2,
         }}>
         {balance} SOL
       </StyledText>
+      <StyledText>Address: {wallet?.publicKey.toBase58()}</StyledText>
       <Separator />
       {!!nfts && (
         <FlatList
@@ -48,6 +78,20 @@ export default function MyWallet() {
           <StyledText>Your NFTs will be displayed here...</StyledText>
         </FlatList>
       )}
+      <StyledButton
+        onPress={async () => {
+          await deauthorizeSession();
+          globalThis.authToken = '';
+          SharedPreferences.removeItem('key');
+          AsyncStorage.removeItem('walletAddress');
+          AsyncStorage.removeItem('hasCompletedWelcome');
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Welcome'}],
+          });
+        }}>
+        Disconnect and Log Out
+      </StyledButton>
     </Layout>
   );
 }
