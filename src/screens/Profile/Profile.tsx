@@ -1,5 +1,5 @@
 import {useEffect, useId, useState} from 'react';
-import {Text, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import Bubble from 'src/components/ui/Bubble';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
@@ -27,6 +27,8 @@ import useProjectsStore from 'src/stores/projectsStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import useBountyStore from 'src/stores/bountyStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CopyIcon from 'src/components/icons/CopyIcon';
+import Clipboard from '@react-native-clipboard/clipboard';
 type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
 
 export default function Profile({route, navigation}: Props) {
@@ -200,35 +202,78 @@ function ProfileCard({
           </Menu>
         </View>
       )}
-      <View style={{flexDirection: 'row', alignItems: 'center', gap: 12}}>
-        <StyledText
-          style={{fontSize: 24, fontWeight: '500'}}
-          suspense
-          trigger={profile?.firstName}
-          shimmerWidth={120}>
-          {profile?.firstName}
-        </StyledText>
-        <Bubble
-          lowHeight
-          text={`Level ${profile?.level}`}
-          suspense
-          trigger={profile}
-        />
-        {profile?.admin && profile.adminec && (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'flex-start',
+          gap: 12,
+          // paddingBottom: 12,
+        }}>
+        <View>
+          <StyledText
+            style={{fontSize: 24, fontWeight: '500'}}
+            suspense
+            trigger={profile?.firstName}
+            shimmerWidth={120}>
+            {profile?.firstName}
+          </StyledText>
+          <StyledText suspense trigger={profile}>
+            @{profile?.username}
+          </StyledText>
+        </View>
+
+        <View
+          style={{
+            flexWrap: 'wrap',
+            flex: 1,
+            flexDirection: 'row',
+            gap: 12,
+            alignContent: 'center',
+          }}>
           <Bubble
             lowHeight
-            text={`Admin`}
-            type="red"
+            text={`Level ${profile?.level}`}
             suspense
             trigger={profile}
           />
-        )}
+          {profile?.admin && profile.adminec && (
+            <Bubble
+              lowHeight
+              text={`Admin`}
+              type="red"
+              suspense
+              trigger={profile}
+            />
+          )}
+          {profile?.financialOfficer && (
+            <Bubble
+              lowHeight
+              text={`Financial Officer`}
+              type="green"
+              suspense
+              trigger={profile}
+            />
+          )}
+        </View>
       </View>
+      {!!profile?.id && (
+        <TouchableOpacity
+          style={{flexDirection: 'row', gap: 8, alignItems: 'center'}}
+          onPress={() => Clipboard.setString(profile.id)}>
+          <View style={{padding: 8}}>
+            <CopyIcon />
+          </View>
+          <StyledText>Copy wallet address</StyledText>
+        </TouchableOpacity>
+      )}
 
-      <StyledText suspense trigger={profile}>
-        @{profile?.username}
-      </StyledText>
-      <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 14}}>
+      <View
+        style={{
+          flexWrap: 'wrap',
+          flexDirection: 'row',
+          gap: 14,
+          paddingBottom: 12,
+        }}>
         {!profile && (
           <>
             <Bubble text="" suspense />

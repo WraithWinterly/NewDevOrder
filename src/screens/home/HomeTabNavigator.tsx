@@ -23,6 +23,8 @@ import useBountyStore from 'src/stores/bountyStore';
 import {RoleType} from 'src/sharedTypes';
 import Admin from '../admin/Admin';
 import AdminIcon from 'src/components/icons/AdminIcon';
+import FinancialOfficer from '../financialOfficer/FinancialOfficer';
+import CashIcon from 'src/components/icons/CashIcon';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -31,6 +33,7 @@ export type MainTabsParams = {
   Inbox: undefined;
   Projects: undefined;
   Admin: undefined;
+  Officer: undefined;
   Dev: undefined;
 };
 
@@ -42,6 +45,7 @@ const tabToHeaderText = {
   Projects: 'Your Projects',
   Admin: 'Admin',
   Dev: '__DEVELOPER__',
+  Officer: 'Officer',
 };
 
 const Tab = createBottomTabNavigator<MainTabsParams>();
@@ -159,7 +163,21 @@ export default function HomeTabNavigator() {
           }}
         />
       )}
-      {__DEV__ && (
+      {myProfile?.financialOfficer && (
+        <Tab.Screen
+          name="Officer"
+          component={FinancialOfficer}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon
+                focused={focused}
+                icon={<CashIcon customSize={22} />}
+              />
+            ),
+          }}
+        />
+      )}
+      {/* {__DEV__ && (
         <Tab.Screen
           name="Dev"
           component={DeveloperMenu}
@@ -169,7 +187,7 @@ export default function HomeTabNavigator() {
             ),
           }}
         />
-      )}
+      )} */}
     </Tab.Navigator>
   );
 }

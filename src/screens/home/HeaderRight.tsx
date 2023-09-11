@@ -25,6 +25,7 @@ import {useState} from 'react';
 
 import StyledText from 'src/components/ui/styled/StyledText';
 import {RoleType} from 'src/sharedTypes';
+import useOfficerStore from 'src/stores/officerStore';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
@@ -45,6 +46,8 @@ export default function HeaderRight() {
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
 
+  const fetchItems = useOfficerStore(state => state.fetchItems);
+
   const [refreshing, setRefreshing] = useState(false);
   const [refreshError, setRefreshError] = useState<boolean>(false);
 
@@ -58,6 +61,9 @@ export default function HeaderRight() {
         fetchProjects(),
         fetchMyProfile(),
       ]);
+      if (myProfile?.financialOfficer) {
+        fetchItems();
+      }
       setSelectedTeam(undefined);
       setSelectedProject(undefined);
       setSelectedBounty(undefined);

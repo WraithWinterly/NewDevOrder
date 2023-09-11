@@ -52,6 +52,10 @@ export enum Endpoints {
   BOUNTYMGR_DECLINE = '/bountymgr-decline',
   FOUNDER_CONFIRM_PAY = '/founder-confirm-pay',
   GET_BOUNTIES_FOR_PROJECT = '/get-bounties-for-project',
+  // FINANCIAL OFFICER
+  FINANCIAL_OFFICER = '/get-officer-items',
+  FINANCIAL_OFFICER_PROJECT_PAID = '/officer-confirm-project-paid',
+  FINANCIAL_OFFICER_BOUNTY_WINNER_PAID = '/officer-confirm-bounty-winner-paid',
 }
 
 export function getServerEndpoint(endpoint: Endpoints) {

@@ -400,7 +400,7 @@ export default function ViewBounty({route, navigation}: Props) {
                 />
               ))}
             </View>
-            {!!thisBountyWin && playingRole === RoleType.BountyHunter && (
+            {!!thisBountyWin && (
               <View style={{marginTop: 24, gap: 12}}>
                 <StyledText>
                   🎉 Your team,{' '}

@@ -58,7 +58,10 @@ export default function ClaimReward() {
           ${selectedBounty?.reward}
         </StyledText>
         <View style={{height: 24}} />
-        <StyledText>Gas fees: $1.00</StyledText>
+        <StyledText>
+          You will be paid by our Financial Officer once you confirm the reward.
+        </StyledText>
+        {/* <StyledText>Gas fees: $1.00</StyledText> */}
         <BottomBar>
           <StyledButton onPress={onSubmit} loading={loading} error={!!error}>
             Confirm and claim reward

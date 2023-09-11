@@ -44,8 +44,8 @@ import StartTestCases from './screens/projects/validator/StartTestCases';
 import ViewSolution from './screens/bounties/ViewSolution';
 import ClaimReward from './screens/bounties/ClaimReward';
 import ViewProjectBounties from './screens/projects/shared/ViewProjectBounties';
-import BackArrow from './components/icons/BackArrow';
-import {View} from 'react-native';
+import OfficerBountyWinner from './screens/projects/officer/OfficerBountyWinner';
+import {Bounty, Member, Project, Submission, Team} from './sharedTypes';
 
 export type StackParamList = WelcomeStackParamList &
   WalletParamList &
@@ -64,6 +64,14 @@ export type StackParamList = WelcomeStackParamList &
 
     Profile: {viewProfileAddress?: string} | undefined;
     Leaderboard: undefined;
+    OfficerBountyWinner: {
+      submission: Submission & {
+        bounty: Bounty & {project: Project};
+        team: Team & {
+          creator: Member;
+        };
+      };
+    };
   };
 
 export type WelcomeStackParamList = {
@@ -259,6 +267,12 @@ export default function StackNavigator() {
 
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Leaderboard" component={LeaderboardNavigation} />
+
+        <Stack.Screen
+          name="OfficerBountyWinner"
+          component={OfficerBountyWinner}
+          options={{title: 'Financial Officer View Owed Bounty'}}
+        />
 
         {/* Projects */}
         <Stack.Screen

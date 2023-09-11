@@ -483,15 +483,18 @@ export default function StartTestCases() {
                       !selectedSubmission.isWinnerApprovedByFounder) ||
                       (playingRole === RoleType.BountyManager &&
                         !selectedSubmission.isWinnerApprovedByManager)) && (
-                      <StyledButton
-                        loading={loadingApproveDisapproveBountyWinner}
-                        error={!!errorApproveDisapproveBountyWinner}
-                        onPress={() => approveDisapproveBountyWinner(true)}
-                        type="normal">
-                        Accept winner
-                      </StyledButton>
+                      <>
+                        <StyledButton
+                          loading={loadingApproveDisapproveBountyWinner}
+                          error={!!errorApproveDisapproveBountyWinner}
+                          onPress={() => approveDisapproveBountyWinner(true)}
+                          type="normal">
+                          Accept winner
+                        </StyledButton>
+                        <View style={{height: 32}}></View>
+                      </>
                     )}
-                  <View style={{height: 42}}></View>
+
                   <StyledButton
                     loading={loadingApproveDisapproveBountyWinner}
                     error={!!errorApproveDisapproveBountyWinner}

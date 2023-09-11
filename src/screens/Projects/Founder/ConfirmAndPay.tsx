@@ -50,18 +50,25 @@ export default function ConfirmAndPay() {
             Your quote is{' '}
             <Text style={{fontWeight: 'bold'}}>${proj?.quotePrice}</Text>.
           </StyledText>
-          <StyledText>
+          {/* <StyledText>
             This amount is non-refundable. Once we've secured your funds, your
             proposal will be sent over to the Bounty Designer. When the Bounty
             Design Document is completed, you will need to review and approve
             that it meets your requirements. Then, it will be posted on the NDO
             app for Bounty Hunters to complete.
+          </StyledText> */}
+          <StyledText>
+            You will be contacted by our Financial Officer in order to pay the
+            amount. Once it is paid and confirmed, the bounty designer will
+            design the bounties and we will review them. You will confirm the
+            bounties and they will be public. Once the winner is decided, you
+            will agree to it and they will be paid.
           </StyledText>
         </View>
 
         <StyledButton onPress={onSubmit} loading={loading} error={!!error}>
           <StyledText style={{fontSize: 18, color: Colors.BtnTextColor}}>
-            Confirm and pay{' '}
+            Agree to pay{' '}
             <Text style={{fontWeight: '500'}}>${proj?.quotePrice}</Text>.
           </StyledText>
         </StyledButton>
