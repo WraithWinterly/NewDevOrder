@@ -26,6 +26,7 @@ import {useState} from 'react';
 import StyledText from 'src/components/ui/styled/StyledText';
 import {RoleType} from 'src/sharedTypes';
 import useOfficerStore from 'src/stores/officerStore';
+import useInboxStore from 'src/stores/inboxStore';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
@@ -48,6 +49,8 @@ export default function HeaderRight() {
 
   const fetchItems = useOfficerStore(state => state.fetchItems);
 
+  const fetchNotifications = useInboxStore(state => state.fetchNotifications);
+
   const [refreshing, setRefreshing] = useState(false);
   const [refreshError, setRefreshError] = useState<boolean>(false);
 
@@ -60,6 +63,7 @@ export default function HeaderRight() {
         fetchTeams(),
         fetchProjects(),
         fetchMyProfile(),
+        fetchNotifications(),
       ]);
       if (myProfile?.financialOfficer) {
         fetchItems();

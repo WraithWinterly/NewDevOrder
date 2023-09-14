@@ -34,7 +34,7 @@ export default function AddRewards() {
   const [errors, setErrors] = useState<string[]>([]);
 
   function calcReward() {
-    let leftOver = project?.quotePrice || 0;
+    let leftOver = project?.totalFunds || 0;
     const withoutMe = bountiesForProject?.filter(
       b => b.id !== createBountyData?.id,
     );
@@ -81,7 +81,7 @@ export default function AddRewards() {
           {project?.title} / {create?.title}
         </StyledText>
         <StyledText>
-          The Founder has committed {project?.quotePrice} to this project.
+          The Founder has committed ${project?.quotePrice} to this project.
         </StyledText>
         <StyledText>
           You have <Text style={{fontWeight: '500'}}>${calcReward()}</Text>{' '}

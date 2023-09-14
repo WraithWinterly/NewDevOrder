@@ -56,6 +56,8 @@ export enum Endpoints {
   FINANCIAL_OFFICER = '/get-officer-items',
   FINANCIAL_OFFICER_PROJECT_PAID = '/officer-confirm-project-paid',
   FINANCIAL_OFFICER_BOUNTY_WINNER_PAID = '/officer-confirm-bounty-winner-paid',
+  GET_NOTIFICATIONS = '/get-notifications',
+  REMOVE_NOTIFICATION = '/remove-notification',
 }
 
 export function getServerEndpoint(endpoint: Endpoints) {

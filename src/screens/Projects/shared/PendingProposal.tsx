@@ -56,7 +56,11 @@ export default function PendingProposal() {
       <ScrollView>
         <StyledText
           style={{fontSize: 26, fontWeight: 'bold', marginBottom: 22}}>
-          {proj?.stage === 'Ready' ? 'Active Project' : 'Pending Proposal'}
+          {proj?.stage === ProjectStage.Ready
+            ? 'Active Project'
+            : proj?.stage === ProjectStage.Declined
+            ? 'Declined Proposal'
+            : 'Pending Proposal'}
         </StyledText>
         {proj?.stage === ProjectStage.PendingOfficer && (
           <StyledText>Pending Financial Officer to Receive Payment</StyledText>
