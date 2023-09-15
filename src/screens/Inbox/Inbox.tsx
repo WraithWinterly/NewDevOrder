@@ -4,8 +4,10 @@ import {useEffect, useId, useState} from 'react';
 import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StackParamList} from 'src/StackNavigator';
+import CheckIcon from 'src/components/icons/CheckIcon';
 import CheckIconAccent from 'src/components/icons/CheckIconAccent';
 import CloseIcon from 'src/components/icons/CloseIcon';
+import WarningIcon from 'src/components/icons/WarningIcon';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import useMutation from 'src/hooks/useMutation';
@@ -44,6 +46,9 @@ export default function Inbox() {
   const notifications = useInboxStore(state => state.notifications);
   const fetchNotifications = useInboxStore(state => state.fetchNotifications);
   const removeNotification = useInboxStore(state => state.removeNotification);
+  const setNotificationCount = useInboxStore(
+    state => state.setNotificationCount,
+  );
 
   const setSelectedProject = useProjectsStore(
     state => state.setSelectedProject,
@@ -122,6 +127,14 @@ export default function Inbox() {
     mutateRemoveNoti({notificationID: id} as RemoveNotificationPOSTData);
   }
 
+  useEffect(() => {
+    setNotificationCount(
+      notifications.length +
+        (myBountyWins?.length || 0) +
+        (myProfile?.teamInvites?.length || 0),
+    );
+  }, [notifications, myBountyWins, myProfile?.teamInvites]);
+
   function onRefresh() {
     // setRefreshing(true);
     // fetchNotifications().then(() => setRefreshing(false));
@@ -141,6 +154,144 @@ export default function Inbox() {
             Latest Messages
           </StyledText>
         )}
+
+        {!!myBountyWins &&
+          myBountyWins.map((bountyWin, index) => (
+            <View
+              style={{
+                backgroundColor: Colors.BackgroundLighter,
+                padding: 12,
+                marginVertical: 8,
+                borderRadius: 12,
+                flexDirection: 'row',
+                gap: 12,
+              }}
+              key={`${id2}-${index}-win`}>
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 50,
+                }}>
+                <CheckIcon customSize={30} />
+              </View>
+              <View style={{flex: 1, gap: 12}}>
+                <StyledText>
+                  Congratulations! Your team,{' '}
+                  <StyledText
+                    style={{color: Colors.Primary}}
+                    onPress={() => {
+                      setTeam(bountyWin?.team?.id);
+                      navigation.navigate('TeamVar');
+                    }}>
+                    {bountyWin?.team?.name.trim()},{' '}
+                  </StyledText>
+                  won the bounty:{' '}
+                  <StyledText
+                    style={{color: Colors.Primary}}
+                    onPress={() => {
+                      setSelectedBounty(bountyWin.bounty.id);
+                      navigation.navigate('ViewBounty');
+                    }}>
+                    {bountyWin?.bounty.title.trim()}
+                    {'. '}
+                  </StyledText>
+                  {bountyWin?.team.creatorID !== myProfile?.id &&
+                    'Consult with your Team Owner to claim the reward.'}
+                </StyledText>
+                {bountyWin?.team.creatorID === myProfile?.id && (
+                  <StyledButton
+                    type="borderNoFill"
+                    onPress={() => {
+                      setSelectedBounty(bountyWin.bounty.id);
+                      navigation.navigate('ViewBounty');
+                    }}>
+                    Claim reward
+                  </StyledButton>
+                )}
+              </View>
+            </View>
+          ))}
+
+        {!!myProfile &&
+          (myProfile.teamInvites?.length || 0) > 0 &&
+          myProfile.teamInvites?.map((item, index) => (
+            <View
+              style={{
+                backgroundColor: Colors.BackgroundLighter,
+                padding: 12,
+                marginVertical: 8,
+                borderRadius: 12,
+                flexDirection: 'row',
+                gap: 12,
+              }}
+              key={`${id}-${index}-invite`}>
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  backgroundColor: Colors.Gray[800],
+                  borderRadius: 50,
+                }}>
+                <WarningIcon />
+              </View>
+              <View key={`${id}-${index}`} style={{width: '80%'}}>
+                {(myProfile.teamInvites?.length || 0) > 0 && (
+                  <Text style={{fontSize: 16, lineHeight: 28}}>
+                    <Text
+                      onPress={() => {
+                        navigation.navigate('Profile', {
+                          viewProfileAddress: item.fromMemberID,
+                        });
+                      }}
+                      style={{color: Colors.Primary}}>
+                      {item.fromMemberName}
+                    </Text>
+                    <Text> invited you to join their team, </Text>
+                    <Text
+                      onPress={() => {
+                        setTeam(item.toTeamID);
+                        navigation.navigate('TeamVar');
+                      }}
+                      style={{color: Colors.Primary}}>
+                      {item.toTeamName}
+                    </Text>
+                    .
+                  </Text>
+                )}
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: 12,
+                    alignItems: 'center',
+                    gap: 16,
+                  }}>
+                  <StyledButton
+                    type="borderNoFill"
+                    loading={loadingJoin}
+                    enabled={!performingAction}
+                    error={!!errorJoin}
+                    onPress={() => joinInvite(item.toTeamID)}>
+                    <Text>Join Team</Text>
+                  </StyledButton>
+                  <StyledButton
+                    type="noBg"
+                    loading={loadingDeny}
+                    enabled={!performingAction}
+                    error={!!errorDeny}
+                    onPress={() => denyInvite(item.toTeamID)}>
+                    <Text style={{color: Colors.Red[300], fontWeight: '500'}}>
+                      Deny Invite
+                    </Text>
+                  </StyledButton>
+                </View>
+              </View>
+            </View>
+          ))}
+
         {!!notifications &&
           notifications.map((notification, index) => (
             <View
@@ -157,10 +308,12 @@ export default function Inbox() {
                 style={{
                   width: 32,
                   height: 32,
-                  backgroundColor: Colors.Gray[200],
+                  backgroundColor: Colors.Gray[800],
                   borderRadius: 50,
                   flexDirection: 'row',
-                }}></View>
+                }}>
+                <WarningIcon />
+              </View>
               {/* <StyledText>{notification.type}</StyledText> */}
               <View
                 style={{
@@ -440,138 +593,6 @@ export default function Inbox() {
               </TouchableOpacity>
             </View>
           ))}
-
-        {!!myBountyWins &&
-          myBountyWins.map((bountyWin, index) => (
-            <View
-              style={{
-                backgroundColor: Colors.BackgroundLighter,
-                padding: 12,
-                marginVertical: 8,
-                borderRadius: 12,
-                flexDirection: 'row',
-                gap: 12,
-              }}
-              key={`${id2}-${index}-win`}>
-              <View
-                style={{
-                  width: 32,
-                  height: 32,
-                  backgroundColor: Colors.Gray[200],
-                  borderRadius: 50,
-                }}></View>
-              <View style={{flex: 1, gap: 12}}>
-                <StyledText>
-                  Congratulations! Your team,{' '}
-                  <StyledText
-                    style={{color: Colors.Primary}}
-                    onPress={() => {
-                      setTeam(bountyWin?.team?.id);
-                      navigation.navigate('TeamVar');
-                    }}>
-                    {bountyWin?.team?.name.trim()},{' '}
-                  </StyledText>
-                  won the bounty:{' '}
-                  <StyledText
-                    style={{color: Colors.Primary}}
-                    onPress={() => {
-                      setSelectedBounty(bountyWin.bounty.id);
-                      navigation.navigate('ViewBounty');
-                    }}>
-                    {bountyWin?.bounty.title.trim()}
-                    {'. '}
-                  </StyledText>
-                  {bountyWin?.team.creatorID !== myProfile?.id &&
-                    'Consult with your Team Owner to claim the reward.'}
-                </StyledText>
-                {bountyWin?.team.creatorID === myProfile?.id && (
-                  <StyledButton
-                    type="borderNoFill"
-                    onPress={() => {
-                      setSelectedBounty(bountyWin.bounty.id);
-                      navigation.navigate('ViewBounty');
-                    }}>
-                    Claim reward
-                  </StyledButton>
-                )}
-              </View>
-            </View>
-          ))}
-
-        {!!myProfile &&
-          (myProfile.teamInvites?.length || 0) > 0 &&
-          myProfile.teamInvites?.map((item, index) => (
-            <View
-              style={{
-                backgroundColor: Colors.BackgroundLighter,
-                padding: 12,
-                marginVertical: 8,
-                borderRadius: 12,
-                flexDirection: 'row',
-                gap: 12,
-              }}
-              key={`${id}-${index}-invite`}>
-              <View
-                style={{
-                  width: 32,
-                  height: 32,
-                  backgroundColor: Colors.Gray[200],
-                  borderRadius: 50,
-                }}></View>
-              <View key={`${id}-${index}`} style={{width: '80%'}}>
-                {(myProfile.teamInvites?.length || 0) > 0 && (
-                  <Text style={{fontSize: 16, lineHeight: 28}}>
-                    <Text
-                      onPress={() => {
-                        navigation.navigate('Profile', {
-                          viewProfileAddress: item.fromMemberID,
-                        });
-                      }}
-                      style={{color: Colors.Primary}}>
-                      {item.fromMemberName}
-                    </Text>
-                    <Text> invited you to join their team, </Text>
-                    <Text
-                      onPress={() => {
-                        setTeam(item.toTeamID);
-                        navigation.navigate('TeamVar');
-                      }}
-                      style={{color: Colors.Primary}}>
-                      {item.toTeamName}
-                    </Text>
-                    .
-                  </Text>
-                )}
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginVertical: 12,
-                    alignItems: 'center',
-                    gap: 16,
-                  }}>
-                  <StyledButton
-                    type="borderNoFill"
-                    loading={loadingJoin}
-                    enabled={!performingAction}
-                    error={!!errorJoin}
-                    onPress={() => joinInvite(item.toTeamID)}>
-                    <Text>Join Team</Text>
-                  </StyledButton>
-                  <StyledButton
-                    type="noBg"
-                    loading={loadingDeny}
-                    enabled={!performingAction}
-                    error={!!errorDeny}
-                    onPress={() => denyInvite(item.toTeamID)}>
-                    <Text style={{color: Colors.Red[300], fontWeight: '500'}}>
-                      Deny Invite
-                    </Text>
-                  </StyledButton>
-                </View>
-              </View>
-            </View>
-          ))}
         {!areMessages && (
           <View
             style={{
@@ -582,7 +603,7 @@ export default function Inbox() {
               marginTop: -50,
               height: '100%',
             }}>
-            {!myBountyWins || !myProfile?.teamInvites ? (
+            {!myBountyWins || !myProfile?.teamInvites || !notifications ? (
               <ActivityIndicator color={Colors.Primary} />
             ) : (
               <>

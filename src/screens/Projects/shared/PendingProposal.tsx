@@ -7,6 +7,7 @@ import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import MemberBox from 'src/components/MemberBox';
 import ForwardArrow from 'src/components/icons/ForwardArrow';
+import LeftArrowIcon from 'src/components/icons/LeftArrowIcon';
 
 import RightArrowIcon from 'src/components/icons/RightArrowIcon';
 import Separator from 'src/components/ui/Separator';
@@ -50,6 +51,42 @@ export default function PendingProposal() {
       fetchItems();
     }
   }
+
+  const [viewBountyButton, setViewBountyButton] = useState<
+    'DesignerWorkspaceNavigator' | 'ViewProjectBounties' | null
+  >(null);
+
+  // Take them to the right page if they are here
+  useEffect(() => {
+    if (role === RoleType.BountyDesigner) {
+      if (
+        proj?.stage === ProjectStage.PendingBountyDesign ||
+        proj?.stage === ProjectStage.Ready
+      ) {
+        setViewBountyButton('DesignerWorkspaceNavigator');
+        return;
+      } else {
+        setViewBountyButton(null);
+        return;
+      }
+    } else if (role === RoleType.Founder || role === RoleType.BountyManager) {
+      if ((proj?.bountyIDs?.length || 0) > 0) {
+        setViewBountyButton('ViewProjectBounties');
+        return;
+      }
+    } else if (role === RoleType.BountyValidator) {
+      if (proj?.stage === ProjectStage.Ready) {
+        setViewBountyButton('ViewProjectBounties');
+        return;
+      } else {
+        if ((proj?.bountyIDs?.length || 0) > 0) {
+          setViewBountyButton('ViewProjectBounties');
+          return;
+        }
+      }
+    }
+    setViewBountyButton(null);
+  }, [proj]);
 
   return (
     <Layout>
@@ -257,6 +294,23 @@ export default function PendingProposal() {
               <Separator customH={8} />
             </View>
           )}
+        {viewBountyButton && (
+          <>
+            <StyledButton
+              type="normal2"
+              onPress={() => {
+                navigation.navigate(viewBountyButton);
+              }}>
+              <View
+                style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+                <LeftArrowIcon />
+                <StyledText style={{fontSize: 18, fontWeight: 'bold'}}>
+                  View Bounties
+                </StyledText>
+              </View>
+            </StyledButton>
+          </>
+        )}
       </ScrollView>
     </Layout>
   );

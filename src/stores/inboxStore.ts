@@ -7,6 +7,8 @@ type InboxStore = {
   notifications: Notification[];
   fetchNotifications: () => void;
   removeNotification: (id: string) => void;
+  notificationCount: number;
+  setNotificationCount: (count: number) => void;
 };
 const useInboxStore = create<InboxStore>((set, get) => ({
   notifications: [],
@@ -20,7 +22,11 @@ const useInboxStore = create<InboxStore>((set, get) => ({
     }
   },
   removeNotification: (id: string) => {
-    set({notifications: get().notifications.filter(n => n.id !== id)});
+    set;
+  },
+  notificationCount: 0,
+  setNotificationCount: (count: number) => {
+    set({notificationCount: count});
   },
 }));
 

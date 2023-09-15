@@ -14,6 +14,8 @@ const xml = `
 </svg>
 `;
 
-export default function CheckIcon() {
-  return <BaseIcon width={24} height={24} xml={xml} />;
+export default function CheckIcon({customSize}: {customSize?: number}) {
+  return (
+    <BaseIcon width={customSize || 24} height={customSize || 24} xml={xml} />
+  );
 }

@@ -25,6 +25,7 @@ import Admin from '../admin/Admin';
 import AdminIcon from 'src/components/icons/AdminIcon';
 import FinancialOfficer from '../financialOfficer/FinancialOfficer';
 import CashIcon from 'src/components/icons/CashIcon';
+import useInboxStore from 'src/stores/inboxStore';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -55,6 +56,9 @@ export default function HomeTabNavigator() {
 
   const fetchBounties = useBountyStore(state => state.fetchBounties);
   const myProfile = useMemberStore(state => state.myProfile);
+
+  const notificationCount = useInboxStore(state => state.notificationCount);
+
   useEffect(() => {
     fetchBounties();
   }, []);
@@ -137,7 +141,29 @@ export default function HomeTabNavigator() {
         component={Inbox}
         options={{
           tabBarIcon: ({focused}) => (
-            <TabBarIcon focused={focused} icon={<InboxIcon />} />
+            // <TabBarIcon focused={focused} icon={<InboxIcon />} />
+            <View>
+              <TabBarIcon focused={focused} icon={<InboxIcon />} />
+              {notificationCount > 0 && (
+                <View
+                  style={{
+                    backgroundColor: Colors.Red[700],
+                    position: 'absolute',
+                    right: 8,
+                    top: 0,
+                    paddingHorizontal: 4,
+                    height: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    borderRadius: 50,
+                  }}>
+                  <StyledText style={{fontSize: 12}}>
+                    {notificationCount}
+                  </StyledText>
+                </View>
+              )}
+            </View>
           ),
         }}
       />
