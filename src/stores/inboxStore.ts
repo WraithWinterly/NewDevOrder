@@ -22,7 +22,7 @@ const useInboxStore = create<InboxStore>((set, get) => ({
     }
   },
   removeNotification: (id: string) => {
-    set;
+    set({notifications: get().notifications.filter(n => n.id !== id)});
   },
   notificationCount: 0,
   setNotificationCount: (count: number) => {
