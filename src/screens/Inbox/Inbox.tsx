@@ -85,20 +85,18 @@ export default function Inbox() {
     if (data) {
       navigation.navigate('TeamVar');
       // Refresh my profile (which will also refresh inbox)
-      if (wallet.wallet?.publicKey.toBase58.toString()) {
-        fetchMyProfile();
-        // refresh teams as well
-        await fetchTeams();
-      }
+
+      fetchMyProfile();
+      // refresh teams as well
+      await fetchTeams();
+
       setSelectedTeam(teamID);
     }
   }
 
   async function denyInvite(teamID: string) {
     if (!myProfile?.id || performingAction) {
-      console.error(
-        'Cannot deny invite because you do not have a wallet address or are performing an action',
-      );
+      console.error('Cannot deny invite because you are performing an action');
       return;
     }
 
@@ -108,11 +106,9 @@ export default function Inbox() {
 
     const data = await mutateDeny(body);
     if (data) {
-      if (wallet.wallet?.publicKey.toBase58.toString()) {
-        fetchMyProfile();
-        // refresh teams as well
-        fetchTeams();
-      }
+      fetchMyProfile();
+      // refresh teams as well
+      fetchTeams();
     }
   }
   const {

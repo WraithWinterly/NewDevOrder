@@ -126,6 +126,18 @@ export default function HomeTabNavigator() {
         }}
       />
 
+      {playingRole !== RoleType.BountyHunter && (
+        <Tab.Screen
+          name="Projects"
+          component={Projects}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon focused={focused} icon={<ProjectsIcon />} />
+            ),
+          }}
+        />
+      )}
+
       <Tab.Screen
         name="Teams"
         component={Teams}
@@ -167,17 +179,7 @@ export default function HomeTabNavigator() {
           ),
         }}
       />
-      {playingRole !== RoleType.BountyHunter && (
-        <Tab.Screen
-          name="Projects"
-          component={Projects}
-          options={{
-            tabBarIcon: ({focused}) => (
-              <TabBarIcon focused={focused} icon={<ProjectsIcon />} />
-            ),
-          }}
-        />
-      )}
+
       {myProfile?.admin && myProfile.adminec && (
         <Tab.Screen
           name="Admin"

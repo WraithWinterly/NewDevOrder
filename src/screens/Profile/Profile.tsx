@@ -119,6 +119,8 @@ function ProfileCard({
     const data = await mutateRole({role} as ChangeRolePOSTData);
     if (!!data) {
       fetchMyProfile();
+      fetchBounties();
+      fetchProjects();
     }
   }
 

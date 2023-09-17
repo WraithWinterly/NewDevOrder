@@ -58,6 +58,7 @@ export default function PendingProposal() {
 
   // Take them to the right page if they are here
   useEffect(() => {
+    if (!proj) return;
     if (role === RoleType.BountyDesigner) {
       if (
         proj?.stage === ProjectStage.PendingBountyDesign ||

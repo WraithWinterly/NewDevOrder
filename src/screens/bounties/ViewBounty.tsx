@@ -8,7 +8,12 @@ import TeamsIcon from 'src/components/icons/TeamsIcon';
 import CalendarIcon from 'src/components/icons/CalendarIcon';
 import CashIcon from 'src/components/icons/CashIcon';
 import {Colors} from 'src/styles/styles';
-import {didIApprove, fromFireDate, formatTimeAgo} from 'src/utils/utils';
+import {
+  didIApprove,
+  fromFireDate,
+  formatTimeAgo,
+  isFireDate,
+} from 'src/utils/utils';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 
 import {StackParamList} from 'src/StackNavigator';
@@ -449,7 +454,10 @@ export default function ViewBounty({route, navigation}: Props) {
                   <CalendarIcon />
                   <StyledText>Opens:</StyledText>
                   <StyledText suspense trigger={bounty}>
-                    {fromFireDate(bounty?.startDate)?.toDateString()}
+                    {!!bounty &&
+                      (isFireDate(bounty?.startDate)
+                        ? fromFireDate(bounty?.startDate)?.toDateString()
+                        : new Date(bounty.startDate)?.toDateString())}
                   </StyledText>
                 </View>
                 <View
@@ -462,7 +470,10 @@ export default function ViewBounty({route, navigation}: Props) {
                   <CalendarIcon />
                   <StyledText>Deadline:</StyledText>
                   <StyledText suspense trigger={bounty}>
-                    {fromFireDate(bounty?.deadline)?.toDateString()}
+                    {!!bounty &&
+                      (isFireDate(bounty?.deadline)
+                        ? fromFireDate(bounty?.deadline)?.toDateString()
+                        : new Date(bounty.deadline)?.toDateString())}
                   </StyledText>
                 </View>
                 <View

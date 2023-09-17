@@ -4,6 +4,7 @@ import BountyList from 'src/components/home/BountyList';
 import SearchIcon from 'src/components/icons/SearchIcon';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import Layout from 'src/layout/Layout';
+import {BountyStage} from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';
 import useMemberStore from 'src/stores/membersStore';
 import useTeamsStore from 'src/stores/teamsStore';
@@ -19,8 +20,8 @@ export default function YourBounties() {
   const bountiesWithSearch = !!bounties
     ? bounties?.filter(bounty => {
         if (
-          bounty.title.includes(searchText || '') &&
-          bounty.stage === 'Active'
+          bounty.title.includes(searchText || '')
+          // bounty.stage === BountyStage.Active
         ) {
           if (!walletAddress) return;
           const myTeams = teams?.filter(team =>
