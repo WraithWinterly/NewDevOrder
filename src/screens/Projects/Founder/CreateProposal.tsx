@@ -9,7 +9,7 @@ import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledPhoneInput from 'src/components/ui/styled/StyledPhoneInput';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import Layout from 'src/layout/Layout';
 import {CreateProjectPOSTData} from 'src/sharedTypes';
 
@@ -17,14 +17,9 @@ import useMemberStore from 'src/stores/membersStore';
 
 import useProjectsStore from 'src/stores/projectsStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function CreateProposal() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
 
   const myProfile = useMemberStore(state => state.myProfile);
   const [createProposalData, setCreateProposalData] =

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import StackNavigator from './src/StackNavigator';
 
@@ -12,8 +12,12 @@ import {MenuProvider} from 'react-native-popup-menu';
 import {AuthorizationProvider} from 'src/web3/SolAuthorizationProvider';
 import {ConnectionProvider, RPC_ENDPOINT} from 'src/web3/ConnectionProvider';
 import {clusterApiUrl} from '@solana/web3.js';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <AuthorizationProvider>
       <ConnectionProvider

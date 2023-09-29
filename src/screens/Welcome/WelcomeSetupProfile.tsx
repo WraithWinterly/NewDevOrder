@@ -7,7 +7,7 @@ import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import {CreateProfilePOSTData} from 'src/sharedTypes';
@@ -103,6 +103,7 @@ export default function WelcomeSetupProfile() {
               )}
               <StyledTextInput
                 onChangeText={t => setUsername(t)}
+                noAutoCapitalize
                 value={username}
                 placeholder="Enter your username"
                 label="Username"
@@ -123,6 +124,7 @@ export default function WelcomeSetupProfile() {
                 onChangeText={t => setEmail(t)}
                 value={email}
                 placeholder="Enter your email"
+                noAutoCapitalize
                 label="Email"
               />
             </View>

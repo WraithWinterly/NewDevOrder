@@ -6,7 +6,7 @@ import {StackParamList} from 'src/StackNavigator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import Layout from 'src/layout/Layout';
 import {CreateTeamPOSTData} from 'src/sharedTypes';
 import useProjectsStore from 'src/stores/projectsStore';
@@ -58,7 +58,6 @@ export default function CreateTeam() {
   async function onSubmit() {
     if (!canProceedCreateTeam) return;
 
-    const walletAddress = wallet.wallet?.publicKey.toBase58().toString();
     const createData: CreateTeamPOSTData = {
       ...createTeamData!,
     };

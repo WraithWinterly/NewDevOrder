@@ -3,6 +3,7 @@ import {SERVER_URL, TEST_SERVER_URL, USE_LOCAL_SERVER} from '@env';
 export enum Endpoints {
   AUTHORIZE = '/authorize',
   REQUEST_NONCE = '/request-nonce',
+  VERIFY_AUTH = '/verify-auth',
   // MISC
   ALIVE = '/alive',
   ALIVE_POST = '/alive-post',
@@ -12,6 +13,7 @@ export enum Endpoints {
   // PROFILE AND MEMBERS
   CREATE_PROFILE = '/create-profile',
   GET_MEMBER_BY_WALLET_ADDRESS = '/get-member-by-wallet-address',
+  GET_MEMBERS_BY_USERNAME = '/get-members-by-username',
   GET_MEMBERS_BY_WALLET_ADDRESSES = '/get-members-by-wallet-addresses',
   GET_MY_PROFILE = '/get-my-profile',
   CHANGE_ROLE = '/change-role',
@@ -50,6 +52,12 @@ export enum Endpoints {
   BOUNTYMGR_DECLINE = '/bountymgr-decline',
   FOUNDER_CONFIRM_PAY = '/founder-confirm-pay',
   GET_BOUNTIES_FOR_PROJECT = '/get-bounties-for-project',
+  // FINANCIAL OFFICER
+  FINANCIAL_OFFICER = '/get-officer-items',
+  FINANCIAL_OFFICER_PROJECT_PAID = '/officer-confirm-project-paid',
+  FINANCIAL_OFFICER_BOUNTY_WINNER_PAID = '/officer-confirm-bounty-winner-paid',
+  GET_NOTIFICATIONS = '/get-notifications',
+  REMOVE_NOTIFICATION = '/remove-notification',
 }
 
 export function getServerEndpoint(endpoint: Endpoints) {
@@ -57,10 +65,8 @@ export function getServerEndpoint(endpoint: Endpoints) {
 }
 
 function getServerURL() {
-  // if (USE_LOCAL_SERVER === 'true') {
-  //   return TEST_SERVER_URL;
-  // }
-  // return TEST_SERVER_URL;
-  // console.log('getServerURL');
+  if (USE_LOCAL_SERVER === 'true') {
+    return TEST_SERVER_URL;
+  }
   return SERVER_URL;
 }

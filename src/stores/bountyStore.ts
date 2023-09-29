@@ -17,8 +17,9 @@ type BountyStore = {
   bounties: (Bounty & {project: Project})[] | undefined;
   fetchBounties: () => Promise<void>;
   selectedBounty?: Bounty & {
-    project: Project;
-    founder: Member;
+    project: Project & {
+      founder: Member;
+    };
     submissions: (Submission & {team: Team})[] | undefined;
     winningSubmission: (Submission & {team: Team}) | undefined;
   };
@@ -59,8 +60,10 @@ const useBountyStore = create<BountyStore>((set, get) => ({
 
     if (result) {
       const data = result as Bounty & {
-        project: Project;
-        founder: Member;
+        project: Project & {
+          founder: Member;
+        };
+
         submissions: (Submission & {team: Team})[] | undefined;
         winningSubmission: (Submission & {team: Team}) | undefined;
       };

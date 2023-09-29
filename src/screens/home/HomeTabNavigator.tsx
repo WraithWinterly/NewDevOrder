@@ -21,6 +21,11 @@ import HeaderRight from './HeaderRight';
 import useMemberStore from 'src/stores/membersStore';
 import useBountyStore from 'src/stores/bountyStore';
 import {RoleType} from 'src/sharedTypes';
+import Admin from '../admin/Admin';
+import AdminIcon from 'src/components/icons/AdminIcon';
+import FinancialOfficer from '../financialOfficer/FinancialOfficer';
+import CashIcon from 'src/components/icons/CashIcon';
+import useInboxStore from 'src/stores/inboxStore';
 
 export type MainTabsParams = {
   Home: undefined;
@@ -28,6 +33,8 @@ export type MainTabsParams = {
   Bounties: undefined;
   Inbox: undefined;
   Projects: undefined;
+  Admin: undefined;
+  Officer: undefined;
   Dev: undefined;
 };
 
@@ -37,7 +44,9 @@ const tabToHeaderText = {
   Bounties: 'Bounties',
   Inbox: 'Inbox',
   Projects: 'Your Projects',
+  Admin: 'Admin',
   Dev: '__DEVELOPER__',
+  Officer: 'Officer',
 };
 
 const Tab = createBottomTabNavigator<MainTabsParams>();
@@ -46,6 +55,9 @@ export default function HomeTabNavigator() {
   const playingRole = useMemberStore(state => state.myProfile?.playingRole);
 
   const fetchBounties = useBountyStore(state => state.fetchBounties);
+  const myProfile = useMemberStore(state => state.myProfile);
+
+  const notificationCount = useInboxStore(state => state.notificationCount);
 
   useEffect(() => {
     fetchBounties();
@@ -114,6 +126,18 @@ export default function HomeTabNavigator() {
         }}
       />
 
+      {playingRole !== RoleType.BountyHunter && (
+        <Tab.Screen
+          name="Projects"
+          component={Projects}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon focused={focused} icon={<ProjectsIcon />} />
+            ),
+          }}
+        />
+      )}
+
       <Tab.Screen
         name="Teams"
         component={Teams}
@@ -129,22 +153,59 @@ export default function HomeTabNavigator() {
         component={Inbox}
         options={{
           tabBarIcon: ({focused}) => (
-            <TabBarIcon focused={focused} icon={<InboxIcon />} />
+            // <TabBarIcon focused={focused} icon={<InboxIcon />} />
+            <View>
+              <TabBarIcon focused={focused} icon={<InboxIcon />} />
+              {notificationCount > 0 && (
+                <View
+                  style={{
+                    backgroundColor: Colors.Red[700],
+                    position: 'absolute',
+                    right: 8,
+                    top: 0,
+                    paddingHorizontal: 4,
+                    height: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    borderRadius: 50,
+                  }}>
+                  <StyledText style={{fontSize: 12}}>
+                    {notificationCount}
+                  </StyledText>
+                </View>
+              )}
+            </View>
           ),
         }}
       />
-      {playingRole !== RoleType.BountyHunter && (
+
+      {myProfile?.admin && myProfile.adminec && (
         <Tab.Screen
-          name="Projects"
-          component={Projects}
+          name="Admin"
+          component={Admin}
           options={{
             tabBarIcon: ({focused}) => (
-              <TabBarIcon focused={focused} icon={<ProjectsIcon />} />
+              <TabBarIcon focused={focused} icon={<AdminIcon />} />
             ),
           }}
         />
       )}
-      {__DEV__ && (
+      {myProfile?.financialOfficer && (
+        <Tab.Screen
+          name="Officer"
+          component={FinancialOfficer}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <TabBarIcon
+                focused={focused}
+                icon={<CashIcon customSize={22} />}
+              />
+            ),
+          }}
+        />
+      )}
+      {/* {__DEV__ && (
         <Tab.Screen
           name="Dev"
           component={DeveloperMenu}
@@ -154,7 +215,7 @@ export default function HomeTabNavigator() {
             ),
           }}
         />
-      )}
+      )} */}
     </Tab.Navigator>
   );
 }

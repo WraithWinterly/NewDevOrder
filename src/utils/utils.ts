@@ -78,11 +78,14 @@ export default function addSpaceCase(str: string | undefined) {
   return str;
 }
 
-export function isFireDate(obj: Object) {
+export function isFireDate(obj: Object | null | undefined) {
+  if (obj == null) {
+    return false;
+  }
   //@ts-expect-error
   const is = obj['_nanoseconds'] != null;
 
-  return true;
+  return is;
 }
 
 export function fromFireDate(timestamp: any | undefined) {

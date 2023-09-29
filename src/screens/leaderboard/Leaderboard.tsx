@@ -37,7 +37,7 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
 
   useEffect(() => {
     refetch();
-  }, [tabIndex]);
+  }, []);
 
   async function refetch() {
     if (!isFounder) fetchTopMembers(0);
@@ -63,16 +63,16 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
       {!loading && (
         <FlatList
           data={!isFounder ? topMembers : topFounders}
-          keyExtractor={(item, index) => `${item.walletAddress}-${index}-${id}`}
+          keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           ItemSeparatorComponent={() => <View style={{height: 12}} />}
-          renderItem={({item, index}) => (
+          renderItem={({item: mbr, index}) => (
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('Profile', {
-                  viewProfileAddress: item.walletAddress,
+                  viewProfileAddress: mbr.id,
                 });
               }}
               style={{
@@ -97,14 +97,14 @@ export default function Leaderboard({type}: {type: 'members' | 'founders'}) {
                   {index + 1}
                 </StyledText>
                 <View style={{flexDirection: 'column'}}>
-                  <StyledText>{item.firstName}</StyledText>
+                  <StyledText>{mbr.firstName}</StyledText>
                   <StyledText style={{color: Colors.Primary}}>
-                    {item.username}
+                    {mbr.username}
                   </StyledText>
                 </View>
               </View>
 
-              <StyledText>Level {item.level}</StyledText>
+              <StyledText>Level {mbr.level}</StyledText>
             </TouchableOpacity>
           )}></FlatList>
       )}

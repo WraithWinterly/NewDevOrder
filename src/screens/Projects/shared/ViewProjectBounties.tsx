@@ -56,7 +56,8 @@ export default function ViewProjectBounties() {
             <StyledText
               style={{fontWeight: '500', fontSize: 18, paddingTop: 12}}
               suspense
-              trigger={null}>
+              trigger={null}
+              shimmerWidth={180}>
               Loading
             </StyledText>
             <BountyList bounties={undefined} noSort2></BountyList>

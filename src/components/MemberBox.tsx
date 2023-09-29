@@ -8,6 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from 'src/StackNavigator';
 import useSolanaContext from 'src/web3/SolanaProvider';
 import {Member} from 'src/sharedTypes';
+import useMemberStore from 'src/stores/membersStore';
 
 export default function MemberBox({
   member,
@@ -18,9 +19,7 @@ export default function MemberBox({
 }) {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
 
   return (
     <TouchableOpacity
@@ -32,15 +31,15 @@ export default function MemberBox({
         paddingHorizontal: 12,
         paddingVertical: 8,
         backgroundColor:
-          walletAddress === member?.walletAddress
+          walletAddress === member?.id
             ? Colors.Purple[900]
             : Colors.BackgroundLighter,
         borderRadius: 12,
       }}
       onPress={() => {
-        if (!!member?.walletAddress)
+        if (!!member?.id)
           navigation.navigate('Profile', {
-            viewProfileAddress: member?.walletAddress,
+            viewProfileAddress: member?.id,
           });
       }}>
       <View style={{padding: 8, borderRadius: 8}}>

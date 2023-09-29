@@ -247,7 +247,7 @@ export default function BountyList({
           }}>
           <TeamsIcon small />
           <StyledText suspense trigger={bounty} shimmerWidth={112}>
-            Teams Currently Hacking: {bounty?.participantsTeamIDs.length}
+            Teams Currently Hacking: {bounty?.participantTeamIDs.length}
           </StyledText>
         </View>
         {((bounty?.stage === BountyStage.Active &&

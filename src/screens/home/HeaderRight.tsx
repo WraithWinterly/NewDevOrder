@@ -22,16 +22,16 @@ import useTeamsStore from 'src/stores/teamsStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import RefreshIcon from 'src/components/icons/RefreshIcon';
 import {useState} from 'react';
-import useSolanaContext from 'src/web3/SolanaProvider';
+
 import StyledText from 'src/components/ui/styled/StyledText';
 import {RoleType} from 'src/sharedTypes';
+import useOfficerStore from 'src/stores/officerStore';
+import useInboxStore from 'src/stores/inboxStore';
 
 export default function HeaderRight() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
 
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
 
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
@@ -47,6 +47,10 @@ export default function HeaderRight() {
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
 
+  const fetchItems = useOfficerStore(state => state.fetchItems);
+
+  const fetchNotifications = useInboxStore(state => state.fetchNotifications);
+
   const [refreshing, setRefreshing] = useState(false);
   const [refreshError, setRefreshError] = useState<boolean>(false);
 
@@ -59,7 +63,11 @@ export default function HeaderRight() {
         fetchTeams(),
         fetchProjects(),
         fetchMyProfile(),
+        fetchNotifications(),
       ]);
+      if (myProfile?.financialOfficer) {
+        fetchItems();
+      }
       setSelectedTeam(undefined);
       setSelectedProject(undefined);
       setSelectedBounty(undefined);
@@ -156,7 +164,9 @@ export default function HeaderRight() {
                   <Text style={{color: Colors.White, fontSize: 18}}>
                     {myProfile.firstName}
                   </Text>
-                  <Text>@{myProfile.username}</Text>
+                  <Text style={{color: Colors.Gray[400]}}>
+                    @{myProfile.username}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -166,7 +176,9 @@ export default function HeaderRight() {
                     paddingHorizontal: 18,
                     paddingVertical: 6,
                   }}>
-                  <Text>Level {myProfile.level}</Text>
+                  <Text style={{color: Colors.Gray[200]}}>
+                    Level {myProfile.level}
+                  </Text>
                 </View>
               </View>
             </View>

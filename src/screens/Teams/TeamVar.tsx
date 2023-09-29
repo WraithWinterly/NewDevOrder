@@ -47,7 +47,7 @@ export default function TeamVar() {
           </StyledText>
           {/* Suspense Skeleton */}
           {!selectedTeam && (
-            <View style={{gap: 12}}>
+            <View style={{gap: 12, flexDirection: 'column'}}>
               <MemberBox
                 member={undefined}
                 rightChildren={<Bubble suspense trigger={undefined} />}
@@ -60,9 +60,7 @@ export default function TeamVar() {
           )}
           <FlatList
             data={selectedTeam?.members}
-            keyExtractor={(item, index) =>
-              `${item.walletAddress}-${index}-${id}`
-            }
+            keyExtractor={(item, index) => `${item.id}-${index}-${id}`}
             ItemSeparatorComponent={() => <View style={{height: 12}}></View>}
             renderItem={({item: member}) => (
               <MemberBox
@@ -71,7 +69,7 @@ export default function TeamVar() {
                   <Bubble
                     type="transparent"
                     text={
-                      member.walletAddress === selectedTeam?.creatorAddress
+                      member.id === selectedTeam?.creatorID
                         ? 'Creator'
                         : 'Member'
                     }

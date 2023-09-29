@@ -10,6 +10,7 @@ interface TextInputProps {
   icon?: ReactNode;
   secureTextEntry?: boolean;
   isLinkInput?: boolean;
+  noAutoCapitalize?: boolean;
   multiLine?: boolean;
   numberInput?: boolean;
   label?: string;
@@ -21,6 +22,7 @@ export default function StyledTextInput({
   placeholder,
   icon = null,
   secureTextEntry = false,
+  noAutoCapitalize = false,
   isLinkInput = false,
   multiLine = false,
   numberInput = false,
@@ -42,6 +44,7 @@ export default function StyledTextInput({
             style={{
               fontWeight: '300',
               fontSize: 13,
+              color: Colors.Gray[300],
             }}>
             {label}
           </Text>
@@ -50,7 +53,7 @@ export default function StyledTextInput({
       <TextInput
         placeholderTextColor={Colors.Gray[400]}
         autoCorrect={!isLinkInput}
-        autoCapitalize={isLinkInput ? 'none' : undefined}
+        autoCapitalize={isLinkInput || noAutoCapitalize ? 'none' : undefined}
         autoComplete={isLinkInput ? 'url' : undefined}
         style={{
           borderColor: Colors.BorderColor,

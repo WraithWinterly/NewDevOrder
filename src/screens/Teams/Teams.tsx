@@ -4,21 +4,20 @@ import {useEffect, useId, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
+import AdminIcon from 'src/components/icons/AdminIcon';
 import Bubble from 'src/components/ui/Bubble';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
+import useMemberStore from 'src/stores/membersStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
-import useSolanaContext from 'src/web3/SolanaProvider';
 
 export default function Teams() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
 
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
 
   const fetchTeams = useTeamsStore(state => state.fetchTeams);
   const teams = useTeamsStore(state => state.teams);
@@ -38,23 +37,19 @@ export default function Teams() {
     if (!teams) return;
 
     const userTeams = teams.filter(team => {
-      if (team.creatorAddress === walletAddress) return true;
+      if (team.creatorID === walletAddress) return true;
       return (
         team.memberIDs?.some(member => member === walletAddress) &&
-        team.creatorAddress !== walletAddress
+        team.creatorID !== walletAddress
       );
     });
 
-    setTeamsCreated(
-      userTeams.filter(team => team.creatorAddress === walletAddress),
-    );
-    setTeamsJoined(
-      userTeams.filter(team => team.creatorAddress !== walletAddress),
-    );
+    setTeamsCreated(userTeams.filter(team => team.creatorID === walletAddress));
+    setTeamsJoined(userTeams.filter(team => team.creatorID !== walletAddress));
     setOtherTeams(
       teams.filter(
         team =>
-          team.creatorAddress !== walletAddress &&
+          team.creatorID !== walletAddress &&
           !team.memberIDs?.some(member => member === walletAddress),
       ),
     );
@@ -131,7 +126,12 @@ export default function Teams() {
         )}
         {!!teams && !!otherTeams && otherTeams.length > 0 && (
           <>
-            <StyledText style={{marginBottom: 16}}>Other Teams</StyledText>
+            <View
+              style={{flexDirection: 'row', alignContent: 'center', gap: 8}}>
+              <StyledText style={{marginBottom: 16}}>Other Teams</StyledText>
+              <AdminIcon />
+            </View>
+
             {otherTeams.map(item => (
               <View key={`${item.id + 1}-${id2}`}>
                 <TeamCard

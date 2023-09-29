@@ -8,7 +8,12 @@ import TeamsIcon from 'src/components/icons/TeamsIcon';
 import CalendarIcon from 'src/components/icons/CalendarIcon';
 import CashIcon from 'src/components/icons/CashIcon';
 import {Colors} from 'src/styles/styles';
-import {didIApprove, fromFireDate, formatTimeAgo} from 'src/utils/utils';
+import {
+  didIApprove,
+  fromFireDate,
+  formatTimeAgo,
+  isFireDate,
+} from 'src/utils/utils';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 
 import {StackParamList} from 'src/StackNavigator';
@@ -21,7 +26,7 @@ import useTeamsStore from 'src/stores/teamsStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import useQuery from 'src/hooks/useQuery';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import {
   Bounty,
   BountyStage,
@@ -32,7 +37,7 @@ import {
   SetApproveBountyPostData,
   Submission,
 } from 'src/sharedTypes';
-import useSolanaContext from 'src/web3/SolanaProvider';
+
 import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import useMemberStore from 'src/stores/membersStore';
 import {DropdownSection} from 'src/components/ui/styled/StyledDropdown';
@@ -42,10 +47,6 @@ import {TouchableOpacity} from 'react-native';
 type Props = NativeStackScreenProps<StackParamList, 'ViewBounty'>;
 
 export default function ViewBounty({route, navigation}: Props) {
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
-
   const createBountyData = useBountyStore(state => state.createBountyData);
   const bounties = useBountyStore(state => state.bounties);
   const fetchBounties = useBountyStore(state => state.fetchBounties);
@@ -77,7 +78,7 @@ export default function ViewBounty({route, navigation}: Props) {
 
   const [startedByTeams, setStartedByTeams] = useState<string[]>([]);
   const [bounty, setBounty] = useState<
-    (Bounty & {project: Project; founder: Member}) | undefined
+    (Bounty & {project: Project & {founder: Member}}) | undefined
   >(undefined);
 
   const existWinner =
@@ -113,7 +114,7 @@ export default function ViewBounty({route, navigation}: Props) {
     const localTeams: Array<string> = [];
 
     teams?.forEach(team => {
-      if (bounty?.participantsTeamIDs.includes(team.id)) {
+      if (bounty?.participantTeamIDs.includes(team.id)) {
         localTeams.push(team.name);
       }
     });
@@ -124,10 +125,6 @@ export default function ViewBounty({route, navigation}: Props) {
   async function onSubmitCreateBounty(draft: boolean) {
     if (!createBountyData) {
       console.error('No create bounty data');
-      return;
-    }
-    if (!walletAddress) {
-      console.error('No wallet address');
       return;
     }
 
@@ -169,8 +166,8 @@ export default function ViewBounty({route, navigation}: Props) {
       return;
     }
 
-    if (!project?.founder.walletAddress) {
-      console.error('Error: Missing founder wallet address!');
+    if (!project?.founder.id) {
+      console.error('Error: Missing founder id!');
       return;
     }
 
@@ -181,7 +178,7 @@ export default function ViewBounty({route, navigation}: Props) {
       stage: BountyStage.Draft,
       title: createBountyData.title,
       types: createBountyData.types, // Assuming 'BountyType' is an enum type for type
-      founderAddress: project.founder.walletAddress,
+      founderAddress: project.founder.id,
       description: createBountyData.description,
       deadline: new Date(createBountyData.deadline),
       approvedByFounder: false,
@@ -190,7 +187,7 @@ export default function ViewBounty({route, navigation}: Props) {
       aboutProject: createBountyData.aboutProject,
       headerSections: createBountyData.headerSections,
       projectId: null, // Assuming it's null for now
-      participantsTeamIDs: [],
+      participantTeamIDs: [],
       createdAt: new Date(),
       bountyWinnerID: '',
       submissionIDs: [],
@@ -199,21 +196,18 @@ export default function ViewBounty({route, navigation}: Props) {
       winningSubmissionID: '',
       project: {
         ...project,
-      },
-      founder: {
-        ...project.founder,
+        founder: {
+          ...project.founder,
+        },
       },
     } as Bounty & {
-      project: Project;
-      founder: Member;
+      project: Project & {
+        founder: Member;
+      };
     };
   }
 
   async function onSubmitToggleApproval() {
-    if (!walletAddress) {
-      console.error('No walletAddress');
-      return;
-    }
     if (!bounty?.id) {
       console.error('No bounty id');
       return;
@@ -460,7 +454,10 @@ export default function ViewBounty({route, navigation}: Props) {
                   <CalendarIcon />
                   <StyledText>Opens:</StyledText>
                   <StyledText suspense trigger={bounty}>
-                    {fromFireDate(bounty?.startDate)?.toDateString()}
+                    {!!bounty &&
+                      (isFireDate(bounty?.startDate)
+                        ? fromFireDate(bounty?.startDate)?.toDateString()
+                        : new Date(bounty.startDate)?.toDateString())}
                   </StyledText>
                 </View>
                 <View
@@ -473,7 +470,10 @@ export default function ViewBounty({route, navigation}: Props) {
                   <CalendarIcon />
                   <StyledText>Deadline:</StyledText>
                   <StyledText suspense trigger={bounty}>
-                    {fromFireDate(bounty?.deadline)?.toDateString()}
+                    {!!bounty &&
+                      (isFireDate(bounty?.deadline)
+                        ? fromFireDate(bounty?.deadline)?.toDateString()
+                        : new Date(bounty.deadline)?.toDateString())}
                   </StyledText>
                 </View>
                 <View
@@ -485,7 +485,7 @@ export default function ViewBounty({route, navigation}: Props) {
                   <TeamsIcon small />
                   <StyledText>
                     Teams Currently Hacking:{' '}
-                    {bounty?.participantsTeamIDs?.length}
+                    {bounty?.participantTeamIDs?.length}
                   </StyledText>
                 </View>
               </View>
@@ -514,7 +514,7 @@ export default function ViewBounty({route, navigation}: Props) {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('Profile', {
-                  viewProfileAddress: bounty?.founder?.walletAddress,
+                  viewProfileAddress: project?.founderID,
                 })
               }
               style={{
@@ -528,16 +528,16 @@ export default function ViewBounty({route, navigation}: Props) {
                 suspense
                 trigger={bounty}
                 shimmerWidth={240}>
-                Meet the founder - {bounty?.founder?.firstName}
+                Meet the founder - {bounty?.project.founder?.firstName}
               </StyledText>
               <StyledText
                 style={{color: Colors.Gray[400]}}
                 suspense
                 trigger={bounty}>
-                {bounty?.founder?.username}
+                {bounty?.project.founder?.username}
               </StyledText>
               <StyledText style={{paddingTop: 4}} suspense trigger={bounty}>
-                {bounty?.founder?.bio}
+                {bounty?.project.founder?.bio}
               </StyledText>
             </TouchableOpacity>
           </View>

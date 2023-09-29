@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import Layout from 'src/layout/Layout';
 import useBountyStore from 'src/stores/bountyStore';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
@@ -22,17 +22,11 @@ export default function ClaimReward() {
   const {data, loading, error, mutate} = useMutation(
     getServerEndpoint(Endpoints.CONFIRM_REWARD),
   );
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   async function onSubmit() {
     if (!selectedBounty?.winningSubmissionID) {
       console.error('No winningSubmissionID');
-      return;
-    }
-    if (!walletAddress) {
-      console.error('No walletAddress');
       return;
     }
     const body: ConfirmRewardPostData = {
@@ -64,7 +58,10 @@ export default function ClaimReward() {
           ${selectedBounty?.reward}
         </StyledText>
         <View style={{height: 24}} />
-        <StyledText>Gas fees: $1.00</StyledText>
+        <StyledText>
+          You will be paid by our Financial Officer once you confirm the reward.
+        </StyledText>
+        {/* <StyledText>Gas fees: $1.00</StyledText> */}
         <BottomBar>
           <StyledButton onPress={onSubmit} loading={loading} error={!!error}>
             Confirm and claim reward

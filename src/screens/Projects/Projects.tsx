@@ -38,7 +38,7 @@ export default function Projects() {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [playingRole]);
 
   function getFirstFilter(): ProjectStage[] | null {
     const role = playingRole ?? RoleType.BountyHunter;
@@ -53,7 +53,6 @@ export default function Projects() {
         ProjectStage.PendingFounderPay,
         ProjectStage.PendingBountyMgrQuote,
         ProjectStage.PendingBountyDesign,
-        ProjectStage.PendingBountyValidator,
       ];
     }
     return null;
@@ -185,12 +184,17 @@ function ProjectCard({
         suspense={suspense}
         shimmerWidth={80}>
         {project?.stage === 'Ready' ? 'Ready' : ''}
-        {project?.stage === 'PendingBountyMgrQuote' ? 'Pending Review' : ''}
-        {project?.stage === 'PendingFounderPay'
+        {project?.stage === ProjectStage.PendingBountyMgrQuote
+          ? 'Pending Price Quote'
+          : ''}
+        {project?.stage === ProjectStage.PendingFounderPay
           ? 'Pending founder payment'
           : ''}
-        {project?.stage === 'Declined' ? 'Declined' : ''}
-        {project?.stage === 'PendingBountyDesign'
+        {project?.stage === ProjectStage.PendingOfficer
+          ? 'Pending financial officer to receive payment.'
+          : ''}
+        {project?.stage === ProjectStage.Declined ? 'Declined' : ''}
+        {project?.stage === ProjectStage.PendingBountyDesign
           ? 'Pending design from bounty designer'
           : ''}
       </StyledText>

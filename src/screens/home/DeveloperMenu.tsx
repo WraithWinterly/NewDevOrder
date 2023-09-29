@@ -4,10 +4,11 @@ import {ScrollView, View} from 'react-native';
 import PhantomConnectButton from 'src/components/ui/PhantomConnectButton';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
+import SharedPreferences from 'react-native-shared-preferences';
 
 export default function DeveloperMenu() {
   const [resetFeedback, setResetFeedback] = useState('');
@@ -37,6 +38,9 @@ export default function DeveloperMenu() {
 
   async function onResetWelcomeScreen() {
     await AsyncStorage.clear();
+    globalThis.authToken = '';
+    SharedPreferences.removeItem('key');
+    AsyncStorage.removeItem('walletAddress');
     setResetFeedback('Storage data erased. Restart the app.');
   }
 

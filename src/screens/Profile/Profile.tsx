@@ -1,5 +1,5 @@
 import {useEffect, useId, useState} from 'react';
-import {Text, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import Bubble from 'src/components/ui/Bubble';
 import StyledText from 'src/components/ui/styled/StyledText';
 import Layout from 'src/layout/Layout';
@@ -10,7 +10,7 @@ import {StackParamList} from 'src/StackNavigator';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ChangeRolePOSTData, Member, RoleType} from 'src/sharedTypes';
 import DropdownMenu from 'src/components/ui/DropdownMenu';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import addSpaceCase from 'src/utils/utils';
@@ -23,14 +23,17 @@ import {
 import {Colors} from 'src/styles/styles';
 import DropdownIcon from 'src/components/icons/DropdownIcon';
 import useQuery from 'src/hooks/useQuery';
-
+import useProjectsStore from 'src/stores/projectsStore';
+import useTeamsStore from 'src/stores/teamsStore';
+import useBountyStore from 'src/stores/bountyStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CopyIcon from 'src/components/icons/CopyIcon';
+import Clipboard from '@react-native-clipboard/clipboard';
 type Props = NativeStackScreenProps<StackParamList, 'Profile'>;
 
 export default function Profile({route, navigation}: Props) {
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
-
-  const wallet = useSolanaContext();
 
   const viewProfileAddress = route.params?.viewProfileAddress ?? undefined;
 
@@ -40,8 +43,17 @@ export default function Profile({route, navigation}: Props) {
 
   const [displayProfile, setDisplayProfile] = useState<Member | undefined>();
 
+  const [rememberedID, setRememberedID] = useState<string>();
+
   const isMyProfile =
-    viewProfileAddress === wallet?.wallet?.publicKey.toBase58().toString();
+    viewProfileAddress === rememberedID || viewProfileAddress === myProfile?.id;
+
+  // Prevent flickering from ID nullifying after refresh / role switching
+  useEffect(() => {
+    AsyncStorage.getItem('walletAddress').then(value => {
+      if (value) setRememberedID(value);
+    });
+  }, []);
 
   useEffect(() => {
     if (!isMyProfile && !!viewProfileAddress) {
@@ -79,9 +91,10 @@ function ProfileCard({
   const myProfile = useMemberStore(state => state.myProfile);
   const fetchMyProfile = useMemberStore(state => state.fetchMyProfile);
   const playingRole = useMemberStore(state => state.myProfile)?.playingRole;
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+
+  const fetchProjects = useProjectsStore(state => state.fetchProjects);
+  const fetchTeams = useTeamsStore(state => state.fetchTeams);
+  const fetchBounties = useBountyStore(state => state.fetchBounties);
 
   const {
     loading: loadingRole,
@@ -96,11 +109,6 @@ function ProfileCard({
   } = useMutation(getServerEndpoint(Endpoints.UPDATE_MY_ROLES));
 
   async function onSubmit() {
-    if (!walletAddress) {
-      console.error('No walletAddress');
-      return;
-    }
-
     const data = await mutateUpdateRoles({});
     if (data) {
       fetchMyProfile();
@@ -108,13 +116,11 @@ function ProfileCard({
   }
 
   async function onSubmitRole(role: RoleType) {
-    if (!walletAddress) {
-      console.error('No walletAddress');
-      return;
-    }
     const data = await mutateRole({role} as ChangeRolePOSTData);
     if (!!data) {
       fetchMyProfile();
+      fetchBounties();
+      fetchProjects();
     }
   }
 
@@ -198,26 +204,78 @@ function ProfileCard({
           </Menu>
         </View>
       )}
-      <View style={{flexDirection: 'row', alignItems: 'center', gap: 12}}>
-        <StyledText
-          style={{fontSize: 24, fontWeight: '500'}}
-          suspense
-          trigger={profile?.firstName}
-          shimmerWidth={120}>
-          {profile?.firstName}
-        </StyledText>
-        <Bubble
-          lowHeight
-          text={`Level ${profile?.level}`}
-          suspense
-          trigger={profile}
-        />
-      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'flex-start',
+          gap: 12,
+          // paddingBottom: 12,
+        }}>
+        <View>
+          <StyledText
+            style={{fontSize: 24, fontWeight: '500'}}
+            suspense
+            trigger={profile?.firstName}
+            shimmerWidth={120}>
+            {profile?.firstName}
+          </StyledText>
+          <StyledText suspense trigger={profile}>
+            @{profile?.username}
+          </StyledText>
+        </View>
 
-      <StyledText suspense trigger={profile}>
-        @{profile?.username}
-      </StyledText>
-      <View style={{flexWrap: 'wrap', flexDirection: 'row', gap: 14}}>
+        <View
+          style={{
+            flexWrap: 'wrap',
+            flex: 1,
+            flexDirection: 'row',
+            gap: 12,
+            alignContent: 'center',
+          }}>
+          <Bubble
+            lowHeight
+            text={`Level ${profile?.level}`}
+            suspense
+            trigger={profile}
+          />
+          {profile?.admin && profile.adminec && (
+            <Bubble
+              lowHeight
+              text={`Admin`}
+              type="red"
+              suspense
+              trigger={profile}
+            />
+          )}
+          {profile?.financialOfficer && (
+            <Bubble
+              lowHeight
+              text={`Financial Officer`}
+              type="green"
+              suspense
+              trigger={profile}
+            />
+          )}
+        </View>
+      </View>
+      {!!profile?.id && (
+        <TouchableOpacity
+          style={{flexDirection: 'row', gap: 8, alignItems: 'center'}}
+          onPress={() => Clipboard.setString(profile.id)}>
+          <View style={{padding: 8}}>
+            <CopyIcon />
+          </View>
+          <StyledText>Copy wallet address</StyledText>
+        </TouchableOpacity>
+      )}
+
+      <View
+        style={{
+          flexWrap: 'wrap',
+          flexDirection: 'row',
+          gap: 14,
+          paddingBottom: 12,
+        }}>
         {!profile && (
           <>
             <Bubble text="" suspense />

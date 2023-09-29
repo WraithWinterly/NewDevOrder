@@ -10,11 +10,12 @@ import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import {SubmitDeliverablesPostData} from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';
+import useMemberStore from 'src/stores/membersStore';
 import useTeamsStore from 'src/stores/teamsStore';
 import {Colors} from 'src/styles/styles';
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
@@ -27,12 +28,10 @@ export default function SubmitDeliverables() {
   const teams = useTeamsStore(state => state.teams);
   const setSelectedTeam = useTeamsStore(state => state.setSelectedTeam);
   const selectedTeam = useTeamsStore(state => state.selectedTeam);
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
+  const walletAddress = useMemberStore(state => state.myProfile)?.id;
   const viewTeams = teams
-    ?.filter(t => t.creatorAddress == walletAddress)
-    .filter(team => selectedBounty?.participantsTeamIDs?.includes(team.id));
+    ?.filter(t => t.creatorID == walletAddress)
+    .filter(team => selectedBounty?.participantTeamIDs?.includes(team.id));
 
   const [linkToVideoDemo, setLinkToVideoDemo] = useState('https://');
   const [linkToCode, setLinkToCode] = useState('https://');
@@ -86,10 +85,6 @@ export default function SubmitDeliverables() {
     }
     if (!selectedBounty?.id) {
       console.error('No bounty selected');
-      return;
-    }
-    if (!walletAddress) {
-      console.error('No wallet address');
       return;
     }
     if (!selectedTeam?.id) {

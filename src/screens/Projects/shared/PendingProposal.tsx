@@ -6,35 +6,109 @@ import {TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
 import MemberBox from 'src/components/MemberBox';
+import ForwardArrow from 'src/components/icons/ForwardArrow';
+import LeftArrowIcon from 'src/components/icons/LeftArrowIcon';
 
 import RightArrowIcon from 'src/components/icons/RightArrowIcon';
 import Separator from 'src/components/ui/Separator';
 import StyledButton from 'src/components/ui/styled/StyledButton';
 import StyledText from 'src/components/ui/styled/StyledText';
+import useMutation from 'src/hooks/useMutation';
 import Layout from 'src/layout/Layout';
-import {RoleType} from 'src/sharedTypes';
+import {
+  OfficerConfirmProjectPaidPOSTData,
+  ProjectStage,
+  RoleType,
+} from 'src/sharedTypes';
 import useMemberStore from 'src/stores/membersStore';
+import useOfficerStore from 'src/stores/officerStore';
 import useProjectsStore from 'src/stores/projectsStore';
 import {Colors} from 'src/styles/styles';
+import {Endpoints, getServerEndpoint} from 'src/utils/server';
 
 export default function PendingProposal() {
   const proj = useProjectsStore(state => state.selectedProject);
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
   const role = useMemberStore(state => state.myProfile?.playingRole);
+  const myProfile = useMemberStore(state => state.myProfile);
+
+  const fetchItems = useOfficerStore(state => state.fetchItems);
+  const {data, loading, error, mutate} = useMutation(
+    getServerEndpoint(Endpoints.FINANCIAL_OFFICER_PROJECT_PAID),
+  );
+
+  async function onSubmitOfficerConfirm() {
+    if (!proj?.id) {
+      console.error('No project');
+      return;
+    }
+
+    const data = await mutate({
+      projectID: proj?.id,
+    } as OfficerConfirmProjectPaidPOSTData);
+    if (!!data) {
+      navigation.navigate('HomeNavigation');
+      fetchItems();
+    }
+  }
+
+  const [viewBountyButton, setViewBountyButton] = useState<
+    'DesignerWorkspaceNavigator' | 'ViewProjectBounties' | null
+  >(null);
+
+  // Take them to the right page if they are here
+  useEffect(() => {
+    if (!proj) return;
+    if (role === RoleType.BountyDesigner) {
+      if (
+        proj?.stage === ProjectStage.PendingBountyDesign ||
+        proj?.stage === ProjectStage.Ready
+      ) {
+        setViewBountyButton('DesignerWorkspaceNavigator');
+        return;
+      } else {
+        setViewBountyButton(null);
+        return;
+      }
+    } else if (role === RoleType.Founder || role === RoleType.BountyManager) {
+      if ((proj?.bountyIDs?.length || 0) > 0) {
+        setViewBountyButton('ViewProjectBounties');
+        return;
+      }
+    } else if (role === RoleType.BountyValidator) {
+      if (proj?.stage === ProjectStage.Ready) {
+        setViewBountyButton('ViewProjectBounties');
+        return;
+      } else {
+        if ((proj?.bountyIDs?.length || 0) > 0) {
+          setViewBountyButton('ViewProjectBounties');
+          return;
+        }
+      }
+    }
+    setViewBountyButton(null);
+  }, [proj]);
 
   return (
     <Layout>
       <ScrollView>
         <StyledText
           style={{fontSize: 26, fontWeight: 'bold', marginBottom: 22}}>
-          {proj?.stage === 'Ready' ? 'Active Project' : 'Pending Proposal'}
+          {proj?.stage === ProjectStage.Ready
+            ? 'Active Project'
+            : proj?.stage === ProjectStage.Declined
+            ? 'Declined Proposal'
+            : 'Pending Proposal'}
         </StyledText>
+        {proj?.stage === ProjectStage.PendingOfficer && (
+          <StyledText>Pending Financial Officer to Receive Payment</StyledText>
+        )}
         {role === RoleType.Founder &&
         proj?.quotePrice &&
         proj.quotePrice > 0 &&
-        proj.stage != 'PendingBountyMgrQuote' ? (
+        proj.stage != ProjectStage.PendingBountyMgrQuote ? (
           <View>
-            {proj?.stage === 'PendingFounderPay' && (
+            {proj?.stage === ProjectStage.PendingFounderPay && (
               <>
                 <StyledText style={{fontSize: 18, marginBottom: 18}}>
                   <Text>Your quote is </Text>
@@ -42,18 +116,19 @@ export default function PendingProposal() {
                 </StyledText>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    // flexDirection: 'row',
+                    // justifyContent: 'space-between',
                     marginHorizontal: 12,
+                    flex: 1,
                   }}>
                   <StyledButton
                     onPress={() => navigation.navigate('ConfirmAndPay')}>
-                    Confirm and checkout
+                    I agree to pay this.
                   </StyledButton>
                 </View>
               </>
             )}
-            {proj?.stage === 'PendingBountyDesign' && (
+            {proj?.stage === ProjectStage.PendingBountyDesign && (
               <StyledText style={{fontSize: 18, marginBottom: 18}}>
                 <Text>
                   You already paid{' '}
@@ -67,10 +142,44 @@ export default function PendingProposal() {
           </View>
         ) : null}
 
+        {!!proj &&
+          proj?.stage === ProjectStage.PendingOfficer &&
+          myProfile?.financialOfficer && (
+            <>
+              <StyledText style={{fontSize: 18, marginBottom: 12}}>
+                Financial Officer
+              </StyledText>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 10,
+                  paddingBottom: 12,
+                }}>
+                <ForwardArrow />
+                <StyledText>IN: ${proj?.quotePrice}</StyledText>
+              </View>
+              <StyledText style={{color: Colors.Gray[400]}}>
+                You are responsible for collecting this money for NDO.
+              </StyledText>
+              <View style={{height: 24}} />
+              <StyledButton
+                loading={loading}
+                error={!!error}
+                onPress={onSubmitOfficerConfirm}>
+                <StyledText style={{color: Colors.BtnTextColor}}>
+                  I confirm that NDO has received ${proj?.quotePrice}.
+                </StyledText>
+              </StyledButton>
+              <Separator />
+            </>
+          )}
+
         {role != RoleType.Founder &&
-          proj?.stage !== 'PendingBountyMgrQuote' && (
+          proj?.stage !== ProjectStage.PendingBountyMgrQuote &&
+          proj?.stage != ProjectStage.PendingOfficer && (
             <View>
-              <Text>
+              {/* <Text>
                 <StyledText style={{fontSize: 18}}>Quoted for </StyledText>
                 <StyledText suspense trigger={proj}>
                   ${proj?.quotePrice}{' '}
@@ -78,11 +187,17 @@ export default function PendingProposal() {
                     <Text style={{fontWeight: 'bold'}}> Already Paid.</Text>
                   )}
                 </StyledText>
+              </Text> */}
+              <Text>
+                <StyledText style={{fontSize: 18}}>Paid Funds: </StyledText>
+                <StyledText suspense trigger={proj}>
+                  ${proj?.totalFunds}{' '}
+                  {/* {proj?.stage === ProjectStage.PendingBountyDesign && (
+                    <Text style={{fontWeight: 'bold'}}> Already Paid.</Text>
+                  )} */}
+                </StyledText>
               </Text>
 
-              {proj?.stage === 'PendingFounderPay' && (
-                <StyledText>Pending Founder Payment</StyledText>
-              )}
               <Separator />
             </View>
           )}
@@ -117,14 +232,25 @@ export default function PendingProposal() {
         <StyledText style={{fontSize: 18, marginBottom: 12}}>
           Project information
         </StyledText>
-        <Text>
-          <StyledText style={{fontWeight: 'bold'}}>
-            Name:&nbsp;&nbsp;&nbsp;&nbsp;
-          </StyledText>
-          <StyledText suspense trigger={proj}>
-            {proj?.title}
-          </StyledText>
-        </Text>
+        <View>
+          {myProfile?.financialOfficer &&
+            proj?.stage === ProjectStage.PendingOfficer && (
+              <>
+                <StyledText style={{fontWeight: 'bold'}}>ID: </StyledText>
+                <StyledText suspense trigger={proj}>
+                  {proj?.id}
+                </StyledText>
+              </>
+            )}
+          <Text>
+            <StyledText style={{fontWeight: 'bold'}}>
+              Name:&nbsp;&nbsp;&nbsp;&nbsp;
+            </StyledText>
+            <StyledText suspense trigger={proj}>
+              {proj?.title}
+            </StyledText>
+          </Text>
+        </View>
         <Text>
           <StyledText style={{fontWeight: 'bold'}}>Details: </StyledText>
           <StyledText suspense trigger={proj}>
@@ -169,6 +295,23 @@ export default function PendingProposal() {
               <Separator customH={8} />
             </View>
           )}
+        {viewBountyButton && (
+          <>
+            <StyledButton
+              type="normal2"
+              onPress={() => {
+                navigation.navigate(viewBountyButton);
+              }}>
+              <View
+                style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+                <LeftArrowIcon />
+                <StyledText style={{fontSize: 18, fontWeight: 'bold'}}>
+                  View Bounties
+                </StyledText>
+              </View>
+            </StyledButton>
+          </>
+        )}
       </ScrollView>
     </Layout>
   );

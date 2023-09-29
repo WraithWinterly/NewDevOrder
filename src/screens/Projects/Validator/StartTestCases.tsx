@@ -5,10 +5,14 @@ import {useEffect, useId, useState} from 'react';
 import {Linking, ScrollView, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {StackParamList} from 'src/StackNavigator';
+import ChangeIcon from 'src/components/icons/ChangeIcon';
 import CheckIcon from 'src/components/icons/CheckIcon';
+import CloseIcon from 'src/components/icons/CloseIcon';
 import CollapsibleArrow from 'src/components/icons/CollapsibleArrow';
 import DeleteIcon from 'src/components/icons/DeleteIcon';
+import MinusIcon from 'src/components/icons/MinusIcon';
 import PlusIcon from 'src/components/icons/PlusIcon';
+import RedXIcon from 'src/components/icons/RedXIcon';
 import WarningIcon from 'src/components/icons/WarningIcon';
 import ProjBountyBreadcrumb from 'src/components/ui/ProjBountyBreadcrumb';
 import Separator from 'src/components/ui/Separator';
@@ -18,7 +22,7 @@ import StyledCheckbox from 'src/components/ui/styled/StyledCheckbox';
 import StyledText from 'src/components/ui/styled/StyledText';
 import StyledTextInput from 'src/components/ui/styled/StyledTextInput';
 import useKeyboardVisible from 'src/hooks/useKeyboardVisible';
-import useMutation from 'src/hooks/usePost';
+import useMutation from 'src/hooks/useMutation';
 import useQuery from 'src/hooks/useQuery';
 import Layout from 'src/layout/Layout';
 import {
@@ -28,6 +32,7 @@ import {
   RoleType,
   SelectWinningSubmissionPostData,
   SubmissionState,
+  TestCase,
 } from 'src/sharedTypes';
 import useBountyStore from 'src/stores/bountyStore';
 import useMemberStore from 'src/stores/membersStore';
@@ -35,15 +40,10 @@ import {Colors} from 'src/styles/styles';
 
 import {Endpoints, getServerEndpoint} from 'src/utils/server';
 import addSpaceCase from 'src/utils/utils';
-import useSolanaContext from 'src/web3/SolanaProvider';
-
+import {v4 as uuid} from 'uuid';
 // type Props = NativeStackScreenProps<StackParamList, 'StartTestCases'>;
 export default function StartTestCases() {
   const navigation = useNavigation<StackNavigationProp<StackParamList>>();
-
-  const walletAddress = useSolanaContext()
-    .wallet?.publicKey.toBase58()
-    .toString();
 
   const selectedBounty = useBountyStore(state => state.selectedBounty);
   const setSelectedBounty = useBountyStore(state => state.setSelectedBounty);
@@ -74,13 +74,15 @@ export default function StartTestCases() {
   const id = useId();
   const kbVisible = useKeyboardVisible();
 
-  const [testCases, setTestCases] = useState<string[]>(
+  const [testCases, setTestCases] = useState<TestCase[]>(
     selectedSubmission?.testCases || [],
   );
 
   const [addingTestCase, setAddingTestCase] = useState(false);
 
-  const [newTestCase, setNewTestCase] = useState('');
+  const [newTestCase, setNewTestCase] = useState<TestCase | undefined>(
+    undefined,
+  );
 
   const isWinnerPending =
     !!selectedBounty &&
@@ -106,10 +108,6 @@ export default function StartTestCases() {
   }) {
     if (!selectedBounty?.id) {
       console.error('No bounty selected');
-      return;
-    }
-    if (!walletAddress) {
-      console.error('No wallet address');
       return;
     }
     if (!selectedSubmission?.id) {
@@ -141,10 +139,6 @@ export default function StartTestCases() {
       console.error('No bounty selected');
       return;
     }
-    if (!walletAddress) {
-      console.error('No wallet address');
-      return;
-    }
     if (!selectedSubmission?.id) {
       console.error('No submission ID');
       return;
@@ -169,10 +163,6 @@ export default function StartTestCases() {
       console.error('No bounty selected');
       return;
     }
-    if (!walletAddress) {
-      console.error('No wallet address');
-      return;
-    }
     if (!selectedSubmission?.id) {
       console.error('No submission ID');
       return;
@@ -192,7 +182,14 @@ export default function StartTestCases() {
     <Layout>
       <View style={{height: '100%'}}>
         <ScrollView
-          style={{marginBottom: isBountyValidator && !kbVisible ? 120 : 0}}>
+          style={{
+            marginBottom:
+              isBountyValidator && !kbVisible
+                ? isWinnerPending
+                  ? 42
+                  : 120
+                : 0,
+          }}>
           <StyledText
             style={{fontSize: 24}}
             suspense
@@ -256,6 +253,12 @@ export default function StartTestCases() {
                   }}
                   onPress={() => {
                     setAddingTestCase(prev => !prev);
+                    const id = uuid();
+                    setNewTestCase({
+                      id,
+                      testCase: '',
+                      status: 'unsure',
+                    });
                   }}>
                   <StyledText style={{color: Colors.Primary, fontSize: 18}}>
                     Add test case
@@ -268,16 +271,26 @@ export default function StartTestCases() {
               {addingTestCase && (
                 <View style={{paddingTop: 8}}>
                   <StyledTextInput
-                    onChangeText={e => setNewTestCase(e)}
-                    value={newTestCase}
+                    onChangeText={e =>
+                      setNewTestCase(c => {
+                        if (!!c) {
+                          return {...c, testCase: e};
+                        }
+                        return undefined;
+                      })
+                    }
+                    value={newTestCase?.testCase || ''}
                     placeholder="Enter test case"
                   />
                   <View style={{height: 12}}></View>
                   <StyledButton
                     onPress={() => {
-                      setTestCases([...testCases, newTestCase]);
+                      if (!!testCases && !!newTestCase) {
+                        setTestCases([...testCases, newTestCase]);
+                      }
+
                       setAddingTestCase(false);
-                      setNewTestCase('');
+                      setNewTestCase(undefined);
                     }}>
                     Add
                   </StyledButton>
@@ -287,81 +300,166 @@ export default function StartTestCases() {
 
               {testCases.map((testCase, index) => (
                 <View
-                  style={{gap: 10, marginTop: index === 0 ? -16 : 16}}
+                  style={{marginTop: index === 0 ? 12 : 16}}
                   key={`${id}-${index}`}>
                   <View
                     style={{
-                      flexDirection: 'row',
+                      flexDirection:
+                        playingRole === RoleType.BountyValidator
+                          ? 'column'
+                          : 'row',
                       justifyContent: 'space-between',
-                      gap: 10,
-                      marginTop: 12,
+                      paddingBottom: 12,
+                      paddingHorizontal: 8,
                     }}>
                     <View>
-                      <StyledText style={{fontSize: 20, fontWeight: '500'}}>
-                        Test Case {index + 1}
+                      <StyledText
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '500',
+                        }}>
+                        {testCase.testCase}
                       </StyledText>
                       <StyledText
-                        style={{fontSize: 16, color: Colors.Gray[300]}}
+                        style={{fontSize: 12, color: Colors.Gray[300]}}
                         key={index + 1}>
-                        {testCase}
+                        Test Case {index + 1}
                       </StyledText>
                     </View>
-                    {isBountyValidator && (
+
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: 10,
+                        // marginTop: 12,
+                      }}>
                       <View
                         style={{
                           flexDirection: 'row',
                           alignItems: 'center',
-                          gap: 0,
-                          paddingBottom: 8,
+                          gap: 8,
                         }}>
-                        <TouchableOpacity
-                          style={{padding: 20}}
-                          onPress={() => {
-                            // Swaps values with the string before it, if it is not the first index
-                            const idx = testCases.findIndex(
-                              t => t === testCase,
-                            );
-                            if (idx !== 0) {
-                              const temp = testCases[idx];
-                              testCases[idx] = testCases[idx - 1];
-                              testCases[idx - 1] = temp;
-                              setTestCases([...testCases]);
-                            }
-                          }}>
-                          <CollapsibleArrow faceDown={false} wh={20} />
-                        </TouchableOpacity>
+                        {playingRole === RoleType.BountyValidator && (
+                          <TouchableOpacity
+                            style={{padding: 12}}
+                            onPress={() => {
+                              // Cycle between status
+                              const idx = testCases.findIndex(
+                                t => t.id === testCase.id,
+                              );
 
-                        <TouchableOpacity
-                          style={{padding: 20}}
-                          onPress={() => {
-                            // Swaps values with the string after it, if it is not the last index
-                            const idx = testCases.findIndex(
-                              t => t === testCase,
-                            );
-                            if (idx !== testCases.length - 1) {
-                              const temp = testCases[idx];
-                              testCases[idx] = testCases[idx + 1];
-                              testCases[idx + 1] = temp;
-                              setTestCases([...testCases]);
-                            }
-                          }}>
-                          <CollapsibleArrow faceDown wh={20} />
-                        </TouchableOpacity>
+                              if (typeof idx != 'undefined') {
+                                const localTestCases = [...testCases];
+                                const temp = localTestCases[idx];
 
-                        <TouchableOpacity
-                          style={{padding: 12}}
-                          onPress={() => {
-                            setTestCases(testCases.filter(t => t !== testCase));
+                                temp.status =
+                                  temp.status === 'unsure'
+                                    ? 'passed'
+                                    : temp.status === 'passed'
+                                    ? 'failed'
+                                    : 'unsure';
+                                localTestCases[idx] = temp;
+                                setTestCases([...localTestCases]);
+                              }
+                            }}>
+                            <ChangeIcon />
+                          </TouchableOpacity>
+                        )}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 8,
                           }}>
-                          <DeleteIcon />
-                        </TouchableOpacity>
+                          {playingRole === RoleType.BountyValidator && (
+                            <StyledText
+                              style={{fontSize: 14, color: Colors.Gray[300]}}>
+                              {testCase.status.substring(0, 1).toUpperCase() +
+                                testCase.status.substring(1)}
+                            </StyledText>
+                          )}
+                          {testCase.status === 'unsure' ? (
+                            <MinusIcon />
+                          ) : testCase.status === 'passed' ? (
+                            <CheckIcon />
+                          ) : (
+                            <RedXIcon />
+                          )}
+                          {playingRole != RoleType.BountyValidator && (
+                            <StyledText
+                              style={{fontSize: 14, color: Colors.Gray[300]}}>
+                              {testCase.status.substring(0, 1).toUpperCase() +
+                                testCase.status.substring(1)}
+                            </StyledText>
+                          )}
+                        </View>
                       </View>
-                    )}
+
+                      {isBountyValidator && (
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 0,
+                            paddingBottom: 8,
+                          }}>
+                          <TouchableOpacity
+                            style={{padding: 20}}
+                            onPress={() => {
+                              // Swaps values with the string before it, if it is not the first index
+                              const idx = testCases.findIndex(
+                                t => t.id === testCase.id,
+                              );
+                              if (idx !== 0) {
+                                const localTestCases = [...testCases];
+                                const temp = localTestCases[idx];
+
+                                localTestCases[idx] = localTestCases[idx - 1];
+                                localTestCases[idx - 1] = temp;
+                                setTestCases([...localTestCases]);
+                              }
+                            }}>
+                            <CollapsibleArrow faceDown={false} wh={20} />
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            style={{padding: 20}}
+                            onPress={() => {
+                              // Swaps values with the string after it, if it is not the last index
+                              const idx = testCases.findIndex(
+                                t => t.id === testCase.id,
+                              );
+                              if (idx !== testCases.length - 1) {
+                                const localTestCases = [...testCases];
+                                const temp = localTestCases[idx];
+                                localTestCases[idx] = localTestCases[idx + 1];
+                                localTestCases[idx + 1] = temp;
+                                setTestCases([...localTestCases]);
+                              }
+                            }}>
+                            <CollapsibleArrow faceDown wh={20} />
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            style={{padding: 12}}
+                            onPress={() => {
+                              setTestCases(
+                                testCases.filter(t => t !== testCase),
+                              );
+                            }}>
+                            <DeleteIcon />
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                    </View>
                   </View>
 
                   <Separator customH={4} />
                 </View>
               ))}
+              <View style={{height: 24}}></View>
               {isWinnerPending && (
                 <View>
                   <View style={{height: 24}} />
@@ -385,20 +483,23 @@ export default function StartTestCases() {
                       !selectedSubmission.isWinnerApprovedByFounder) ||
                       (playingRole === RoleType.BountyManager &&
                         !selectedSubmission.isWinnerApprovedByManager)) && (
-                      <StyledButton
-                        loading={loadingApproveDisapproveBountyWinner}
-                        error={!!errorApproveDisapproveBountyWinner}
-                        onPress={() => approveDisapproveBountyWinner(true)}
-                        type="normal2">
-                        Accept winner
-                      </StyledButton>
+                      <>
+                        <StyledButton
+                          loading={loadingApproveDisapproveBountyWinner}
+                          error={!!errorApproveDisapproveBountyWinner}
+                          onPress={() => approveDisapproveBountyWinner(true)}
+                          type="normal">
+                          Accept winner
+                        </StyledButton>
+                        <View style={{height: 32}}></View>
+                      </>
                     )}
-                  <View style={{height: 12}}></View>
+
                   <StyledButton
                     loading={loadingApproveDisapproveBountyWinner}
                     error={!!errorApproveDisapproveBountyWinner}
                     onPress={() => approveDisapproveBountyWinner(false)}
-                    type="normal2">
+                    type="noBgDanger">
                     Reject winner (no undo)
                   </StyledButton>
                   <Separator />
@@ -415,13 +516,13 @@ export default function StartTestCases() {
             </View>
           )}
         </ScrollView>
-        {isBountyValidator && (
+        {isBountyValidator && !!selectedSubmission && (
           <BottomBar>
             <View style={{gap: 12}}>
               <View
                 style={{
                   flexDirection: 'row',
-                  alignItems: 'center',
+                  alignItems: 'stretch',
                   justifyContent: 'center',
                 }}>
                 <View style={{flex: 1}}>
@@ -435,7 +536,7 @@ export default function StartTestCases() {
                       })
                     }
                     type="normal">
-                    Update Test Cases
+                    {isWinnerPending ? 'Update Test Cases' : 'Approve'}
                   </StyledButton>
                 </View>
                 {!isWinnerPending && !winnerExists && (
@@ -450,23 +551,25 @@ export default function StartTestCases() {
                         })
                       }
                       type="normal2">
-                      Confirm as winner
+                      Confirm winner
                     </StyledButton>
                   </View>
                 )}
               </View>
-
-              <StyledButton
-                loading={loadingSubmit}
-                error={!!errorSubmit}
-                onPress={() =>
-                  onSubmit({
-                    type: 'reject',
-                  })
-                }
-                type="noBgDanger">
-                Submit and Reject
-              </StyledButton>
+              {selectedSubmission?.state !=
+                SubmissionState.WinnerPendingConfirmation && (
+                <StyledButton
+                  loading={loadingSubmit}
+                  error={!!errorSubmit}
+                  onPress={() =>
+                    onSubmit({
+                      type: 'reject',
+                    })
+                  }
+                  type="noBgDanger">
+                  Reject Submission
+                </StyledButton>
+              )}
             </View>
 
             {selectedSubmission &&
